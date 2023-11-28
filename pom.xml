@@ -90,6 +90,9 @@ SOFTWARE.
   </properties>
   <profiles>
     <profile>
+      <id>qulice</id>
+    </profile>
+    <profile>
       <id>release</id>
       <activation>
         <activeByDefault>false</activeByDefault>
