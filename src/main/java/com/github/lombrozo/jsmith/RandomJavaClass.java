@@ -1,15 +1,21 @@
 package com.github.lombrozo.jsmith;
 
-public final class JavaProgram {
+public final class RandomJavaClass {
 
+    private final String name;
     private final String source;
 
-    public JavaProgram() {
-        this(JavaProgram.helloWorld());
+    public RandomJavaClass() {
+        this("HelloWorld", RandomJavaClass.helloWorld());
     }
 
-    public JavaProgram(final String src) {
-        this.source = src;
+    public RandomJavaClass(final String name, final String source) {
+        this.name = name;
+        this.source = source;
+    }
+
+    public String name() {
+        return this.name;
     }
 
     public String src() {
