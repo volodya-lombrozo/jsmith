@@ -27,7 +27,10 @@ SOFTWARE.
   <groupId>com.github.volodya-lombrozo</groupId>
   <artifactId>jsmith</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
   <name>jsmith</name>
+  <description>jsmith, a random generator of Java programs</description>
+  <inceptionYear>2023</inceptionYear>
   <url>https://github.com/volodya-lombrozo/jsmith</url>
   <scm>
     <connection>
