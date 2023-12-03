@@ -33,15 +33,16 @@ The library provides a set of classes for generating random Java programs. To
 generate a random class you can use the following code:
 
 ```java
-import com.github.lombrozo.jsmith.RandomJavaClass;
-
-// Generate a random class.
-RandomJavaClass clazz = new RandomJavaClass();
-// Get source code of the class.
-String code = clazz.src();
-// Get the name of the class.
-String name = clazz.name();
+RandomJavaGenerator generator = new RandomJavaGenerator();
+// Generate code
+generator.generate();
+// Get code of the classes.
+List<String> classSrcs = generator.getClassSrcs();
+// Get code of the interfaces.
+List<String> interfacesSrcs = generator.getInterfacesSrcs();
 ```
+
+By default, all generated files will be placed in ```generatedSrc``` folder.
 
 ## How to Contribute
 
