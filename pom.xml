@@ -108,7 +108,7 @@ SOFTWARE.
                 <exclude>checkstyle:/src/test/resources/.*</exclude>
                 <exclude>checkstyle:/src/it/.*</exclude>
                 <exclude>duplicatefinder:.*</exclude>
-<!--                <exclude>dependencies:.*</exclude>-->
+                <exclude>dependencies:.*</exclude>
               </excludes>
             </configuration>
             <executions>
