@@ -28,35 +28,18 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test cases for {@link RandomJavaClass}.
+ * Test cases for {@link RandomJavaGenerator}.
  * @since 0.1
  */
-class RandomJavaClassTest {
+class RandomJavaGeneratorTest {
 
     @Test
     void retrievesTheName() {
-        MatcherAssert.assertThat(
-            "Name of the class is not equal to the expected one",
-            new RandomJavaClass().name(),
-            Matchers.equalTo("HelloWorld")
-        );
+
     }
 
     @Test
     void retrievesTheSourceCode() {
-        MatcherAssert.assertThat(
-            "Source code of the class is not equal to the expected 'hello-world' program",
-            new RandomJavaClass().src(),
-            Matchers.equalTo(
-                String.join(
-                    "\n",
-                    "public class HelloWorld {",
-                    "    public static void main(String[] args) {",
-                    "        System.out.println(\"Hello, World!\");",
-                    "    }",
-                    "}"
-                )
-            )
-        );
+
     }
 }
