@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
  * Test cases for {@link RandomJavaClass}.
  * @since 0.1
  */
-public class RandomJavaClassTest {
+class RandomJavaClassTest {
 
     @Test
     void retrievesTheName() {
