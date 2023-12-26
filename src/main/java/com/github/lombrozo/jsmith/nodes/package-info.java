@@ -21,10 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith;
-
 /**
- * Test cases for {@link RandomJavaClass}.
+ * All nodes of java program.
  * @since 0.1
  */
-class RandomJavaClassTest { }
+package com.github.lombrozo.jsmith.nodes;
