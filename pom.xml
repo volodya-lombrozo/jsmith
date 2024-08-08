@@ -67,6 +67,11 @@ SOFTWARE.
     <antlr.version>4.13.1</antlr.version>
   </properties>
   <dependencies>
+  <dependency>
+    <groupId>org.cactoos</groupId>
+    <artifactId>cactoos</artifactId>
+    <version>0.55.0</version>
+  </dependency>
     <dependency>
       <groupId>org.antlr</groupId>
       <artifactId>antlr4-runtime</artifactId>
@@ -112,7 +117,7 @@ SOFTWARE.
             </goals>
             <configuration>
               <sources>
-                <source>src/main/antlr4/Java</source>
+                <source>src/main/antlr4/com/github/lombrozo/jsmith/Java</source>
               </sources>
             </configuration>
           </execution>
