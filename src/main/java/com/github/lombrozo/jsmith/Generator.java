@@ -25,6 +25,8 @@ package com.github.lombrozo.jsmith;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
 
@@ -34,7 +36,18 @@ public final class Generator {
         try {
             final String grammar = new TextOf(new ResourceOf("grammars/Simple.g4")).asString();
             final CodePointCharStream stream = CharStreams.fromString(grammar);
-
+            final ANTLRv4Lexer lexer = new ANTLRv4Lexer(stream);
+            final CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
+            final ANTLRv4Parser parser = new ANTLRv4Parser(commonTokenStream);
+            final ANTLRv4Parser.GrammarSpecContext spec = parser.grammarSpec();
+            final ParseTreeWalker walker = new ParseTreeWalker();
+            final ANTLRListener listener = new ANTLRListener();
+            final String stringTree = spec.toStringTree(parser);
+            System.out.println(stringTree);
+            walker.walk(listener, parser.grammarSpec());
+            System.out.println("Unparser:\n");
+            final Unparser unparser = listener.unparser();
+            System.out.println(unparser.generate());
         } catch (final Exception exception) {
             throw new RuntimeException(exception);
         }
