@@ -1,6 +1,9 @@
 package com.github.lombrozo.jsmith;
 
-public final class UnparserRule {
+import com.github.lombrozo.jsmith.antlr.AltList;
+import com.github.lombrozo.jsmith.antlr.Generative;
+
+public final class UnparserRule implements Generative {
 
     private final String name;
     private AltList list;
@@ -14,8 +17,9 @@ public final class UnparserRule {
         return this.name;
     }
 
+    @Override
     public String generate() {
-        return "";
+        return list.generate();
     }
 
     public void append(final AltList altList) {

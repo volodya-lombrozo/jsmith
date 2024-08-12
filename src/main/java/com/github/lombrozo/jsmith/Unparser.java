@@ -25,4 +25,8 @@ public final class Unparser {
     public String generate() {
         return this.rules.get(this.top).generate();
     }
+
+    public String generate(final String rule){
+        return this.rules.get(rule).generate();
+    }
 }

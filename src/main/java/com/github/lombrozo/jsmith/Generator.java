@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith;
 
+import com.github.lombrozo.jsmith.antlr.ANTLRListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;

@@ -1,5 +1,9 @@
-package com.github.lombrozo.jsmith;
+package com.github.lombrozo.jsmith.antlr;
 
+import com.github.lombrozo.jsmith.ANTLRv4Parser;
+import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
+import com.github.lombrozo.jsmith.Unparser;
+import com.github.lombrozo.jsmith.UnparserRule;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public final class ANTLRListener extends ANTLRv4ParserBaseListener {
@@ -85,7 +89,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     @Override
     public void enterRuleref(final ANTLRv4Parser.RulerefContext ctx) {
         final String text = ctx.RULE_REF().getText();
-        this.currentAtom.with(new Reference(text));
+        this.currentAtom.with(new Reference(text, this.unparser));
         super.enterRuleref(ctx);
     }
 

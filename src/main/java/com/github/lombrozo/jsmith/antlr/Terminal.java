@@ -1,4 +1,4 @@
-package com.github.lombrozo.jsmith;
+package com.github.lombrozo.jsmith.antlr;
 
 public final class Terminal implements ElementItem {
 
@@ -6,5 +6,10 @@ public final class Terminal implements ElementItem {
 
     public Terminal(final String text) {
         this.text = text;
+    }
+
+    @Override
+    public String generate() {
+        return this.text;
     }
 }
