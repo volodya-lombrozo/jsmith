@@ -44,7 +44,7 @@ public final class Generator {
             final ANTLRListener listener = new ANTLRListener();
             final String stringTree = spec.toStringTree(parser);
             System.out.println(stringTree);
-            walker.walk(listener, parser.grammarSpec());
+            walker.walk(listener, spec);
             System.out.println("Unparser:\n");
             final Unparser unparser = listener.unparser();
             System.out.println(unparser.generate());
