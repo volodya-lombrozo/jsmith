@@ -4,7 +4,6 @@ public final class LexerCharSet implements Generative {
     private final Generative parent;
     private final String text;
 
-
     public LexerCharSet(final Generative parent, final String text) {
         this.parent = parent;
         this.text = text;
@@ -18,6 +17,18 @@ public final class LexerCharSet implements Generative {
     @Override
     public String generate() {
         return this.text;
+    }
+
+    public char[] alphabet() {
+        final String substring = text.substring(1, text.length() - 1);
+        final char first = substring.charAt(0);
+        final char last = substring.charAt(substring.length() - 1);
+        final int length = last - first;
+        char[] alphabet = new char[length];
+        for (char index = first; index < last; ++index) {
+            alphabet[index - first] = index;
+        }
+        return alphabet;
     }
 
     @Override

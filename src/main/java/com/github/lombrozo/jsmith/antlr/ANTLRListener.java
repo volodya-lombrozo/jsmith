@@ -181,7 +181,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerElement(final ANTLRv4Parser.LexerElementContext ctx) {
-        final Generative element = new Element(this.current);
+        final Generative element = new LexerElement(this.current);
         this.current.append(element);
         this.current = element;
         super.enterLexerElement(ctx);
@@ -226,5 +226,11 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     public void exitCharacterRange(final ANTLRv4Parser.CharacterRangeContext ctx) {
         // nothing to do yet, since "CharacterRange" is a leaf node that doesn't have children.
         super.exitCharacterRange(ctx);
+    }
+
+    @Override
+    public void enterEbnfSuffix(final ANTLRv4Parser.EbnfSuffixContext ctx) {
+        //TODO!
+        super.enterEbnfSuffix(ctx);
     }
 }

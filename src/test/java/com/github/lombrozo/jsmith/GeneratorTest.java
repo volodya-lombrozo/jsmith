@@ -32,7 +32,10 @@ final class GeneratorTest {
 
     @Test
     void generatesSuccessfully() {
-        new Generator().generate();
+        for (int i = 0; i < 10; ++i) {
+            new Generator().generate();
+            System.out.println();
+        }
     }
 
 }
