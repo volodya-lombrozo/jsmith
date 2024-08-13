@@ -38,6 +38,10 @@ public final class Unparser {
         return this.rules.get(this.top).generate();
     }
 
+    public UnlexerRule unlexerRule(final String rule) {
+        return this.unlexerRules.get(rule);
+    }
+
     public String generate(final String rule) {
         return this.rules.get(rule).generate();
     }
