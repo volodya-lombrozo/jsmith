@@ -376,7 +376,7 @@ block
 
 // ----------------
 // Parser rule ref
-ruleref
+ ruleref
     : RULE_REF argActionBlock? elementOptions?
     ;
 

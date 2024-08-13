@@ -1,15 +1,40 @@
 package com.github.lombrozo.jsmith.antlr;
 
-public final class Alternative implements Generative{
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-    private Element element;
+public final class Alternative implements Generative {
 
-    public void withElement(final Element element) {
-        this.element = element;
+    private final Generative parent;
+    private final List<Generative> elements;
+
+    public Alternative(final Generative parent) {
+        this(parent, new ArrayList<>(0));
+    }
+
+    public Alternative(
+        final Generative parent,
+        final List<Generative> element
+    ) {
+        this.parent = parent;
+        this.elements = element;
+    }
+
+    @Override
+    public Generative parent() {
+        return this.parent;
     }
 
     @Override
     public String generate() {
-        return element.generate();
+        return this.elements.stream()
+            .map(Generative::generate)
+            .collect(Collectors.joining(" "));
+    }
+
+    @Override
+    public void append(final Generative generative) {
+        this.elements.add(generative);
     }
 }

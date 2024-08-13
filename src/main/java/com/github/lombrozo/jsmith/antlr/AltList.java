@@ -6,31 +6,44 @@ import java.util.List;
 
 public final class AltList implements Generative {
 
-    private final List<Alternative> alternatives;
+    private final Generative parent;
+
+    private final List<Generative> alternatives;
     private final Randomizer randomizer;
 
-    public AltList() {
-        this(new ArrayList<>(0));
+    public AltList(final Generative parent) {
+        this(parent, new ArrayList<>(0));
     }
 
-    public AltList(final List<Alternative> alternatives) {
-        this(alternatives, new Randomizer());
+    public AltList(final Generative parent, final List<Generative> alternatives) {
+        this(parent, alternatives, new Randomizer());
     }
 
-    public AltList(final List<Alternative> alternatives, final Randomizer randomizer) {
+    public AltList(
+        final Generative parent,
+        final List<Generative> alternatives,
+        final Randomizer randomizer
+    ) {
+        this.parent = parent;
         this.alternatives = alternatives;
         this.randomizer = randomizer;
     }
 
-    public AltList withAlternative(final Alternative alternative) {
-        this.alternatives.add(alternative);
-        return this;
+
+    @Override
+    public Generative parent() {
+        return this.parent;
     }
 
     @Override
     public String generate() {
-        final Alternative alternative = alternatives.get(
-            this.randomizer.nextInt(this.alternatives.size()));
-        return alternative.generate();
+        return this.alternatives.get(
+            this.randomizer.nextInt(this.alternatives.size())
+        ).generate();
+    }
+
+    @Override
+    public void append(final Generative generative) {
+        this.alternatives.add(generative);
     }
 }

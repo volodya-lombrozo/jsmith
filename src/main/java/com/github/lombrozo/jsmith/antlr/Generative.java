@@ -4,6 +4,10 @@ import java.util.stream.Stream;
 
 public interface Generative {
 
+    Generative parent();
+
     String generate();
+
+    void append(final Generative generative);
 
 }
