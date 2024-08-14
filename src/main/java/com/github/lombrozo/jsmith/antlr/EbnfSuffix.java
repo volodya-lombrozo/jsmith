@@ -3,12 +3,16 @@ package com.github.lombrozo.jsmith.antlr;
 public final class EbnfSuffix implements Generative {
     private final Generative parent;
     private final String operation;
+    private final String question;
 
-    //todo?
-    private String question;
+    public EbnfSuffix(final Generative parent, final String operation) {
+        this(parent, operation, "");
+    }
 
-    public EbnfSuffix(final Generative parent) {
+    public EbnfSuffix(final Generative parent, final String operation, final String question) {
         this.parent = parent;
+        this.operation = operation;
+        this.question = question;
     }
 
     @Override

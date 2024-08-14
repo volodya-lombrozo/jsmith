@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a lexer element.
+ * lexerElement
+ *     : lexerAtom ebnfSuffix?
+ *     | lexerBlock ebnfSuffix?
+ *     | actionBlock QUESTION?
+ *     ;
+ */
 public final class LexerElement implements Generative {
 
     private final Generative parent;
@@ -26,7 +34,38 @@ public final class LexerElement implements Generative {
 
     @Override
     public String generate() {
-        return this.children.stream().map(Generative::generate).collect(Collectors.joining(" "));
+        if (this.children.get(0) instanceof LexerAtom) {
+            final String regex;
+            final Generative atom = this.children.get(0);
+            if (this.children.size() > 1) {
+                final Generative ebnSuffix = this.children.get(1);
+                if (ebnSuffix != null) {
+                    if (ebnSuffix instanceof EbnfSuffix) {
+                        regex = atom.generate() + ebnSuffix.generate();
+                    } else {
+                        throw new IllegalStateException(
+                            String.format(
+                                "The second element should be EbnfSuffix! But was %s, %s",
+                                ebnSuffix.getClass().getSimpleName(),
+                                ebnSuffix
+                            )
+                        );
+                    }
+                } else {
+                    regex = atom.generate();
+                }
+            } else {
+                regex = atom.generate();
+            }
+            return LexerElement.fromRegex(regex);
+        } else {
+            return this.children.stream().map(Generative::generate)
+                .collect(Collectors.joining(" "));
+        }
+    }
+
+    private static String fromRegex(final String regex) {
+        return regex;
     }
 
     @Override

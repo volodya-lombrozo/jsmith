@@ -5,6 +5,9 @@ import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
 import com.github.lombrozo.jsmith.UnlexerRule;
 import com.github.lombrozo.jsmith.Unparser;
 import com.github.lombrozo.jsmith.UnparserRule;
+import java.util.Optional;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
@@ -230,7 +233,27 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterEbnfSuffix(final ANTLRv4Parser.EbnfSuffixContext ctx) {
-        //TODO!
+        final TerminalNode question = ctx.QUESTION(0);
+        final TerminalNode star = ctx.STAR();
+        final TerminalNode plus = ctx.PLUS();
+        final TerminalNode secondq = ctx.QUESTION(1);
+        final TerminalNode terminal = Optional.ofNullable(question)
+            .orElse(Optional.ofNullable(star)
+                .orElse(Optional.ofNullable(plus).orElseThrow(
+                    () -> new IllegalStateException("Can't find appropriate terminal"))));
+        this.current.append(
+            new EbnfSuffix(
+                this.current,
+                terminal.getText(),
+                Optional.ofNullable(secondq).map(ParseTree::getText).orElse("")
+            )
+        );
         super.enterEbnfSuffix(ctx);
+    }
+
+    @Override
+    public void exitEbnfSuffix(final ANTLRv4Parser.EbnfSuffixContext ctx) {
+        // nothing to do yet, since "EbnfSuffix" is a leaf node that doesn't have children.
+        super.exitEbnfSuffix(ctx);
     }
 }

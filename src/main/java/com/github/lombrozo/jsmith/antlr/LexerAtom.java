@@ -26,6 +26,7 @@ public final class LexerAtom implements Generative {
 
     @Override
     public String generate() {
+
         return this.elems.get(new Randomizer().nextInt(this.elems.size())).generate();
     }
 
