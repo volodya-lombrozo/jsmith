@@ -200,7 +200,8 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     public void enterLexerAtom(final ANTLRv4Parser.LexerAtomContext ctx) {
         final Generative atom = new LexerAtom(this.current);
         if (ctx.LEXER_CHAR_SET() != null) {
-            atom.append(new LexerCharSet(atom, ctx.LEXER_CHAR_SET().getText()));
+            final String text = ctx.LEXER_CHAR_SET().getText();
+            atom.append(new LexerCharSet(atom, text));
         }
 //        Todo?
 //        else if (ctx.DOT() != null) {
@@ -221,7 +222,8 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterCharacterRange(final ANTLRv4Parser.CharacterRangeContext ctx) {
-        this.current.append(new CharacterRange(this.current, ctx.getText()));
+        final String text = ctx.getText();
+        this.current.append(new CharacterRange(this.current, text));
         super.enterCharacterRange(ctx);
     }
 
@@ -241,11 +243,13 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
             .orElse(Optional.ofNullable(star)
                 .orElse(Optional.ofNullable(plus).orElseThrow(
                     () -> new IllegalStateException("Can't find appropriate terminal"))));
+        final String text = terminal.getText();
+        final String question1 = Optional.ofNullable(secondq).map(ParseTree::getText).orElse("");
         this.current.append(
             new EbnfSuffix(
                 this.current,
-                terminal.getText(),
-                Optional.ofNullable(secondq).map(ParseTree::getText).orElse("")
+                text,
+                question1
             )
         );
         super.enterEbnfSuffix(ctx);

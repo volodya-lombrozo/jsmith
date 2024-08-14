@@ -5,7 +5,7 @@ expr
     | number
     ;
 
-number: (NUMBER)+;
+number: NUMBER;
 
 
 PLUS: '+';

@@ -27,7 +27,7 @@ public final class Terminal implements ElementItem {
         final UnlexerRule rule = this.unparser.unlexerRule(this.text);
         //todo: fix null check - remove it!
         if (rule == null) {
-            return this.text;
+            return this.text.replace("'", "");
         }
         return rule.generate();
     }

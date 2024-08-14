@@ -3,6 +3,8 @@ package com.github.lombrozo.jsmith.antlr;
 public final class EbnfSuffix implements Generative {
     private final Generative parent;
     private final String operation;
+
+    // todo: use it!
     private final String question;
 
     public EbnfSuffix(final Generative parent, final String operation) {

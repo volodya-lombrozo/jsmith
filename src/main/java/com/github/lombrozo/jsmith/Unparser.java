@@ -42,6 +42,7 @@ public final class Unparser {
         return this.unlexerRules.get(rule);
     }
 
+    //todo: trace generation path?
     public String generate(final String rule) {
         return this.rules.get(rule).generate();
     }
