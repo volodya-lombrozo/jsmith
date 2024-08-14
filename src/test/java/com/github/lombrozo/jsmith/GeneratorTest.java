@@ -23,6 +23,9 @@
  */
 package com.github.lombrozo.jsmith;
 
+import com.mifmif.common.regex.Generex;
+import com.mifmif.common.regex.util.Iterator;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -36,6 +39,14 @@ final class GeneratorTest {
             new Generator().generate();
             System.out.println();
         }
+    }
+
+    @Test
+    void regexGenerationTest() {
+        Generex generex = new Generex("[0-3]+");
+        System.out.println(generex.random());
+        Generex second = new Generex("[0-3]");
+        System.out.println(second.random());
     }
 
 }

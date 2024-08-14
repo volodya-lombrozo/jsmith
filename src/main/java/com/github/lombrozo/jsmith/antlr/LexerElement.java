@@ -1,5 +1,7 @@
 package com.github.lombrozo.jsmith.antlr;
 
+import com.github.lombrozo.jsmith.Generator;
+import com.mifmif.common.regex.Generex;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,7 +67,7 @@ public final class LexerElement implements Generative {
     }
 
     private static String fromRegex(final String regex) {
-        return regex;
+        return new Generex(regex).random();
     }
 
     @Override

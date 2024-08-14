@@ -72,6 +72,11 @@ SOFTWARE.
     <artifactId>cactoos</artifactId>
     <version>0.55.0</version>
   </dependency>
+  <dependency>
+    <groupId>com.github.mifmif</groupId>
+    <artifactId>generex</artifactId>
+    <version>1.0.2</version>
+  </dependency>
     <dependency>
       <groupId>org.antlr</groupId>
       <artifactId>antlr4-runtime</artifactId>
