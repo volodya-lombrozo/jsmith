@@ -25,32 +25,43 @@ package com.github.lombrozo.jsmith;
 
 import com.github.lombrozo.jsmith.antlr.ANTLRListener;
 import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.cactoos.io.ResourceOf;
+import org.cactoos.Input;
 import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 
 public final class Generator {
 
-    public void generate() {
-        try {
-            final String grammar = new TextOf(new ResourceOf("grammars/Simple.g4")).asString();
-            final CodePointCharStream stream = CharStreams.fromString(grammar);
-            final ANTLRv4Lexer lexer = new ANTLRv4Lexer(stream);
-            final CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
-            final ANTLRv4Parser parser = new ANTLRv4Parser(commonTokenStream);
-            final ANTLRv4Parser.GrammarSpecContext spec = parser.grammarSpec();
-            final ParseTreeWalker walker = new ParseTreeWalker();
-            final ANTLRListener listener = new ANTLRListener();
-            final String stringTree = spec.toStringTree(parser);
-            System.out.println(stringTree);
-            walker.walk(listener, spec);
-            System.out.println("Unparser:\n");
-            final Unparser unparser = listener.unparser();
-            System.out.println(unparser.generate());
-        } catch (final Exception exception) {
-            throw new RuntimeException(exception);
-        }
+    private final String grammar;
+
+    Generator(final Input input) {
+        this(new UncheckedText(new TextOf(input)).asString());
+    }
+
+    private Generator(final String grammar) {
+        this.grammar = grammar;
+    }
+
+    public String generate() {
+        final ANTLRListener listener = new ANTLRListener();
+        new ParseTreeWalker().walk(listener, this.parser().grammarSpec());
+        return listener.unparser().generate();
+    }
+
+    String grammarTree() {
+        final ANTLRv4Parser parser = this.parser();
+        final ANTLRv4Parser.GrammarSpecContext spec = parser.grammarSpec();
+        return spec.toStringTree(parser);
+    }
+
+    private ANTLRv4Parser parser() {
+        return new ANTLRv4Parser(
+            new CommonTokenStream(
+                new ANTLRv4Lexer(
+                    CharStreams.fromString(this.grammar)
+                )
+            )
+        );
     }
 }

@@ -18,6 +18,27 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         return this.unparser;
     }
 
+
+    @Override
+    public void enterGrammarSpec(final ANTLRv4Parser.GrammarSpecContext ctx) {
+        super.enterGrammarSpec(ctx);
+    }
+
+    @Override
+    public void enterGrammarDecl(final ANTLRv4Parser.GrammarDeclContext ctx) {
+        super.enterGrammarDecl(ctx);
+    }
+
+    @Override
+    public void enterRules(final ANTLRv4Parser.RulesContext ctx) {
+        super.enterRules(ctx);
+    }
+
+    @Override
+    public void enterRuleSpec(final ANTLRv4Parser.RuleSpecContext ctx) {
+        super.enterRuleSpec(ctx);
+    }
+
     @Override
     public void enterParserRuleSpec(final ANTLRv4Parser.ParserRuleSpecContext ctx) {
         final UnparserRule rule = new UnparserRule(ctx.RULE_REF().getText(), this.current);

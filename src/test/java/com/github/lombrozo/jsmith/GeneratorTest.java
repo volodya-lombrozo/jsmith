@@ -24,8 +24,8 @@
 package com.github.lombrozo.jsmith;
 
 import com.mifmif.common.regex.Generex;
-import com.mifmif.common.regex.util.Iterator;
-import java.util.List;
+import org.cactoos.io.ResourceOf;
+import org.cactoos.text.TextOf;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -35,9 +35,10 @@ final class GeneratorTest {
 
     @Test
     void generatesSuccessfully() {
+        final Generator generator = new Generator(new ResourceOf("grammars/Simple.g4"));
+        System.out.println(generator.grammarTree());
         for (int i = 0; i < 10; ++i) {
-            new Generator().generate();
-            System.out.println();
+            System.out.println(generator.generate());
         }
     }
 
