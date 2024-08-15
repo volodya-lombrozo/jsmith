@@ -5,6 +5,10 @@ public final class Literal implements Generative {
     private final Generative parent;
     private final String text;
 
+    public Literal(final String text) {
+        this(new Empty(), text);
+    }
+
     public Literal(final Generative parent, final String text) {
         this.parent = parent;
         this.text = text;

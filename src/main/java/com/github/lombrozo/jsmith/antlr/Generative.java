@@ -10,4 +10,21 @@ public interface Generative {
 
     void append(final Generative generative);
 
+    class Empty implements Generative {
+
+        @Override
+        public Generative parent() {
+            return this;
+        }
+
+        @Override
+        public String generate() {
+            return "";
+        }
+
+        @Override
+        public void append(final Generative ignore) {
+        }
+    }
+
 }

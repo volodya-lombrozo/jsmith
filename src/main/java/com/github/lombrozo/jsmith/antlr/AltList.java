@@ -2,8 +2,18 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.Randomizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Alternative ANTLR rule.
+ * The rule definition:
+ * {@code
+ * altList
+ *     : alternative (OR alternative)*
+ *     ;
+ * }
+ */
 public final class AltList implements Generative {
 
     private final Generative parent;
@@ -11,15 +21,19 @@ public final class AltList implements Generative {
     private final List<Generative> alternatives;
     private final Randomizer randomizer;
 
-    public AltList(final Generative parent) {
+    AltList(final Generative parent) {
         this(parent, new ArrayList<>(0));
     }
 
-    public AltList(final Generative parent, final List<Generative> alternatives) {
+    AltList(final Generative parent, Generative... alternatives) {
+        this(parent, Arrays.asList(alternatives));
+    }
+
+    private AltList(final Generative parent, final List<Generative> alternatives) {
         this(parent, alternatives, new Randomizer());
     }
 
-    public AltList(
+    private AltList(
         final Generative parent,
         final List<Generative> alternatives,
         final Randomizer randomizer
@@ -37,9 +51,12 @@ public final class AltList implements Generative {
 
     @Override
     public String generate() {
-        return this.alternatives.get(
-            this.randomizer.nextInt(this.alternatives.size())
-        ).generate();
+        String result = "";
+        final int size = this.alternatives.size();
+        if (size >= 1) {
+            result = this.alternatives.get(this.randomizer.nextInt(size)).generate();
+        }
+        return result;
     }
 
     @Override

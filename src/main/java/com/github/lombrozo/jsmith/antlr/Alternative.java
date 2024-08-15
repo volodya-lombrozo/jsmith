@@ -4,16 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Alternative ANTLR rule.
+ * The rule definition:
+ * {@code
+ * alternative
+ *     : elementOptions? element+
+ *     |
+ *     // explicitly allow empty alts
+ *     ;
+ * }
+ */
 public final class Alternative implements Generative {
 
     private final Generative parent;
     private final List<Generative> elements;
 
-    public Alternative(final Generative parent) {
+    Alternative(final Generative parent) {
         this(parent, new ArrayList<>(0));
     }
 
-    public Alternative(
+    private Alternative(
         final Generative parent,
         final List<Generative> element
     ) {
