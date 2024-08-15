@@ -43,7 +43,6 @@ public final class AltList implements Generative {
         this.randomizer = randomizer;
     }
 
-
     @Override
     public Generative parent() {
         return this.parent;
