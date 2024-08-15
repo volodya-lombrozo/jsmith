@@ -9,8 +9,9 @@ public final class InvalidSyntax extends Exception {
     /**
      * Constructor.
      * @param message Error message.
+     * @param cause Cause of the error.
      */
-    public InvalidSyntax(final String message) {
-        super(message);
+    public InvalidSyntax(final String message, final Throwable cause) {
+        super(message, cause);
     }
 }

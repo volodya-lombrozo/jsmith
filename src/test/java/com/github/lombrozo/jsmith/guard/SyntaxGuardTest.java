@@ -1,32 +1,39 @@
 package com.github.lombrozo.jsmith.guard;
 
+import java.nio.file.Path;
+import org.cactoos.Input;
+import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests for {@link SyntaxGuard}.
  */
 final class SyntaxGuardTest {
 
-    private static final String GRAMMAR = "grammars/Simple.g4";
+    /**
+     * Grammar file.
+     */
+    private static final Input GRAMMAR = new ResourceOf("grammars/Simple.g4");
 
     @Test
-    void validatesCorrectSynax() {
+    void validatesCorrectSynax(@TempDir final Path temp) {
         Assertions.assertDoesNotThrow(
-            () -> new SyntaxGuard(SyntaxGuardTest.GRAMMAR).verify("1 + 1"),
+            () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR).verify("1 + 1"),
             "We expect that the code will be verified without errors"
         );
     }
 
     @Test
-    void throwsInvalidSyntaxOnIncorrectSyntax() {
+    void throwsInvalidSyntaxOnIncorrectSyntax(@TempDir final Path temp) {
         MatcherAssert.assertThat(
             "We expect that the code will be verified with errors and error message will be informative",
             Assertions.assertThrows(
                 InvalidSyntax.class,
-                () -> new SyntaxGuard(SyntaxGuardTest.GRAMMAR).verify("1 - 1"),
+                () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR).verify("1 - 1"),
                 "We expect that the code will be verified with errors"
             ).getMessage(),
             Matchers.equalTo("Incorrect syntax")
@@ -34,12 +41,12 @@ final class SyntaxGuardTest {
     }
 
     @Test
-    void throwsInvalidSyntaxOnEmptyCode() {
+    void throwsInvalidSyntaxOnEmptyCode(@TempDir final Path temp) {
         MatcherAssert.assertThat(
             "We expect that the empty code will be verified with errors and error message will be informative",
             Assertions.assertThrows(
                 InvalidSyntax.class,
-                () -> new SyntaxGuard(SyntaxGuardTest.GRAMMAR).verify(""),
+                () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR).verify(""),
                 "We expect that the empty code will be verified with errors"
             ).getMessage(),
             Matchers.equalTo("Empty code")
