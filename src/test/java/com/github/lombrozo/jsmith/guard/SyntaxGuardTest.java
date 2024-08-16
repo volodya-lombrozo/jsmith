@@ -8,6 +8,8 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests for {@link SyntaxGuard}.
@@ -58,6 +60,21 @@ final class SyntaxGuardTest {
                 "We expect that the empty code will be verified with errors"
             ).getMessage(),
             Matchers.equalTo("missing NUMBER at '<EOF>'")
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "grammar Simple;",
+        "lexer grammar Simple;",
+        "parser grammar Simple;",
+        "grammar Simple; expr: NUMBER;"
+    })
+    void findsGrammarName(final String grammar) {
+        MatcherAssert.assertThat(
+            "We expect that the grammar name will be found",
+            new SyntaxGuard(null, grammar, "expr").grammarName(),
+            Matchers.equalTo("Simple")
         );
     }
 }

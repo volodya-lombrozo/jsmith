@@ -1,6 +1,5 @@
 package com.github.lombrozo.jsmith.guard;
 
-import com.github.lombrozo.jsmith.Randomizer;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,6 +9,8 @@ import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.tools.ToolProvider;
 import org.antlr.v4.Tool;
 import org.antlr.v4.runtime.CharStream;
@@ -24,6 +25,8 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * This class is responsible for checking the syntax of the generated code.
+ * It tries to generate default ANTLR lexer and parser and parse the code.
+ * If the code is incorrect, it throws an exception.
  * @since 0.1
  * @todo #1:90min Make SyntaxGuard cleaner!
  *  SyntaxGuard is too complex and uses java compiler to check the syntax of the code.
@@ -33,30 +36,55 @@ import org.cactoos.text.UncheckedText;
  */
 public final class SyntaxGuard {
 
-
+    /**
+     * Temporary directory.
+     * Where the generated ANTLR lexer and parser will be stored.
+     */
     private final Path temp;
+
+    /**
+     * ANTLR grammar text.
+     */
     private final String grammar;
 
+    /**
+     * Top rule name.
+     */
     private final String top;
 
+    /**
+     * Constructor.
+     * @param temp Temporary directory.
+     * @param input ANTLR grammar input.
+     * @param top Top rule name.
+     */
     public SyntaxGuard(final Path temp, final Input input, final String top) {
         this(temp, new UncheckedText(new TextOf(input)).asString(), top);
     }
 
-    public SyntaxGuard(final Path temp, final String grammar, final String top) {
+    /**
+     * Constructor.
+     * @param temp Temporary directory.
+     * @param grammar ANTLR grammar text.
+     * @param top Top rule name.
+     */
+    SyntaxGuard(final Path temp, final String grammar, final String top) {
         this.temp = temp;
         this.grammar = grammar;
         this.top = top;
     }
 
+    /**
+     * Verify the generated code.
+     * @param code Generated code.
+     * @throws InvalidSyntax If the code is incorrect or contains syntax errors.
+     */
     public void verify(final String code) throws InvalidSyntax {
         try {
-            final Path grammarPath = temp.resolve(
-                String.format("Simple.g4", new Randomizer().nextInt(Integer.MAX_VALUE))
-            );
-            Files.write(grammarPath, this.grammar.getBytes(StandardCharsets.UTF_8));
-            System.out.println(String.format("Grammar file was created %s", grammarPath));
-            final Tool tool = new Tool(new String[]{grammarPath.toString()});
+            final String name = this.grammarName();
+            final Path gpath = this.temp.resolve(String.format("%s.g4", name));
+            Files.write(gpath, this.grammar.getBytes(StandardCharsets.UTF_8));
+            final Tool tool = new Tool(new String[]{gpath.toString()});
             tool.processGrammarsOnCommandLine();
             ToolProvider.getSystemJavaCompiler().run(
                 System.in,
@@ -67,20 +95,18 @@ public final class SyntaxGuard {
                     .map(Path::toString)
                     .toArray(String[]::new)
             );
-            Class lexerClass = this.loadClass("SimpleLexer");
-            final Constructor declaredConstructor = lexerClass.getDeclaredConstructor(
-                CharStream.class);
+            final Class<?> clexer = this.load(String.format("%sLexer", name));
+            final Class<?> cparser = this.load(String.format("%sParser", name));
+            final Constructor declaredConstructor = clexer.getDeclaredConstructor(CharStream.class);
             Lexer lexer = (Lexer) declaredConstructor.newInstance(CharStreams.fromString(code));
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            final Class<?> parserClass = this.loadClass("SimpleParser");
-            Constructor parserCTor = parserClass.getConstructor(TokenStream.class);
-            Parser parser = (Parser) parserCTor.newInstance(tokens);
-            final SyntaxErrorListener listener = new SyntaxErrorListener();
-            parser.addErrorListener(listener);
-            lexer.addErrorListener(listener);
-            parserClass.getMethod(this.top).invoke(parser);
-            listener.report();
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
+            final Constructor parserCTor = cparser.getConstructor(TokenStream.class);
+            final Parser parser = (Parser) parserCTor.newInstance(new CommonTokenStream(lexer));
+            final SyntaxErrorListener errors = new SyntaxErrorListener();
+            parser.addErrorListener(errors);
+            lexer.addErrorListener(errors);
+            cparser.getMethod(this.top).invoke(parser);
+            errors.report();
+        } catch (NoSuchMethodException | IllegalAccessException |
                  InvocationTargetException | InstantiationException | IOException exception) {
             throw new IllegalStateException(
                 "Something went wrong during ANTLR grammar compilation",
@@ -89,8 +115,34 @@ public final class SyntaxGuard {
         }
     }
 
-    private Class<?> loadClass(String name) throws ClassNotFoundException, MalformedURLException {
-        return new URLClassLoader(new URL[]{this.temp.toFile().toURI().toURL()}).loadClass(name);
+    /**
+     * Get grammar name.
+     * @return Grammar name.
+     */
+    String grammarName() {
+        final Matcher matcher = Pattern.compile("grammar\\s+(\\w+);").matcher(this.grammar);
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            throw new IllegalStateException("Grammar name not found");
+        }
     }
 
+    /**
+     * Load class from the temp directory.
+     * @param name Class name.
+     * @return Loaded class.
+     */
+    private Class<?> load(String name) {
+        try {
+            return new URLClassLoader(
+                new URL[]{this.temp.toFile().toURI().toURL()}
+            ).loadClass(name);
+        } catch (final MalformedURLException | ClassNotFoundException exception) {
+            throw new IllegalStateException(
+                "Something went wrong during class loading",
+                exception
+            );
+        }
+    }
 }
