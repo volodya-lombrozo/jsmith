@@ -1,7 +1,6 @@
 package com.github.lombrozo.jsmith.guard;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,7 +19,6 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.TokenStream;
 import org.cactoos.Input;
-import org.cactoos.Scalar;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
@@ -39,23 +37,15 @@ import org.cactoos.text.UncheckedText;
  *  The starting point: <a href="https://stackoverflow.com/questions/5762067/in-antlr-3-how-do-i-generate-a-lexer-and-parser-at-runtime-instead-of-ahead-o">here.</a>
  */
 public final class SyntaxGuard {
-
-    /**
-     * Temporary directory.
-     * Where the generated ANTLR lexer and parser will be stored.
-     */
-    private final Path temp;
-
-    /**
-     * ANTLR grammar text.
-     */
-    private final String grammar;
-
     /**
      * Top rule name.
      */
     private final String top;
 
+    /**
+     * Environment with lexer and parser.
+     * Created only once and then cached.
+     */
     private final Sticky<Environment> environment;
 
     /**
@@ -75,17 +65,18 @@ public final class SyntaxGuard {
      * @param top Top rule name.
      */
     SyntaxGuard(final Path temp, final String grammar, final String top) {
-        this(temp, grammar, top, SyntaxGuard.prestructor(temp, grammar));
+        this(top, SyntaxGuard.prestructor(temp, grammar));
     }
 
+    /**
+     * Constructor.
+     * @param top Top rule name.
+     * @param environment Environment.
+     */
     private SyntaxGuard(
-        final Path temp,
-        final String grammar,
         final String top,
         final Sticky<Environment> environment
     ) {
-        this.temp = temp;
-        this.grammar = grammar;
         this.top = top;
         this.environment = environment;
     }
@@ -99,7 +90,7 @@ public final class SyntaxGuard {
     public void verifySilently(final String code) {
         try {
             this.verify(code);
-        } catch (InvalidSyntax exception) {
+        } catch (final InvalidSyntax exception) {
             throw new IllegalStateException(exception);
         }
     }
@@ -109,61 +100,55 @@ public final class SyntaxGuard {
      * @param code Generated code.
      * @throws InvalidSyntax If the code is incorrect or contains syntax errors.
      */
-    public void verify(final String code) throws InvalidSyntax {
-        try {
-            final Environment env = new Unchecked<>(this.environment).value();
-            final Lexer lexer = this.lexer(env.lexer, code);
-            final Parser parser = this.parser(env.parser, lexer);
-            final SyntaxErrorListener errors = new SyntaxErrorListener();
-            parser.addErrorListener(errors);
-            lexer.addErrorListener(errors);
-            env.parser.getMethod(this.top).invoke(parser);
-            errors.report();
-        } catch (final NoSuchMethodException | IllegalAccessException |
-                       InvocationTargetException exception) {
-            throw new IllegalStateException(
-                "Something went wrong during ANTLR grammar compilation",
-                exception
-            );
-        }
+    void verify(final String code) throws InvalidSyntax {
+        final Environment env = new Unchecked<>(this.environment).value();
+        final Lexer lexer = env.lexer(code);
+        final Parser parser = env.parser(lexer);
+        final SyntaxErrorListener errors = new SyntaxErrorListener();
+        parser.addErrorListener(errors);
+        lexer.addErrorListener(errors);
+        env.parse(parser, this.top);
+        errors.report();
     }
 
     /**
-     * Create parser instance.
-     * @param cparser Loaded parser class.
-     * @param lexer Lexer instance.
-     * @return Parser instance.
+     * Prepare environment.
+     * @param temp Temporary directory where to store generated classes.
+     * @param grammar ANTLR grammar text.
+     * @return Environment that contains lexer and parser classes.
      */
-    private Parser parser(final Class<?> cparser, final Lexer lexer) {
-        try {
-            final Constructor<?> constructor = cparser.getDeclaredConstructor(TokenStream.class);
-            return (Parser) constructor.newInstance(new CommonTokenStream(lexer));
-        } catch (final NoSuchMethodException | IllegalAccessException |
-                       InvocationTargetException | InstantiationException exception) {
-            throw new IllegalStateException(
-                "Something went wrong during parser creation",
-                exception
-            );
-        }
-    }
-
-    /**
-     * Create lexer instance.
-     * @param clexer Loaded lexer class.
-     * @param code Code to parse.
-     * @return Lexer instance.
-     */
-    private Lexer lexer(final Class<?> clexer, final String code) {
-        try {
-            final Constructor<?> constructor = clexer.getDeclaredConstructor(CharStream.class);
-            return (Lexer) constructor.newInstance(CharStreams.fromString(code));
-        } catch (final NoSuchMethodException | IllegalAccessException |
-                       InvocationTargetException | InstantiationException exception) {
-            throw new IllegalStateException(
-                "Something went wrong during lexer creation",
-                exception
-            );
-        }
+    private static Sticky<Environment> prestructor(final Path temp, final String grammar) {
+        return new Sticky<>(
+            new Synced<>(
+                () -> {
+                    try {
+                        final String name = SyntaxGuard.grammarName(grammar);
+                        final Path gpath = temp.resolve(String.format("%s.g4", name));
+                        Files.write(gpath, grammar.getBytes(StandardCharsets.UTF_8));
+                        final Tool tool = new Tool(new String[]{gpath.toString()});
+                        tool.processGrammarsOnCommandLine();
+                        ToolProvider.getSystemJavaCompiler().run(
+                            System.in,
+                            System.out,
+                            System.err,
+                            Files.list(temp).filter(Files::isRegularFile)
+                                .filter(java -> java.getFileName().toString().endsWith(".java"))
+                                .map(Path::toString)
+                                .toArray(String[]::new)
+                        );
+                        return new Environment(
+                            SyntaxGuard.load(String.format("%sLexer", name), temp),
+                            SyntaxGuard.load(String.format("%sParser", name), temp)
+                        );
+                    } catch (final IOException exception) {
+                        throw new IllegalStateException(
+                            "Something went wrong during ANTLR grammar compilation",
+                            exception
+                        );
+                    }
+                }
+            )
+        );
     }
 
     /**
@@ -176,24 +161,6 @@ public final class SyntaxGuard {
             return matcher.group(1);
         } else {
             throw new IllegalStateException("Grammar name not found");
-        }
-    }
-
-    /**
-     * Load class from the temp directory.
-     * @param name Class name.
-     * @return Loaded class.
-     */
-    private Class<?> load(String name) {
-        try {
-            return new URLClassLoader(
-                new URL[]{this.temp.toFile().toURI().toURL()}
-            ).loadClass(name);
-        } catch (final MalformedURLException | ClassNotFoundException exception) {
-            throw new IllegalStateException(
-                "Something went wrong during class loading",
-                exception
-            );
         }
     }
 
@@ -215,57 +182,84 @@ public final class SyntaxGuard {
         }
     }
 
-    private static Sticky<Environment> prestructor(final Path temp, final String grammar) {
-        return new Sticky<>(
-            new Synced<>(SyntaxGuard.scalar(temp, grammar))
-        );
-    }
-
-    private static Scalar<Environment> scalar(final Path temp, final String grammar) {
-        return () -> {
-            try {
-                final String name = SyntaxGuard.grammarName(grammar);
-                final Path gpath = temp.resolve(String.format("%s.g4", name));
-                Files.write(gpath, grammar.getBytes(StandardCharsets.UTF_8));
-                final Tool tool = new Tool(new String[]{gpath.toString()});
-                tool.processGrammarsOnCommandLine();
-                ToolProvider.getSystemJavaCompiler().run(
-                    System.in,
-                    System.out,
-                    System.err,
-                    Files.list(temp).filter(Files::isRegularFile)
-                        .filter(java -> java.getFileName().toString().endsWith(".java"))
-                        .map(Path::toString)
-                        .toArray(String[]::new)
-                );
-                final Class<?> cparser = load(String.format("%sParser", name), temp);
-                final Class<?> clexer = load(String.format("%sLexer", name), temp);
-                return new Environment(clexer, cparser);
-            } catch (final IOException exception) {
-                throw new IllegalStateException(
-                    "Something went wrong during ANTLR grammar compilation",
-                    exception
-                );
-            }
-        };
-    }
-
+    /**
+     * Compiled lexer and parser classes.
+     * This class encapsulates lexer and parser instances.
+     * @since 0.1
+     */
     private static class Environment {
 
+        /**
+         * Lexer class.
+         */
         private final Class<?> lexer;
+
+        /**
+         * Parser class.
+         */
         private final Class<?> parser;
 
-        public Environment(final Class<?> lexer, final Class<?> parser) {
+        /**
+         * Constructor.
+         * @param lexer Lexer class.
+         * @param parser Parser class.
+         */
+        Environment(final Class<?> lexer, final Class<?> parser) {
             this.lexer = lexer;
             this.parser = parser;
         }
 
-        public Class<?> getLexer() {
-            return this.lexer;
+        /**
+         * Create lexer instance.
+         * @param code Code to parse.
+         * @return Lexer instance.
+         */
+        Lexer lexer(final String code) {
+            try {
+                return (Lexer) this.lexer.getDeclaredConstructor(CharStream.class)
+                    .newInstance(CharStreams.fromString(code));
+            } catch (final NoSuchMethodException | IllegalAccessException |
+                           InvocationTargetException | InstantiationException exception) {
+                throw new IllegalStateException(
+                    "Something went wrong during lexer creation",
+                    exception
+                );
+            }
         }
 
-        public Class<?> getParser() {
-            return this.parser;
+        /**
+         * Create parser instance.
+         * @param lexer Lexer instance.
+         * @return Parser instance.
+         */
+        Parser parser(final Lexer lexer) {
+            try {
+                return (Parser) this.parser.getDeclaredConstructor(TokenStream.class)
+                    .newInstance(new CommonTokenStream(lexer));
+            } catch (final NoSuchMethodException | IllegalAccessException |
+                           InvocationTargetException | InstantiationException exception) {
+                throw new IllegalStateException(
+                    "Something went wrong during parser creation",
+                    exception
+                );
+            }
+        }
+
+        /**
+         * Parse the code by using top rule.
+         * @param parser Parser instance.
+         * @param top Top rule name.
+         */
+        void parse(final Parser parser, final String top) {
+            try {
+                this.parser.getMethod(top).invoke(parser);
+            } catch (final NoSuchMethodException | IllegalAccessException |
+                           InvocationTargetException exception) {
+                throw new IllegalStateException(
+                    "Something went wrong during parsing",
+                    exception
+                );
+            }
         }
     }
 }
