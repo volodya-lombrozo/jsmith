@@ -73,7 +73,7 @@ final class SyntaxGuardTest {
     void findsGrammarName(final String grammar) {
         MatcherAssert.assertThat(
             "We expect that the grammar name will be found",
-            new SyntaxGuard(null, grammar, "expr").grammarName(),
+            SyntaxGuard.grammarName(grammar),
             Matchers.equalTo("Simple")
         );
     }

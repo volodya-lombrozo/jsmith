@@ -20,6 +20,10 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.TokenStream;
 import org.cactoos.Input;
+import org.cactoos.Scalar;
+import org.cactoos.scalar.Sticky;
+import org.cactoos.scalar.Synced;
+import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
@@ -52,6 +56,8 @@ public final class SyntaxGuard {
      */
     private final String top;
 
+    private final Sticky<Environment> environment;
+
     /**
      * Constructor.
      * @param temp Temporary directory.
@@ -69,9 +75,33 @@ public final class SyntaxGuard {
      * @param top Top rule name.
      */
     SyntaxGuard(final Path temp, final String grammar, final String top) {
+        this(temp, grammar, top, SyntaxGuard.prestructor(temp, grammar));
+    }
+
+    private SyntaxGuard(
+        final Path temp,
+        final String grammar,
+        final String top,
+        final Sticky<Environment> environment
+    ) {
         this.temp = temp;
         this.grammar = grammar;
         this.top = top;
+        this.environment = environment;
+    }
+
+    /**
+     * Verify the generated code.
+     * Throws a runtime exception if the code is incorrect or contains syntax errors.
+     * The same as {@link SyntaxGuard#verify(String)} but without checked exceptions.
+     * @param code Generated code.
+     */
+    public void verifySilently(final String code) {
+        try {
+            this.verify(code);
+        } catch (InvalidSyntax exception) {
+            throw new IllegalStateException(exception);
+        }
     }
 
     /**
@@ -81,30 +111,16 @@ public final class SyntaxGuard {
      */
     public void verify(final String code) throws InvalidSyntax {
         try {
-            final String name = this.grammarName();
-            final Path gpath = this.temp.resolve(String.format("%s.g4", name));
-            Files.write(gpath, this.grammar.getBytes(StandardCharsets.UTF_8));
-            final Tool tool = new Tool(new String[]{gpath.toString()});
-            tool.processGrammarsOnCommandLine();
-            ToolProvider.getSystemJavaCompiler().run(
-                System.in,
-                System.out,
-                System.err,
-                Files.list(this.temp).filter(Files::isRegularFile)
-                    .filter(java -> java.getFileName().toString().endsWith(".java"))
-                    .map(Path::toString)
-                    .toArray(String[]::new)
-            );
-            final Lexer lexer = this.lexer(this.load(String.format("%sLexer", name)), code);
-            final Class<?> cparser = this.load(String.format("%sParser", name));
-            final Parser parser = this.parser(cparser, lexer);
+            final Environment env = new Unchecked<>(this.environment).value();
+            final Lexer lexer = this.lexer(env.lexer, code);
+            final Parser parser = this.parser(env.parser, lexer);
             final SyntaxErrorListener errors = new SyntaxErrorListener();
             parser.addErrorListener(errors);
             lexer.addErrorListener(errors);
-            cparser.getMethod(this.top).invoke(parser);
+            env.parser.getMethod(this.top).invoke(parser);
             errors.report();
         } catch (final NoSuchMethodException | IllegalAccessException |
-                       InvocationTargetException | IOException exception) {
+                       InvocationTargetException exception) {
             throw new IllegalStateException(
                 "Something went wrong during ANTLR grammar compilation",
                 exception
@@ -154,8 +170,8 @@ public final class SyntaxGuard {
      * Get grammar name.
      * @return Grammar name.
      */
-    String grammarName() {
-        final Matcher matcher = Pattern.compile("grammar\\s+(\\w+);").matcher(this.grammar);
+    static String grammarName(final String grammar) {
+        final Matcher matcher = Pattern.compile("grammar\\s+(\\w+);").matcher(grammar);
         if (matcher.find()) {
             return matcher.group(1);
         } else {
@@ -178,6 +194,78 @@ public final class SyntaxGuard {
                 "Something went wrong during class loading",
                 exception
             );
+        }
+    }
+
+    /**
+     * Load class from the temp directory.
+     * @param name Class name.
+     * @return Loaded class.
+     */
+    private static Class<?> load(String name, Path temp) {
+        try {
+            return new URLClassLoader(
+                new URL[]{temp.toFile().toURI().toURL()}
+            ).loadClass(name);
+        } catch (final MalformedURLException | ClassNotFoundException exception) {
+            throw new IllegalStateException(
+                "Something went wrong during class loading",
+                exception
+            );
+        }
+    }
+
+    private static Sticky<Environment> prestructor(final Path temp, final String grammar) {
+        return new Sticky<>(
+            new Synced<>(SyntaxGuard.scalar(temp, grammar))
+        );
+    }
+
+    private static Scalar<Environment> scalar(final Path temp, final String grammar) {
+        return () -> {
+            try {
+                final String name = SyntaxGuard.grammarName(grammar);
+                final Path gpath = temp.resolve(String.format("%s.g4", name));
+                Files.write(gpath, grammar.getBytes(StandardCharsets.UTF_8));
+                final Tool tool = new Tool(new String[]{gpath.toString()});
+                tool.processGrammarsOnCommandLine();
+                ToolProvider.getSystemJavaCompiler().run(
+                    System.in,
+                    System.out,
+                    System.err,
+                    Files.list(temp).filter(Files::isRegularFile)
+                        .filter(java -> java.getFileName().toString().endsWith(".java"))
+                        .map(Path::toString)
+                        .toArray(String[]::new)
+                );
+                final Class<?> cparser = load(String.format("%sParser", name), temp);
+                final Class<?> clexer = load(String.format("%sLexer", name), temp);
+                return new Environment(clexer, cparser);
+            } catch (final IOException exception) {
+                throw new IllegalStateException(
+                    "Something went wrong during ANTLR grammar compilation",
+                    exception
+                );
+            }
+        };
+    }
+
+    private static class Environment {
+
+        private final Class<?> lexer;
+        private final Class<?> parser;
+
+        public Environment(final Class<?> lexer, final Class<?> parser) {
+            this.lexer = lexer;
+            this.parser = parser;
+        }
+
+        public Class<?> getLexer() {
+            return this.lexer;
+        }
+
+        public Class<?> getParser() {
+            return this.parser;
         }
     }
 }

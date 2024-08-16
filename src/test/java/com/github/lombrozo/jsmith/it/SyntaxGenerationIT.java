@@ -3,6 +3,7 @@ package com.github.lombrozo.jsmith.it;
 import com.github.lombrozo.jsmith.Generator;
 import com.github.lombrozo.jsmith.guard.SyntaxGuard;
 import java.nio.file.Path;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
@@ -20,7 +21,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 final class SyntaxGenerationIT {
 
-    @ParameterizedTest(name = "Generates syntax for {1} with top rule {2}")
+    @ParameterizedTest(name = "Generates programs for {1} grammar with top rule {2}")
     @MethodSource("syntax")
     void generatesSyntaxForGrammar(
         final Path temp,
@@ -28,11 +29,25 @@ final class SyntaxGenerationIT {
         final String top
     ) {
         final Input grammar = new ResourceOf(name);
-        final String program = new Generator(grammar).generate(top);
+        final Generator generator = new Generator(grammar);
+        final SyntaxGuard guard = new SyntaxGuard(temp, grammar, top);
         Assertions.assertDoesNotThrow(
-            () -> new SyntaxGuard(temp, grammar, top).verify(program),
+            () -> Stream.generate(() -> "expr")
+                .map(generator::generate)
+                .limit(50)
+                .peek(SyntaxGenerationIT::logProgram)
+                .forEach(guard::verifySilently),
             "We expect that the randomly generated code will be verified without errors"
         );
+    }
+
+    /**
+     * Logs the generated program.
+     * @param program The generated program.
+     */
+    private static void logProgram(final String program) {
+        Logger.getLogger(SyntaxGenerationIT.class.getSimpleName())
+            .info(String.format("Generated program: %n%s%n", program));
     }
 
     /**
