@@ -95,21 +95,56 @@ public final class SyntaxGuard {
                     .map(Path::toString)
                     .toArray(String[]::new)
             );
-            final Class<?> clexer = this.load(String.format("%sLexer", name));
+            final Lexer lexer = this.lexer(this.load(String.format("%sLexer", name)), code);
             final Class<?> cparser = this.load(String.format("%sParser", name));
-            final Constructor declaredConstructor = clexer.getDeclaredConstructor(CharStream.class);
-            Lexer lexer = (Lexer) declaredConstructor.newInstance(CharStreams.fromString(code));
-            final Constructor parserCTor = cparser.getConstructor(TokenStream.class);
-            final Parser parser = (Parser) parserCTor.newInstance(new CommonTokenStream(lexer));
+            final Parser parser = this.parser(cparser, lexer);
             final SyntaxErrorListener errors = new SyntaxErrorListener();
             parser.addErrorListener(errors);
             lexer.addErrorListener(errors);
             cparser.getMethod(this.top).invoke(parser);
             errors.report();
-        } catch (NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException | InstantiationException | IOException exception) {
+        } catch (final NoSuchMethodException | IllegalAccessException |
+                       InvocationTargetException | IOException exception) {
             throw new IllegalStateException(
                 "Something went wrong during ANTLR grammar compilation",
+                exception
+            );
+        }
+    }
+
+    /**
+     * Create parser instance.
+     * @param cparser Loaded parser class.
+     * @param lexer Lexer instance.
+     * @return Parser instance.
+     */
+    private Parser parser(final Class<?> cparser, final Lexer lexer) {
+        try {
+            final Constructor<?> constructor = cparser.getDeclaredConstructor(TokenStream.class);
+            return (Parser) constructor.newInstance(new CommonTokenStream(lexer));
+        } catch (final NoSuchMethodException | IllegalAccessException |
+                       InvocationTargetException | InstantiationException exception) {
+            throw new IllegalStateException(
+                "Something went wrong during parser creation",
+                exception
+            );
+        }
+    }
+
+    /**
+     * Create lexer instance.
+     * @param clexer Loaded lexer class.
+     * @param code Code to parse.
+     * @return Lexer instance.
+     */
+    private Lexer lexer(final Class<?> clexer, final String code) {
+        try {
+            final Constructor<?> constructor = clexer.getDeclaredConstructor(CharStream.class);
+            return (Lexer) constructor.newInstance(CharStreams.fromString(code));
+        } catch (final NoSuchMethodException | IllegalAccessException |
+                       InvocationTargetException | InstantiationException exception) {
+            throw new IllegalStateException(
+                "Something went wrong during lexer creation",
                 exception
             );
         }

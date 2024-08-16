@@ -5,21 +5,18 @@ import java.util.Map;
 
 public final class Unparser {
 
-    private final String top;
     private final Map<String, UnparserRule> rules;
 
     private final Map<String, UnlexerRule> unlexerRules;
 
-    public Unparser(final String top) {
-        this(top, new HashMap<>(0), new HashMap<>(0));
+    public Unparser() {
+        this(new HashMap<>(0), new HashMap<>(0));
     }
 
     private Unparser(
-        final String top,
         final Map<String, UnparserRule> rules,
         final Map<String, UnlexerRule> unlexerRules
     ) {
-        this.top = top;
         this.rules = rules;
         this.unlexerRules = unlexerRules;
     }
@@ -33,11 +30,6 @@ public final class Unparser {
         this.unlexerRules.put(rule.name(), rule);
         return this;
     }
-
-    public String generate() {
-        return this.rules.get(this.top).generate();
-    }
-
     public UnlexerRule unlexerRule(final String rule) {
         return this.unlexerRules.get(rule);
     }

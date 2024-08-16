@@ -11,13 +11,12 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
-    private final Unparser unparser = new Unparser("expr");
+    private final Unparser unparser = new Unparser();
     private Generative current = new Root();
 
     public Unparser unparser() {
         return this.unparser;
     }
-
 
     @Override
     public void enterGrammarSpec(final ANTLRv4Parser.GrammarSpecContext ctx) {

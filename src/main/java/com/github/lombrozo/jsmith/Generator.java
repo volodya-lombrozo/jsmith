@@ -35,7 +35,7 @@ public final class Generator {
 
     private final String grammar;
 
-    Generator(final Input input) {
+    public Generator(final Input input) {
         this(new UncheckedText(new TextOf(input)).asString());
     }
 
@@ -43,10 +43,10 @@ public final class Generator {
         this.grammar = grammar;
     }
 
-    public String generate() {
+    public String generate(final String rule) {
         final ANTLRListener listener = new ANTLRListener();
         new ParseTreeWalker().walk(listener, this.parser().grammarSpec());
-        return listener.unparser().generate();
+        return listener.unparser().generate(rule);
     }
 
     String grammarTree() {

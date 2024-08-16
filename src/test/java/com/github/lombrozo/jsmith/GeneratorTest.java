@@ -25,7 +25,6 @@ package com.github.lombrozo.jsmith;
 
 import com.mifmif.common.regex.Generex;
 import org.cactoos.io.ResourceOf;
-import org.cactoos.text.TextOf;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -38,7 +37,7 @@ final class GeneratorTest {
         final Generator generator = new Generator(new ResourceOf("grammars/Simple.g4"));
         System.out.println(generator.grammarTree());
         for (int i = 0; i < 10; ++i) {
-            System.out.println(generator.generate());
+            System.out.println(generator.generate("expr"));
         }
     }
 
