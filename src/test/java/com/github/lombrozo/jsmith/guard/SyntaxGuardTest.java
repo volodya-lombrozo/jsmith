@@ -19,10 +19,16 @@ final class SyntaxGuardTest {
      */
     private static final Input GRAMMAR = new ResourceOf("grammars/Simple.g4");
 
+    /**
+     * Top rule.
+     */
+    private static final String TOP = "expr";
+
     @Test
     void validatesCorrectSynax(@TempDir final Path temp) {
         Assertions.assertDoesNotThrow(
-            () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR).verify("1 + 1"),
+            () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR, SyntaxGuardTest.TOP)
+                .verify("1 + 1"),
             "We expect that the code will be verified without errors"
         );
     }
@@ -33,10 +39,11 @@ final class SyntaxGuardTest {
             "We expect that the code will be verified with errors and error message will be informative",
             Assertions.assertThrows(
                 InvalidSyntax.class,
-                () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR).verify("1 - 1"),
+                () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR, SyntaxGuardTest.TOP)
+                    .verify("1 - 1"),
                 "We expect that the code will be verified with errors"
             ).getMessage(),
-            Matchers.equalTo("Incorrect syntax")
+            Matchers.equalTo("token recognition error at: '-'")
         );
     }
 
@@ -46,10 +53,11 @@ final class SyntaxGuardTest {
             "We expect that the empty code will be verified with errors and error message will be informative",
             Assertions.assertThrows(
                 InvalidSyntax.class,
-                () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR).verify(""),
+                () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR, SyntaxGuardTest.TOP)
+                    .verify(""),
                 "We expect that the empty code will be verified with errors"
             ).getMessage(),
-            Matchers.equalTo("Empty code")
+            Matchers.equalTo("missing NUMBER at '<EOF>'")
         );
     }
 }

@@ -1,34 +1,23 @@
 package com.github.lombrozo.jsmith.guard;
 
 import com.github.lombrozo.jsmith.Randomizer;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.BitSet;
-import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import javax.xml.transform.ErrorListener;
 import org.antlr.v4.Tool;
-import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNConfigSet;
-import org.antlr.v4.runtime.atn.ParseInfo;
-import org.antlr.v4.runtime.dfa.DFA;
 import org.cactoos.Input;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
@@ -48,14 +37,16 @@ public final class SyntaxGuard {
     private final Path temp;
     private final String grammar;
 
-    public SyntaxGuard(final Path temp, final Input input) {
-        this(temp, new UncheckedText(new TextOf(input)).asString());
+    private final String top;
+
+    public SyntaxGuard(final Path temp, final Input input, final String top) {
+        this(temp, new UncheckedText(new TextOf(input)).asString(), top);
     }
 
-
-    public SyntaxGuard(final Path temp, final String grammar) {
+    public SyntaxGuard(final Path temp, final String grammar, final String top) {
         this.temp = temp;
         this.grammar = grammar;
+        this.top = top;
     }
 
     public void verify(final String code) throws InvalidSyntax {
@@ -76,86 +67,30 @@ public final class SyntaxGuard {
                     .map(Path::toString)
                     .toArray(String[]::new)
             );
-
             Class lexerClass = this.loadClass("SimpleLexer");
             final Constructor declaredConstructor = lexerClass.getDeclaredConstructor(
                 CharStream.class);
             Lexer lexer = (Lexer) declaredConstructor.newInstance(CharStreams.fromString(code));
             CommonTokenStream tokens = new CommonTokenStream(lexer);
-
             final Class<?> parserClass = this.loadClass("SimpleParser");
             Constructor parserCTor = parserClass.getConstructor(TokenStream.class);
             Parser parser = (Parser) parserCTor.newInstance(tokens);
-//            final Method[] declaredMethods = parserClass.getDeclaredMethods();
-//            parserClass.getMethod("expr").invoke(parser);
-//            Method entryPointMethod = parserClass.getMethod("getNumberOfSyntaxErrors");
-//            final Object invoke = entryPointMethod.invoke(parser);
-//            System.out.println(invoke);
-            final BaseErrorListener listener = new BaseErrorListener();
+            final SyntaxErrorListener listener = new SyntaxErrorListener();
             parser.addErrorListener(listener);
-            lexer.addErrorListener(new ANTLRErrorListener() {
-                @Override
-                public void syntaxError(
-                    final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line,
-                    final int charPositionInLine, final String msg, final RecognitionException e
-                ) {
-                    System.out.println("Syntax error: " + msg);
-                }
-
-                @Override
-                public void reportAmbiguity(
-                    final Parser recognizer, final DFA dfa, final int startIndex,
-                    final int stopIndex, final boolean exact,
-                    final BitSet ambigAlts, final ATNConfigSet configs
-                ) {
-                    System.out.println("Syntax error: " + code);
-
-                }
-
-                @Override
-                public void reportAttemptingFullContext(
-                    final Parser recognizer, final DFA dfa, final int startIndex,
-                    final int stopIndex,
-                    final BitSet conflictingAlts, final ATNConfigSet configs
-                ) {
-                    System.out.println("Syntax error: " + code);
-
-                }
-
-                @Override
-                public void reportContextSensitivity(
-                    final Parser recognizer, final DFA dfa, final int startIndex,
-                    final int stopIndex, final int prediction,
-                    final ATNConfigSet configs
-                ) {
-                    System.out.println("Syntax error: " + code);
-                }
-            });
-            final String[] ruleNames = parser.getRuleNames();
-            System.out.println(Arrays.toString(ruleNames));
-            System.out.println(parser.getRuleInvocationStack());
-
-            final Object invoke = parserClass.getMethod(ruleNames[0]).invoke(parser);
-            System.out.println(invoke);
-            System.out.println(parser.getNumberOfSyntaxErrors());
-
-        } catch (Exception e) {
-            throw new InvalidSyntax("Incorrect syntax", e);
+            lexer.addErrorListener(listener);
+            parserClass.getMethod(this.top).invoke(parser);
+            listener.report();
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
+                 InvocationTargetException | InstantiationException | IOException exception) {
+            throw new IllegalStateException(
+                "Something went wrong during ANTLR grammar compilation",
+                exception
+            );
         }
-        System.out.println("Checking syntax of the code...");
     }
 
-    private Class<?> loadClass(
-        String className
-    ) throws ClassNotFoundException, MalformedURLException {
-        URL url = temp.toFile().toURI().toURL();          // file:/c:/myclasses/
-        URL[] urls = new URL[]{url};
-
-        // Create a new class loader with the directory
-        ClassLoader cl = new URLClassLoader(urls);
-
-        Class cls = cl.loadClass(className);
-        return cls;
+    private Class<?> loadClass(String name) throws ClassNotFoundException, MalformedURLException {
+        return new URLClassLoader(new URL[]{this.temp.toFile().toURI().toURL()}).loadClass(name);
     }
 
 }
