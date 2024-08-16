@@ -10,7 +10,7 @@ import com.github.lombrozo.jsmith.Unparser;
  *     | STRING_LITERAL elementOptions?
  *     ;
  */
-public final class TerminalDef implements ElementItem {
+public final class TerminalDef implements Generative {
 
     private final Generative parent;
 
