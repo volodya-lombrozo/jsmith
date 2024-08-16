@@ -21,6 +21,16 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 final class SyntaxGenerationIT {
 
+    /**
+     * Provides grammar files and top rules.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> syntax(@TempDir final Path temp) {
+        return Stream.of(
+            Arguments.of(temp, "grammars/Simple.g4", "expr")
+        );
+    }
+
     @ParameterizedTest(name = "Generates programs for {1} grammar with top rule {2}")
     @MethodSource("syntax")
     void generatesSyntaxForGrammar(
@@ -48,15 +58,5 @@ final class SyntaxGenerationIT {
     private static void logProgram(final String program) {
         Logger.getLogger(SyntaxGenerationIT.class.getSimpleName())
             .info(String.format("Generated program: %n%s%n", program));
-    }
-
-    /**
-     * Provides grammar files and top rules.
-     * @return Stream of arguments.
-     */
-    static Stream<Arguments> syntax(@TempDir final Path temp) {
-        return Stream.of(
-            Arguments.of(temp, "grammars/Simple.g4", "expr")
-        );
     }
 }
