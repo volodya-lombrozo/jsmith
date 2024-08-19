@@ -191,7 +191,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerElements(final ANTLRv4Parser.LexerElementsContext ctx) {
-        final Generative elements = new Elements(this.current);
+        final Generative elements = new LexerElements(this.current);
         this.current.append(elements);
         this.current = elements;
         super.enterLexerElements(ctx);

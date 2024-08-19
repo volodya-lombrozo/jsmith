@@ -74,4 +74,9 @@ public final class LexerElement implements Generative {
     public void append(final Generative generative) {
         this.children.add(generative);
     }
+
+    @Override
+    public String toString() {
+        return "lexerElement";
+    }
 }

@@ -2,7 +2,6 @@ package com.github.lombrozo.jsmith.antlr;
 
 import java.util.Objects;
 import java.util.Optional;
-import lombok.ToString;
 
 /**
  * Ebnf suffix ANTLR production.
@@ -16,7 +15,6 @@ import lombok.ToString;
  * }
  * @since 0.1
  */
-@ToString
 public final class EbnfSuffix implements Generative {
 
     private final Generative parent;
@@ -66,5 +64,12 @@ public final class EbnfSuffix implements Generative {
     @Override
     public void append(final Generative generative) {
         throw new UnsupportedOperationException("Unsupported operation yet");
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "ebnfSuffix(%s%s)", this.operation, Optional.ofNullable(this.question).orElse("")
+        );
     }
 }

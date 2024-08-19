@@ -23,6 +23,11 @@ public interface Generative {
         @Override
         public void append(final Generative ignore) {
         }
+
+        @Override
+        public String toString() {
+            return "empty";
+        }
     }
 
 }
