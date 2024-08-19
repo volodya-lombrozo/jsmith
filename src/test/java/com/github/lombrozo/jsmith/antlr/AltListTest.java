@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link AltList}.
+ *
+ * @since 0.1
  */
 class AltListTest {
 
