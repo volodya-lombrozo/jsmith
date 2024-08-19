@@ -33,8 +33,17 @@ import org.junit.jupiter.api.Test;
 final class GeneratorTest {
 
     @Test
-    void generatesSuccessfully() {
+    void generatesSimpleGrammarSuccessfully() {
         final Generator generator = new Generator(new ResourceOf("grammars/Simple.g4"));
+        System.out.println(generator.grammarTree());
+        for (int i = 0; i < 10; ++i) {
+            System.out.println(generator.generate("expr"));
+        }
+    }
+
+    @Test
+    void generatesArithmeticGrammarSuccessfully() {
+        final Generator generator = new Generator(new ResourceOf("grammars/Arithmetic.g4"));
         System.out.println(generator.grammarTree());
         for (int i = 0; i < 10; ++i) {
             System.out.println(generator.generate("expr"));

@@ -25,18 +25,19 @@ final class SyntaxGenerationIT {
      * Provides grammar files and top rules.
      * @return Stream of arguments.
      */
-    static Stream<Arguments> syntax(@TempDir final Path temp) {
+    static Stream<Arguments> syntax() {
         return Stream.of(
-            Arguments.of(temp, "grammars/Simple.g4", "expr")
+            Arguments.of("grammars/Simple.g4", "expr"),
+            Arguments.of("grammars/Arithmetic.g4", "prog")
         );
     }
 
     @ParameterizedTest(name = "Generates programs for {1} grammar with top rule {2}")
     @MethodSource("syntax")
     void generatesSyntaxForGrammar(
-        final Path temp,
         final String name,
-        final String top
+        final String top,
+        @TempDir final Path temp
     ) {
         final Input grammar = new ResourceOf(name);
         final Generator generator = new Generator(grammar);
