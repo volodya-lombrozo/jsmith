@@ -33,4 +33,8 @@ public final class UnparserRule implements Generative {
         this.list = generative;
     }
 
+    @Override
+    public String toString() {
+        return String.format("rule(%s)", this.name);
+    }
 }

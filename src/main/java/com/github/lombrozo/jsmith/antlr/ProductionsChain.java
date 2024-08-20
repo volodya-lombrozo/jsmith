@@ -8,15 +8,15 @@ import java.util.stream.Stream;
  * Used for logging of the current chain of {@link Generative} objects.
  * @since 0.1
  */
-final class ProductionsChain {
+public final class ProductionsChain {
 
     private Generative child;
 
-    ProductionsChain(final Generative start) {
+    public ProductionsChain(final Generative start) {
         this.child = start;
     }
 
-    String toTree() {
+   public String toTree() {
         return this.tree(this.child);
     }
 

@@ -30,4 +30,9 @@ public final class Root implements Generative {
     public void append(final Generative generative) {
         this.all.add(generative);
     }
+
+    @Override
+    public String toString() {
+        return "root";
+    }
 }

@@ -2,13 +2,25 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.Unparser;
 
-public final class Reference implements Generative {
+/**
+ * Parser rule reference.
+ * The rule definition in ANTLR grammar:
+ * {@code
+ * ruleref
+ *     : RULE_REF argActionBlock? elementOptions?
+ *     ;
+ * }
+ */
+//@todo #1:Add more test cases for rule ref.
+//  Currently we handle only the case when the rule reference is a simple string.
+//  We need to add more test cases to cover the cases with argActionBlock and elementOptions.
+public final class Ruleref implements Generative {
 
     private final Generative parent;
     private final String ref;
     private final Unparser unparser;
 
-    public Reference(
+    public Ruleref(
         final Generative parent,
         final String ref,
         final Unparser unparser

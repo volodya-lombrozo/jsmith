@@ -120,7 +120,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     @Override
     public void enterRuleref(final ANTLRv4Parser.RulerefContext ctx) {
         final String text = ctx.getText();
-        this.current.append(new Reference(this.current, text, this.unparser));
+        this.current.append(new Ruleref(this.current, text, this.unparser));
         super.enterRuleref(ctx);
     }
 
