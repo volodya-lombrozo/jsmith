@@ -1,5 +1,17 @@
 package com.github.lombrozo.jsmith.antlr;
 
+/**
+ * Atom.
+ * The ANTLR grammar definition:
+ * {@code
+ * atom
+ *     : {@link TerminalDef}
+ *     | {@link Ruleref}
+ *     | notSet
+ *     | DOT elementOptions?
+ *     ;
+ * }
+ */
 public final class Atom implements Generative {
 
     private final Generative parent;
@@ -22,5 +34,10 @@ public final class Atom implements Generative {
     @Override
     public String generate() {
         return this.item.generate();
+    }
+
+    @Override
+    public String toString() {
+        return "atom";
     }
 }

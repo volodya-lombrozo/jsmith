@@ -37,11 +37,27 @@ public final class Ruleref implements Generative {
 
     @Override
     public String generate() {
-        return this.unparser.generate(this.ref);
+        try {
+            return this.unparser.generate(this.ref);
+        } catch (final RecursionException exception) {
+            throw new RecursionException(
+                String.format(
+                    "Recursion detected in rule reference %s",
+                    new ProductionsChain(this).toTree()
+                ),
+                exception
+            );
+
+        }
     }
 
     @Override
     public void append(final Generative generative) {
         throw new UnsupportedOperationException("Reference cannot have children yet");
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ruleref(%s)", this.ref);
     }
 }
