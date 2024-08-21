@@ -79,6 +79,13 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         super.exitParserRuleSpec(ctx);
     }
 
+    @Override
+    public void enterAltList(final ANTLRv4Parser.AltListContext ctx) {
+        final Generative list = new AltList(this.current);
+        this.current.append(list);
+        this.current = list;
+        super.enterAltList(ctx);
+    }
 
     @Override
     public void exitAltList(final ANTLRv4Parser.AltListContext ctx) {
@@ -243,9 +250,9 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     public void enterLexerRuleSpec(final ANTLRv4Parser.LexerRuleSpecContext ctx) {
         final String text = ctx.TOKEN_REF().getText();
         final UnlexerRule rule = new UnlexerRule(this.current, text);
+        this.unparser.withLexerRule(rule);
         this.current.append(rule);
         this.current = rule;
-        this.unparser.withLexerRule(rule);
         super.enterLexerRuleSpec(ctx);
     }
 
@@ -376,7 +383,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void exitIdentifier(final ANTLRv4Parser.IdentifierContext ctx) {
-        this.current = current.parent();
+        this.current = this.current.parent();
         super.exitIdentifier(ctx);
     }
 
@@ -452,13 +459,15 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
+        final LabeledAlt alt = new LabeledAlt(this.current);
+        this.current.append(alt);
+        this.current = alt;
         super.enterLabeledAlt(ctx);
-        throw new UnsupportedOperationException("!!!! Implement this!!!");
     }
 
     @Override
     public void exitLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
+        this.current = this.current.parent();
         super.exitLabeledAlt(ctx);
-        throw new UnsupportedOperationException("!!!! Implement this!!!");
     }
 }
