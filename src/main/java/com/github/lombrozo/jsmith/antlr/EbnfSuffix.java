@@ -1,7 +1,10 @@
 package com.github.lombrozo.jsmith.antlr;
 
+import com.github.lombrozo.jsmith.Randomizer;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Ebnf suffix ANTLR production.
@@ -20,6 +23,8 @@ public final class EbnfSuffix implements Generative {
     private final Generative parent;
     private final String operation;
     private final String question;
+
+    private final Randomizer randomizer = new Randomizer();
 
     public EbnfSuffix(final String operation) {
         this(new Generative.Empty(), operation);
@@ -59,6 +64,30 @@ public final class EbnfSuffix implements Generative {
             this.operation,
             Optional.ofNullable(this.question).orElse("")
         );
+    }
+
+    public Generative multiplier(Generative from) {
+        if (this.operation.equals("?")) {
+            if (this.randomizer.flip()) {
+                return from;
+            } else {
+                return new Empty();
+            }
+        } else if (this.operation.equals("+")) {
+            int number = this.randomizer.nextInt(5) + 1;
+            return new Several(Collections.nCopies(number, from));
+        } else if (this.operation.equals("*")) {
+            int number = this.randomizer.nextInt(5);
+            return new Several(Collections.nCopies(number, from));
+        } else {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Unsupported operation %s for EbnfSuffix %s",
+                    this.operation,
+                    this
+                )
+            );
+        }
     }
 
     @Override

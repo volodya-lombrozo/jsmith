@@ -10,4 +10,8 @@ public final class Randomizer {
         return random.nextInt(bound);
     }
 
+    public boolean flip() {
+        return this.random.nextBoolean();
+    }
+
 }

@@ -1,12 +1,17 @@
 package com.github.lombrozo.jsmith.antlr;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 /**
  * Alternative elements.
  * The ANTLR grammar definition:
  * {@code
  * element
- *     : labeledElement (ebnfSuffix |)
- *     | atom (ebnfSuffix |)
+ *     : labeledElement ({@link EbnfSuffix} |)
+ *     | {@link Atom} ({@link EbnfSuffix} |)
  *     | ebnf
  *     | actionBlock (QUESTION predicateOptions?)?
  *     ;
@@ -16,10 +21,11 @@ package com.github.lombrozo.jsmith.antlr;
 public final class Element implements Generative {
 
     private final Generative parent;
-    private Generative atom;
+    private List<Generative> children;
 
     public Element(final Generative parent) {
         this.parent = parent;
+        this.children = new ArrayList<>(1);
     }
 
     @Override
@@ -29,12 +35,27 @@ public final class Element implements Generative {
 
     @Override
     public String generate() {
-        return this.atom.generate();
+        if (this.children.isEmpty()) {
+            throw new IllegalStateException("Element should have at least one child");
+        }
+        final Generative first = this.children.get(0);
+        if (first instanceof Atom) {
+            if (this.children.size() == 1) {
+                return first.generate();
+            } else {
+                final EbnfSuffix ebnfSuffix = (EbnfSuffix) this.children.get(1);
+                return ebnfSuffix.multiplier(first).generate();
+            }
+        } else {
+            throw new IllegalStateException(
+                String.format("Unrecognized element type %s for element %s", first, this)
+            );
+        }
     }
 
     @Override
     public void append(final Generative generative) {
-        this.atom = generative;
+        this.children.add(generative);
     }
 
     @Override

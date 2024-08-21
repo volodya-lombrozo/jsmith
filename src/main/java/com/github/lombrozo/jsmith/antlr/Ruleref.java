@@ -40,7 +40,7 @@ public final class Ruleref implements Generative {
         try {
             return this.unparser.generate(this.ref);
         } catch (final RecursionException exception) {
-            throw new RecursionException(
+            throw new IllegalStateException(
                 String.format(
                     "Recursion detected in rule reference %s",
                     new ProductionsChain(this).toTree()
