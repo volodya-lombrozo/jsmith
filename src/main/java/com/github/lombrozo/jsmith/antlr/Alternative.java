@@ -48,4 +48,9 @@ public final class Alternative implements Generative {
     public void append(final Generative generative) {
         this.elements.add(generative);
     }
+
+    @Override
+    public String toString() {
+        return "alternative";
+    }
 }

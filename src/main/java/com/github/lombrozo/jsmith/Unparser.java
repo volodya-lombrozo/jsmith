@@ -1,14 +1,22 @@
 package com.github.lombrozo.jsmith;
 
+import com.github.lombrozo.jsmith.antlr.ParserRuleSpec;
 import com.github.lombrozo.jsmith.antlr.ProductionsChain;
 import com.github.lombrozo.jsmith.antlr.RecursionException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @todo #1:90min Unify Recursion Detection.
+ *   We use a stack to detect recursion in the {@link Unparser} class.
+ *   And we use a chain of productions to detect recursion in the
+ *   {@link com.github.lombrozo.jsmith.antlr.ANTLRListener}.
+ *   Maybe we should unify these two approaches.
+ */
 public final class Unparser {
 
-    private final Map<String, UnparserRule> rules;
+    private final Map<String, ParserRuleSpec> rules;
 
     private final Map<String, UnlexerRule> unlexerRules;
 
@@ -19,14 +27,14 @@ public final class Unparser {
     }
 
     private Unparser(
-        final Map<String, UnparserRule> rules,
+        final Map<String, ParserRuleSpec> rules,
         final Map<String, UnlexerRule> unlexerRules
     ) {
         this.rules = rules;
         this.unlexerRules = unlexerRules;
     }
 
-    public Unparser withParserRule(final UnparserRule rule) {
+    public Unparser withParserRule(final ParserRuleSpec rule) {
         this.rules.put(rule.name(), rule);
         return this;
     }
@@ -54,6 +62,8 @@ public final class Unparser {
                 )
             );
         }
-        return this.rules.get(rule).generate();
+        final String generate = this.rules.get(rule).generate();
+        this.stack.decrementAndGet();
+        return generate;
     }
 }

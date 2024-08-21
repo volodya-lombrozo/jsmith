@@ -1,7 +1,6 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.Unparser;
-import com.github.lombrozo.jsmith.UnparserRule;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +17,7 @@ class RulerefTest {
     void generatesRuleReferenceByUsingLink() {
         final String ref = "reference";
         final String expected = "Linked rule value";
-        final UnparserRule rule = new UnparserRule(ref, new Generative.Empty());
+        final ParserRuleSpec rule = new ParserRuleSpec(ref, new Generative.Empty());
         rule.append(new Literal(expected));
         final Unparser unparser = new Unparser();
         unparser.withParserRule(rule);
@@ -37,7 +36,7 @@ class RulerefTest {
     void detectsRecursion() {
         final String ref = "reference";
         final Unparser unparser = new Unparser();
-        final UnparserRule rule = new UnparserRule(ref, new Generative.Empty());
+        final ParserRuleSpec rule = new ParserRuleSpec(ref, new Generative.Empty());
         final Generative recursive = new Ruleref(new Generative.Empty(), ref, unparser);
         rule.append(recursive);
         unparser.withParserRule(rule);
