@@ -450,4 +450,15 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         super.exitRuleBlock(ctx);
     }
 
+    @Override
+    public void enterLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
+        super.enterLabeledAlt(ctx);
+        throw new UnsupportedOperationException("!!!! Implement this!!!");
+    }
+
+    @Override
+    public void exitLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
+        super.exitLabeledAlt(ctx);
+        throw new UnsupportedOperationException("!!!! Implement this!!!");
+    }
 }
