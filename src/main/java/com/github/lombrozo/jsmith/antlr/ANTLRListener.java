@@ -141,10 +141,77 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         // nothing to do yet, since "TerminalDef" is a leaf node that doesn't have children.
         super.exitTerminalDef(ctx);
     }
+// --------------------
+// EBNF and blocks
+
+    @Override
+    public void enterEbnf(final ANTLRv4Parser.EbnfContext ctx) {
+        final Ebnf ebnf = new Ebnf(this.current);
+        this.current.append(ebnf);
+        this.current = ebnf;
+        super.enterEbnf(ctx);
+    }
+
+    @Override
+    public void exitEbnf(final ANTLRv4Parser.EbnfContext ctx) {
+        this.current = this.current.parent();
+        super.exitEbnf(ctx);
+    }
+
+    @Override
+    public void enterEbnfSuffix(final ANTLRv4Parser.EbnfSuffixContext ctx) {
+        this.current.append(
+            new EbnfSuffix(
+                this.current,
+                Stream.of(ctx.QUESTION(0), ctx.STAR(), ctx.PLUS())
+                    .filter(Objects::nonNull)
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Can't find appropriate terminal"))
+                    .getText(),
+                Optional.ofNullable(ctx.QUESTION(1)).map(ParseTree::getText).orElse(null)
+            )
+        );
+        super.enterEbnfSuffix(ctx);
+    }
+
+    @Override
+    public void exitEbnfSuffix(final ANTLRv4Parser.EbnfSuffixContext ctx) {
+        // nothing to do yet, since "EbnfSuffix" is a leaf node that doesn't have children.
+        super.exitEbnfSuffix(ctx);
+    }
+
+    // -------------
+// Grammar Block
+    @Override
+    public void enterBlock(final ANTLRv4Parser.BlockContext ctx) {
+        final Block block = new Block(this.current);
+        this.current.append(block);
+        this.current = block;
+        super.enterBlock(ctx);
+    }
+
+    @Override
+    public void exitBlock(final ANTLRv4Parser.BlockContext ctx) {
+        this.current = this.current.parent();
+        super.exitBlock(ctx);
+    }
+
+    @Override
+    public void enterBlockSuffix(final ANTLRv4Parser.BlockSuffixContext ctx) {
+        final BlockSuffix suffix = new BlockSuffix(this.current);
+        this.current.append(suffix);
+        this.current = suffix;
+        super.enterBlockSuffix(ctx);
+    }
+
+    @Override
+    public void exitBlockSuffix(final ANTLRv4Parser.BlockSuffixContext ctx) {
+        this.current = this.current.parent();
+        super.exitBlockSuffix(ctx);
+    }
 
 
-//    LEXER RULES
-
+    //    LEXER RULES
     @Override
     public void enterLexerRuleSpec(final ANTLRv4Parser.LexerRuleSpecContext ctx) {
         final String text = ctx.TOKEN_REF().getText();
@@ -254,25 +321,91 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         super.exitCharacterRange(ctx);
     }
 
+
+    // --------------------
+// Rule Alts
     @Override
-    public void enterEbnfSuffix(final ANTLRv4Parser.EbnfSuffixContext ctx) {
-        this.current.append(
-            new EbnfSuffix(
-                this.current,
-                Stream.of(ctx.QUESTION(0), ctx.STAR(), ctx.PLUS())
-                    .filter(Objects::nonNull)
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalStateException("Can't find appropriate terminal"))
-                    .getText(),
-                Optional.ofNullable(ctx.QUESTION(1)).map(ParseTree::getText).orElse(null)
-            )
-        );
-        super.enterEbnfSuffix(ctx);
+    public void enterLabeledElement(final ANTLRv4Parser.LabeledElementContext ctx) {
+        final LabeledElement element = new LabeledElement(this.current);
+        this.current.append(element);
+        this.current = element;
+        super.enterLabeledElement(ctx);
     }
 
     @Override
-    public void exitEbnfSuffix(final ANTLRv4Parser.EbnfSuffixContext ctx) {
-        // nothing to do yet, since "EbnfSuffix" is a leaf node that doesn't have children.
-        super.exitEbnfSuffix(ctx);
+    public void exitLabeledElement(final ANTLRv4Parser.LabeledElementContext ctx) {
+        this.current = this.current.parent();
+        super.exitLabeledElement(ctx);
+    }
+
+
+    @Override
+    public void enterIdentifier(final ANTLRv4Parser.IdentifierContext ctx) {
+        final Identifier identifier = new Identifier(this.current);
+        this.current.append(identifier);
+        this.current = identifier;
+        super.enterIdentifier(ctx);
+    }
+
+    @Override
+    public void exitIdentifier(final ANTLRv4Parser.IdentifierContext ctx) {
+        this.current = current.parent();
+        super.exitIdentifier(ctx);
+    }
+
+    @Override
+    public void enterActionBlock(final ANTLRv4Parser.ActionBlockContext ctx) {
+        final ActionBlock block = new ActionBlock(this.current);
+        this.current.append(block);
+        this.current = block;
+        super.enterActionBlock(ctx);
+    }
+
+    @Override
+    public void exitActionBlock(final ANTLRv4Parser.ActionBlockContext ctx) {
+        this.current = this.current.parent();
+        super.exitActionBlock(ctx);
+    }
+
+    @Override
+    public void enterPredicateOptions(final ANTLRv4Parser.PredicateOptionsContext ctx) {
+        final PredicateOptions options = new PredicateOptions(this.current);
+        this.current.append(options);
+        this.current = options;
+        super.enterPredicateOptions(ctx);
+    }
+
+    @Override
+    public void exitPredicateOptions(final ANTLRv4Parser.PredicateOptionsContext ctx) {
+        this.current = this.current.parent();
+        super.exitPredicateOptions(ctx);
+    }
+
+    @Override
+    public void enterPredicateOption(final ANTLRv4Parser.PredicateOptionContext ctx) {
+        final PredicateOption option = new PredicateOption(this.current);
+        this.current.append(option);
+        this.current = option;
+        super.enterPredicateOption(ctx);
+    }
+
+    @Override
+    public void exitPredicateOption(final ANTLRv4Parser.PredicateOptionContext ctx) {
+        this.current = this.current.parent();
+        super.exitPredicateOption(ctx);
+    }
+
+    @Override
+    public void enterElementOption(final ANTLRv4Parser.ElementOptionContext ctx) {
+        final ElementOption option = new ElementOption(this.current);
+        this.current.append(option);
+        this.current = option;
+        super.enterElementOption(ctx);
+    }
+
+    @Override
+    public void exitElementOption(final ANTLRv4Parser.ElementOptionContext ctx) {
+        this.current = this.current.parent();
+        super.exitElementOption(ctx);
     }
 }

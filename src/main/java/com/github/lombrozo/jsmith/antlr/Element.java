@@ -2,18 +2,16 @@ package com.github.lombrozo.jsmith.antlr;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Alternative elements.
  * The ANTLR grammar definition:
  * {@code
  * element
- *     : labeledElement ({@link EbnfSuffix} |)
+ *     : {@link LabeledElement} ({@link EbnfSuffix} |)
  *     | {@link Atom} ({@link EbnfSuffix} |)
- *     | ebnf
- *     | actionBlock (QUESTION predicateOptions?)?
+ *     | {@link Ebnf}
+ *     | {@link ActionBlock} (QUESTION predicateOptions?)?
  *     ;
  * }
  * @since 0.1
