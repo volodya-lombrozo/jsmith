@@ -44,9 +44,11 @@ public final class Element implements Generative {
                 final EbnfSuffix ebnfSuffix = (EbnfSuffix) this.children.get(1);
                 return ebnfSuffix.multiplier(first).generate();
             }
+        } else if (first instanceof Ebnf) {
+            return first.generate();
         } else {
             throw new IllegalStateException(
-                String.format("Unrecognized element type %s for element %s", first, this)
+                String.format("Unrecognized element type '%s' for '%s' element", first, this)
             );
         }
     }
