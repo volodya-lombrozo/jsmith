@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 1.0
  */
-class RulerefTest {
+final class RulerefTest {
 
     @Test
     void generatesRuleReferenceByUsingLink() {

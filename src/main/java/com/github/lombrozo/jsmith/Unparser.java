@@ -54,7 +54,8 @@ public final class Unparser {
                 String.format("Rule not found: %s. All available rules: [%s]", rule, this.rules)
             );
         }
-        if (this.stack.incrementAndGet() > 50) {
+        //todo: to high stack! We neeed to learn how to control it!
+        if (this.stack.incrementAndGet() > 500) {
             throw new RecursionException(
                 String.format(
                     "Recursion detected in rule: %n%s%n",

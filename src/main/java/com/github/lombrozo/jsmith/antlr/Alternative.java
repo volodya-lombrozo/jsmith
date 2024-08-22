@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  * The rule definition:
  * {@code
  * alternative
- *     : elementOptions? element+
+ *     : elementOptions? {@link Element}+
  *     |
  *     // explicitly allow empty alts
  *     ;

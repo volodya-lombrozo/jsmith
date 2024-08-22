@@ -1,6 +1,5 @@
 package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.Generator;
 import com.mifmif.common.regex.Generex;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +8,9 @@ import java.util.stream.Collectors;
 /**
  * Represents a lexer element.
  * lexerElement
- *     : lexerAtom ebnfSuffix?
- *     | lexerBlock ebnfSuffix?
- *     | actionBlock QUESTION?
+ *     : {@link LexerAtom} ebnfSuffix?
+ *     | {@link LexerBlock} ebnfSuffix?
+ *     | {@link ActionBlock} QUESTION?
  *     ;
  */
 public final class LexerElement implements Generative {
@@ -37,13 +36,20 @@ public final class LexerElement implements Generative {
     @Override
     public String generate() {
         if (this.children.get(0) instanceof LexerAtom) {
-            final String regex;
+            final String res;
             final Generative atom = this.children.get(0);
+            final String generate = atom.generate();
+            if ("\\r".equals(generate) || "\\n".equals(generate)) {
+                //todo: You need to do something with special characters!
+                return "\n";
+            }
             if (this.children.size() > 1) {
                 final Generative ebnSuffix = this.children.get(1);
                 if (ebnSuffix != null) {
                     if (ebnSuffix instanceof EbnfSuffix) {
-                        regex = atom.generate() + ebnSuffix.generate();
+                        res = LexerElement.fromRegex(
+                            String.format("%s%s", generate, ebnSuffix.generate())
+                        );
                     } else {
                         throw new IllegalStateException(
                             String.format(
@@ -54,14 +60,15 @@ public final class LexerElement implements Generative {
                         );
                     }
                 } else {
-                    regex = atom.generate();
+                    res = LexerElement.fromRegex(generate);
                 }
             } else {
-                regex = atom.generate();
+                res = generate;
             }
-            return LexerElement.fromRegex(regex);
+            return res;
         } else {
-            return this.children.stream().map(Generative::generate)
+            return this.children.stream()
+                .map(Generative::generate)
                 .collect(Collectors.joining(" "));
         }
     }

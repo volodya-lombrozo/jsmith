@@ -32,7 +32,7 @@ final class SyntaxGenerationIT {
         );
     }
 
-    @ParameterizedTest(name = "Generates programs for {1} grammar with top rule {2}")
+    @ParameterizedTest(name = "Generates programs for {0} grammar with top rule {1}")
     @MethodSource("syntax")
     void generatesSyntaxForGrammar(
         final String name,
@@ -43,7 +43,7 @@ final class SyntaxGenerationIT {
         final Generator generator = new Generator(grammar);
         final SyntaxGuard guard = new SyntaxGuard(temp, grammar, top);
         Assertions.assertDoesNotThrow(
-            () -> Stream.generate(() -> "expr")
+            () -> Stream.generate(() -> top)
                 .map(generator::generate)
                 .limit(50)
                 .peek(SyntaxGenerationIT::logProgram)

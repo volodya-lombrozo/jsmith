@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
  * Test case for {@link ProductionsChain}.
  * @since 0.1
  */
-class ProductionsChainTest {
+final class ProductionsChainTest {
 
     @Test
     void printsChain() {

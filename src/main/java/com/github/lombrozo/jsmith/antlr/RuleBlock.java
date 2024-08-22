@@ -16,6 +16,11 @@ public final class RuleBlock extends UnimplementedGenerative {
     }
 
     @Override
+    public String generate() {
+        return super.generate();
+    }
+
+    @Override
     public String toString() {
         return "ruleBlock";
     }

@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  *
  * @since 0.1
  */
-class EbnfSuffixTest {
+final class EbnfSuffixTest {
 
     /**
      * Generates all possible combinations of the EBNF suffix.

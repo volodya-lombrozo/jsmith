@@ -46,7 +46,7 @@ final class GeneratorTest {
         final Generator generator = new Generator(new ResourceOf("grammars/Arithmetic.g4"));
         System.out.println(generator.grammarTree());
         for (int i = 0; i < 10; ++i) {
-            System.out.println(generator.generate("expr"));
+            System.out.println(generator.generate("stat"));
         }
     }
 
@@ -56,6 +56,14 @@ final class GeneratorTest {
         System.out.println(generex.random());
         Generex second = new Generex("[0-3]");
         System.out.println(second.random());
+    }
+
+    @Test
+    void checksRandomizer() {
+        final Randomizer randomizer = new Randomizer();
+        for (int i = 0; i < 50; ++i) {
+            System.out.println(randomizer.nextInt(10));
+        }
     }
 
 }
