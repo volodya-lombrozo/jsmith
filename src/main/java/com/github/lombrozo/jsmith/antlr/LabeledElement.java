@@ -8,8 +8,8 @@ package com.github.lombrozo.jsmith.antlr;
  *     : {@link Identifier} (ASSIGN | PLUS_ASSIGN) ({@link Atom} | {@link Block})
  *     ;
  */
-public final class LabeledElement extends UnimplementedGenerative {
-    public LabeledElement(final Generative parent) {
+public final class LabeledElement extends UnimplementedRuleDefinition {
+    public LabeledElement(final RuleDefinition parent) {
         super(parent);
     }
 }

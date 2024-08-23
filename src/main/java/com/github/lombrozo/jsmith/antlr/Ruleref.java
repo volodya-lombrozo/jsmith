@@ -14,14 +14,14 @@ import com.github.lombrozo.jsmith.Unparser;
 //@todo #1:Add more test cases for rule ref.
 //  Currently we handle only the case when the rule reference is a simple string.
 //  We need to add more test cases to cover the cases with argActionBlock and elementOptions.
-public final class Ruleref implements Generative {
+public final class Ruleref implements RuleDefinition {
 
-    private final Generative parent;
+    private final RuleDefinition parent;
     private final String ref;
     private final Unparser unparser;
 
     public Ruleref(
-        final Generative parent,
+        final RuleDefinition parent,
         final String ref,
         final Unparser unparser
     ) {
@@ -31,7 +31,7 @@ public final class Ruleref implements Generative {
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
@@ -52,7 +52,7 @@ public final class Ruleref implements Generative {
     }
 
     @Override
-    public void append(final Generative generative) {
+    public void append(final RuleDefinition rule) {
         throw new UnsupportedOperationException("Reference cannot have children yet");
     }
 

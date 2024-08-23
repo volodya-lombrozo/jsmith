@@ -11,8 +11,8 @@ package com.github.lombrozo.jsmith.antlr;
  * }
  * @since 0.1
  */
-public final class Identifier extends UnimplementedGenerative {
-    public Identifier(final Generative parent) {
+public final class Identifier extends UnimplementedRuleDefinition {
+    public Identifier(final RuleDefinition parent) {
         super(parent);
     }
 }

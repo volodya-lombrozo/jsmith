@@ -12,23 +12,23 @@ package com.github.lombrozo.jsmith.antlr;
  *     ;
  * }
  */
-public final class Atom implements Generative {
+public final class Atom implements RuleDefinition {
 
-    private final Generative parent;
-    private Generative item;
+    private final RuleDefinition parent;
+    private RuleDefinition item;
 
-    public Atom(final Generative parent) {
+    public Atom(final RuleDefinition parent) {
         this.parent = parent;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
     @Override
-    public void append(final Generative generative) {
-        this.item = generative;
+    public void append(final RuleDefinition rule) {
+        this.item = rule;
     }
 
     @Override

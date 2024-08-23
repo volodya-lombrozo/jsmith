@@ -17,34 +17,34 @@ import java.util.Optional;
  * }
  * @since 0.1
  */
-public final class EbnfSuffix implements Generative {
+public final class EbnfSuffix implements RuleDefinition {
 
-    private final Generative parent;
+    private final RuleDefinition parent;
     private final String operation;
     private final String question;
 
     private final Rand rand = new Rand();
 
     public EbnfSuffix(final String operation) {
-        this(new Generative.Empty(), operation);
+        this(new RuleDefinition.Empty(), operation);
     }
 
     EbnfSuffix(final String operation, final String question) {
-        this(new Generative.Empty(), operation, question);
+        this(new RuleDefinition.Empty(), operation, question);
     }
 
-    EbnfSuffix(final Generative parent, final String operation) {
+    EbnfSuffix(final RuleDefinition parent, final String operation) {
         this(parent, operation, "");
     }
 
-    EbnfSuffix(final Generative parent, final String operation, final String question) {
+    EbnfSuffix(final RuleDefinition parent, final String operation, final String question) {
         this.parent = parent;
         this.operation = operation;
         this.question = question;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
@@ -65,7 +65,7 @@ public final class EbnfSuffix implements Generative {
         );
     }
 
-    public Generative multiplier(Generative from) {
+    public RuleDefinition multiplier(RuleDefinition from) {
         if (this.operation.equals("?")) {
             if (this.rand.flip()) {
                 return from;
@@ -90,7 +90,7 @@ public final class EbnfSuffix implements Generative {
     }
 
     @Override
-    public void append(final Generative generative) {
+    public void append(final RuleDefinition rule) {
         throw new UnsupportedOperationException("Unsupported operation yet");
     }
 

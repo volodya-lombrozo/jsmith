@@ -11,8 +11,8 @@ package com.github.lombrozo.jsmith.antlr;
  * }
  * @since 0.1
  */
-public final class ElementOption extends UnimplementedGenerative {
-    public ElementOption(final Generative parent) {
+public final class ElementOption extends UnimplementedRuleDefinition {
+    public ElementOption(final RuleDefinition parent) {
         super(parent);
     }
 }

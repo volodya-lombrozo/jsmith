@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
  * }
  * @since 0.1
  */
-public final class ParserRuleSpec implements Generative {
+public final class ParserRuleSpec implements RuleDefinition {
 
-    private final Generative parent;
+    private final RuleDefinition parent;
 
     private final String name;
-    private List<Generative> list;
+    private List<RuleDefinition> list;
 
-    public ParserRuleSpec(final String name, final Generative parent) {
+    public ParserRuleSpec(final String name, final RuleDefinition parent) {
         this.name = name;
         this.parent = parent;
         this.list = new ArrayList<>();
@@ -33,20 +33,20 @@ public final class ParserRuleSpec implements Generative {
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
     @Override
     public String generate() {
         return this.list.stream()
-            .map(Generative::generate)
+            .map(RuleDefinition::generate)
             .collect(Collectors.joining(" "));
     }
 
     @Override
-    public void append(final Generative generative) {
-        this.list.add(generative);
+    public void append(final RuleDefinition rule) {
+        this.list.add(rule);
     }
 
     @Override

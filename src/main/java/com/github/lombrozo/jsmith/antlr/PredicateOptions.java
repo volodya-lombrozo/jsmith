@@ -10,8 +10,8 @@ package com.github.lombrozo.jsmith.antlr;
  * }
  * @since 0.1
  */
-public final class PredicateOptions extends UnimplementedGenerative {
-    public PredicateOptions(final Generative parent) {
+public final class PredicateOptions extends UnimplementedRuleDefinition {
+    public PredicateOptions(final RuleDefinition parent) {
         super(parent);
     }
 }

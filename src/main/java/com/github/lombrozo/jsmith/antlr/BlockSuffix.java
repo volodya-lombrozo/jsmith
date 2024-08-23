@@ -9,8 +9,8 @@ package com.github.lombrozo.jsmith.antlr;
  *     ;
  * }
  */
-public final class BlockSuffix extends UnimplementedGenerative {
-    public BlockSuffix(final Generative parent) {
+public final class BlockSuffix extends UnimplementedRuleDefinition {
+    public BlockSuffix(final RuleDefinition parent) {
         super(parent);
     }
 }

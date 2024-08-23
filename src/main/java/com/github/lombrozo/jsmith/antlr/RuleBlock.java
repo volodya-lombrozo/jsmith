@@ -10,8 +10,8 @@ package com.github.lombrozo.jsmith.antlr;
  * }
  * @since 0.1
  */
-public final class RuleBlock extends UnimplementedGenerative {
-    public RuleBlock(final Generative parent) {
+public final class RuleBlock extends UnimplementedRuleDefinition {
+    public RuleBlock(final RuleDefinition parent) {
         super(parent);
     }
 

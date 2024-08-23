@@ -1,17 +1,17 @@
 package com.github.lombrozo.jsmith.antlr;
 
-public interface Generative {
+public interface RuleDefinition {
 
-    Generative parent();
+    RuleDefinition parent();
 
     String generate();
 
-    void append(final Generative generative);
+    void append(final RuleDefinition rule);
 
-    class Empty implements Generative {
+    class Empty implements RuleDefinition {
 
         @Override
-        public Generative parent() {
+        public RuleDefinition parent() {
             return this;
         }
 
@@ -21,7 +21,7 @@ public interface Generative {
         }
 
         @Override
-        public void append(final Generative ignore) {
+        public void append(final RuleDefinition ignore) {
         }
 
         @Override

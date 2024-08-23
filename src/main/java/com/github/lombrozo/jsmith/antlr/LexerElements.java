@@ -14,34 +14,34 @@ import java.util.stream.Collectors;
  *     ;
  * }
  */
-public final class LexerElements implements Generative {
+public final class LexerElements implements RuleDefinition {
 
-    private final Generative parent;
+    private final RuleDefinition parent;
 
-    private final List<Generative> elems;
+    private final List<RuleDefinition> elems;
 
-    public LexerElements(final Generative parent) {
+    public LexerElements(final RuleDefinition parent) {
         this(parent, new ArrayList<>(0));
     }
 
-    public LexerElements(final Generative parent, final List<Generative> elems) {
+    public LexerElements(final RuleDefinition parent, final List<RuleDefinition> elems) {
         this.parent = parent;
         this.elems = elems;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
     @Override
     public String generate() {
-        return this.elems.stream().map(Generative::generate).collect(Collectors.joining(""));
+        return this.elems.stream().map(RuleDefinition::generate).collect(Collectors.joining(""));
     }
 
     @Override
-    public void append(final Generative generative) {
-        this.elems.add(generative);
+    public void append(final RuleDefinition rule) {
+        this.elems.add(rule);
     }
 
     @Override

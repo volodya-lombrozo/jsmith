@@ -13,23 +13,23 @@ import java.util.stream.Collectors;
  *     | {@link ActionBlock} QUESTION?
  *     ;
  */
-public final class LexerElement implements Generative {
+public final class LexerElement implements RuleDefinition {
 
-    private final Generative parent;
+    private final RuleDefinition parent;
 
-    private final List<Generative> children;
+    private final List<RuleDefinition> children;
 
-    public LexerElement(final Generative parent) {
+    public LexerElement(final RuleDefinition parent) {
         this(parent, new ArrayList<>(0));
     }
 
-    public LexerElement(final Generative parent, final List<Generative> children) {
+    public LexerElement(final RuleDefinition parent, final List<RuleDefinition> children) {
         this.parent = parent;
         this.children = children;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
@@ -37,14 +37,14 @@ public final class LexerElement implements Generative {
     public String generate() {
         if (this.children.get(0) instanceof LexerAtom) {
             final String res;
-            final Generative atom = this.children.get(0);
+            final RuleDefinition atom = this.children.get(0);
             final String generate = atom.generate();
             if ("\\r".equals(generate) || "\\n".equals(generate)) {
                 //todo: You need to do something with special characters!
                 return "\n";
             }
             if (this.children.size() > 1) {
-                final Generative ebnSuffix = this.children.get(1);
+                final RuleDefinition ebnSuffix = this.children.get(1);
                 if (ebnSuffix != null) {
                     if (ebnSuffix instanceof EbnfSuffix) {
                         res = LexerElement.fromRegex(
@@ -68,7 +68,7 @@ public final class LexerElement implements Generative {
             return res;
         } else {
             return this.children.stream()
-                .map(Generative::generate)
+                .map(RuleDefinition::generate)
                 .collect(Collectors.joining(" "));
         }
     }
@@ -78,8 +78,8 @@ public final class LexerElement implements Generative {
     }
 
     @Override
-    public void append(final Generative generative) {
-        this.children.add(generative);
+    public void append(final RuleDefinition rule) {
+        this.children.add(rule);
     }
 
     @Override

@@ -15,7 +15,7 @@ final class AltListTest {
     void generatesOneOfTheAlternativesFromMany() {
         MatcherAssert.assertThat(
             "We expect that exactly one option will be chosen from the list of alternatives",
-            new AltList(new Generative.Empty(), new Literal("1"), new Literal("2")).generate(),
+            new AltList(new RuleDefinition.Empty(), new Literal("1"), new Literal("2")).generate(),
             Matchers.either(Matchers.equalTo("1")).or(Matchers.equalTo("2"))
         );
     }
@@ -24,7 +24,7 @@ final class AltListTest {
     void generatesOneAlternativeFromSingle() {
         MatcherAssert.assertThat(
             "We expect that the only option will be chosen from the list of alternatives",
-            new AltList(new Generative.Empty(), new Literal("1")).generate(),
+            new AltList(new RuleDefinition.Empty(), new Literal("1")).generate(),
             Matchers.equalTo("1")
         );
     }
@@ -33,7 +33,7 @@ final class AltListTest {
     void generatesNothing() {
         MatcherAssert.assertThat(
             "We expect that nothing will be generated",
-            new AltList(new Generative.Empty()).generate(),
+            new AltList(new RuleDefinition.Empty()).generate(),
             Matchers.equalTo("")
         );
     }

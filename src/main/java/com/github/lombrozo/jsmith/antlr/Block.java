@@ -14,34 +14,34 @@ import java.util.stream.Collectors;
  * }
  * @since 0.1
  */
-public final class Block implements Generative {
+public final class Block implements RuleDefinition {
 
-    private final Generative parent;
-    private final List<Generative> children;
+    private final RuleDefinition parent;
+    private final List<RuleDefinition> children;
 
-    public Block(final Generative parent) {
+    public Block(final RuleDefinition parent) {
         this(parent, new ArrayList<>());
     }
 
-    public Block(final Generative parent, final List<Generative> children) {
+    public Block(final RuleDefinition parent, final List<RuleDefinition> children) {
         this.parent = parent;
         this.children = children;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
     @Override
     public String generate() {
         return this.children.stream()
-            .map(Generative::generate)
+            .map(RuleDefinition::generate)
             .collect(Collectors.joining(" "));
     }
 
     @Override
-    public void append(final Generative generative) {
-        this.children.add(generative);
+    public void append(final RuleDefinition rule) {
+        this.children.add(rule);
     }
 }

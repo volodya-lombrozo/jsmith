@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     private final Unparser unparser = new Unparser();
-    private Generative current = new Root();
+    private RuleDefinition current = new Root();
 
     public Unparser unparser() {
         return this.unparser;
@@ -21,7 +21,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     // Every rule!
     @Override
     public void enterEveryRule(final ParserRuleContext ctx) {
-        Generative parent = this.current;
+        RuleDefinition parent = this.current;
         int size = 0;
         while (!(parent instanceof Root)) {
             parent = parent.parent();
@@ -80,7 +80,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterAltList(final ANTLRv4Parser.AltListContext ctx) {
-        final Generative list = new AltList(this.current);
+        final RuleDefinition list = new AltList(this.current);
         this.current.append(list);
         this.current = list;
         super.enterAltList(ctx);
@@ -94,7 +94,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterRuleAltList(final ANTLRv4Parser.RuleAltListContext ctx) {
-        final Generative list = new RuleAltList(this.current);
+        final RuleDefinition list = new RuleAltList(this.current);
         this.current.append(list);
         this.current = list;
         super.enterRuleAltList(ctx);
@@ -108,7 +108,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterAlternative(final ANTLRv4Parser.AlternativeContext ctx) {
-        final Generative alternative = new Alternative(this.current);
+        final RuleDefinition alternative = new Alternative(this.current);
         this.current.append(alternative);
         this.current = alternative;
         super.enterAlternative(ctx);
@@ -122,7 +122,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
-        final Generative element = new Element(this.current);
+        final RuleDefinition element = new Element(this.current);
         this.current.append(element);
         this.current = element;
         super.enterElement(ctx);
@@ -136,7 +136,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterAtom(final ANTLRv4Parser.AtomContext ctx) {
-        final Generative atom = new Atom(this.current);
+        final RuleDefinition atom = new Atom(this.current);
         this.current.append(atom);
         this.current = atom;
         super.enterAtom(ctx);
@@ -264,7 +264,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerAltList(final ANTLRv4Parser.LexerAltListContext ctx) {
-        final Generative list = new AltList(this.current);
+        final RuleDefinition list = new AltList(this.current);
         this.current.append(list);
         this.current = list;
         super.enterLexerAltList(ctx);
@@ -278,7 +278,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerAlt(final ANTLRv4Parser.LexerAltContext ctx) {
-        final Generative alternative = new Alternative(this.current);
+        final RuleDefinition alternative = new Alternative(this.current);
         this.current.append(alternative);
         this.current = alternative;
         super.enterLexerAlt(ctx);
@@ -292,7 +292,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerElements(final ANTLRv4Parser.LexerElementsContext ctx) {
-        final Generative elements = new LexerElements(this.current);
+        final RuleDefinition elements = new LexerElements(this.current);
         this.current.append(elements);
         this.current = elements;
         super.enterLexerElements(ctx);
@@ -306,7 +306,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerElement(final ANTLRv4Parser.LexerElementContext ctx) {
-        final Generative element = new LexerElement(this.current);
+        final RuleDefinition element = new LexerElement(this.current);
         this.current.append(element);
         this.current = element;
         super.enterLexerElement(ctx);
@@ -320,7 +320,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerAtom(final ANTLRv4Parser.LexerAtomContext ctx) {
-        final Generative atom = new LexerAtom(this.current);
+        final RuleDefinition atom = new LexerAtom(this.current);
         if (ctx.LEXER_CHAR_SET() != null) {
             final String text = ctx.LEXER_CHAR_SET().getText();
             atom.append(new LexerCharSet(atom, text));
@@ -360,7 +360,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 // Rule Alts
     @Override
     public void enterLabeledElement(final ANTLRv4Parser.LabeledElementContext ctx) {
-        final LabeledElement element = new LabeledElement(this.current);
+        final RuleDefinition element = new LabeledElement(this.current);
         this.current.append(element);
         this.current = element;
         super.enterLabeledElement(ctx);
@@ -375,7 +375,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterIdentifier(final ANTLRv4Parser.IdentifierContext ctx) {
-        final Identifier identifier = new Identifier(this.current);
+        final RuleDefinition identifier = new Identifier(this.current);
         this.current.append(identifier);
         this.current = identifier;
         super.enterIdentifier(ctx);
@@ -389,7 +389,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterActionBlock(final ANTLRv4Parser.ActionBlockContext ctx) {
-        final ActionBlock block = new ActionBlock(this.current);
+        final RuleDefinition block = new ActionBlock(this.current);
         this.current.append(block);
         this.current = block;
         super.enterActionBlock(ctx);
@@ -403,7 +403,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterPredicateOptions(final ANTLRv4Parser.PredicateOptionsContext ctx) {
-        final PredicateOptions options = new PredicateOptions(this.current);
+        final RuleDefinition options = new PredicateOptions(this.current);
         this.current.append(options);
         this.current = options;
         super.enterPredicateOptions(ctx);
@@ -417,7 +417,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterPredicateOption(final ANTLRv4Parser.PredicateOptionContext ctx) {
-        final PredicateOption option = new PredicateOption(this.current);
+        final RuleDefinition option = new PredicateOption(this.current);
         this.current.append(option);
         this.current = option;
         super.enterPredicateOption(ctx);
@@ -431,7 +431,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterElementOption(final ANTLRv4Parser.ElementOptionContext ctx) {
-        final ElementOption option = new ElementOption(this.current);
+        final RuleDefinition option = new ElementOption(this.current);
         this.current.append(option);
         this.current = option;
         super.enterElementOption(ctx);
@@ -445,7 +445,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterRuleBlock(final ANTLRv4Parser.RuleBlockContext ctx) {
-        final RuleBlock block = new RuleBlock(this.current);
+        final RuleDefinition block = new RuleBlock(this.current);
         this.current.append(block);
         this.current = block;
         super.enterRuleBlock(ctx);
@@ -459,7 +459,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
-        final LabeledAlt alt = new LabeledAlt(this.current);
+        final RuleDefinition alt = new LabeledAlt(this.current);
         this.current.append(alt);
         this.current = alt;
         super.enterLabeledAlt(ctx);

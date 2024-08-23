@@ -14,28 +14,28 @@ import java.util.List;
  *     ;
  * }
  */
-public final class AltList implements Generative {
+public final class AltList implements RuleDefinition {
 
-    private final Generative parent;
+    private final RuleDefinition parent;
 
-    private final List<Generative> alternatives;
+    private final List<RuleDefinition> alternatives;
     private final Rand rand;
 
-    AltList(final Generative parent) {
+    AltList(final RuleDefinition parent) {
         this(parent, new ArrayList<>(0));
     }
 
-    AltList(final Generative parent, Generative... alternatives) {
+    AltList(final RuleDefinition parent, RuleDefinition... alternatives) {
         this(parent, Arrays.asList(alternatives));
     }
 
-    private AltList(final Generative parent, final List<Generative> alternatives) {
+    private AltList(final RuleDefinition parent, final List<RuleDefinition> alternatives) {
         this(parent, alternatives, new Rand());
     }
 
     private AltList(
-        final Generative parent,
-        final List<Generative> alternatives,
+        final RuleDefinition parent,
+        final List<RuleDefinition> alternatives,
         final Rand rand
     ) {
         this.parent = parent;
@@ -44,7 +44,7 @@ public final class AltList implements Generative {
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
@@ -59,7 +59,7 @@ public final class AltList implements Generative {
     }
 
     @Override
-    public void append(final Generative generative) {
-        this.alternatives.add(generative);
+    public void append(final RuleDefinition rule) {
+        this.alternatives.add(rule);
     }
 }

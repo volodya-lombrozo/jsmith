@@ -16,18 +16,18 @@ import java.util.List;
  * }
  * @since 0.1
  */
-public final class Element implements Generative {
+public final class Element implements RuleDefinition {
 
-    private final Generative parent;
-    private List<Generative> children;
+    private final RuleDefinition parent;
+    private List<RuleDefinition> children;
 
-    public Element(final Generative parent) {
+    public Element(final RuleDefinition parent) {
         this.parent = parent;
         this.children = new ArrayList<>(1);
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
@@ -36,7 +36,7 @@ public final class Element implements Generative {
         if (this.children.isEmpty()) {
             throw new IllegalStateException("Element should have at least one child");
         }
-        final Generative first = this.children.get(0);
+        final RuleDefinition first = this.children.get(0);
         if (first instanceof Atom) {
             if (this.children.size() == 1) {
                 return first.generate();
@@ -54,8 +54,8 @@ public final class Element implements Generative {
     }
 
     @Override
-    public void append(final Generative generative) {
-        this.children.add(generative);
+    public void append(final RuleDefinition rule) {
+        this.children.add(rule);
     }
 
     @Override

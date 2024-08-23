@@ -12,7 +12,7 @@ final class ElementTest {
     @Test
     void generatesUsingAtomBranch() {
         final Root root = new Root();
-        final Generative element = new Element(root);
+        final RuleDefinition element = new Element(root);
         final Atom atom = new Atom(root);
         atom.append(new Literal("1"));
         element.append(atom);
@@ -23,7 +23,7 @@ final class ElementTest {
     @Test
     void generatesUsingAtomBranchAndEbnfSuffix() {
         final Root root = new Root();
-        final Generative element = new Element(root);
+        final RuleDefinition element = new Element(root);
         final Atom atom = new Atom(root);
         atom.append(new Literal("1"));
         element.append(atom);

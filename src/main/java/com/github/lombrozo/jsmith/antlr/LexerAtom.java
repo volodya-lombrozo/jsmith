@@ -4,23 +4,23 @@ import com.github.lombrozo.jsmith.Rand;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class LexerAtom implements Generative {
+public final class LexerAtom implements RuleDefinition {
 
-    private final Generative parent;
+    private final RuleDefinition parent;
 
-    private final List<Generative> elems;
+    private final List<RuleDefinition> elems;
 
-    public LexerAtom(final Generative parent) {
+    public LexerAtom(final RuleDefinition parent) {
         this(parent, new ArrayList<>(0));
     }
 
-    public LexerAtom(final Generative parent, final List<Generative> elems) {
+    public LexerAtom(final RuleDefinition parent, final List<RuleDefinition> elems) {
         this.parent = parent;
         this.elems = elems;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
@@ -31,7 +31,7 @@ public final class LexerAtom implements Generative {
     }
 
     @Override
-    public void append(final Generative generative) {
-        this.elems.add(generative);
+    public void append(final RuleDefinition rule) {
+        this.elems.add(rule);
     }
 }

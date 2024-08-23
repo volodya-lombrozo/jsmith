@@ -15,38 +15,38 @@ import java.util.stream.Collectors;
  *     ;
  * }
  */
-public final class Alternative implements Generative {
+public final class Alternative implements RuleDefinition {
 
-    private final Generative parent;
-    private final List<Generative> elements;
+    private final RuleDefinition parent;
+    private final List<RuleDefinition> elements;
 
-    Alternative(final Generative parent) {
+    Alternative(final RuleDefinition parent) {
         this(parent, new ArrayList<>(0));
     }
 
     private Alternative(
-        final Generative parent,
-        final List<Generative> element
+        final RuleDefinition parent,
+        final List<RuleDefinition> element
     ) {
         this.parent = parent;
         this.elements = element;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
     @Override
     public String generate() {
         return this.elements.stream()
-            .map(Generative::generate)
+            .map(RuleDefinition::generate)
             .collect(Collectors.joining(" "));
     }
 
     @Override
-    public void append(final Generative generative) {
-        this.elements.add(generative);
+    public void append(final RuleDefinition rule) {
+        this.elements.add(rule);
     }
 
     @Override

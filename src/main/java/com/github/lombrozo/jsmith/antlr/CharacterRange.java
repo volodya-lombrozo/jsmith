@@ -1,17 +1,17 @@
 package com.github.lombrozo.jsmith.antlr;
 
-public final class CharacterRange implements Generative {
+public final class CharacterRange implements RuleDefinition {
 
-    private final Generative parent;
+    private final RuleDefinition parent;
     private final String text;
 
-    public CharacterRange(final Generative parent, final String text) {
+    public CharacterRange(final RuleDefinition parent, final String text) {
         this.parent = parent;
         this.text = text;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
@@ -21,7 +21,7 @@ public final class CharacterRange implements Generative {
     }
 
     @Override
-    public void append(final Generative generative) {
+    public void append(final RuleDefinition rule) {
         throw new UnsupportedOperationException("CharacterRange cannot have children yet");
     }
 }

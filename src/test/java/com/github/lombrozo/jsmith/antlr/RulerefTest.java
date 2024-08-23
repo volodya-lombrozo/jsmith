@@ -17,11 +17,11 @@ final class RulerefTest {
     void generatesRuleReferenceByUsingLink() {
         final String ref = "reference";
         final String expected = "Linked rule value";
-        final ParserRuleSpec rule = new ParserRuleSpec(ref, new Generative.Empty());
+        final ParserRuleSpec rule = new ParserRuleSpec(ref, new RuleDefinition.Empty());
         rule.append(new Literal(expected));
         final Unparser unparser = new Unparser();
         unparser.withParserRule(rule);
-        final Ruleref ruleref = new Ruleref(new Generative.Empty(), ref, unparser);
+        final Ruleref ruleref = new Ruleref(new RuleDefinition.Empty(), ref, unparser);
         MatcherAssert.assertThat(
             String.format(
                 "We expect that %s will invoke the linked rule to generate output, but it didn't happen",
@@ -36,8 +36,8 @@ final class RulerefTest {
     void detectsRecursion() {
         final String ref = "reference";
         final Unparser unparser = new Unparser();
-        final ParserRuleSpec rule = new ParserRuleSpec(ref, new Generative.Empty());
-        final Generative recursive = new Ruleref(new Generative.Empty(), ref, unparser);
+        final ParserRuleSpec rule = new ParserRuleSpec(ref, new RuleDefinition.Empty());
+        final RuleDefinition recursive = new Ruleref(new RuleDefinition.Empty(), ref, unparser);
         rule.append(recursive);
         unparser.withParserRule(rule);
         Assertions.assertThrows(

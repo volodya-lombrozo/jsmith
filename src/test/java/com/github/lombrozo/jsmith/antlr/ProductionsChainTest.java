@@ -18,7 +18,7 @@ final class ProductionsChainTest {
                 new EbnfSuffix(
                     new LexerElement(
                         new LexerElements(
-                            new Generative.Empty()
+                            new RuleDefinition.Empty()
                         )
                     ),
                     "+"

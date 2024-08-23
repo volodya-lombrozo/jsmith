@@ -9,8 +9,8 @@ package com.github.lombrozo.jsmith.antlr;
  *     ;
  * }
  */
-public final class LabeledAlt extends UnimplementedGenerative {
-    public LabeledAlt(final Generative parent) {
+public final class LabeledAlt extends UnimplementedRuleDefinition {
+    public LabeledAlt(final RuleDefinition parent) {
         super(parent);
     }
 

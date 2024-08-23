@@ -10,8 +10,8 @@ package com.github.lombrozo.jsmith.antlr;
  * }
  * @since 0.1
  */
-public final class ActionBlock extends UnimplementedGenerative {
-    public ActionBlock(final Generative parent) {
+public final class ActionBlock extends UnimplementedRuleDefinition {
+    public ActionBlock(final RuleDefinition parent) {
         super(parent);
     }
 }

@@ -14,24 +14,24 @@ import java.util.List;
  * }
  * @since 0.1
  */
-public final class RuleAltList implements Generative {
+public final class RuleAltList implements RuleDefinition {
 
-    private final Generative parent;
-    private final List<Generative> alternatives;
+    private final RuleDefinition parent;
+    private final List<RuleDefinition> alternatives;
 
     private final Rand rand = new Rand();
 
-    public RuleAltList(final Generative parent) {
+    public RuleAltList(final RuleDefinition parent) {
         this(parent, new ArrayList<>(0));
     }
 
-    public RuleAltList(final Generative parent, final List<Generative> alternatives) {
+    public RuleAltList(final RuleDefinition parent, final List<RuleDefinition> alternatives) {
         this.parent = parent;
         this.alternatives = alternatives;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
@@ -44,8 +44,8 @@ public final class RuleAltList implements Generative {
     }
 
     @Override
-    public void append(final Generative generative) {
-        this.alternatives.add(generative);
+    public void append(final RuleDefinition rule) {
+        this.alternatives.add(rule);
     }
 
     @Override

@@ -1,16 +1,16 @@
 package com.github.lombrozo.jsmith.antlr;
 
-public final class LexerCharSet implements Generative {
-    private final Generative parent;
+public final class LexerCharSet implements RuleDefinition {
+    private final RuleDefinition parent;
     private final String text;
 
-    public LexerCharSet(final Generative parent, final String text) {
+    public LexerCharSet(final RuleDefinition parent, final String text) {
         this.parent = parent;
         this.text = text;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
@@ -32,7 +32,7 @@ public final class LexerCharSet implements Generative {
     }
 
     @Override
-    public void append(final Generative generative) {
+    public void append(final RuleDefinition rule) {
         throw new UnsupportedOperationException("LexerCharSet cannot have children yet");
     }
 }

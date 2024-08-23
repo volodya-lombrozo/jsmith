@@ -9,21 +9,21 @@ import com.github.lombrozo.jsmith.Unparser;
  *     | STRING_LITERAL elementOptions?
  *     ;
  */
-public final class TerminalDef implements Generative {
+public final class TerminalDef implements RuleDefinition {
 
-    private final Generative parent;
+    private final RuleDefinition parent;
 
     private final Unparser unparser;
     private final String text;
 
-    public TerminalDef(final Generative parent, final Unparser unparser, final String text) {
+    public TerminalDef(final RuleDefinition parent, final Unparser unparser, final String text) {
         this.parent = parent;
         this.unparser = unparser;
         this.text = text;
     }
 
     @Override
-    public Generative parent() {
+    public RuleDefinition parent() {
         return this.parent;
     }
 
@@ -38,7 +38,7 @@ public final class TerminalDef implements Generative {
     }
 
     @Override
-    public void append(final Generative generative) {
+    public void append(final RuleDefinition rule) {
         throw new UnsupportedOperationException("Terminal cannot have children yet");
     }
 }
