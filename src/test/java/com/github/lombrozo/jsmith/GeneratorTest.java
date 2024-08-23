@@ -60,9 +60,9 @@ final class GeneratorTest {
 
     @Test
     void checksRandomizer() {
-        final Randomizer randomizer = new Randomizer();
+        final Rand rand = new Rand();
         for (int i = 0; i < 50; ++i) {
-            System.out.println(randomizer.nextInt(10));
+            System.out.println(rand.nextInt(10));
         }
     }
 

@@ -1,6 +1,5 @@
 package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.UnlexerRule;
 import com.github.lombrozo.jsmith.Unparser;
 
 /**
@@ -30,7 +29,7 @@ public final class TerminalDef implements Generative {
 
     @Override
     public String generate() {
-        final UnlexerRule rule = this.unparser.unlexerRule(this.text);
+        final LexerRuleSpec rule = this.unparser.unlexerRule(this.text);
         //todo: fix null check - remove it!
         if (rule == null) {
             return this.text.replace("'", "");

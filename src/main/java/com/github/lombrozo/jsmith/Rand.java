@@ -2,7 +2,7 @@ package com.github.lombrozo.jsmith;
 
 import java.util.Random;
 
-public final class Randomizer {
+public final class Rand {
 
     Random random = new Random();
 

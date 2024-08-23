@@ -1,6 +1,6 @@
 package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.Randomizer;
+import com.github.lombrozo.jsmith.Rand;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +19,7 @@ public final class RuleAltList implements Generative {
     private final Generative parent;
     private final List<Generative> alternatives;
 
-    private final Randomizer randomizer = new Randomizer();
+    private final Rand rand = new Rand();
 
     public RuleAltList(final Generative parent) {
         this(parent, new ArrayList<>(0));
@@ -40,7 +40,7 @@ public final class RuleAltList implements Generative {
         if (this.alternatives.isEmpty()) {
             throw new IllegalStateException("RuleAltList should have at least one alternative");
         }
-        return this.alternatives.get(this.randomizer.nextInt(this.alternatives.size())).generate();
+        return this.alternatives.get(this.rand.nextInt(this.alternatives.size())).generate();
     }
 
     @Override

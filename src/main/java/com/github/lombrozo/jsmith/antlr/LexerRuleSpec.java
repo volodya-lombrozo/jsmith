@@ -1,19 +1,28 @@
-package com.github.lombrozo.jsmith;
+package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.antlr.AltList;
 import com.github.lombrozo.jsmith.antlr.Generative;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class UnlexerRule implements Generative {
+/**
+ * Lexer rule specification.
+ * The ANTLR rule definition:
+ * {@code
+ * lexerRuleSpec
+ *     : FRAGMENT? TOKEN_REF optionsSpec? COLON {@link LexerRuleBlock} SEMI
+ *     ;
+ * }
+ * @since 0.1
+ */
+public final class LexerRuleSpec implements Generative {
 
     private final Generative parent;
 
     private final String name;
     private List<Generative> list;
 
-    public UnlexerRule(final Generative parent, final String name) {
+    public LexerRuleSpec(final Generative parent, final String name) {
         this.parent = parent;
         this.name = name;
         this.list = new ArrayList<>(0);

@@ -1,6 +1,6 @@
 package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.Randomizer;
+import com.github.lombrozo.jsmith.Rand;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +19,7 @@ public final class AltList implements Generative {
     private final Generative parent;
 
     private final List<Generative> alternatives;
-    private final Randomizer randomizer;
+    private final Rand rand;
 
     AltList(final Generative parent) {
         this(parent, new ArrayList<>(0));
@@ -30,17 +30,17 @@ public final class AltList implements Generative {
     }
 
     private AltList(final Generative parent, final List<Generative> alternatives) {
-        this(parent, alternatives, new Randomizer());
+        this(parent, alternatives, new Rand());
     }
 
     private AltList(
         final Generative parent,
         final List<Generative> alternatives,
-        final Randomizer randomizer
+        final Rand rand
     ) {
         this.parent = parent;
         this.alternatives = alternatives;
-        this.randomizer = randomizer;
+        this.rand = rand;
     }
 
     @Override
@@ -53,7 +53,7 @@ public final class AltList implements Generative {
         String result = "";
         final int size = this.alternatives.size();
         if (size >= 1) {
-            result = this.alternatives.get(this.randomizer.nextInt(size)).generate();
+            result = this.alternatives.get(this.rand.nextInt(size)).generate();
         }
         return result;
     }

@@ -1,5 +1,6 @@
 package com.github.lombrozo.jsmith;
 
+import com.github.lombrozo.jsmith.antlr.LexerRuleSpec;
 import com.github.lombrozo.jsmith.antlr.ParserRuleSpec;
 import com.github.lombrozo.jsmith.antlr.ProductionsChain;
 import com.github.lombrozo.jsmith.antlr.RecursionException;
@@ -18,7 +19,7 @@ public final class Unparser {
 
     private final Map<String, ParserRuleSpec> rules;
 
-    private final Map<String, UnlexerRule> unlexerRules;
+    private final Map<String, LexerRuleSpec> unlexerRules;
 
     private final AtomicInteger stack = new AtomicInteger(0);
 
@@ -28,7 +29,7 @@ public final class Unparser {
 
     private Unparser(
         final Map<String, ParserRuleSpec> rules,
-        final Map<String, UnlexerRule> unlexerRules
+        final Map<String, LexerRuleSpec> unlexerRules
     ) {
         this.rules = rules;
         this.unlexerRules = unlexerRules;
@@ -39,12 +40,12 @@ public final class Unparser {
         return this;
     }
 
-    public Unparser withLexerRule(final UnlexerRule rule) {
+    public Unparser withLexerRule(final LexerRuleSpec rule) {
         this.unlexerRules.put(rule.name(), rule);
         return this;
     }
 
-    public UnlexerRule unlexerRule(final String rule) {
+    public LexerRuleSpec unlexerRule(final String rule) {
         return this.unlexerRules.get(rule);
     }
 

@@ -1,6 +1,6 @@
 package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.Randomizer;
+import com.github.lombrozo.jsmith.Rand;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +27,7 @@ public final class LexerAtom implements Generative {
     @Override
     public String generate() {
 
-        return this.elems.get(new Randomizer().nextInt(this.elems.size())).generate();
+        return this.elems.get(new Rand().nextInt(this.elems.size())).generate();
     }
 
     @Override

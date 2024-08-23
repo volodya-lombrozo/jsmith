@@ -2,7 +2,6 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
-import com.github.lombrozo.jsmith.UnlexerRule;
 import com.github.lombrozo.jsmith.Unparser;
 import java.util.Objects;
 import java.util.Optional;
@@ -166,6 +165,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterTerminalDef(final ANTLRv4Parser.TerminalDefContext ctx) {
+        ctx.STRING_LITERAL();
         this.current.append(new TerminalDef(this.current, this.unparser, ctx.getText()));
         super.enterTerminalDef(ctx);
     }
@@ -249,7 +249,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     @Override
     public void enterLexerRuleSpec(final ANTLRv4Parser.LexerRuleSpecContext ctx) {
         final String text = ctx.TOKEN_REF().getText();
-        final UnlexerRule rule = new UnlexerRule(this.current, text);
+        final LexerRuleSpec rule = new LexerRuleSpec(this.current, text);
         this.unparser.withLexerRule(rule);
         this.current.append(rule);
         this.current = rule;
