@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Volodya Lombrozo
+ * Copyright (c) 2023-2024 Volodya Lombrozo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,15 +31,15 @@ import org.cactoos.Input;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
-public final class Generator {
+public final class RandomScript {
 
     private final String grammar;
 
-    public Generator(final Input input) {
+    public RandomScript(final Input input) {
         this(new UncheckedText(new TextOf(input)).asString());
     }
 
-    private Generator(final String grammar) {
+    private RandomScript(final String grammar) {
         this.grammar = grammar;
     }
 
@@ -49,7 +49,7 @@ public final class Generator {
         return listener.unparser().generate(rule);
     }
 
-    String grammarTree() {
+    String spec() {
         final ANTLRv4Parser parser = this.parser();
         final ANTLRv4Parser.GrammarSpecContext spec = parser.grammarSpec();
         return spec.toStringTree(parser);

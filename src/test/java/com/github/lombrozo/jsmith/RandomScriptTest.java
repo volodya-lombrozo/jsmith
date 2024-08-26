@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Volodya Lombrozo
+ * Copyright (c) 2023-2024 Volodya Lombrozo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,25 +28,25 @@ import org.cactoos.io.ResourceOf;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test for {@link Generator}.
+ * Test for {@link RandomScript}.
  */
-final class GeneratorTest {
+final class RandomScriptTest {
 
     @Test
     void generatesSimpleGrammarSuccessfully() {
-        final Generator generator = new Generator(new ResourceOf("grammars/Simple.g4"));
-        System.out.println(generator.grammarTree());
+        final RandomScript script = new RandomScript(new ResourceOf("grammars/Simple.g4"));
+        System.out.println(script.spec());
         for (int i = 0; i < 10; ++i) {
-            System.out.println(generator.generate("expr"));
+            System.out.println(script.generate("expr"));
         }
     }
 
     @Test
     void generatesArithmeticGrammarSuccessfully() {
-        final Generator generator = new Generator(new ResourceOf("grammars/Arithmetic.g4"));
-        System.out.println(generator.grammarTree());
+        final RandomScript script = new RandomScript(new ResourceOf("grammars/Arithmetic.g4"));
+        System.out.println(script.spec());
         for (int i = 0; i < 10; ++i) {
-            System.out.println(generator.generate("stat"));
+            System.out.println(script.generate("stat"));
         }
     }
 

@@ -1,6 +1,6 @@
 package com.github.lombrozo.jsmith.it;
 
-import com.github.lombrozo.jsmith.Generator;
+import com.github.lombrozo.jsmith.RandomScript;
 import com.github.lombrozo.jsmith.guard.SyntaxGuard;
 import java.nio.file.Path;
 import java.util.logging.Logger;
@@ -40,11 +40,11 @@ final class SyntaxGenerationIT {
         @TempDir final Path temp
     ) {
         final Input grammar = new ResourceOf(name);
-        final Generator generator = new Generator(grammar);
+        final RandomScript script = new RandomScript(grammar);
         final SyntaxGuard guard = new SyntaxGuard(temp, grammar, top);
         Assertions.assertDoesNotThrow(
             () -> Stream.generate(() -> top)
-                .map(generator::generate)
+                .map(script::generate)
                 .limit(50)
                 .peek(SyntaxGenerationIT::logProgram)
                 .forEach(guard::verifySilently),
