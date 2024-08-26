@@ -2,7 +2,9 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
+import com.github.lombrozo.jsmith.antlr.rules.Action;
 import com.github.lombrozo.jsmith.antlr.rules.ActionBlock;
+import com.github.lombrozo.jsmith.antlr.rules.ActionScopeName;
 import com.github.lombrozo.jsmith.antlr.rules.AltList;
 import com.github.lombrozo.jsmith.antlr.rules.Alternative;
 import com.github.lombrozo.jsmith.antlr.rules.Atom;
@@ -371,6 +373,20 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
 
     @Override
+    public void enterAction_(final ANTLRv4Parser.Action_Context ctx) {
+        final RuleDefinition action = new Action(this.current);
+        this.current.append(action);
+        this.current = action;
+        super.enterAction_(ctx);
+    }
+
+    @Override
+    public void exitAction_(final ANTLRv4Parser.Action_Context ctx) {
+        this.current = this.current.parent();
+        super.exitAction_(ctx);
+    }
+
+    @Override
     public void enterCharacterRange(final ANTLRv4Parser.CharacterRangeContext ctx) {
         final String text = ctx.getText();
         this.current.append(new CharacterRange(this.current, text));
@@ -497,5 +513,19 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     public void exitLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
         this.current = this.current.parent();
         super.exitLabeledAlt(ctx);
+    }
+
+    @Override
+    public void enterActionScopeName(final ANTLRv4Parser.ActionScopeNameContext ctx) {
+        RuleDefinition name = new ActionScopeName(this.current);
+        this.current.append(name);
+        this.current = name;
+        super.enterActionScopeName(ctx);
+    }
+
+    @Override
+    public void exitActionScopeName(final ANTLRv4Parser.ActionScopeNameContext ctx) {
+        this.current = this.current.parent();
+        super.exitActionScopeName(ctx);
     }
 }

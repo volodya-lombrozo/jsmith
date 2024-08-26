@@ -23,7 +23,6 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.RecursionException;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -65,7 +64,7 @@ final class RulerefTest {
         rule.append(recursive);
         unparser.withParserRule(rule);
         Assertions.assertThrows(
-            RecursionException.class,
+            IllegalStateException.class,
             recursive::generate,
             String.format(
                 "We expect that %s will throw an exception because of recursion, but it didn't happen",

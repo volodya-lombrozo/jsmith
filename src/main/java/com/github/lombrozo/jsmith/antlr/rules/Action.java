@@ -21,11 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.github.lombrozo.jsmith.antlr.rules;
+
 /**
- * This package contains semi-integration tests.
- * Those tests are rather slow and require a lot of resources,
- * so they are not included in the main test suite.
- *
+ * Action rule.
+ * The ANTLR grammar definition:
+ * {@code
+ * action_
+ *     : AT ({@link ActionScopeName} COLONCOLON)? {@link Identifier} {@link ActionBlock}
+ *     ;
+ * }
  * @since 0.1
  */
-package com.github.lombrozo.jsmith.it;
+public final class Action extends Unimplemented {
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     */
+    public Action(final RuleDefinition parent) {
+        super(parent);
+    }
+
+    @Override
+    public String toString() {
+        return "action_";
+    }
+}
