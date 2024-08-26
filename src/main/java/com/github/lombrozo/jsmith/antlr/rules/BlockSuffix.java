@@ -33,7 +33,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class BlockSuffix extends UnimplementedRuleDefinition {
+public final class BlockSuffix extends Unimplemented {
 
     /**
      * Constructor.

@@ -24,7 +24,6 @@ import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.PredicateOption;
 import com.github.lombrozo.jsmith.antlr.rules.PredicateOptions;
-import com.github.lombrozo.jsmith.antlr.rules.RecursionException;
 import com.github.lombrozo.jsmith.antlr.rules.Root;
 import com.github.lombrozo.jsmith.antlr.rules.RuleAltList;
 import com.github.lombrozo.jsmith.antlr.rules.RuleBlock;

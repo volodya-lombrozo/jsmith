@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.RecursionException;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;

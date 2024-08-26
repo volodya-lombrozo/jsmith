@@ -2,7 +2,6 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
-import com.github.lombrozo.jsmith.antlr.rules.RecursionException;
 import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
 import java.util.HashMap;
 import java.util.Map;

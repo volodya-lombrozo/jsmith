@@ -8,7 +8,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     : {@link Identifier} (ASSIGN | PLUS_ASSIGN) ({@link Atom} | {@link Block})
  *     ;
  */
-public final class LabeledElement extends UnimplementedRuleDefinition {
+public final class LabeledElement extends Unimplemented {
     public LabeledElement(final RuleDefinition parent) {
         super(parent);
     }

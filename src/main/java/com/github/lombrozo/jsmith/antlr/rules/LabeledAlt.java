@@ -9,7 +9,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     ;
  * }
  */
-public final class LabeledAlt extends UnimplementedRuleDefinition {
+public final class LabeledAlt extends Unimplemented {
     public LabeledAlt(final RuleDefinition parent) {
         super(parent);
     }

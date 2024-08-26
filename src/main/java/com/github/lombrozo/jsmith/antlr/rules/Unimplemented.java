@@ -23,13 +23,22 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
- * Literal rule.
- * The ANTLR grammar definition:
- * WARNING: This is NOT a part of the ANTLR grammar!
+ * Unimplemented rule.
+ * This rule was created to speed up the development process.
+ * All the rules that are not implemented yet should inherit from this class.
+ * Later, when some rules are implemented, this class should be removed.
  * @since 0.1
+ * @todo #1:90min Implement all the rules that inherit from Unimplemented class.
+ *  The Unimplemented class was created to speed up the development process.
+ *  All the rules that implement this class should be implemented.
+ *  When all the rules are implemented, this class should be removed.
  */
-public final class Literal implements RuleDefinition {
+public abstract class Unimplemented implements RuleDefinition {
 
     /**
      * Parent rule.
@@ -37,26 +46,32 @@ public final class Literal implements RuleDefinition {
     private final RuleDefinition parent;
 
     /**
-     * Text of the literal.
+     * Children rules.
      */
-    private final String text;
+    private final List<RuleDefinition> children;
 
     /**
      * Constructor.
-     * @param text Text of the literal.
+     * @param parent Parent rule.
      */
-    public Literal(final String text) {
-        this(new Empty(), text);
+    protected Unimplemented(final RuleDefinition parent) {
+        this(parent, new ArrayList<>(0));
     }
 
     /**
      * Constructor.
      * @param parent Parent rule.
-     * @param text Text of the literal.
+     * @param children Children rules.
      */
-    public Literal(final RuleDefinition parent, final String text) {
+    protected Unimplemented(final RuleDefinition parent, final List<RuleDefinition> children) {
         this.parent = parent;
-        this.text = text;
+        this.children = children;
+    }
+
+    @Override
+    public String generate() {
+        return this.children.stream().map(RuleDefinition::generate)
+            .collect(Collectors.joining(" "));
     }
 
     @Override
@@ -65,12 +80,7 @@ public final class Literal implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
-        return this.text;
-    }
-
-    @Override
     public void append(final RuleDefinition rule) {
-        throw new UnsupportedOperationException("Literal cannot have children yet");
+        this.children.add(rule);
     }
 }

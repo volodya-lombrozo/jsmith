@@ -32,22 +32,37 @@ import java.util.stream.Collectors;
  * ANTLR grammar:
  * {@code
  * lexerElements
- *     : lexerElement+
+ *     : {@link LexerElement}+
  *     |
  *     ;
  * }
  */
 public final class LexerElements implements RuleDefinition {
 
+    /**
+     * Parent rule.
+     */
     private final RuleDefinition parent;
 
+    /**
+     * Children rules.
+     */
     private final List<RuleDefinition> elems;
 
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     */
     public LexerElements(final RuleDefinition parent) {
         this(parent, new ArrayList<>(0));
     }
 
-    public LexerElements(final RuleDefinition parent, final List<RuleDefinition> elems) {
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param elems Children rules.
+     */
+    private LexerElements(final RuleDefinition parent, final List<RuleDefinition> elems) {
         this.parent = parent;
         this.elems = elems;
     }
