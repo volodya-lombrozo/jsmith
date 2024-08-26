@@ -33,7 +33,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  * Tests for {@link Rand}.
  * @since 0.1
  */
-class RandTest {
+final class RandTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"[0-3]+", "[0-3]"})

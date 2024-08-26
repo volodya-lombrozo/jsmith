@@ -23,32 +23,50 @@
  */
 package com.github.lombrozo.jsmith;
 
+import java.util.logging.Logger;
 import org.cactoos.io.ResourceOf;
-import org.junit.jupiter.api.Test;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.RepeatedTest;
 
 /**
  * Tests for {@link RandomScript}.
  * @since 0.1
+ * @todo #1:90min Control Recursive RandomScript generation.
+ *  Currently, if we run one of this tests many times we can encounter StackOverflowError.
+ *  We need to control the recursive generation of RandomScript to avoid this error.
+ *  Most probably some researches mentioned this problem and we can use their solutions.
  */
 final class RandomScriptTest {
 
-    @Test
+    /**
+     * Logger.
+     */
+    private final Logger logger = Logger.getLogger("RandomScriptTest");
+
+    @RepeatedTest(10)
     void generatesSimpleGrammarSuccessfully() {
         final RandomScript script = new RandomScript(new ResourceOf("grammars/Simple.g4"));
-        System.out.println(script.spec());
-        for (int i = 0; i < 10; ++i) {
-            System.out.println(script.generate("expr"));
-        }
+        this.logger.info(String.format("Simple spec (lisp format): %s", script.spec()));
+        final String example = script.generate("expr");
+        this.logger.info(String.format("Generated simple example:%n%s%n", example));
+        MatcherAssert.assertThat(
+            "We expect that the example for Simple grammar will be generated successfully",
+            example,
+            Matchers.not(Matchers.emptyString())
+        );
     }
 
-    @Test
+    @RepeatedTest(10)
     void generatesArithmeticGrammarSuccessfully() {
         final RandomScript script = new RandomScript(new ResourceOf("grammars/Arithmetic.g4"));
-        System.out.println(script.spec());
-        for (int i = 0; i < 10; ++i) {
-            System.out.println(script.generate("stat"));
-        }
+        this.logger.info(String.format("Arithmetic spec (lisp format): %s", script.spec()));
+        final String example = script.generate("stat");
+        this.logger.info(String.format("Generated Arithmetic example:%n%s%n", example));
+        MatcherAssert.assertThat(
+            "We expect that the example for Arithmetic grammar will be generated successfully",
+            example,
+            Matchers.not(Matchers.emptyString())
+        );
     }
-
-
 }
