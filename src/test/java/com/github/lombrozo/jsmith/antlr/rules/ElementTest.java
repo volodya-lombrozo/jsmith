@@ -23,12 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.rules.Atom;
-import com.github.lombrozo.jsmith.antlr.rules.EbnfSuffix;
-import com.github.lombrozo.jsmith.antlr.rules.Element;
-import com.github.lombrozo.jsmith.antlr.rules.Literal;
-import com.github.lombrozo.jsmith.antlr.rules.Root;
-import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -42,22 +38,33 @@ final class ElementTest {
     void generatesUsingAtomBranch() {
         final Root root = new Root();
         final RuleDefinition element = new Element(root);
-        final Atom atom = new Atom(root);
-        atom.append(new Literal("1"));
+        final RuleDefinition atom = new Atom(root);
+        final String number = "1";
+        atom.append(new Literal(number));
         element.append(atom);
-        //todo: assert
-        System.out.println(element.generate());
+        MatcherAssert.assertThat(
+            "We expect that the element with an atom will be generated correctly",
+            element.generate(),
+            Matchers.equalTo(number)
+        );
     }
 
     @Test
     void generatesUsingAtomBranchAndEbnfSuffix() {
         final Root root = new Root();
         final RuleDefinition element = new Element(root);
-        final Atom atom = new Atom(root);
+        final RuleDefinition atom = new Atom(root);
         atom.append(new Literal("1"));
         element.append(atom);
         element.append(new EbnfSuffix("*"));
-        //todo: assert
-        System.out.println(element.generate());
+        MatcherAssert.assertThat(
+            "We expect that the element with EBNF suffix will be generated correctly",
+            element.generate(),
+            Matchers.anyOf(
+                Matchers.equalTo(""),
+                Matchers.equalTo("1"),
+                Matchers.containsString("1 1")
+            )
+        );
     }
 }

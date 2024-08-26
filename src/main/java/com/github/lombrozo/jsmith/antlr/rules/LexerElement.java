@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.mifmif.common.regex.Generex;
+import com.github.lombrozo.jsmith.Rand;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,6 +49,11 @@ public final class LexerElement implements RuleDefinition {
     private final List<RuleDefinition> children;
 
     /**
+     * Random generator.
+     */
+    private final Rand rand;
+
+    /**
      * Constructor.
      * @param parent Parent rule.
      */
@@ -64,6 +69,7 @@ public final class LexerElement implements RuleDefinition {
     private LexerElement(final RuleDefinition parent, final List<RuleDefinition> children) {
         this.parent = parent;
         this.children = children;
+        this.rand = new Rand();
     }
 
     @Override
@@ -85,7 +91,7 @@ public final class LexerElement implements RuleDefinition {
                 final RuleDefinition ebnSuffix = this.children.get(1);
                 if (ebnSuffix != null) {
                     if (ebnSuffix instanceof EbnfSuffix) {
-                        res = LexerElement.fromRegex(
+                        res = this.rand.regex(
                             String.format("%s%s", generate, ebnSuffix.generate())
                         );
                     } else {
@@ -98,7 +104,7 @@ public final class LexerElement implements RuleDefinition {
                         );
                     }
                 } else {
-                    res = LexerElement.fromRegex(generate);
+                    res = this.rand.regex(generate);
                 }
             } else {
                 res = generate;
@@ -119,14 +125,5 @@ public final class LexerElement implements RuleDefinition {
     @Override
     public String toString() {
         return "lexerElement";
-    }
-
-    /**
-     * Generate random string from regex.
-     * @param regex Regex.
-     * @return Random string.
-     */
-    private static String fromRegex(final String regex) {
-        return new Generex(regex).random();
     }
 }

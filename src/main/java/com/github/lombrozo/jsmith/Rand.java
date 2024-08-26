@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith;
 
+import com.mifmif.common.regex.Generex;
 import java.util.Random;
 
 /**
@@ -66,6 +67,15 @@ public final class Rand {
      */
     public boolean flip() {
         return this.random.nextBoolean();
+    }
+
+    /**
+     * Generates a random string for a given regex.
+     * @param regex Regex for which to generate a string.
+     * @return Random string.
+     */
+    public String regex(final String regex) {
+        return new Generex(regex).random();
     }
 
 }

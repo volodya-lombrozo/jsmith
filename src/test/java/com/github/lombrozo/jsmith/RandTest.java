@@ -23,32 +23,42 @@
  */
 package com.github.lombrozo.jsmith;
 
-import org.cactoos.io.ResourceOf;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * Tests for {@link RandomScript}.
+ * Tests for {@link Rand}.
  * @since 0.1
  */
-final class RandomScriptTest {
+class RandTest {
 
-    @Test
-    void generatesSimpleGrammarSuccessfully() {
-        final RandomScript script = new RandomScript(new ResourceOf("grammars/Simple.g4"));
-        System.out.println(script.spec());
-        for (int i = 0; i < 10; ++i) {
-            System.out.println(script.generate("expr"));
-        }
+    @ParameterizedTest
+    @ValueSource(strings = {"[0-3]+", "[0-3]"})
+    void regexGenerationTest(final String regex) {
+        final Rand rand = new Rand();
+        final String actual = rand.regex(regex);
+        MatcherAssert.assertThat(
+            "We expect that the generated string will match the regex pattern",
+            actual,
+            Matchers.matchesRegex(regex)
+        );
     }
 
     @Test
-    void generatesArithmeticGrammarSuccessfully() {
-        final RandomScript script = new RandomScript(new ResourceOf("grammars/Arithmetic.g4"));
-        System.out.println(script.spec());
-        for (int i = 0; i < 10; ++i) {
-            System.out.println(script.generate("stat"));
-        }
+    void checksRandomizer() {
+        MatcherAssert.assertThat(
+            "We expect that the randomizer will generate a number from 0 to 4",
+            new Rand().nextInt(5),
+            Matchers.anyOf(
+                Matchers.equalTo(0),
+                Matchers.equalTo(1),
+                Matchers.equalTo(2),
+                Matchers.equalTo(3),
+                Matchers.equalTo(4)
+            )
+        );
     }
-
-
 }
