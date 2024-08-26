@@ -43,7 +43,7 @@ final class RulerefTest {
         final ParserRuleSpec rule = new ParserRuleSpec(ref, new Empty());
         rule.append(new Literal(expected));
         final Unparser unparser = new Unparser();
-        unparser.withParserRule(rule);
+        unparser.with(rule);
         final Ruleref ruleref = new Ruleref(new Empty(), ref, unparser);
         MatcherAssert.assertThat(
             String.format(
@@ -62,7 +62,7 @@ final class RulerefTest {
         final ParserRuleSpec rule = new ParserRuleSpec(ref, new Empty());
         final RuleDefinition recursive = new Ruleref(new Empty(), ref, unparser);
         rule.append(recursive);
-        unparser.withParserRule(rule);
+        unparser.with(rule);
         Assertions.assertThrows(
             IllegalStateException.class,
             recursive::generate,

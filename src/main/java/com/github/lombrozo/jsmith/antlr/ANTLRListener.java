@@ -42,6 +42,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     private final Unparser unparser = new Unparser();
+
+    private final Unlexer unlexer = new Unlexer();
     private RuleDefinition current = new Root();
 
     public Unparser unparser() {
@@ -98,7 +100,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         final ParserRuleSpec rule = new ParserRuleSpec(ctx.RULE_REF().getText(), this.current);
         this.current.append(rule);
         this.current = rule;
-        this.unparser.withParserRule(rule);
+        this.unparser.with(rule);
         super.enterParserRuleSpec(ctx);
     }
 
@@ -196,7 +198,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     @Override
     public void enterTerminalDef(final ANTLRv4Parser.TerminalDefContext ctx) {
         ctx.STRING_LITERAL();
-        this.current.append(new TerminalDef(this.current, this.unparser, ctx.getText()));
+        this.current.append(new TerminalDef(this.current, this.unlexer, ctx.getText()));
         super.enterTerminalDef(ctx);
     }
 
@@ -280,7 +282,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     public void enterLexerRuleSpec(final ANTLRv4Parser.LexerRuleSpecContext ctx) {
         final String text = ctx.TOKEN_REF().getText();
         final LexerRuleSpec rule = new LexerRuleSpec(this.current, text);
-        this.unparser.withLexerRule(rule);
+        this.unlexer.with(rule);
         this.current.append(rule);
         this.current = rule;
         super.enterLexerRuleSpec(ctx);

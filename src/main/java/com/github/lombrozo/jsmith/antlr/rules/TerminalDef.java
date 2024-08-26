@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 
 /**
@@ -44,9 +45,9 @@ public final class TerminalDef implements RuleDefinition {
     private final RuleDefinition parent;
 
     /**
-     * Unparser.
+     * Unlexer.
      */
-    private final Unparser unparser;
+    private final Unlexer unlexer;
 
     /**
      * Text.
@@ -56,12 +57,12 @@ public final class TerminalDef implements RuleDefinition {
     /**
      * Constructor.
      * @param parent Parent rule.
-     * @param unparser Unparser.
+     * @param unlexer Unparser.
      * @param text Text.
      */
-    public TerminalDef(final RuleDefinition parent, final Unparser unparser, final String text) {
+    public TerminalDef(final RuleDefinition parent, final Unlexer unlexer, final String text) {
         this.parent = parent;
-        this.unparser = unparser;
+        this.unlexer = unlexer;
         this.text = text;
     }
 
@@ -72,7 +73,7 @@ public final class TerminalDef implements RuleDefinition {
 
     @Override
     public String generate() {
-        final LexerRuleSpec rule = this.unparser.unlexerRule(this.text);
+        final LexerRuleSpec rule = this.unlexer.find(this.text);
         //todo: fix null check - remove it!
         if (rule == null) {
             return this.text.replace("'", "");

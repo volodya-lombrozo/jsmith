@@ -21,21 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr;
-
 /**
- * Recursion exception.
- * This exception is thrown when the recursion is detected.
+ * This package contains the classes required to parse ANTLR grammars.
  * @since 0.1
  */
-public final class RecursionException extends RuntimeException {
-
-    /**
-     * Constructor.
-     * @param message Message.
-     */
-    RecursionException(final String message) {
-        super(message);
-    }
-
-}
+package com.github.lombrozo.jsmith.antlr;

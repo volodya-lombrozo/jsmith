@@ -23,19 +23,60 @@
  */
 package com.github.lombrozo.jsmith.antlr;
 
+import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Recursion exception.
- * This exception is thrown when the recursion is detected.
+ * Unlexer.
+ * This class is used to store and to retrieve lexer rules.
  * @since 0.1
  */
-public final class RecursionException extends RuntimeException {
+public final class Unlexer {
+
+    /**
+     * All lexer rules.
+     */
+    private final Map<String, LexerRuleSpec> rules;
 
     /**
      * Constructor.
-     * @param message Message.
      */
-    RecursionException(final String message) {
-        super(message);
+    Unlexer() {
+        this(new HashMap<>(0));
     }
 
+    /**
+     * Constructor.
+     * @param rules Rules.
+     */
+    private Unlexer(final Map<String, LexerRuleSpec> rules) {
+        this.rules = rules;
+    }
+
+    /**
+     * Add a new lexer rule.
+     * @param rule Lexer rule.
+     * @return This unlexer.
+     */
+    public Unlexer with(final LexerRuleSpec rule) {
+        this.rules.put(rule.name(), rule);
+        return this;
+    }
+
+    /**
+     * Find a lexer rule by its name.
+     * @param rule Rule name.
+     * @return Lexer rule.
+     */
+    public LexerRuleSpec find(final String rule) {
+        if (!this.rules.containsKey(rule)) {
+            throw new IllegalStateException(
+                String.format(
+                    "Lexer rule '%s' not found. All available rules: [%s]", rule, this.rules
+                )
+            );
+        }
+        return this.rules.get(rule);
+    }
 }
