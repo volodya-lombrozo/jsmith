@@ -2,7 +2,36 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
-import com.github.lombrozo.jsmith.Unparser;
+import com.github.lombrozo.jsmith.antlr.rules.ActionBlock;
+import com.github.lombrozo.jsmith.antlr.rules.AltList;
+import com.github.lombrozo.jsmith.antlr.rules.Alternative;
+import com.github.lombrozo.jsmith.antlr.rules.Atom;
+import com.github.lombrozo.jsmith.antlr.rules.Block;
+import com.github.lombrozo.jsmith.antlr.rules.BlockSuffix;
+import com.github.lombrozo.jsmith.antlr.rules.CharacterRange;
+import com.github.lombrozo.jsmith.antlr.rules.Ebnf;
+import com.github.lombrozo.jsmith.antlr.rules.EbnfSuffix;
+import com.github.lombrozo.jsmith.antlr.rules.Element;
+import com.github.lombrozo.jsmith.antlr.rules.ElementOption;
+import com.github.lombrozo.jsmith.antlr.rules.Identifier;
+import com.github.lombrozo.jsmith.antlr.rules.LabeledAlt;
+import com.github.lombrozo.jsmith.antlr.rules.LabeledElement;
+import com.github.lombrozo.jsmith.antlr.rules.LexerAtom;
+import com.github.lombrozo.jsmith.antlr.rules.LexerCharSet;
+import com.github.lombrozo.jsmith.antlr.rules.LexerElement;
+import com.github.lombrozo.jsmith.antlr.rules.LexerElements;
+import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
+import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
+import com.github.lombrozo.jsmith.antlr.rules.PredicateOption;
+import com.github.lombrozo.jsmith.antlr.rules.PredicateOptions;
+import com.github.lombrozo.jsmith.antlr.rules.RecursionException;
+import com.github.lombrozo.jsmith.antlr.rules.Root;
+import com.github.lombrozo.jsmith.antlr.rules.RuleAltList;
+import com.github.lombrozo.jsmith.antlr.rules.RuleBlock;
+import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
+import com.github.lombrozo.jsmith.antlr.rules.Ruleref;
+import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
+import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -31,7 +60,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
             throw new RecursionException(
                 String.format(
                     "Recursion detected in rule: %n%s%n",
-                    new ProductionsChain(this.current).toTree()
+                    new ProductionsChain(this.current).tree()
                 )
             );
         }
