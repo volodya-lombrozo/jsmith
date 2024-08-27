@@ -50,6 +50,7 @@ import com.github.lombrozo.jsmith.antlr.rules.LexerCharSet;
 import com.github.lombrozo.jsmith.antlr.rules.LexerElement;
 import com.github.lombrozo.jsmith.antlr.rules.LexerElements;
 import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
+import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.PredicateOption;
 import com.github.lombrozo.jsmith.antlr.rules.PredicateOptions;
@@ -234,8 +235,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         // nothing to do yet, since "TerminalDef" is a leaf node that doesn't have children.
         super.exitTerminalDef(ctx);
     }
-// --------------------
-// EBNF and blocks
 
     @Override
     public void enterEbnf(final ANTLRv4Parser.EbnfContext ctx) {
@@ -273,8 +272,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         super.exitEbnfSuffix(ctx);
     }
 
-    // -------------
-// Grammar Block
     @Override
     public void enterBlock(final ANTLRv4Parser.BlockContext ctx) {
         final Block block = new Block(this.current);
@@ -303,8 +300,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         super.exitBlockSuffix(ctx);
     }
 
-
-    //    LEXER RULES
     @Override
     public void enterLexerRuleSpec(final ANTLRv4Parser.LexerRuleSpecContext ctx) {
         final String text = ctx.TOKEN_REF().getText();
@@ -381,13 +376,10 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     public void enterLexerAtom(final ANTLRv4Parser.LexerAtomContext ctx) {
         final RuleDefinition atom = new LexerAtom(this.current);
         if (ctx.LEXER_CHAR_SET() != null) {
-            final String text = ctx.LEXER_CHAR_SET().getText();
-            atom.append(new LexerCharSet(atom, text));
+            atom.append(new LexerCharSet(atom, ctx.LEXER_CHAR_SET().getText()));
+        } else if (ctx.DOT() != null) {
+            atom.append(new Literal(ctx.DOT().getText()));
         }
-//        Todo?
-//        else if (ctx.DOT() != null) {
-//            atom.append(new LexerCharSet(atom, ctx.DOT().getText()));
-//        }
         this.current.append(atom);
         this.current = atom;
         super.enterLexerAtom(ctx);
@@ -428,9 +420,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         super.exitCharacterRange(ctx);
     }
 
-
-    // --------------------
-// Rule Alts
     @Override
     public void enterLabeledElement(final ANTLRv4Parser.LabeledElementContext ctx) {
         final RuleDefinition element = new LabeledElement(this.current);

@@ -60,6 +60,6 @@ public final class LexerCharSet implements RuleDefinition {
 
     @Override
     public void append(final RuleDefinition rule) {
-        throw new UnsupportedOperationException("LexerCharSet cannot have children yet");
+        throw new UnsupportedOperationException("LexerCharSet cannot have children");
     }
 }
