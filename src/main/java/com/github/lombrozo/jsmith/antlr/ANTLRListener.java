@@ -41,6 +41,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Ebnf;
 import com.github.lombrozo.jsmith.antlr.rules.EbnfSuffix;
 import com.github.lombrozo.jsmith.antlr.rules.Element;
 import com.github.lombrozo.jsmith.antlr.rules.ElementOption;
+import com.github.lombrozo.jsmith.antlr.rules.ElementOptions;
 import com.github.lombrozo.jsmith.antlr.rules.Identifier;
 import com.github.lombrozo.jsmith.antlr.rules.LabeledAlt;
 import com.github.lombrozo.jsmith.antlr.rules.LabeledElement;
@@ -599,4 +600,17 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         super.exitDelegateGrammars(ctx);
     }
 
+    @Override
+    public void enterElementOptions(final ANTLRv4Parser.ElementOptionsContext ctx) {
+        final RuleDefinition rule = new ElementOptions(this.current);
+        this.current.append(rule);
+        this.current = rule;
+        super.enterElementOptions(ctx);
+    }
+
+    @Override
+    public void exitElementOptions(final ANTLRv4Parser.ElementOptionsContext ctx) {
+        this.current = this.current.parent();
+        super.exitElementOptions(ctx);
+    }
 }

@@ -24,15 +24,14 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Unlexer;
-import com.github.lombrozo.jsmith.antlr.Unparser;
 
 /**
  * Terminal definition.
  * The ANTLR grammar definition:
  * {@code
  * terminalDef
- *     : TOKEN_REF elementOptions?
- *     | STRING_LITERAL elementOptions?
+ *     : TOKEN_REF {@link ElementOptions}?
+ *     | STRING_LITERAL {@link ElementOptions}?
  *     ;
  * }
  * @since 0.1

@@ -32,7 +32,7 @@ import com.github.lombrozo.jsmith.antlr.Unparser;
  * The rule definition in ANTLR grammar:
  * {@code
  * ruleref
- *     : RULE_REF argActionBlock? elementOptions?
+ *     : RULE_REF {@link ArgActionBlock}? {@link ElementOptions}?
  *     ;
  * }
  * @since 0.1

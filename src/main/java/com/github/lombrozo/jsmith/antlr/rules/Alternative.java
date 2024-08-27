@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * The rule definition:
  * {@code
  * alternative
- *     : elementOptions? {@link Element}+
+ *     : {@link ElementOptions}? {@link Element}+
  *     |
  *     // explicitly allow empty alts
  *     ;

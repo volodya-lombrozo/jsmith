@@ -24,55 +24,22 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 /**
- * Atom.
+ * Element options.
  * The ANTLR grammar definition:
  * {@code
- * atom
- *     : {@link TerminalDef}
- *     | {@link Ruleref}
- *     | notSet
- *     | DOT {@link ElementOptions}?
+ * elementOptions
+ *     : LT {@link ElementOption} (COMMA {@link ElementOption})* GT
  *     ;
  * }
  * @since 0.1
  */
-public final class Atom implements RuleDefinition {
-
-    /**
-     * Parent rule.
-     */
-    private final RuleDefinition parent;
-
-    /**
-     * Atom inner element.
-     */
-    private RuleDefinition item;
-
-    /**
-     * Constructor.
-     * @param rule Parent rule.
-     */
-    public Atom(final RuleDefinition rule) {
-        this.parent = rule;
-    }
-
-    @Override
-    public RuleDefinition parent() {
-        return this.parent;
-    }
-
-    @Override
-    public void append(final RuleDefinition rule) {
-        this.item = rule;
-    }
-
-    @Override
-    public String generate() {
-        return this.item.generate();
+public final class ElementOptions extends Unimplemented {
+    public ElementOptions(final RuleDefinition parent) {
+        super(parent);
     }
 
     @Override
     public String toString() {
-        return "atom";
+        return "elementOptions";
     }
 }

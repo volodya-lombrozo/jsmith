@@ -36,7 +36,7 @@ import java.util.List;
  *     | {@link TerminalDef}
  *     | notSet
  *     | {@link LexerCharSet}
- *     | DOT elementOptions?
+ *     | DOT {@link ElementOptions}?
  *     ;
  */
 public final class LexerAtom implements RuleDefinition {
