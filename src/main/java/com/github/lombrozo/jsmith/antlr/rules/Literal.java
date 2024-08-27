@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import java.util.regex.Pattern;
+
 /**
  * Literal rule.
  * The ANTLR grammar definition:
@@ -32,9 +34,9 @@ package com.github.lombrozo.jsmith.antlr.rules;
 public final class Literal implements RuleDefinition {
 
     /**
-     * Parent rule.
+     * Apostrophe pattern.
      */
-    private final RuleDefinition parent;
+    private static final Pattern APOSTROPHE = Pattern.compile("'", Pattern.LITERAL);
 
     /**
      * Text of the literal.
@@ -46,27 +48,17 @@ public final class Literal implements RuleDefinition {
      * @param text Text of the literal.
      */
     public Literal(final String text) {
-        this(new Empty(), text);
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param text Text of the literal.
-     */
-    public Literal(final RuleDefinition parent, final String text) {
-        this.parent = parent;
         this.text = text;
     }
 
     @Override
     public RuleDefinition parent() {
-        return this.parent;
+        throw new UnsupportedOperationException("Literal cannot have parent");
     }
 
     @Override
     public String generate() {
-        return this.text;
+        return Literal.APOSTROPHE.matcher(this.text).replaceAll("");
     }
 
     @Override
