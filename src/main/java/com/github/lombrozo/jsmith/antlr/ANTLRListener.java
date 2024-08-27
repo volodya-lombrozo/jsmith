@@ -224,7 +224,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterTerminalDef(final ANTLRv4Parser.TerminalDefContext ctx) {
-        ctx.STRING_LITERAL();
         this.current.append(new TerminalDef(this.current, this.unlexer, ctx.getText()));
         super.enterTerminalDef(ctx);
     }

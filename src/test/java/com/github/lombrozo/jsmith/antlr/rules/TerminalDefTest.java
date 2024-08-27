@@ -21,57 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr;
+package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
-import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import com.github.lombrozo.jsmith.antlr.Unlexer;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
 /**
- * Unlexer.
- * This class is used to store and to retrieve lexer rules.
+ * Test case for {@link TerminalDef}.
  * @since 0.1
  */
-public final class Unlexer {
+final class TerminalDefTest {
 
-    /**
-     * All lexer rules.
-     */
-    private final Map<String, LexerRuleSpec> rules;
-
-    /**
-     * Constructor.
-     */
-    public Unlexer() {
-        this(new HashMap<>(0));
+    @Test
+    void retrievesLexerRule() {
+        final Unlexer unlexer = new Unlexer();
+        final LexerRuleSpec rule = new LexerRuleSpec("PLUS");
+        final String text = "+";
+        rule.append(new Literal(text));
+        unlexer.with(rule);
+        MatcherAssert.assertThat(
+            "We expect that the lexer rule will be retrieved and this rule will generate the text",
+            new TerminalDef(unlexer, "PLUS").generate(),
+            Matchers.equalTo(text)
+        );
     }
 
-    /**
-     * Constructor.
-     * @param rules Rules.
-     */
-    private Unlexer(final Map<String, LexerRuleSpec> rules) {
-        this.rules = rules;
-    }
-
-    /**
-     * Add a new lexer rule.
-     * @param rule Lexer rule.
-     * @return This unlexer.
-     */
-    public Unlexer with(final LexerRuleSpec rule) {
-        this.rules.put(rule.name(), rule);
-        return this;
-    }
-
-    /**
-     * Find a lexer rule by its name.
-     * @param rule Rule name.
-     * @return Lexer rule.
-     */
-    public Optional<RuleDefinition> find(final String rule) {
-        return Optional.ofNullable(this.rules.get(rule));
+    @Test
+    void retrievesLiteral() {
+        final String text = "-";
+        MatcherAssert.assertThat(
+            "We expect that the literal will be retrieved",
+            new TerminalDef(new Unlexer(), text).generate(),
+            Matchers.equalTo(text)
+        );
     }
 }

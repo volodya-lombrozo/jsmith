@@ -65,6 +65,14 @@ public final class LexerRuleSpec implements RuleDefinition {
         this.list = new ArrayList<>(0);
     }
 
+    /**
+     * Constructor.
+     * @param name Rule name.
+     */
+    LexerRuleSpec(final String name) {
+        this(new Empty(), name);
+    }
+
     @Override
     public RuleDefinition parent() {
         return this.parent;

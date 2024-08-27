@@ -65,6 +65,15 @@ public final class TerminalDef implements RuleDefinition {
         this.text = text;
     }
 
+    /**
+     * Constructor.
+     * @param unlexer Unlexer.
+     * @param text Terminal text.
+     */
+    TerminalDef(final Unlexer unlexer, final String text) {
+        this(new Empty(), unlexer, text);
+    }
+
     @Override
     public RuleDefinition parent() {
         return this.parent;
@@ -72,12 +81,9 @@ public final class TerminalDef implements RuleDefinition {
 
     @Override
     public String generate() {
-        final LexerRuleSpec rule = this.unlexer.find(this.text);
-        //todo: fix null check - remove it!
-        if (rule == null) {
-            return this.text.replace("'", "");
-        }
-        return rule.generate();
+        return this.unlexer.find(this.text)
+            .orElseGet(() -> new Literal(this.text))
+            .generate();
     }
 
     @Override
