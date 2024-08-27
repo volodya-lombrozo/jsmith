@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -37,6 +38,11 @@ public final class Literal implements RuleDefinition {
      * Apostrophe pattern.
      */
     private static final Pattern APOSTROPHE = Pattern.compile("'", Pattern.LITERAL);
+
+    /**
+     * Special characters pattern.
+     */
+    private static final Pattern SPECIAL = Pattern.compile("\\\\([nrtbf\"'\\\\])");
 
     /**
      * Text of the literal.
@@ -58,11 +64,63 @@ public final class Literal implements RuleDefinition {
 
     @Override
     public String generate() {
-        return Literal.APOSTROPHE.matcher(this.text).replaceAll("");
+        return Literal.APOSTROPHE.matcher(Literal.replaceEscapes(this.text)).replaceAll("");
+
     }
 
     @Override
     public void append(final RuleDefinition rule) {
         throw new UnsupportedOperationException("Literal cannot have children yet");
+    }
+
+    /**
+     * Replace escape sequences.
+     * For example:
+     * {@code
+     * \\n -> \n
+     * \\r -> \r
+     * \\t -> \t
+     * ...
+     * }
+     * @param original Original string.
+     * @return String with replaced escape sequences.
+     */
+    private static String replaceEscapes(final String original) {
+        final Matcher matcher = Literal.SPECIAL.matcher(original);
+        final StringBuffer result = new StringBuffer(original.length());
+        while (matcher.find()) {
+            final String replacement;
+            switch (matcher.group(1)) {
+                case "n":
+                    replacement = "\n";
+                    break;
+                case "r":
+                    replacement = "\r";
+                    break;
+                case "t":
+                    replacement = "\t";
+                    break;
+                case "b":
+                    replacement = "\b";
+                    break;
+                case "f":
+                    replacement = "\f";
+                    break;
+                case "\\":
+                    replacement = "\\";
+                    break;
+                case "\"":
+                    replacement = "\"";
+                    break;
+                case "'":
+                    replacement = "'";
+                    break;
+                default:
+                    replacement = matcher.group(0);
+            }
+            matcher.appendReplacement(result, replacement);
+        }
+        matcher.appendTail(result);
+        return result.toString();
     }
 }

@@ -83,10 +83,6 @@ public final class LexerElement implements RuleDefinition {
             final String res;
             final RuleDefinition atom = this.children.get(0);
             final String generate = atom.generate();
-            if ("\\r".equals(generate) || "\\n".equals(generate)) {
-                //todo: You need to do something with special characters!
-                return "\n";
-            }
             if (this.children.size() > 1) {
                 final RuleDefinition ebnSuffix = this.children.get(1);
                 if (ebnSuffix != null) {

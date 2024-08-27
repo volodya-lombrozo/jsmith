@@ -65,8 +65,18 @@ final class LiteralTest {
             Arguments.of("ID", "ID"),
             Arguments.of("INT", "INT"),
             Arguments.of("NUMBER", "NUMBER"),
+            Arguments.of("'\\r'", "\r"),
             Arguments.of("'\r'", "\r"),
-            Arguments.of("'\n'", "\n")
+            Arguments.of("'\\n'", "\n"),
+            Arguments.of("'\n'", "\n"),
+            Arguments.of("'\\t'", "\t"),
+            Arguments.of("'\t'", "\t"),
+            Arguments.of("'\\f'", "\f"),
+            Arguments.of("'\f'", "\f"),
+            Arguments.of("'\\b'", "\b"),
+            Arguments.of("'\b'", "\b"),
+            Arguments.of("'\\\"'", "\""),
+            Arguments.of("'\\\"'", "\"")
         );
     }
 }

@@ -71,10 +71,43 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
-    private final Unparser unparser = new Unparser();
+    /**
+     * Unparser with a collection of parser rules.
+     */
+    private final Unparser unparser;
 
-    private final Unlexer unlexer = new Unlexer();
-    private RuleDefinition current = new Root();
+    /**
+     * Unlexer with a collection of lexer rules.
+     */
+    private final Unlexer unlexer;
+
+    /**
+     * Current rule.
+     */
+    private RuleDefinition current;
+
+    /**
+     * Constructor.
+     */
+    public ANTLRListener() {
+        this(new Unparser(), new Unlexer(), new Root());
+    }
+
+    /**
+     * Constructor.
+     * @param unparser Unparser.
+     * @param unlexer Unlexer.
+     * @param current Current rule.
+     */
+    private ANTLRListener(
+        final Unparser unparser,
+        final Unlexer unlexer,
+        final RuleDefinition current
+    ) {
+        this.unparser = unparser;
+        this.unlexer = unlexer;
+        this.current = current;
+    }
 
     public Unparser unparser() {
         return this.unparser;
