@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
+import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
 import com.github.lombrozo.jsmith.antlr.rules.Action;
 import com.github.lombrozo.jsmith.antlr.rules.ActionBlock;
 import com.github.lombrozo.jsmith.antlr.rules.ActionScopeName;
@@ -45,7 +46,9 @@ import com.github.lombrozo.jsmith.antlr.rules.ElementOptions;
 import com.github.lombrozo.jsmith.antlr.rules.Identifier;
 import com.github.lombrozo.jsmith.antlr.rules.LabeledAlt;
 import com.github.lombrozo.jsmith.antlr.rules.LabeledElement;
+import com.github.lombrozo.jsmith.antlr.rules.LexerAltList;
 import com.github.lombrozo.jsmith.antlr.rules.LexerAtom;
+import com.github.lombrozo.jsmith.antlr.rules.LexerBlock;
 import com.github.lombrozo.jsmith.antlr.rules.LexerCharSet;
 import com.github.lombrozo.jsmith.antlr.rules.LexerElement;
 import com.github.lombrozo.jsmith.antlr.rules.LexerElements;
@@ -60,7 +63,6 @@ import com.github.lombrozo.jsmith.antlr.rules.RuleBlock;
 import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
 import com.github.lombrozo.jsmith.antlr.rules.Ruleref;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
-import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -274,7 +276,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterBlock(final ANTLRv4Parser.BlockContext ctx) {
-        final Block block = new Block(this.current);
+        final RuleDefinition block = new Block(this.current);
         this.current.append(block);
         this.current = block;
         super.enterBlock(ctx);
@@ -288,7 +290,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterBlockSuffix(final ANTLRv4Parser.BlockSuffixContext ctx) {
-        final BlockSuffix suffix = new BlockSuffix(this.current);
+        final RuleDefinition suffix = new BlockSuffix(this.current);
         this.current.append(suffix);
         this.current = suffix;
         super.enterBlockSuffix(ctx);
@@ -318,7 +320,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerAltList(final ANTLRv4Parser.LexerAltListContext ctx) {
-        final RuleDefinition list = new AltList(this.current);
+        final RuleDefinition list = new LexerAltList(this.current);
         this.current.append(list);
         this.current = list;
         super.enterLexerAltList(ctx);
@@ -601,5 +603,19 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     public void exitElementOptions(final ANTLRv4Parser.ElementOptionsContext ctx) {
         this.current = this.current.parent();
         super.exitElementOptions(ctx);
+    }
+
+    @Override
+    public void enterLexerBlock(final ANTLRv4Parser.LexerBlockContext ctx) {
+        final RuleDefinition rule = new LexerBlock(this.current);
+        this.current.append(rule);
+        this.current = rule;
+        super.enterLexerBlock(ctx);
+    }
+
+    @Override
+    public void exitLexerBlock(final ANTLRv4Parser.LexerBlockContext ctx) {
+        this.current = this.current.parent();
+        super.exitLexerBlock(ctx);
     }
 }

@@ -31,8 +31,8 @@ import java.util.stream.Collectors;
 /**
  * Represents a lexer element.
  * lexerElement
- *     : {@link LexerAtom} ebnfSuffix?
- *     | {@link LexerBlock} ebnfSuffix?
+ *     : {@link LexerAtom} {@link EbnfSuffix}?
+ *     | {@link LexerBlock} {@link EbnfSuffix}?
  *     | {@link ActionBlock} QUESTION?
  *     ;
  */
