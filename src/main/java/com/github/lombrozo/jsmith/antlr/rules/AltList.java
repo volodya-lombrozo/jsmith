@@ -56,6 +56,13 @@ public final class AltList implements RuleDefinition {
     private final Rand rand;
 
     /**
+     * Default constructor.
+     */
+    public AltList() {
+        this(new Root());
+    }
+
+    /**
      * Constructor.
      * @param parent Parent rule.
      */
@@ -115,5 +122,10 @@ public final class AltList implements RuleDefinition {
     @Override
     public void append(final RuleDefinition rule) {
         this.alternatives.add(rule);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("altList(size=%d)", this.alternatives.size());
     }
 }

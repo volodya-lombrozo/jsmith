@@ -123,4 +123,9 @@ public final class Literal implements RuleDefinition {
         matcher.appendTail(result);
         return result.toString();
     }
+
+    @Override
+    public String toString() {
+        return String.format("literal(%s)", this.text);
+    }
 }
