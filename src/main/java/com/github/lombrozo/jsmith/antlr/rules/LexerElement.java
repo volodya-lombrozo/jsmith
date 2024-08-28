@@ -88,32 +88,6 @@ public final class LexerElement implements RuleDefinition {
         final RuleDefinition first = this.children.get(0);
         if (first instanceof LexerAtom) {
             return this.multiplier().generate(first);
-//            final String res;
-//            final RuleDefinition atom = first;
-//            final String generate = atom.generate();
-//            if (this.children.size() > 1) {
-//                final RuleDefinition ebnSuffix = this.children.get(1);
-//                if (ebnSuffix != null) {
-//                    if (ebnSuffix instanceof EbnfSuffix) {
-//                        res = this.rand.regex(
-//                            String.format("%s%s", generate, ebnSuffix.generate())
-//                        );
-//                    } else {
-//                        throw new IllegalStateException(
-//                            String.format(
-//                                "The second element should be EbnfSuffix! But was %s, %s",
-//                                ebnSuffix.getClass().getSimpleName(),
-//                                ebnSuffix
-//                            )
-//                        );
-//                    }
-//                } else {
-//                    res = this.rand.regex(generate);
-//                }
-//            } else {
-//                res = generate;
-//            }
-//            return res;
         } else if (first instanceof LexerBlock) {
             return this.multiplier().generate(first);
         } else if (first instanceof ActionBlock) {

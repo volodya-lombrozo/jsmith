@@ -63,7 +63,7 @@ final class ElementTest {
             Matchers.anyOf(
                 Matchers.equalTo(""),
                 Matchers.equalTo("1"),
-                Matchers.containsString("1 1")
+                Matchers.containsString("11")
             )
         );
     }

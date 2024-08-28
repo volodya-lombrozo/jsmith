@@ -41,7 +41,7 @@ final class MultiplierTest {
             Matchers.anyOf(
                 Matchers.emptyString(),
                 Matchers.equalTo("a"),
-                Matchers.containsString("a a")
+                Matchers.containsString("aa")
             )
         );
     }
@@ -53,7 +53,7 @@ final class MultiplierTest {
             new Multiplier.OneOrMore().generate(new Literal("a")),
             Matchers.anyOf(
                 Matchers.equalTo("a"),
-                Matchers.containsString("a a")
+                Matchers.containsString("aa")
             )
         );
     }

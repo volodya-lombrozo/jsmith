@@ -78,7 +78,7 @@ final class LexerElementTest {
             element.generate(),
             Matchers.anyOf(
                 Matchers.equalTo("b"),
-                Matchers.containsString("b b")
+                Matchers.containsString("bb")
             )
         );
     }

@@ -55,7 +55,7 @@ public final class Several implements RuleDefinition {
     public String generate() {
         return this.all.stream()
             .map(RuleDefinition::generate)
-            .collect(Collectors.joining(" "));
+            .collect(Collectors.joining());
     }
 
     @Override
