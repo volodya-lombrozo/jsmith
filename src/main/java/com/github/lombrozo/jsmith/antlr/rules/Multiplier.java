@@ -61,12 +61,22 @@ public interface Multiplier {
      */
     final class ZeroOrOne implements Multiplier {
 
+        /**
+         * Random generator.
+         */
         private final Rand rand;
 
+        /**
+         * Constructor.
+         */
         public ZeroOrOne() {
             this(new Rand());
         }
 
+        /**
+         * Constructor.
+         * @param rand Random generator.
+         */
         public ZeroOrOne(final Rand rand) {
             this.rand = rand;
         }

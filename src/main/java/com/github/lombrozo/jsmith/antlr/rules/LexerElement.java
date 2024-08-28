@@ -23,7 +23,6 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.Rand;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,11 +47,6 @@ public final class LexerElement implements RuleDefinition {
     private final List<RuleDefinition> children;
 
     /**
-     * Random generator.
-     */
-    private final Rand rand;
-
-    /**
      * Constructor.
      */
     public LexerElement() {
@@ -75,7 +69,6 @@ public final class LexerElement implements RuleDefinition {
     private LexerElement(final RuleDefinition parent, final List<RuleDefinition> children) {
         this.parent = parent;
         this.children = children;
-        this.rand = new Rand();
     }
 
     @Override
