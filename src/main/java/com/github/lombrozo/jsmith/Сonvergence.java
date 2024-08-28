@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith;
 import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -34,7 +35,7 @@ import java.util.logging.Logger;
  * Should be used in {@link Rand}.
  * @since 0.1
  */
-public final class Сonvergence {
+public final class Сonvergence<T> {
 
     /**
      * Logger.
@@ -52,7 +53,9 @@ public final class Сonvergence {
     /**
      * Weights of the elements.
      */
-    private final Map<String, Map<String, Double>> weights;
+    private final Map<T, Map<T, Double>> weights;
+
+    private final Random random = new Random();
 
     public Сonvergence(final double factor) {
         if (factor < 0 || factor > 1) {
@@ -62,37 +65,37 @@ public final class Сonvergence {
         this.weights = new HashMap<>(0);
     }
 
-    public String choose(final RuleDefinition main, final RuleDefinition... productions) {
-        final String name = main.toString();
-        final Map<String, Double> current = this.weights.computeIfAbsent(
-            name, key -> this.init(productions)
+    public T choose(final T main, final T... productions) {
+        final Map<T, Double> current = this.weights.computeIfAbsent(
+            main,
+            key -> this.init(productions)
         );
-        Сonvergence.LOG.info(() -> String.format("Weights for '%s': '%s'", name, current));
-
-
-        final double totalWeight = current.values().stream().mapToDouble(Double::doubleValue).sum();
-        final double random = Math.random() * totalWeight;
-
+        Сonvergence.LOG.info(() -> String.format("Weights for '%s': '%s'", main, current));
+        final double currentTotal = current.values()
+            .stream()
+            .mapToDouble(Double::doubleValue)
+            .max().orElseThrow(() -> new IllegalStateException("No elements"));
+        final double randomValue = this.random.nextDouble() * currentTotal;
         double sum = 0;
-        for (Map.Entry<String, Double> entry : current.entrySet()) {
+        for (Map.Entry<T, Double> entry : current.entrySet()) {
             sum += entry.getValue();
-            if (sum >= random) {
+            if (sum >= randomValue) {
+                LOG.info(
+                    String.format("Chosen '%s' with weight '%s'", entry.getKey(), entry.getValue())
+                );
                 current.put(entry.getKey(), entry.getValue() * this.factor);
                 return entry.getKey();
             }
         }
-        throw new IllegalStateException("No production was chosen");
+        throw new IllegalStateException("No element was chosen");
     }
 
-    private Map<String, Double> init(
-        final RuleDefinition... productions
-    ) {
-        final Map<String, Double> res = new HashMap<>(0);
-        double total = 0d;
-        for (final RuleDefinition production : productions) {
+    private Map<T, Double> init(final T... elements) {
+        final Map<T, Double> res = new HashMap<>(0);
+        for (final T element : elements) {
             final double initial = 1.0;
-            total += initial;
-            res.put(production.toString(), total);
+            res.putIfAbsent(element, 0d);
+            res.computeIfPresent(element, (key, value) -> value + initial);
         }
         return res;
     }

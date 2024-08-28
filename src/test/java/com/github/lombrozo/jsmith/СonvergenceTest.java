@@ -26,6 +26,11 @@ package com.github.lombrozo.jsmith;
 import com.github.lombrozo.jsmith.antlr.rules.AltList;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -36,19 +41,23 @@ final class СonvergenceTest {
 
 
     @Test
-    void choosesElementsManyTimes() {
+    void choosesDesiredElementEvenIfTheInitalProbabilityIsLow() {
         final AltList list = new AltList();
-        final Literal a = new Literal("a");
-        final Literal b = new Literal("b");
-        final Literal c = new Literal("c");
-        list.append(a);
-        list.append(b);
-        list.append(c);
-        final Сonvergence сonvergence = new Сonvergence(0.5);
-        for (int i = 0; i < 10; ++i) {
-            final String choosen = сonvergence.choose(list, a, b, c);
-            System.out.println(choosen);
-        }
+        final List<AltList> recursive = Collections.nCopies(100, list);
+        final Literal desired = new Literal("desired");
+        final RuleDefinition[] args = Stream.concat(
+            recursive.stream(),
+            Stream.of(desired)
+        ).toArray(RuleDefinition[]::new);
+        list.append(desired);
+        final Сonvergence<RuleDefinition> convergence = new Сonvergence(0.01);
+        convergence.choose(list, args);
+        convergence.choose(list, args);
+        MatcherAssert.assertThat(
+            "",
+            convergence.choose(list, args),
+            Matchers.equalTo(desired)
+        );
     }
 
 }
