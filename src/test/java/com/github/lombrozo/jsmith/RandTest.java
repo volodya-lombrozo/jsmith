@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith;
 
+import java.util.logging.Logger;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -38,11 +39,12 @@ final class RandTest {
     @ParameterizedTest
     @ValueSource(strings = {"[0-3]+", "[0-3]"})
     void regexGenerationTest(final String regex) {
-        final Rand rand = new Rand();
-        final String actual = rand.regex(regex);
+        final String generated = new Rand().regex(regex);
+        Logger.getLogger(RandTest.class.getName())
+            .info(String.format("Generated value: %s", generated));
         MatcherAssert.assertThat(
             "We expect that the generated string will match the regex pattern",
-            actual,
+            generated,
             Matchers.matchesRegex(regex)
         );
     }

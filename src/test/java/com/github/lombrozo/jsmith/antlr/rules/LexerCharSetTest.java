@@ -23,30 +23,28 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
 /**
- * LexerBlock rule.
- * The ANTLR grammar definition:
- * {@code
- * lexerBlock
- *     : LPAREN {@link LexerAltList} RPAREN
- *     ;
- * }
+ * Test cases for {@link LexerCharSet}.
  * @since 0.1
  */
-public final class LexerBlock extends Unimplemented {
+final class LexerCharSetTest {
 
-    /**
-     * Constructor.
-     */
-    public LexerBlock() {
-        this(new Root());
+    @ParameterizedTest
+    @ValueSource(strings = {"a", "b", "[a-c]", "[a-z]", "[a-zA-Z]", "[a-zA-Z0-9]", "[a-zA-Z0-9_]"})
+    void generatesCharSequences(final String sequence) {
+        final RuleDefinition set = new LexerCharSet(sequence);
+        final String generated = set.generate();
+        MatcherAssert.assertThat(
+            "We expect that the generated string will match the sequence",
+            generated,
+            Matchers.matchesRegex(sequence)
+        );
     }
 
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     */
-    public LexerBlock(final RuleDefinition parent) {
-        super(parent);
-    }
+
 }

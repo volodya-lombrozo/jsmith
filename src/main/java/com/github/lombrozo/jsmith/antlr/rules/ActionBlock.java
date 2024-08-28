@@ -34,6 +34,14 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * @since 0.1
  */
 public final class ActionBlock extends Unimplemented {
+
+    /**
+     * Constructor.
+     */
+    public ActionBlock() {
+        this(new Root());
+    }
+
     /**
      * Constructor.
      * @param parent Parent rule.

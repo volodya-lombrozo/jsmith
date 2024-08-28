@@ -26,7 +26,6 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.Rand;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Represents a lexer element.
@@ -55,6 +54,13 @@ public final class LexerElement implements RuleDefinition {
 
     /**
      * Constructor.
+     */
+    public LexerElement() {
+        this(new Root());
+    }
+
+    /**
+     * Constructor.
      * @param parent Parent rule.
      */
     public LexerElement(final RuleDefinition parent) {
@@ -79,37 +85,43 @@ public final class LexerElement implements RuleDefinition {
 
     @Override
     public String generate() {
-        if (this.children.get(0) instanceof LexerAtom) {
-            final String res;
-            final RuleDefinition atom = this.children.get(0);
-            final String generate = atom.generate();
-            if (this.children.size() > 1) {
-                final RuleDefinition ebnSuffix = this.children.get(1);
-                if (ebnSuffix != null) {
-                    if (ebnSuffix instanceof EbnfSuffix) {
-                        res = this.rand.regex(
-                            String.format("%s%s", generate, ebnSuffix.generate())
-                        );
-                    } else {
-                        throw new IllegalStateException(
-                            String.format(
-                                "The second element should be EbnfSuffix! But was %s, %s",
-                                ebnSuffix.getClass().getSimpleName(),
-                                ebnSuffix
-                            )
-                        );
-                    }
-                } else {
-                    res = this.rand.regex(generate);
-                }
-            } else {
-                res = generate;
-            }
-            return res;
+        final RuleDefinition first = this.children.get(0);
+        if (first instanceof LexerAtom) {
+            return this.multiplier().generate(first);
+//            final String res;
+//            final RuleDefinition atom = first;
+//            final String generate = atom.generate();
+//            if (this.children.size() > 1) {
+//                final RuleDefinition ebnSuffix = this.children.get(1);
+//                if (ebnSuffix != null) {
+//                    if (ebnSuffix instanceof EbnfSuffix) {
+//                        res = this.rand.regex(
+//                            String.format("%s%s", generate, ebnSuffix.generate())
+//                        );
+//                    } else {
+//                        throw new IllegalStateException(
+//                            String.format(
+//                                "The second element should be EbnfSuffix! But was %s, %s",
+//                                ebnSuffix.getClass().getSimpleName(),
+//                                ebnSuffix
+//                            )
+//                        );
+//                    }
+//                } else {
+//                    res = this.rand.regex(generate);
+//                }
+//            } else {
+//                res = generate;
+//            }
+//            return res;
+        } else if (first instanceof LexerBlock) {
+            return this.multiplier().generate(first);
+        } else if (first instanceof ActionBlock) {
+            return this.multiplier().generate(first);
         } else {
-            return this.children.stream()
-                .map(RuleDefinition::generate)
-                .collect(Collectors.joining(" "));
+            throw new IllegalStateException(
+                String.format("Unrecognized element type '%s' for '%s' element", first, this)
+            );
         }
     }
 
@@ -121,5 +133,19 @@ public final class LexerElement implements RuleDefinition {
     @Override
     public String toString() {
         return "lexerElement";
+    }
+
+    /**
+     * Returns the multiplier for the element.
+     * @return The multiplier for the {@link LexerAtom}, {@link ActionBlock} and {@link LexerBlock}.
+     */
+    private Multiplier multiplier() {
+        final Multiplier result;
+        if (this.children.size() == 1) {
+            result = new Multiplier.One();
+        } else {
+            result = ((EbnfSuffix) this.children.get(1)).multiplier();
+        }
+        return result;
     }
 }

@@ -23,7 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import org.junit.jupiter.api.Assertions;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -33,17 +34,98 @@ import org.junit.jupiter.api.Test;
 final class LexerElementTest {
 
     @Test
-    void generatesLexerAtom() {
-        Assertions.fail("Not implemented yet");
+    void generatesLexerAtomWithEbnfSuffix() {
+        final RuleDefinition element = new LexerElement();
+        final RuleDefinition atom = new LexerAtom();
+        final RuleDefinition literal = new Literal("a");
+        atom.append(literal);
+        element.append(atom);
+        element.append(new EbnfSuffix("?"));
+        MatcherAssert.assertThat(
+            "We expect that the atom element will be printed correctly with the correct number of repetitions",
+            element.generate(),
+            Matchers.anyOf(
+                Matchers.emptyString(),
+                Matchers.equalTo("a")
+            )
+        );
     }
 
     @Test
-    void generatesLexerBlock() {
-        Assertions.fail("Not implemented yet");
+    void generatesLexerAtomWithoutEbnfSuffix() {
+        final LexerElement element = new LexerElement();
+        final RuleDefinition atom = new LexerAtom(element);
+        final RuleDefinition literal = new Literal("a");
+        atom.append(literal);
+        element.append(atom);
+        MatcherAssert.assertThat(
+            "We expect that the atom element will be printed correctly without the number of repetitions",
+            element.generate(),
+            Matchers.equalTo("a")
+        );
     }
 
     @Test
-    void generatesActionBlock() {
-        Assertions.fail("Not implemented yet");
+    void generatesLexerBlockWithEbnfSuffix() {
+        final RuleDefinition element = new LexerElement();
+        final RuleDefinition block = new LexerBlock();
+        final RuleDefinition literal = new Literal("b");
+        block.append(literal);
+        element.append(block);
+        element.append(new EbnfSuffix("+"));
+        MatcherAssert.assertThat(
+            "We expect that the lexer block will be printed correctly with the correct number of repetitions",
+            element.generate(),
+            Matchers.anyOf(
+                Matchers.equalTo("b"),
+                Matchers.containsString("b b")
+            )
+        );
+    }
+
+    @Test
+    void generatesLexerBlockWithoutEbnfSuffix() {
+        final RuleDefinition element = new LexerElement();
+        final RuleDefinition block = new LexerBlock();
+        final RuleDefinition literal = new Literal("b");
+        block.append(literal);
+        element.append(block);
+        MatcherAssert.assertThat(
+            "We expect that the lexer block will be printed exactly once",
+            element.generate(),
+            Matchers.equalTo("b")
+        );
+    }
+
+    @Test
+    void generatesActionBlockWithoutQuestion() {
+        final RuleDefinition element = new LexerElement();
+        final RuleDefinition action = new ActionBlock();
+        final RuleDefinition literal = new Literal("c");
+        action.append(literal);
+        element.append(action);
+        MatcherAssert.assertThat(
+            "We expect that the action block will be printed exactly once",
+            element.generate(),
+            Matchers.equalTo("c")
+        );
+    }
+
+    @Test
+    void generatesActionBlockWithQuestion() {
+        final RuleDefinition element = new LexerElement();
+        final RuleDefinition action = new ActionBlock();
+        final RuleDefinition literal = new Literal("c");
+        action.append(literal);
+        element.append(action);
+        element.append(new EbnfSuffix("?"));
+        MatcherAssert.assertThat(
+            "We expect that the action block will be printed once or not at all",
+            element.generate(),
+            Matchers.anyOf(
+                Matchers.emptyString(),
+                Matchers.equalTo("c")
+            )
+        );
     }
 }

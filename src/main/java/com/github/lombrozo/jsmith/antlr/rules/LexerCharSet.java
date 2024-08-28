@@ -23,20 +23,38 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.Rand;
+
 /**
  * LexerCharSet rule.
  * @since 0.1
  */
 public final class LexerCharSet implements RuleDefinition {
+
     /**
      * Parent rule.
      */
     private final RuleDefinition parent;
 
+
     /**
-     * Text.
+     * Random generator.
+     */
+    private final Rand rand;
+
+    /**
+     * Char set.
+     * Might be a range or a set of characters.
      */
     private final String text;
+
+    /**
+     * Constructor.
+     * @param text Char set that might be a range or a set of characters.
+     */
+    public LexerCharSet(final String text) {
+        this(new Root(), text);
+    }
 
     /**
      * Constructor.
@@ -44,7 +62,18 @@ public final class LexerCharSet implements RuleDefinition {
      * @param text Text.
      */
     public LexerCharSet(final RuleDefinition parent, final String text) {
+        this(parent, new Rand(), text);
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param rand Random generator.
+     * @param text Text.
+     */
+    public LexerCharSet(final RuleDefinition parent, final Rand rand, final String text) {
         this.parent = parent;
+        this.rand = rand;
         this.text = text;
     }
 
@@ -55,7 +84,7 @@ public final class LexerCharSet implements RuleDefinition {
 
     @Override
     public String generate() {
-        return this.text;
+        return this.rand.regex(this.text);
     }
 
     @Override

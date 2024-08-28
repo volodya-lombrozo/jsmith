@@ -53,6 +53,13 @@ public final class LexerAtom implements RuleDefinition {
 
     /**
      * Constructor.
+     */
+    public LexerAtom() {
+        this(new Root());
+    }
+
+    /**
+     * Constructor.
      * @param parent Parent rule.
      */
     public LexerAtom(final RuleDefinition parent) {

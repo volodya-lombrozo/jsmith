@@ -400,6 +400,9 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         this.current.append(element);
         this.current = element;
         super.enterLexerElement(ctx);
+        if(Objects.nonNull(ctx.QUESTION())){
+            element.append(new EbnfSuffix("?"));
+        }
     }
 
     @Override

@@ -66,7 +66,7 @@ public final class EbnfSuffix implements RuleDefinition {
      * Constructor.
      * @param operation Operation.
      */
-    EbnfSuffix(final String operation) {
+    public EbnfSuffix(final String operation) {
         this(new Empty(), operation);
     }
 
@@ -75,7 +75,7 @@ public final class EbnfSuffix implements RuleDefinition {
      * @param operation Operation.
      * @param question Question.
      */
-    EbnfSuffix(final String operation, final String question) {
+    public EbnfSuffix(final String operation, final String question) {
         this(new Empty(), operation, question);
     }
 
