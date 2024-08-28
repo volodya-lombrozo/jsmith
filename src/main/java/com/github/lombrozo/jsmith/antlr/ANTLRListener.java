@@ -54,6 +54,7 @@ import com.github.lombrozo.jsmith.antlr.rules.LexerElement;
 import com.github.lombrozo.jsmith.antlr.rules.LexerElements;
 import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
+import com.github.lombrozo.jsmith.antlr.rules.NotSet;
 import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.PredicateOption;
 import com.github.lombrozo.jsmith.antlr.rules.PredicateOptions;
@@ -650,5 +651,19 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     public void exitLexerBlock(final ANTLRv4Parser.LexerBlockContext ctx) {
         this.current = this.current.parent();
         super.exitLexerBlock(ctx);
+    }
+
+    @Override
+    public void enterNotSet(final ANTLRv4Parser.NotSetContext ctx) {
+        final RuleDefinition rule = new NotSet(this.current);
+        this.current.append(rule);
+        this.current = rule;
+        super.enterNotSet(ctx);
+    }
+
+    @Override
+    public void exitNotSet(final ANTLRv4Parser.NotSetContext ctx) {
+        this.current = this.current.parent();
+        super.exitNotSet(ctx);
     }
 }

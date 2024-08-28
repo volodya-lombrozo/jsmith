@@ -30,7 +30,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * atom
  *     : {@link TerminalDef}
  *     | {@link Ruleref}
- *     | notSet
+ *     | {@link NotSet}
  *     | DOT {@link ElementOptions}?
  *     ;
  * }

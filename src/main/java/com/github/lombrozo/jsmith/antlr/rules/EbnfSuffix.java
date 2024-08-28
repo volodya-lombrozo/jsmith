@@ -137,30 +137,20 @@ public final class EbnfSuffix implements RuleDefinition {
 
     /**
      * Multiply rule based on ebfn suffix.
-     * @param from Rule to multiply.
      * @return Multiplied rule.
      */
-    RuleDefinition multiplier(RuleDefinition from) {
-        final RuleDefinition result;
+    Multiplier multiplier() {
+        final Multiplier result;
         switch (this.operation) {
             case "?":
-                if (this.rand.flip()) {
-                    result = from;
-                    break;
-                } else {
-                    result = new Empty();
-                    break;
-                }
-            case "+": {
-                final int number = this.rand.nextInt(5) + 1;
-                result = new Several(Collections.nCopies(number, from));
+                result = new Multiplier.ZeroOrOne(this.rand);
                 break;
-            }
-            case "*": {
-                final int number = this.rand.nextInt(5);
-                result = new Several(Collections.nCopies(number, from));
+            case "+":
+                result = new Multiplier.OneOrMore(this.rand);
                 break;
-            }
+            case "*":
+                result = new Multiplier.ZeroOrMore(this.rand);
+                break;
             default:
                 throw new IllegalArgumentException(
                     String.format(

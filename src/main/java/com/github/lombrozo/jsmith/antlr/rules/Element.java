@@ -70,21 +70,20 @@ public final class Element implements RuleDefinition {
         if (this.children.isEmpty()) {
             throw new IllegalStateException("Element should have at least one child");
         }
+        final String result;
         final RuleDefinition first = this.children.get(0);
         if (first instanceof Atom) {
-            if (this.children.size() == 1) {
-                return first.generate();
-            } else {
-                final EbnfSuffix ebnfSuffix = (EbnfSuffix) this.children.get(1);
-                return ebnfSuffix.multiplier(first).generate();
-            }
+            result = this.multiplier().generate(first);
+        } else if (first instanceof LabeledElement) {
+            result = this.multiplier().generate(first);
         } else if (first instanceof Ebnf) {
-            return first.generate();
+            result = first.generate();
         } else {
             throw new IllegalStateException(
                 String.format("Unrecognized element type '%s' for '%s' element", first, this)
             );
         }
+        return result;
     }
 
     @Override
@@ -95,5 +94,20 @@ public final class Element implements RuleDefinition {
     @Override
     public String toString() {
         return "element";
+    }
+
+    /**
+     * Returns the multiplier for the element.
+     * This multiplier might be defined for {@link Atom} and {@link LabeledElement} child elements.
+     * @return The multiplier for the {@link Atom} and {@link LabeledElement}.
+     */
+    private Multiplier multiplier() {
+        final Multiplier result;
+        if (this.children.size() == 1) {
+            result = new Multiplier.One();
+        } else {
+            result = ((EbnfSuffix) this.children.get(1)).multiplier();
+        }
+        return result;
     }
 }

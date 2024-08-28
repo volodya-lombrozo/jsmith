@@ -23,64 +23,23 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.Rand;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * LexerAtom rule.
+ * NotSet rule.
  * The ANTLR grammar definition:
  * {@code
- * lexerAtom
- *     : {@link CharacterRange}
- *     | {@link TerminalDef}
- *     | {@link NotSet}
- *     | {@link LexerCharSet}
- *     | DOT {@link ElementOptions}?
+ * notSet
+ *     : NOT setElement
+ *     | NOT blockSet
  *     ;
+ * }
+ * @since 0.1
  */
-public final class LexerAtom implements RuleDefinition {
-
-    /**
-     * Parent rule.
-     */
-    private final RuleDefinition parent;
-
-    /**
-     * Children rules.
-     */
-    private final List<RuleDefinition> elems;
-
+public final class NotSet extends Unimplemented {
     /**
      * Constructor.
      * @param parent Parent rule.
      */
-    public LexerAtom(final RuleDefinition parent) {
-        this(parent, new ArrayList<>(0));
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param elems Children rules.
-     */
-    private LexerAtom(final RuleDefinition parent, final List<RuleDefinition> elems) {
-        this.parent = parent;
-        this.elems = elems;
-    }
-
-    @Override
-    public RuleDefinition parent() {
-        return this.parent;
-    }
-
-    @Override
-    public String generate() {
-        return this.elems.get(new Rand().nextInt(this.elems.size())).generate();
-    }
-
-    @Override
-    public void append(final RuleDefinition rule) {
-        this.elems.add(rule);
+    public NotSet(final RuleDefinition parent) {
+        super(parent);
     }
 }
