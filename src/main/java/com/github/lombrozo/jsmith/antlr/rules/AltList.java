@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.Convergence;
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,12 +52,6 @@ public final class AltList implements RuleDefinition {
     private final List<RuleDefinition> alternatives;
 
     /**
-     * Convergence strategy.
-     * Allows choosing a random alternative based on the history of the previous choices.
-     */
-    private final Convergence<RuleDefinition> rand;
-
-    /**
      * Default constructor.
      */
     public AltList() {
@@ -70,16 +65,7 @@ public final class AltList implements RuleDefinition {
     public AltList(final RuleDefinition parent) {
         this(parent, new ArrayList<>(0));
     }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param rand Convergence strategy.
-     */
-    public AltList(final RuleDefinition parent, final Convergence rand) {
-        this(parent, new ArrayList<>(0), rand);
-    }
-
+    
     /**
      * Constructor.
      * @param parent Parent rule.
@@ -94,24 +80,12 @@ public final class AltList implements RuleDefinition {
      * @param parent Parent rule.
      * @param alternatives Alternatives.
      */
-    private AltList(final RuleDefinition parent, final List<RuleDefinition> alternatives) {
-        this(parent, alternatives, new Convergence<>());
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param alternatives Alternatives.
-     * @param rand Convergence strategy.
-     */
     private AltList(
         final RuleDefinition parent,
-        final List<RuleDefinition> alternatives,
-        final Convergence<RuleDefinition> rand
+        final List<RuleDefinition> alternatives
     ) {
         this.parent = parent;
         this.alternatives = alternatives;
-        this.rand = rand;
     }
 
     @Override
@@ -120,12 +94,14 @@ public final class AltList implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
+    public String generate(final GenerationContext context) {
         final String result;
         if (this.alternatives.isEmpty()) {
             result = "";
         } else {
-            result = this.rand.choose(this, this.alternatives).generate();
+            final Convergence<RuleDefinition> convergence = context.convergence();
+            result = convergence.choose(this, this.alternatives)
+                .generate(context.withConvergence(convergence));
         }
         return result;
     }

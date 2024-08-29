@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,9 +53,9 @@ public final class Several implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
+    public String generate(final GenerationContext context) {
         return this.all.stream()
-            .map(RuleDefinition::generate)
+            .map(rule -> rule.generate(context))
             .collect(Collectors.joining());
     }
 

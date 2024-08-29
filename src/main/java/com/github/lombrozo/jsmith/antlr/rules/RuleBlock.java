@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
+
 /**
  * Rule block.
  * The ruleBlock definition in ANTLR grammar:
@@ -44,8 +46,8 @@ public final class RuleBlock extends Unimplemented {
     }
 
     @Override
-    public String generate() {
-        return super.generate();
+    public String generate(final GenerationContext context) {
+        return super.generate(context);
     }
 
     @Override

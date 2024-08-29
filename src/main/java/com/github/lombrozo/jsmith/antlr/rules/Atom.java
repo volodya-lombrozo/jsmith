@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
+
 /**
  * Atom.
  * The ANTLR grammar definition:
@@ -67,8 +69,8 @@ public final class Atom implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
-        return this.item.generate();
+    public String generate(final GenerationContext context) {
+        return this.item.generate(context);
     }
 
     @Override

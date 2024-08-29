@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.Rand;
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -106,7 +107,7 @@ public final class EbnfSuffix implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
+    public String generate(final GenerationContext context) {
         if (Objects.isNull(this.operation)) {
             throw new IllegalArgumentException(
                 String.format(

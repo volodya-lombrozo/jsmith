@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
+
 /**
  * Rule definition.
  * @since 0.1
@@ -39,12 +41,22 @@ public interface RuleDefinition {
      * Generate random code.
      * @return Random code.
      */
-    String generate();
+    String generate(final GenerationContext context);
 
     /**
      * Append child rule.
      * @param rule Child rule.
      */
     void append(final RuleDefinition rule);
+
+
+    /**
+     * The default implementation of the generate method.
+     * @return Generated string.
+     * @todo #1:30min Remove the default implementation of the generate method.
+     */
+    default String generate() {
+        return this.generate(new GenerationContext());
+    }
 
 }

@@ -65,7 +65,7 @@ final class RulerefTest {
         unparser.with(rule);
         Assertions.assertThrows(
             IllegalStateException.class,
-            recursive::generate,
+            () -> recursive.generate(),
             String.format(
                 "We expect that %s will throw an exception because of recursion, but it didn't happen",
                 recursive

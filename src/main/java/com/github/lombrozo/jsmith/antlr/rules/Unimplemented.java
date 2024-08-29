@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,8 +70,9 @@ public abstract class Unimplemented implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
-        return this.children.stream().map(RuleDefinition::generate)
+    public String generate(final GenerationContext context) {
+        return this.children.stream()
+            .map(rule -> rule.generate(context))
             .collect(Collectors.joining(" "));
     }
 

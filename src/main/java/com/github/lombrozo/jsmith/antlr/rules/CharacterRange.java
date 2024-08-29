@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
+
 /**
  * CharacterRange rule.
  * The ANTLR grammar definition:
@@ -61,7 +63,7 @@ public final class CharacterRange implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
+    public String generate(final GenerationContext context) {
         return this.text;
     }
 

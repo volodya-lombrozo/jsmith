@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 
 /**
@@ -80,10 +81,10 @@ public final class TerminalDef implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
+    public String generate(final GenerationContext context) {
         return this.unlexer.find(this.text)
             .orElseGet(() -> new Literal(this.text))
-            .generate();
+            .generate(context);
     }
 
     @Override

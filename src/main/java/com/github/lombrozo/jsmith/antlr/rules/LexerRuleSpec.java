@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,8 +80,10 @@ public final class LexerRuleSpec implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
-        return this.list.stream().map(RuleDefinition::generate).collect(Collectors.joining(" "));
+    public String generate(final GenerationContext context) {
+        return this.list.stream()
+            .map(rule -> rule.generate(context))
+            .collect(Collectors.joining(" "));
     }
 
     @Override

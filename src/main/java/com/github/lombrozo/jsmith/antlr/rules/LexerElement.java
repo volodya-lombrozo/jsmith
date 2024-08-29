@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,14 +78,14 @@ public final class LexerElement implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
+    public String generate(final GenerationContext context) {
         final RuleDefinition first = this.children.get(0);
         if (first instanceof LexerAtom) {
-            return this.multiplier().generate(first);
+            return this.multiplier().generate(first, context);
         } else if (first instanceof LexerBlock) {
-            return this.multiplier().generate(first);
+            return this.multiplier().generate(first, context);
         } else if (first instanceof ActionBlock) {
-            return this.multiplier().generate(first);
+            return this.multiplier().generate(first, context);
         } else {
             throw new IllegalStateException(
                 String.format("Unrecognized element type '%s' for '%s' element", first, this)

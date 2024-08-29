@@ -23,8 +23,6 @@
  */
 package com.github.lombrozo.jsmith;
 
-import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
-import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,7 +74,7 @@ public final class Convergence<T> {
      * Default constructor.
      */
     public Convergence() {
-        this(0.01d);
+        this(0.5d);
     }
 
     /**
@@ -109,14 +107,45 @@ public final class Convergence<T> {
         final Rand rand,
         final boolean verbose
     ) {
+        this(factor, weight, new HashMap<>(0), rand, verbose);
+    }
+
+    public Convergence(
+        final double factor,
+        final double weight,
+        final Map<T, Map<T, Double>> weights,
+        final Rand rand,
+        final boolean verbose
+    ) {
         if (factor < 0 || factor > 1) {
             throw new IllegalArgumentException("Factor must be between 0 and 1");
         }
         this.factor = factor;
         this.weight = weight;
+        this.weights = weights;
         this.rand = rand;
         this.verbose = verbose;
-        this.weights = new HashMap<>(0);
+    }
+
+    /**
+     * Copy this object.
+     */
+    public Convergence<T> copy() {
+        return new Convergence<>(
+            this.factor,
+            this.weight,
+            this.wightsCopy(),
+            this.rand,
+            this.verbose
+        );
+    }
+
+    private Map<T, Map<T, Double>> wightsCopy() {
+        final Map<T, Map<T, Double>> copy = new HashMap<>(0);
+        for (final Map.Entry<T, Map<T, Double>> entry : this.weights.entrySet()) {
+            copy.put(entry.getKey(), new HashMap<>(entry.getValue()));
+        }
+        return copy;
     }
 
     /**
@@ -191,5 +220,4 @@ public final class Convergence<T> {
             Convergence.LOG.info(msg);
         }
     }
-
 }

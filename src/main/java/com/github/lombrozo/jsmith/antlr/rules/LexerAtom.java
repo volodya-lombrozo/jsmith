@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.Convergence;
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,12 +51,6 @@ public final class LexerAtom implements RuleDefinition {
      * Children rules.
      */
     private final List<RuleDefinition> elems;
-
-    /**
-     * Convergence strategy.
-     * Allows choosing a random alternative based on the history of the previous choices.
-     */
-    private final Convergence<RuleDefinition> convergence;
 
     /**
      * Constructor.
@@ -103,7 +98,6 @@ public final class LexerAtom implements RuleDefinition {
     ) {
         this.parent = parent;
         this.elems = elems;
-        this.convergence = convergence;
     }
 
     @Override
@@ -112,8 +106,10 @@ public final class LexerAtom implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
-        return this.convergence.choose(this, this.elems).generate();
+    public String generate(final GenerationContext context) {
+        final Convergence<RuleDefinition> convergence = context.convergence();
+        return convergence.choose(this, this.elems)
+            .generate(context.withConvergence(convergence));
     }
 
     @Override

@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.Rand;
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.Collections;
 
 /**
@@ -38,10 +39,12 @@ public interface Multiplier {
 
     /**
      * Generate a string based on the rule and the multiplier.
+     *
      * @param rule Rule to repeat.
+     * @param context
      * @return Generated string by the repetition.
      */
-    String generate(final RuleDefinition rule);
+    String generate(final RuleDefinition rule, final GenerationContext context);
 
     /**
      * Exactly one repetition.
@@ -50,8 +53,8 @@ public interface Multiplier {
     final class One implements Multiplier {
 
         @Override
-        public String generate(final RuleDefinition rule) {
-            return rule.generate();
+        public String generate(final RuleDefinition rule, final GenerationContext context) {
+            return rule.generate(context);
         }
     }
 
@@ -82,10 +85,10 @@ public interface Multiplier {
         }
 
         @Override
-        public String generate(final RuleDefinition rule) {
+        public String generate(final RuleDefinition rule, final GenerationContext context) {
             final String result;
             if (this.rand.flip()) {
-                result = rule.generate();
+                result = rule.generate(context);
             } else {
                 result = "";
             }
@@ -135,10 +138,10 @@ public interface Multiplier {
         }
 
         @Override
-        public String generate(final RuleDefinition rule) {
+        public String generate(final RuleDefinition rule, final GenerationContext context) {
             return new Several(
                 Collections.nCopies(this.rand.nextInt(this.limit) + 1, rule)
-            ).generate();
+            ).generate(context);
         }
     }
 
@@ -184,10 +187,10 @@ public interface Multiplier {
         }
 
         @Override
-        public String generate(final RuleDefinition rule) {
+        public String generate(final RuleDefinition rule, final GenerationContext context) {
             return new Several(
                 Collections.nCopies(this.rand.nextInt(this.limit), rule)
-            ).generate();
+            ).generate(context);
         }
     }
 }

@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
+
 /**
  * Empty rule.
  * Useful for tests mostly.
@@ -37,7 +39,7 @@ public final class Empty implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
+    public String generate(final GenerationContext context) {
         return "";
     }
 

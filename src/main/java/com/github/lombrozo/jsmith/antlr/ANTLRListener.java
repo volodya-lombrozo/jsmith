@@ -25,7 +25,6 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
-import com.github.lombrozo.jsmith.Convergence;
 import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
 import com.github.lombrozo.jsmith.antlr.rules.Action;
 import com.github.lombrozo.jsmith.antlr.rules.ActionBlock;
@@ -93,11 +92,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
      */
     private RuleDefinition current;
 
-//    /**
-//     * Convergence.
-//     */
-//    private final Convergence<RuleDefinition> convergence;
-
     /**
      * Constructor.
      */
@@ -119,7 +113,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         this.unparser = unparser;
         this.unlexer = unlexer;
         this.current = current;
-//        this.convergence = new Convergence<>(0.25d, true);
     }
 
     public Unparser unparser() {
@@ -187,7 +180,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterAltList(final ANTLRv4Parser.AltListContext ctx) {
-        final RuleDefinition list = new AltList(this.current, new Convergence());
+        final RuleDefinition list = new AltList(this.current);
         this.current.append(list);
         this.current = list;
         super.enterAltList(ctx);
@@ -201,7 +194,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterRuleAltList(final ANTLRv4Parser.RuleAltListContext ctx) {
-        final RuleDefinition list = new RuleAltList(this.current, new Convergence<>());
+        final RuleDefinition list = new RuleAltList(this.current);
         this.current.append(list);
         this.current = list;
         super.enterRuleAltList(ctx);
@@ -424,7 +417,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerAtom(final ANTLRv4Parser.LexerAtomContext ctx) {
-        final RuleDefinition atom = new LexerAtom(this.current, new Convergence<>());
+        final RuleDefinition atom = new LexerAtom(this.current);
         if (ctx.LEXER_CHAR_SET() != null) {
             atom.append(new LexerCharSet(atom, ctx.LEXER_CHAR_SET().getText()));
         } else if (ctx.DOT() != null) {

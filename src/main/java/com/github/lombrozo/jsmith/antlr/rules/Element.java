@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,18 +67,18 @@ public final class Element implements RuleDefinition {
     }
 
     @Override
-    public String generate() {
+    public String generate(final GenerationContext context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException("Element should have at least one child");
         }
         final String result;
         final RuleDefinition first = this.children.get(0);
         if (first instanceof Atom) {
-            result = this.multiplier().generate(first);
+            result = this.multiplier().generate(first, context);
         } else if (first instanceof LabeledElement) {
-            result = this.multiplier().generate(first);
+            result = this.multiplier().generate(first, context);
         } else if (first instanceof Ebnf) {
-            result = first.generate();
+            result = first.generate(context);
         } else {
             throw new IllegalStateException(
                 String.format("Unrecognized element type '%s' for '%s' element", first, this)

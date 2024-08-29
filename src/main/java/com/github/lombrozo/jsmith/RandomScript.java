@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith;
 
 import com.github.lombrozo.jsmith.antlr.ANTLRListener;
+import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -46,7 +47,7 @@ public final class RandomScript {
     public String generate(final String rule) {
         final ANTLRListener listener = new ANTLRListener();
         new ParseTreeWalker().walk(listener, this.parser().grammarSpec());
-        return listener.unparser().generate(rule);
+        return listener.unparser().generate(rule, new GenerationContext());
     }
 
     String spec() {
