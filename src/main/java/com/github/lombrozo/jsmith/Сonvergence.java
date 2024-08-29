@@ -23,10 +23,8 @@
  */
 package com.github.lombrozo.jsmith;
 
-import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -51,36 +49,90 @@ public final class Сonvergence<T> {
     private final double factor;
 
     /**
+     * Initial weight of the elements.
+     * Usually, it is 1.
+     */
+    private final double weight;
+
+    /**
      * Weights of the elements.
      */
     private final Map<T, Map<T, Double>> weights;
 
-    private final Random random = new Random();
+    /**
+     * Random generator.
+     */
+    private final Rand rand;
 
+    /**
+     * Verbose mode.
+     */
+    private final boolean verbose;
+
+    /**
+     * Constructor.
+     * @param factor Factor of convergence.
+     */
     public Сonvergence(final double factor) {
+        this(factor, false);
+    }
+
+    /**
+     * Constructor.
+     * @param factor Factor of convergence.
+     * @param verbose Do we need to log changes in the weights?
+     */
+    public Сonvergence(final double factor, final boolean verbose) {
+        this(factor, 1.0d, new Rand(), verbose);
+    }
+
+    /**
+     * Constructor.
+     * @param factor Factor of convergence.
+     * @param weight Initial weight of the elements.
+     * @param rand Random generator.
+     * @param verbose Verbose mode.
+     */
+    public Сonvergence(
+        final double factor,
+        final double weight,
+        final Rand rand,
+        final boolean verbose
+    ) {
         if (factor < 0 || factor > 1) {
             throw new IllegalArgumentException("Factor must be between 0 and 1");
         }
         this.factor = factor;
+        this.weight = weight;
+        this.rand = rand;
+        this.verbose = verbose;
         this.weights = new HashMap<>(0);
     }
 
-    public T choose(final T main, final T... productions) {
+    /**
+     * Choose one of the child elements from a parent element.
+     * Each time when we choose an element, its weight is multiplied by the factor.
+     * So, the probability of choosing this element one more time decreases.
+     * @param from The main parent element which has child elements.
+     * @param elements Child elements.
+     * @return Chosen element.
+     */
+    public T choose(final T from, final T... elements) {
         final Map<T, Double> current = this.weights.computeIfAbsent(
-            main,
-            key -> this.init(productions)
+            from, key -> this.init(elements)
         );
-        Сonvergence.LOG.info(() -> String.format("Weights for '%s': '%s'", main, current));
-        final double currentTotal = current.values()
+        this.log(String.format("Weights for '%s': '%s'", from, current));
+        final double total = current.values()
             .stream()
             .mapToDouble(Double::doubleValue)
-            .max().orElseThrow(() -> new IllegalStateException("No elements"));
-        final double randomValue = this.random.nextDouble() * currentTotal;
+            .max()
+            .orElseThrow(() -> new IllegalStateException("No elements"));
+        final double random = this.rand.nextDouble() * total;
         double sum = 0;
-        for (Map.Entry<T, Double> entry : current.entrySet()) {
+        for (final Map.Entry<T, Double> entry : current.entrySet()) {
             sum += entry.getValue();
-            if (sum >= randomValue) {
-                LOG.info(
+            if (sum >= random) {
+                this.log(
                     String.format("Chosen '%s' with weight '%s'", entry.getKey(), entry.getValue())
                 );
                 current.put(entry.getKey(), entry.getValue() * this.factor);
@@ -90,15 +142,28 @@ public final class Сonvergence<T> {
         throw new IllegalStateException("No element was chosen");
     }
 
+    /**
+     * Init weights map for the elements.
+     * @param elements Elements.
+     * @return Initial map with weights.
+     */
     private Map<T, Double> init(final T... elements) {
         final Map<T, Double> res = new HashMap<>(0);
         for (final T element : elements) {
-            final double initial = 1.0;
             res.putIfAbsent(element, 0d);
-            res.computeIfPresent(element, (key, value) -> value + initial);
+            res.computeIfPresent(element, (key, value) -> value + this.weight);
         }
         return res;
     }
 
+    /**
+     * Log a message if verbose mode is enabled.
+     * @param msg Message to print.
+     */
+    private void log(final String msg) {
+        if (this.verbose) {
+            Сonvergence.LOG.info(msg);
+        }
+    }
 
 }

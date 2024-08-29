@@ -78,4 +78,11 @@ public final class Rand {
         return new Generex(regex).random();
     }
 
+    /**
+     * Generates a random double.
+     * @return Random double.
+     */
+    public double nextDouble() {
+        return this.random.nextDouble();
+    }
 }

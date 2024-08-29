@@ -27,7 +27,6 @@ import com.github.lombrozo.jsmith.antlr.rules.AltList;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -39,25 +38,23 @@ import org.junit.jupiter.api.Test;
  */
 final class СonvergenceTest {
 
-
     @Test
     void choosesDesiredElementEvenIfTheInitalProbabilityIsLow() {
         final AltList list = new AltList();
-        final List<AltList> recursive = Collections.nCopies(100, list);
         final Literal desired = new Literal("desired");
         final RuleDefinition[] args = Stream.concat(
-            recursive.stream(),
+            Collections.nCopies(100_000, list).stream(),
             Stream.of(desired)
         ).toArray(RuleDefinition[]::new);
-        list.append(desired);
-        final Сonvergence<RuleDefinition> convergence = new Сonvergence(0.01);
-        convergence.choose(list, args);
+        final Сonvergence<RuleDefinition> convergence = new Сonvergence(0.0000000001, true);
         convergence.choose(list, args);
         MatcherAssert.assertThat(
-            "",
+            String.format(
+                "We expect that in the first round, the '%s' element will be chosen. However, the probability of choosing it will decrease significantly, and it won't be chosen in the second round.",
+                list
+            ),
             convergence.choose(list, args),
             Matchers.equalTo(desired)
         );
     }
-
 }
