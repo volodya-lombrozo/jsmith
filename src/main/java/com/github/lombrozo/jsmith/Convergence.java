@@ -23,6 +23,9 @@
  */
 package com.github.lombrozo.jsmith;
 
+import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
+import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -33,12 +36,12 @@ import java.util.logging.Logger;
  * Should be used in {@link Rand}.
  * @since 0.1
  */
-public final class Сonvergence<T> {
+public final class Convergence<T> {
 
     /**
      * Logger.
      */
-    private static final Logger LOG = Logger.getLogger(Сonvergence.class.getName());
+    private static final Logger LOG = Logger.getLogger(Convergence.class.getName());
 
     /**
      * Factor of convergence.
@@ -70,10 +73,17 @@ public final class Сonvergence<T> {
     private final boolean verbose;
 
     /**
+     * Default constructor.
+     */
+    public Convergence() {
+        this(0.01d);
+    }
+
+    /**
      * Constructor.
      * @param factor Factor of convergence.
      */
-    public Сonvergence(final double factor) {
+    public Convergence(final double factor) {
         this(factor, false);
     }
 
@@ -82,7 +92,7 @@ public final class Сonvergence<T> {
      * @param factor Factor of convergence.
      * @param verbose Do we need to log changes in the weights?
      */
-    public Сonvergence(final double factor, final boolean verbose) {
+    public Convergence(final double factor, final boolean verbose) {
         this(factor, 1.0d, new Rand(), verbose);
     }
 
@@ -93,7 +103,7 @@ public final class Сonvergence<T> {
      * @param rand Random generator.
      * @param verbose Verbose mode.
      */
-    public Сonvergence(
+    public Convergence(
         final double factor,
         final double weight,
         final Rand rand,
@@ -111,6 +121,17 @@ public final class Сonvergence<T> {
 
     /**
      * Choose one of the child elements from a parent element.
+     * @param from The main parent element which has child elements.
+     * @param elements Child elements.
+     * @return Chosen element.
+     */
+    @SuppressWarnings("unchecked")
+    public T choose(final T from, final Collection<T> elements) {
+        return this.choose(from, (T[]) elements.toArray(new Object[0]));
+    }
+
+    /**
+     * Choose one of the child elements from a parent element.
      * Each time when we choose an element, its weight is multiplied by the factor.
      * So, the probability of choosing this element one more time decreases.
      * @param from The main parent element which has child elements.
@@ -121,6 +142,11 @@ public final class Сonvergence<T> {
         final Map<T, Double> current = this.weights.computeIfAbsent(
             from, key -> this.init(elements)
         );
+        if (elements.length == 0) {
+            throw new IllegalArgumentException(
+                String.format("No elements to choose from for '%s' element", from)
+            );
+        }
         this.log(String.format("Weights for '%s': '%s'", from, current));
         final double total = current.values()
             .stream()
@@ -162,7 +188,7 @@ public final class Сonvergence<T> {
      */
     private void log(final String msg) {
         if (this.verbose) {
-            Сonvergence.LOG.info(msg);
+            Convergence.LOG.info(msg);
         }
     }
 

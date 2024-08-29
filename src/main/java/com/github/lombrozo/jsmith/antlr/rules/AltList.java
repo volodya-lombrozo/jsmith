@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.Rand;
+import com.github.lombrozo.jsmith.Convergence;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,9 +51,10 @@ public final class AltList implements RuleDefinition {
     private final List<RuleDefinition> alternatives;
 
     /**
-     * Random generator.
+     * Convergence strategy.
+     * Allows choosing a random alternative based on the history of the previous choices.
      */
-    private final Rand rand;
+    private final Convergence<RuleDefinition> rand;
 
     /**
      * Default constructor.
@@ -73,6 +74,15 @@ public final class AltList implements RuleDefinition {
     /**
      * Constructor.
      * @param parent Parent rule.
+     * @param rand Convergence strategy.
+     */
+    public AltList(final RuleDefinition parent, final Convergence rand) {
+        this(parent, new ArrayList<>(0), rand);
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
      * @param alternatives Alternatives.
      */
     AltList(final RuleDefinition parent, RuleDefinition... alternatives) {
@@ -85,19 +95,19 @@ public final class AltList implements RuleDefinition {
      * @param alternatives Alternatives.
      */
     private AltList(final RuleDefinition parent, final List<RuleDefinition> alternatives) {
-        this(parent, alternatives, new Rand());
+        this(parent, alternatives, new Convergence<>());
     }
 
     /**
      * Constructor.
      * @param parent Parent rule.
      * @param alternatives Alternatives.
-     * @param rand Random generator.
+     * @param rand Convergence strategy.
      */
     private AltList(
         final RuleDefinition parent,
         final List<RuleDefinition> alternatives,
-        final Rand rand
+        final Convergence<RuleDefinition> rand
     ) {
         this.parent = parent;
         this.alternatives = alternatives;
@@ -111,10 +121,11 @@ public final class AltList implements RuleDefinition {
 
     @Override
     public String generate() {
-        String result = "";
-        final int size = this.alternatives.size();
-        if (size >= 1) {
-            result = this.alternatives.get(this.rand.nextInt(size)).generate();
+        final String result;
+        if (this.alternatives.isEmpty()) {
+            result = "";
+        } else {
+            result = this.rand.choose(this, this.alternatives).generate();
         }
         return result;
     }

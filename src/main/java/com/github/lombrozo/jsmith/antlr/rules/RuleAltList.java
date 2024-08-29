@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.Rand;
+import com.github.lombrozo.jsmith.Convergence;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +50,9 @@ public final class RuleAltList implements RuleDefinition {
     private final List<RuleDefinition> alternatives;
 
     /**
-     * Random generator.
+     * Convergence strategy.
      */
-    private final Rand rand;
+    private final Convergence<RuleDefinition> rand;
 
     /**
      * Constructor.
@@ -64,13 +64,36 @@ public final class RuleAltList implements RuleDefinition {
 
     /**
      * Constructor.
+     * @param parent Parent rule.
+     * @param conv Convergence strategy.
+     */
+    public RuleAltList(final RuleDefinition parent, final Convergence<RuleDefinition> conv) {
+        this(parent, new ArrayList<>(0), conv);
+    }
+
+    /**
+     * Constructor.
      * @param rule Parent rule.
      * @param alts All alternatives of the current node.
      */
     private RuleAltList(final RuleDefinition rule, final List<RuleDefinition> alts) {
-        this.parent = rule;
-        this.alternatives = alts;
-        this.rand = new Rand();
+        this(rule, alts, new Convergence<>());
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param alternatives All alternatives of the current node.
+     * @param conv Convergence strategy.
+     */
+    public RuleAltList(
+        final RuleDefinition parent,
+        final List<RuleDefinition> alternatives,
+        final Convergence<RuleDefinition> conv
+    ) {
+        this.parent = parent;
+        this.alternatives = alternatives;
+        this.rand = conv;
     }
 
     @Override
@@ -83,7 +106,7 @@ public final class RuleAltList implements RuleDefinition {
         if (this.alternatives.isEmpty()) {
             throw new IllegalStateException("RuleAltList should have at least one alternative");
         }
-        return this.alternatives.get(this.rand.nextInt(this.alternatives.size())).generate();
+        return this.rand.choose(this, this.alternatives).generate();
     }
 
     @Override
@@ -93,6 +116,10 @@ public final class RuleAltList implements RuleDefinition {
 
     @Override
     public String toString() {
-        return String.format("ruleAltList(alternatives=%d)", this.alternatives.size());
+        return String.format(
+            "ruleAltList(alternatives=%d, id=%s)",
+            this.alternatives.size(),
+            System.identityHashCode(this)
+        );
     }
 }

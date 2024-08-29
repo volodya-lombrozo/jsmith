@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.Rand;
+import com.github.lombrozo.jsmith.Convergence;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +52,12 @@ public final class LexerAtom implements RuleDefinition {
     private final List<RuleDefinition> elems;
 
     /**
+     * Convergence strategy.
+     * Allows choosing a random alternative based on the history of the previous choices.
+     */
+    private final Convergence<RuleDefinition> convergence;
+
+    /**
      * Constructor.
      */
     public LexerAtom() {
@@ -69,11 +75,35 @@ public final class LexerAtom implements RuleDefinition {
     /**
      * Constructor.
      * @param parent Parent rule.
+     * @param convergence Convergence strategy.
+     */
+    public LexerAtom(final RuleDefinition parent, final Convergence<RuleDefinition> convergence) {
+        this(parent, new ArrayList<>(0), convergence);
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
      * @param elems Children rules.
      */
     private LexerAtom(final RuleDefinition parent, final List<RuleDefinition> elems) {
+        this(parent, elems, new Convergence<>());
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param elems Children rules.
+     * @param convergence Convergence strategy.
+     */
+    public LexerAtom(
+        final RuleDefinition parent,
+        final List<RuleDefinition> elems,
+        final Convergence<RuleDefinition> convergence
+    ) {
         this.parent = parent;
         this.elems = elems;
+        this.convergence = convergence;
     }
 
     @Override
@@ -83,11 +113,16 @@ public final class LexerAtom implements RuleDefinition {
 
     @Override
     public String generate() {
-        return this.elems.get(new Rand().nextInt(this.elems.size())).generate();
+        return this.convergence.choose(this, this.elems).generate();
     }
 
     @Override
     public void append(final RuleDefinition rule) {
         this.elems.add(rule);
+    }
+
+    @Override
+    public String toString() {
+        return "lexerAtom";
     }
 }

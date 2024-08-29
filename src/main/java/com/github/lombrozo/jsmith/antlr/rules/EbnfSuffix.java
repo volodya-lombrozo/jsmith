@@ -24,7 +24,6 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.Rand;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 

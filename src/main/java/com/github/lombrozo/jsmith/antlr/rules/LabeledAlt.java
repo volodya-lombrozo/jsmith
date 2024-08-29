@@ -16,6 +16,6 @@ public final class LabeledAlt extends Unimplemented {
 
     @Override
     public String toString() {
-        return "labeledAlt";
+        return String.format("labeledAlt(id=%d)", System.identityHashCode(this));
     }
 }

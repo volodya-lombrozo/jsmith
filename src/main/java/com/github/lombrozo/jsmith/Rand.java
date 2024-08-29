@@ -85,4 +85,5 @@ public final class Rand {
     public double nextDouble() {
         return this.random.nextDouble();
     }
+
 }

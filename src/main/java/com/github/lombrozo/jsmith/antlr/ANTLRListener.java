@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
+import com.github.lombrozo.jsmith.Convergence;
 import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
 import com.github.lombrozo.jsmith.antlr.rules.Action;
 import com.github.lombrozo.jsmith.antlr.rules.ActionBlock;
@@ -70,6 +71,11 @@ import java.util.stream.Stream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+/**
+ * ANTLR listener.
+ * The listener is used to parse ANTLR grammar and build a tree of rules.
+ * @since 0.1
+ */
 public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     /**
@@ -86,6 +92,11 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
      * Current rule.
      */
     private RuleDefinition current;
+
+//    /**
+//     * Convergence.
+//     */
+//    private final Convergence<RuleDefinition> convergence;
 
     /**
      * Constructor.
@@ -108,13 +119,13 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         this.unparser = unparser;
         this.unlexer = unlexer;
         this.current = current;
+//        this.convergence = new Convergence<>(0.25d, true);
     }
 
     public Unparser unparser() {
         return this.unparser;
     }
 
-    // Every rule!
     @Override
     public void enterEveryRule(final ParserRuleContext ctx) {
         RuleDefinition parent = this.current;
@@ -176,7 +187,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterAltList(final ANTLRv4Parser.AltListContext ctx) {
-        final RuleDefinition list = new AltList(this.current);
+        final RuleDefinition list = new AltList(this.current, new Convergence());
         this.current.append(list);
         this.current = list;
         super.enterAltList(ctx);
@@ -190,7 +201,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterRuleAltList(final ANTLRv4Parser.RuleAltListContext ctx) {
-        final RuleDefinition list = new RuleAltList(this.current);
+        final RuleDefinition list = new RuleAltList(this.current, new Convergence<>());
         this.current.append(list);
         this.current = list;
         super.enterRuleAltList(ctx);
@@ -400,7 +411,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         this.current.append(element);
         this.current = element;
         super.enterLexerElement(ctx);
-        if(Objects.nonNull(ctx.QUESTION())){
+        if (Objects.nonNull(ctx.QUESTION())) {
             element.append(new EbnfSuffix("?"));
         }
     }
@@ -413,7 +424,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerAtom(final ANTLRv4Parser.LexerAtomContext ctx) {
-        final RuleDefinition atom = new LexerAtom(this.current);
+        final RuleDefinition atom = new LexerAtom(this.current, new Convergence<>());
         if (ctx.LEXER_CHAR_SET() != null) {
             atom.append(new LexerCharSet(atom, ctx.LEXER_CHAR_SET().getText()));
         } else if (ctx.DOT() != null) {

@@ -33,10 +33,10 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test for {@link Сonvergence}.
+ * Test for {@link Convergence}.
  * @since 0.1
  */
-final class СonvergenceTest {
+final class ConvergenceTest {
 
     @Test
     void choosesDesiredElementEvenIfTheInitalProbabilityIsLow() {
@@ -46,7 +46,7 @@ final class СonvergenceTest {
             Collections.nCopies(100_000, list).stream(),
             Stream.of(desired)
         ).toArray(RuleDefinition[]::new);
-        final Сonvergence<RuleDefinition> convergence = new Сonvergence(0.0000000001, true);
+        final Convergence<RuleDefinition> convergence = new Convergence(0.0000000001, true);
         convergence.choose(list, args);
         MatcherAssert.assertThat(
             String.format(
