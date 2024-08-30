@@ -38,12 +38,12 @@ import java.util.stream.Collectors;
  * }
  * @since 0.1
  */
-public final class LexerRuleSpec implements RuleDefinition {
+public final class LexerRuleSpec implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Rule name.
@@ -53,14 +53,14 @@ public final class LexerRuleSpec implements RuleDefinition {
     /**
      * Children rules.
      */
-    private List<RuleDefinition> list;
+    private List<Rule> list;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      * @param name Rule name.
      */
-    public LexerRuleSpec(final RuleDefinition parent, final String name) {
+    public LexerRuleSpec(final Rule parent, final String name) {
         this.parent = parent;
         this.name = name;
         this.list = new ArrayList<>(0);
@@ -75,7 +75,7 @@ public final class LexerRuleSpec implements RuleDefinition {
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -87,7 +87,7 @@ public final class LexerRuleSpec implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.list.add(rule);
     }
 

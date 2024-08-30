@@ -39,7 +39,7 @@ public final class PredicateOptions extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public PredicateOptions(final RuleDefinition parent) {
+    public PredicateOptions(final Rule parent) {
         super(parent);
     }
 

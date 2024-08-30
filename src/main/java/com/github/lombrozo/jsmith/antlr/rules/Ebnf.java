@@ -38,23 +38,23 @@ import java.util.stream.Collectors;
  * }
  * @since 0.1
  */
-public final class Ebnf implements RuleDefinition {
+public final class Ebnf implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Block and suffix.
      */
-    private final List<RuleDefinition> children;
+    private final List<Rule> children;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
-    public Ebnf(final RuleDefinition parent) {
+    public Ebnf(final Rule parent) {
         this(parent, new ArrayList<>(0));
     }
 
@@ -63,13 +63,13 @@ public final class Ebnf implements RuleDefinition {
      * @param parent Parent rule.
      * @param children Children rules.
      */
-    public Ebnf(final RuleDefinition parent, final List<RuleDefinition> children) {
+    public Ebnf(final Rule parent, final List<Rule> children) {
         this.parent = parent;
         this.children = children;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -81,7 +81,7 @@ public final class Ebnf implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.children.add(rule);
     }
 

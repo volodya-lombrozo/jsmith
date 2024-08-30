@@ -31,10 +31,10 @@ import com.github.lombrozo.jsmith.antlr.GenerationContext;
  * WARNING: This is NOT a part of the ANTLR grammar!
  * @since 0.1
  */
-public final class Empty implements RuleDefinition {
+public final class Empty implements Rule {
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this;
     }
 
@@ -44,7 +44,7 @@ public final class Empty implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
     }
 
     @Override

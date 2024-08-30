@@ -41,12 +41,12 @@ import java.util.Optional;
  * }
  * @since 0.1
  */
-public final class EbnfSuffix implements RuleDefinition {
+public final class EbnfSuffix implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Operation.
@@ -85,7 +85,7 @@ public final class EbnfSuffix implements RuleDefinition {
      * @param parent Parent rule.
      * @param operation Operation.
      */
-    public EbnfSuffix(final RuleDefinition parent, final String operation) {
+    public EbnfSuffix(final Rule parent, final String operation) {
         this(parent, operation, "");
     }
 
@@ -95,7 +95,7 @@ public final class EbnfSuffix implements RuleDefinition {
      * @param operation Operation.
      * @param question Question.
      */
-    public EbnfSuffix(final RuleDefinition parent, final String operation, final String question) {
+    public EbnfSuffix(final Rule parent, final String operation, final String question) {
         this.parent = parent;
         this.operation = operation;
         this.question = question;
@@ -103,7 +103,7 @@ public final class EbnfSuffix implements RuleDefinition {
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -125,7 +125,7 @@ public final class EbnfSuffix implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         throw new UnsupportedOperationException("Unsupported operation yet");
     }
 

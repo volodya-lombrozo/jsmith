@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
-import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -71,7 +71,7 @@ public final class Unlexer {
      * @param rule Rule name.
      * @return Lexer rule.
      */
-    public Optional<RuleDefinition> find(final String rule) {
+    public Optional<Rule> find(final String rule) {
         return Optional.ofNullable(this.rules.get(rule));
     }
 }

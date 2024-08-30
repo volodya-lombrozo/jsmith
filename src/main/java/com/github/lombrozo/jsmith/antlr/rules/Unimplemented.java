@@ -39,23 +39,23 @@ import java.util.stream.Collectors;
  *  All the rules that implement this class should be implemented.
  *  When all the rules are implemented, this class should be removed.
  */
-public abstract class Unimplemented implements RuleDefinition {
+public abstract class Unimplemented implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Children rules.
      */
-    private final List<RuleDefinition> children;
+    private final List<Rule> children;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
-    protected Unimplemented(final RuleDefinition parent) {
+    protected Unimplemented(final Rule parent) {
         this(parent, new ArrayList<>(0));
     }
 
@@ -64,7 +64,7 @@ public abstract class Unimplemented implements RuleDefinition {
      * @param parent Parent rule.
      * @param children Children rules.
      */
-    protected Unimplemented(final RuleDefinition parent, final List<RuleDefinition> children) {
+    protected Unimplemented(final Rule parent, final List<Rule> children) {
         this.parent = parent;
         this.children = children;
     }
@@ -77,12 +77,12 @@ public abstract class Unimplemented implements RuleDefinition {
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.children.add(rule);
     }
 }

@@ -41,7 +41,7 @@ public final class ActionScopeName extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public ActionScopeName(final RuleDefinition parent) {
+    public ActionScopeName(final Rule parent) {
         super(parent);
     }
 

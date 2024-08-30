@@ -35,9 +35,9 @@ final class LexerElementTest {
 
     @Test
     void generatesLexerAtomWithEbnfSuffix() {
-        final RuleDefinition element = new LexerElement();
-        final RuleDefinition atom = new LexerAtom();
-        final RuleDefinition literal = new Literal("a");
+        final Rule element = new LexerElement();
+        final Rule atom = new LexerAtom();
+        final Rule literal = new Literal("a");
         atom.append(literal);
         element.append(atom);
         element.append(new EbnfSuffix("?"));
@@ -54,8 +54,8 @@ final class LexerElementTest {
     @Test
     void generatesLexerAtomWithoutEbnfSuffix() {
         final LexerElement element = new LexerElement();
-        final RuleDefinition atom = new LexerAtom(element);
-        final RuleDefinition literal = new Literal("a");
+        final Rule atom = new LexerAtom(element);
+        final Rule literal = new Literal("a");
         atom.append(literal);
         element.append(atom);
         MatcherAssert.assertThat(
@@ -67,9 +67,9 @@ final class LexerElementTest {
 
     @Test
     void generatesLexerBlockWithEbnfSuffix() {
-        final RuleDefinition element = new LexerElement();
-        final RuleDefinition block = new LexerBlock();
-        final RuleDefinition literal = new Literal("b");
+        final Rule element = new LexerElement();
+        final Rule block = new LexerBlock();
+        final Rule literal = new Literal("b");
         block.append(literal);
         element.append(block);
         element.append(new EbnfSuffix("+"));
@@ -85,9 +85,9 @@ final class LexerElementTest {
 
     @Test
     void generatesLexerBlockWithoutEbnfSuffix() {
-        final RuleDefinition element = new LexerElement();
-        final RuleDefinition block = new LexerBlock();
-        final RuleDefinition literal = new Literal("b");
+        final Rule element = new LexerElement();
+        final Rule block = new LexerBlock();
+        final Rule literal = new Literal("b");
         block.append(literal);
         element.append(block);
         MatcherAssert.assertThat(
@@ -99,9 +99,9 @@ final class LexerElementTest {
 
     @Test
     void generatesActionBlockWithoutQuestion() {
-        final RuleDefinition element = new LexerElement();
-        final RuleDefinition action = new ActionBlock();
-        final RuleDefinition literal = new Literal("c");
+        final Rule element = new LexerElement();
+        final Rule action = new ActionBlock();
+        final Rule literal = new Literal("c");
         action.append(literal);
         element.append(action);
         MatcherAssert.assertThat(
@@ -113,9 +113,9 @@ final class LexerElementTest {
 
     @Test
     void generatesActionBlockWithQuestion() {
-        final RuleDefinition element = new LexerElement();
-        final RuleDefinition action = new ActionBlock();
-        final RuleDefinition literal = new Literal("c");
+        final Rule element = new LexerElement();
+        final Rule action = new ActionBlock();
+        final Rule literal = new Literal("c");
         action.append(literal);
         element.append(action);
         element.append(new EbnfSuffix("?"));

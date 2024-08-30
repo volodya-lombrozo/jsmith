@@ -38,23 +38,23 @@ import java.util.stream.Collectors;
  *     ;
  * }
  */
-public final class LexerElements implements RuleDefinition {
+public final class LexerElements implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Children rules.
      */
-    private final List<RuleDefinition> elems;
+    private final List<Rule> elems;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
-    public LexerElements(final RuleDefinition parent) {
+    public LexerElements(final Rule parent) {
         this(parent, new ArrayList<>(0));
     }
 
@@ -63,13 +63,13 @@ public final class LexerElements implements RuleDefinition {
      * @param parent Parent rule.
      * @param elems Children rules.
      */
-    private LexerElements(final RuleDefinition parent, final List<RuleDefinition> elems) {
+    private LexerElements(final Rule parent, final List<Rule> elems) {
         this.parent = parent;
         this.elems = elems;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -81,7 +81,7 @@ public final class LexerElements implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.elems.add(rule);
     }
 

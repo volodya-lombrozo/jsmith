@@ -38,23 +38,23 @@ import java.util.stream.Collectors;
  * }
  * @since 0.1
  */
-public final class Block implements RuleDefinition {
+public final class Block implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Elements between parentheses.
      */
-    private final List<RuleDefinition> elements;
+    private final List<Rule> elements;
 
     /**
      * Constructor.
      * @param rule Parent rule.
      */
-    public Block(final RuleDefinition rule) {
+    public Block(final Rule rule) {
         this(rule, new ArrayList<>(0));
     }
 
@@ -63,13 +63,13 @@ public final class Block implements RuleDefinition {
      * @param rule Parent rule.
      * @param children Children rules.
      */
-    public Block(final RuleDefinition rule, final List<RuleDefinition> children) {
+    public Block(final Rule rule, final List<Rule> children) {
         this.parent = rule;
         this.elements = children;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -81,7 +81,7 @@ public final class Block implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.elements.add(rule);
     }
 }

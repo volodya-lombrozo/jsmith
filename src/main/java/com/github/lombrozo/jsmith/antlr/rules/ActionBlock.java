@@ -46,7 +46,7 @@ public final class ActionBlock extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public ActionBlock(final RuleDefinition parent) {
+    public ActionBlock(final Rule parent) {
         super(parent);
     }
 }

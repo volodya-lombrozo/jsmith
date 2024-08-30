@@ -34,12 +34,12 @@ import java.util.stream.Collectors;
  * WARNING: This is NOT a part of the ANTLR grammar!
  * @since 0.1
  */
-public final class Root implements RuleDefinition {
+public final class Root implements Rule {
 
     /**
      * All children of the current node.
      */
-    private final List<RuleDefinition> all;
+    private final List<Rule> all;
 
     /**
      * Constructor.
@@ -52,12 +52,12 @@ public final class Root implements RuleDefinition {
      * Constructor.
      * @param all All children of the current node.
      */
-    private Root(final List<RuleDefinition> all) {
+    private Root(final List<Rule> all) {
         this.all = all;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this;
     }
 
@@ -69,7 +69,7 @@ public final class Root implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.all.add(rule);
     }
 

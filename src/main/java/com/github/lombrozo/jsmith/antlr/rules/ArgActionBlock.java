@@ -39,7 +39,7 @@ public final class ArgActionBlock extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public ArgActionBlock(final RuleDefinition parent) {
+    public ArgActionBlock(final Rule parent) {
         super(parent);
     }
 

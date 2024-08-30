@@ -23,13 +23,13 @@
  */
 package com.github.lombrozo.jsmith.antlr.representation;
 
-import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Chain of {@link RuleDefinition} objects.
- * Used for logging of the current chain of {@link RuleDefinition} objects.
+ * Chain of {@link Rule} objects.
+ * Used for logging of the current chain of {@link Rule} objects.
  * @since 0.1
  */
 public final class ProductionsChain {
@@ -37,13 +37,13 @@ public final class ProductionsChain {
     /**
      * The lowest child.
      */
-    private final RuleDefinition child;
+    private final Rule child;
 
     /**
      * Constructor.
      * @param start The lowest child.
      */
-    public ProductionsChain(final RuleDefinition start) {
+    public ProductionsChain(final Rule start) {
         this.child = start;
     }
 
@@ -60,11 +60,11 @@ public final class ProductionsChain {
     }
 
     /**
-     * Prints the tree of the {@link RuleDefinition} objects.
+     * Prints the tree of the {@link Rule} objects.
      * @param node The current node.
-     * @return The tree of the {@link RuleDefinition} objects.
+     * @return The tree of the {@link Rule} objects.
      */
-    private String tree(final RuleDefinition node) {
+    private String tree(final Rule node) {
         final String result;
         if (node == node.parent()) {
             result = String.format("%s\n", node);

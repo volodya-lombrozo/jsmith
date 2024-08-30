@@ -38,23 +38,23 @@ import java.util.List;
  * }
  * @since 0.1
  */
-public final class RuleAltList implements RuleDefinition {
+public final class RuleAltList implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * All alternatives of the current node.
      */
-    private final List<RuleDefinition> alternatives;
+    private final List<Rule> alternatives;
 
     /**
      * Constructor.
      * @param rule Parent rule.
      */
-    public RuleAltList(final RuleDefinition rule) {
+    public RuleAltList(final Rule rule) {
         this(rule, new ArrayList<>(0));
     }
 
@@ -64,15 +64,15 @@ public final class RuleAltList implements RuleDefinition {
      * @param alternatives All alternatives of the current node.
      */
     public RuleAltList(
-        final RuleDefinition parent,
-        final List<RuleDefinition> alternatives
+        final Rule parent,
+        final List<Rule> alternatives
     ) {
         this.parent = parent;
         this.alternatives = alternatives;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -81,14 +81,14 @@ public final class RuleAltList implements RuleDefinition {
         if (this.alternatives.isEmpty()) {
             throw new IllegalStateException("RuleAltList should have at least one alternative");
         }
-        final Convergence<RuleDefinition> convergence = context.convergence();
-        final RuleDefinition choose = convergence.choose(this, this.alternatives);
+        final Convergence<Rule> convergence = context.convergence();
+        final Rule choose = convergence.choose(this, this.alternatives);
         final GenerationContext conv = context.withConvergence(convergence);
         return choose.generate(conv);
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.alternatives.add(rule);
     }
 

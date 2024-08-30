@@ -37,12 +37,12 @@ import com.github.lombrozo.jsmith.antlr.Unlexer;
  * }
  * @since 0.1
  */
-public final class TerminalDef implements RuleDefinition {
+public final class TerminalDef implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Unlexer.
@@ -60,7 +60,7 @@ public final class TerminalDef implements RuleDefinition {
      * @param unlexer Unparser.
      * @param text Text.
      */
-    public TerminalDef(final RuleDefinition parent, final Unlexer unlexer, final String text) {
+    public TerminalDef(final Rule parent, final Unlexer unlexer, final String text) {
         this.parent = parent;
         this.unlexer = unlexer;
         this.text = text;
@@ -76,7 +76,7 @@ public final class TerminalDef implements RuleDefinition {
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -88,7 +88,7 @@ public final class TerminalDef implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         throw new UnsupportedOperationException("Terminal cannot have children yet");
     }
 

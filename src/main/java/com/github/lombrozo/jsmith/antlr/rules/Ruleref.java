@@ -41,12 +41,12 @@ import com.github.lombrozo.jsmith.antlr.Unparser;
  *  Currently we handle only the case when the rule reference is a simple string.
  *  We need to add more test cases to cover the cases with argActionBlock and elementOptions.
  */
-public final class Ruleref implements RuleDefinition {
+public final class Ruleref implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Rule reference.
@@ -65,7 +65,7 @@ public final class Ruleref implements RuleDefinition {
      * @param unparser Unparser.
      */
     public Ruleref(
-        final RuleDefinition parent,
+        final Rule parent,
         final String ref,
         final Unparser unparser
     ) {
@@ -75,7 +75,7 @@ public final class Ruleref implements RuleDefinition {
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -96,7 +96,7 @@ public final class Ruleref implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         throw new UnsupportedOperationException("Reference cannot have children yet");
     }
 

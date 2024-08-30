@@ -40,23 +40,23 @@ import java.util.stream.Collectors;
  * }
  * @since 0.1
  */
-public final class Alternative implements RuleDefinition {
+public final class Alternative implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Elements of the alternative.
      */
-    private final List<RuleDefinition> elements;
+    private final List<Rule> elements;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
-    public Alternative(final RuleDefinition parent) {
+    public Alternative(final Rule parent) {
         this(parent, new ArrayList<>(0));
     }
 
@@ -66,15 +66,15 @@ public final class Alternative implements RuleDefinition {
      * @param element Elements of the alternative.
      */
     private Alternative(
-        final RuleDefinition parent,
-        final List<RuleDefinition> element
+        final Rule parent,
+        final List<Rule> element
     ) {
         this.parent = parent;
         this.elements = element;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -86,7 +86,7 @@ public final class Alternative implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.elements.add(rule);
     }
 

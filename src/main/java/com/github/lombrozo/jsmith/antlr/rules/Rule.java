@@ -29,13 +29,13 @@ import com.github.lombrozo.jsmith.antlr.GenerationContext;
  * Rule definition.
  * @since 0.1
  */
-public interface RuleDefinition {
+public interface Rule {
 
     /**
      * Parent rule.
      * @return Parent rule.
      */
-    RuleDefinition parent();
+    Rule parent();
 
     /**
      * Generate code.
@@ -47,7 +47,7 @@ public interface RuleDefinition {
      * Append child rule.
      * @param rule Child rule.
      */
-    void append(final RuleDefinition rule);
+    void append(final Rule rule);
 
 
     /**

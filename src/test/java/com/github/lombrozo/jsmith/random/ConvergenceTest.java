@@ -25,8 +25,7 @@ package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.rules.AltList;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
-import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
-import com.github.lombrozo.jsmith.random.Convergence;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
@@ -43,11 +42,11 @@ final class ConvergenceTest {
     void choosesDesiredElementEvenIfTheInitalProbabilityIsLow() {
         final AltList list = new AltList();
         final Literal desired = new Literal("desired");
-        final RuleDefinition[] args = Stream.concat(
+        final Rule[] args = Stream.concat(
             Collections.nCopies(100_000, list).stream(),
             Stream.of(desired)
-        ).toArray(RuleDefinition[]::new);
-        final Convergence<RuleDefinition> convergence = new Convergence(0.0000000001, true);
+        ).toArray(Rule[]::new);
+        final Convergence<Rule> convergence = new Convergence(0.0000000001, true);
         convergence.choose(list, args);
         MatcherAssert.assertThat(
             String.format(

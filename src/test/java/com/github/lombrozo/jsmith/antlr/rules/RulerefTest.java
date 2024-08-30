@@ -60,7 +60,7 @@ final class RulerefTest {
         final String ref = "reference";
         final Unparser unparser = new Unparser();
         final ParserRuleSpec rule = new ParserRuleSpec(ref, new Empty());
-        final RuleDefinition recursive = new Ruleref(new Empty(), ref, unparser);
+        final Rule recursive = new Ruleref(new Empty(), ref, unparser);
         rule.append(recursive);
         unparser.with(rule);
         Assertions.assertThrows(

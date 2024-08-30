@@ -35,7 +35,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * @since 0.1
  */
 public final class Identifier extends Unimplemented {
-    public Identifier(final RuleDefinition parent) {
+    public Identifier(final Rule parent) {
         super(parent);
     }
 }

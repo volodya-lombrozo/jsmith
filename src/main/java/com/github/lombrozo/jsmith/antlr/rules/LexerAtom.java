@@ -40,17 +40,17 @@ import java.util.List;
  *     | DOT {@link ElementOptions}?
  *     ;
  */
-public final class LexerAtom implements RuleDefinition {
+public final class LexerAtom implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Children rules.
      */
-    private final List<RuleDefinition> elems;
+    private final List<Rule> elems;
 
     /**
      * Constructor.
@@ -63,7 +63,7 @@ public final class LexerAtom implements RuleDefinition {
      * Constructor.
      * @param parent Parent rule.
      */
-    public LexerAtom(final RuleDefinition parent) {
+    public LexerAtom(final Rule parent) {
         this(parent, new ArrayList<>(0));
     }
 
@@ -72,7 +72,7 @@ public final class LexerAtom implements RuleDefinition {
      * @param parent Parent rule.
      * @param convergence Convergence strategy.
      */
-    public LexerAtom(final RuleDefinition parent, final Convergence<RuleDefinition> convergence) {
+    public LexerAtom(final Rule parent, final Convergence<Rule> convergence) {
         this(parent, new ArrayList<>(0), convergence);
     }
 
@@ -81,7 +81,7 @@ public final class LexerAtom implements RuleDefinition {
      * @param parent Parent rule.
      * @param elems Children rules.
      */
-    private LexerAtom(final RuleDefinition parent, final List<RuleDefinition> elems) {
+    private LexerAtom(final Rule parent, final List<Rule> elems) {
         this(parent, elems, new Convergence<>());
     }
 
@@ -92,28 +92,28 @@ public final class LexerAtom implements RuleDefinition {
      * @param convergence Convergence strategy.
      */
     public LexerAtom(
-        final RuleDefinition parent,
-        final List<RuleDefinition> elems,
-        final Convergence<RuleDefinition> convergence
+        final Rule parent,
+        final List<Rule> elems,
+        final Convergence<Rule> convergence
     ) {
         this.parent = parent;
         this.elems = elems;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
     @Override
     public String generate(final GenerationContext context) {
-        final Convergence<RuleDefinition> convergence = context.convergence();
+        final Convergence<Rule> convergence = context.convergence();
         return convergence.choose(this, this.elems)
             .generate(context.withConvergence(convergence));
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.elems.add(rule);
     }
 

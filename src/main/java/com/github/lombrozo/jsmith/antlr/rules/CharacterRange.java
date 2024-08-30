@@ -35,12 +35,12 @@ import com.github.lombrozo.jsmith.antlr.GenerationContext;
  * }
  * @since 0.1
  */
-public final class CharacterRange implements RuleDefinition {
+public final class CharacterRange implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Range text.
@@ -52,13 +52,13 @@ public final class CharacterRange implements RuleDefinition {
      * @param parent Parent rule.
      * @param text Range text.
      */
-    public CharacterRange(final RuleDefinition parent, final String text) {
+    public CharacterRange(final Rule parent, final String text) {
         this.parent = parent;
         this.text = text;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -68,7 +68,7 @@ public final class CharacterRange implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         throw new UnsupportedOperationException("CharacterRange cannot have children yet");
     }
 

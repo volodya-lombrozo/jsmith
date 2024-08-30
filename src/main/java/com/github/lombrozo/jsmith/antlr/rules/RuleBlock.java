@@ -41,7 +41,7 @@ public final class RuleBlock extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public RuleBlock(final RuleDefinition parent) {
+    public RuleBlock(final Rule parent) {
         super(parent);
     }
 

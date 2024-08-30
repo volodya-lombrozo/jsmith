@@ -36,17 +36,17 @@ import java.util.List;
  *     | {@link ActionBlock} QUESTION?
  *     ;
  */
-public final class LexerElement implements RuleDefinition {
+public final class LexerElement implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Children rules.
      */
-    private final List<RuleDefinition> children;
+    private final List<Rule> children;
 
     /**
      * Constructor.
@@ -59,7 +59,7 @@ public final class LexerElement implements RuleDefinition {
      * Constructor.
      * @param parent Parent rule.
      */
-    public LexerElement(final RuleDefinition parent) {
+    public LexerElement(final Rule parent) {
         this(parent, new ArrayList<>(0));
     }
 
@@ -68,19 +68,19 @@ public final class LexerElement implements RuleDefinition {
      * @param parent Parent rule.
      * @param children Children rules.
      */
-    private LexerElement(final RuleDefinition parent, final List<RuleDefinition> children) {
+    private LexerElement(final Rule parent, final List<Rule> children) {
         this.parent = parent;
         this.children = children;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
     @Override
     public String generate(final GenerationContext context) {
-        final RuleDefinition first = this.children.get(0);
+        final Rule first = this.children.get(0);
         if (first instanceof LexerAtom) {
             return this.multiplier().repeat(first).generate(context);
         } else if (first instanceof LexerBlock) {
@@ -95,7 +95,7 @@ public final class LexerElement implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.children.add(rule);
     }
 

@@ -46,7 +46,7 @@ public final class LexerBlock extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public LexerBlock(final RuleDefinition parent) {
+    public LexerBlock(final Rule parent) {
         super(parent);
     }
 }

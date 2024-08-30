@@ -37,7 +37,7 @@ public final class LexerAltList extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public LexerAltList(final RuleDefinition parent) {
+    public LexerAltList(final Rule parent) {
         super(parent);
     }
 }

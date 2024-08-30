@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  * WARNING: This is NOT a part of the ANTLR grammar!
  * @since 0.1
  */
-public final class Literal implements RuleDefinition {
+public final class Literal implements Rule {
 
     /**
      * Apostrophe pattern.
@@ -59,7 +59,7 @@ public final class Literal implements RuleDefinition {
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         throw new UnsupportedOperationException("Literal cannot have parent");
     }
 
@@ -70,7 +70,7 @@ public final class Literal implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         throw new UnsupportedOperationException("Literal cannot have children yet");
     }
 

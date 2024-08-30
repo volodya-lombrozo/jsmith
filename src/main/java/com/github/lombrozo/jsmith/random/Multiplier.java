@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.rules.Empty;
-import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
 
 /**
@@ -44,7 +44,7 @@ public interface Multiplier {
      * @param element Element to repeat.
      * @return Generated string by the repetition.
      */
-    RuleDefinition repeat(final RuleDefinition element);
+    Rule repeat(final Rule element);
 
     /**
      * Exactly one repetition.
@@ -53,7 +53,7 @@ public interface Multiplier {
     final class One implements Multiplier {
 
         @Override
-        public RuleDefinition repeat(final RuleDefinition element) {
+        public Rule repeat(final Rule element) {
             return element;
         }
     }
@@ -85,8 +85,8 @@ public interface Multiplier {
         }
 
         @Override
-        public RuleDefinition repeat(final RuleDefinition element) {
-            final RuleDefinition res;
+        public Rule repeat(final Rule element) {
+            final Rule res;
             if (this.rand.flip()) {
                 res = element;
             } else {
@@ -138,7 +138,7 @@ public interface Multiplier {
         }
 
         @Override
-        public RuleDefinition repeat(final RuleDefinition element) {
+        public Rule repeat(final Rule element) {
             return new Several(Collections.nCopies(this.rand.range(this.limit) + 1, element));
         }
     }
@@ -185,7 +185,7 @@ public interface Multiplier {
         }
 
         @Override
-        public RuleDefinition repeat(final RuleDefinition element) {
+        public Rule repeat(final Rule element) {
             return new Several(Collections.nCopies(this.rand.range(this.limit), element));
         }
     }

@@ -39,7 +39,7 @@ public final class Action extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public Action(final RuleDefinition parent) {
+    public Action(final Rule parent) {
         super(parent);
     }
 

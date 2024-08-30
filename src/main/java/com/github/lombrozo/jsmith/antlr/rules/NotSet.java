@@ -39,7 +39,7 @@ public final class NotSet extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public NotSet(final RuleDefinition parent) {
+    public NotSet(final Rule parent) {
         super(parent);
     }
 }

@@ -39,12 +39,12 @@ import java.util.stream.Collectors;
  * }
  * @since 0.1
  */
-public final class ParserRuleSpec implements RuleDefinition {
+public final class ParserRuleSpec implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Rule name.
@@ -54,21 +54,21 @@ public final class ParserRuleSpec implements RuleDefinition {
     /**
      * Children rules.
      */
-    private List<RuleDefinition> list;
+    private List<Rule> list;
 
     /**
      * Constructor.
      * @param name Rule name.
      * @param parent Parent rule.
      */
-    public ParserRuleSpec(final String name, final RuleDefinition parent) {
+    public ParserRuleSpec(final String name, final Rule parent) {
         this.name = name;
         this.parent = parent;
         this.list = new ArrayList<>(0);
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -80,7 +80,7 @@ public final class ParserRuleSpec implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.list.add(rule);
     }
 

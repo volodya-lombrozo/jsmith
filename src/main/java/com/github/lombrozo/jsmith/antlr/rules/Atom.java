@@ -38,33 +38,33 @@ import com.github.lombrozo.jsmith.antlr.GenerationContext;
  * }
  * @since 0.1
  */
-public final class Atom implements RuleDefinition {
+public final class Atom implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Atom inner element.
      */
-    private RuleDefinition item;
+    private Rule item;
 
     /**
      * Constructor.
      * @param rule Parent rule.
      */
-    public Atom(final RuleDefinition rule) {
+    public Atom(final Rule rule) {
         this.parent = rule;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.item = rule;
     }
 

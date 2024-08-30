@@ -39,7 +39,7 @@ public final class BlockSuffix extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public BlockSuffix(final RuleDefinition parent) {
+    public BlockSuffix(final Rule parent) {
         super(parent);
     }
 }

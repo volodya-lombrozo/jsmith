@@ -41,29 +41,29 @@ import java.util.List;
  * }
  * @since 0.1
  */
-public final class Element implements RuleDefinition {
+public final class Element implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Children rules.
      */
-    private List<RuleDefinition> children;
+    private List<Rule> children;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
-    public Element(final RuleDefinition parent) {
+    public Element(final Rule parent) {
         this.parent = parent;
         this.children = new ArrayList<>(1);
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -73,7 +73,7 @@ public final class Element implements RuleDefinition {
             throw new IllegalStateException("Element should have at least one child");
         }
         final String result;
-        final RuleDefinition first = this.children.get(0);
+        final Rule first = this.children.get(0);
         if (first instanceof Atom) {
             result = this.multiplier().repeat(first).generate(context);
         } else if (first instanceof LabeledElement) {
@@ -89,7 +89,7 @@ public final class Element implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.children.add(rule);
     }
 

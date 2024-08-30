@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.GenerationContext;
-import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,23 +33,23 @@ import java.util.stream.Collectors;
  * WARNING: This is NOT a part of the ANTLR grammar!
  * @since 0.1
  */
-final class Several implements RuleDefinition {
+final class Several implements Rule {
 
     /**
      * All children of the current node.
      */
-    private final List<? extends RuleDefinition> all;
+    private final List<? extends Rule> all;
 
     /**
      * Constructor.
      * @param all All children of the current node.
      */
-    Several(final List<? extends RuleDefinition> all) {
+    Several(final List<? extends Rule> all) {
         this.all = all;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         throw new UnsupportedOperationException("'Several' node doesn't have a parent node");
     }
 
@@ -61,7 +61,7 @@ final class Several implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         throw new UnsupportedOperationException("'Several' node cannot add children");
     }
 

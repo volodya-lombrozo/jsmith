@@ -39,7 +39,7 @@ public final class ElementOption extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public ElementOption(final RuleDefinition parent) {
+    public ElementOption(final Rule parent) {
         super(parent);
     }
 }

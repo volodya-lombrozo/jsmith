@@ -39,7 +39,7 @@ public final class DelegateGrammars extends Unimplemented {
      * Constructor.
      * @param parent Parent rule.
      */
-    public DelegateGrammars(final RuleDefinition parent) {
+    public DelegateGrammars(final Rule parent) {
         super(parent);
     }
 

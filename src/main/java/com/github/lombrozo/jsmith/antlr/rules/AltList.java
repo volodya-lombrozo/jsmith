@@ -39,17 +39,17 @@ import java.util.List;
  * }
  * @since 0.1
  */
-public final class AltList implements RuleDefinition {
+public final class AltList implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
     /**
      * Alternatives.
      */
-    private final List<RuleDefinition> alternatives;
+    private final List<Rule> alternatives;
 
     /**
      * Default constructor.
@@ -62,7 +62,7 @@ public final class AltList implements RuleDefinition {
      * Constructor.
      * @param parent Parent rule.
      */
-    public AltList(final RuleDefinition parent) {
+    public AltList(final Rule parent) {
         this(parent, new ArrayList<>(0));
     }
 
@@ -71,7 +71,7 @@ public final class AltList implements RuleDefinition {
      * @param parent Parent rule.
      * @param alternatives Alternatives.
      */
-    AltList(final RuleDefinition parent, RuleDefinition... alternatives) {
+    AltList(final Rule parent, Rule... alternatives) {
         this(parent, Arrays.asList(alternatives));
     }
 
@@ -81,15 +81,15 @@ public final class AltList implements RuleDefinition {
      * @param alternatives Alternatives.
      */
     private AltList(
-        final RuleDefinition parent,
-        final List<RuleDefinition> alternatives
+        final Rule parent,
+        final List<Rule> alternatives
     ) {
         this.parent = parent;
         this.alternatives = alternatives;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -99,7 +99,7 @@ public final class AltList implements RuleDefinition {
         if (this.alternatives.isEmpty()) {
             result = "";
         } else {
-            final Convergence<RuleDefinition> convergence = context.convergence();
+            final Convergence<Rule> convergence = context.convergence();
             result = convergence.choose(this, this.alternatives)
                 .generate(context.withConvergence(convergence));
         }
@@ -107,7 +107,7 @@ public final class AltList implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         this.alternatives.add(rule);
     }
 

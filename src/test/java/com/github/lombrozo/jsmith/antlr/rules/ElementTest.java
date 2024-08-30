@@ -37,8 +37,8 @@ final class ElementTest {
     @Test
     void generatesUsingAtomBranch() {
         final Root root = new Root();
-        final RuleDefinition element = new Element(root);
-        final RuleDefinition atom = new Atom(root);
+        final Rule element = new Element(root);
+        final Rule atom = new Atom(root);
         final String number = "1";
         atom.append(new Literal(number));
         element.append(atom);
@@ -52,8 +52,8 @@ final class ElementTest {
     @Test
     void generatesUsingAtomBranchAndEbnfSuffix() {
         final Root root = new Root();
-        final RuleDefinition element = new Element(root);
-        final RuleDefinition atom = new Atom(root);
+        final Rule element = new Element(root);
+        final Rule atom = new Atom(root);
         atom.append(new Literal("1"));
         element.append(atom);
         element.append(new EbnfSuffix("*"));

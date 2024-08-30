@@ -30,12 +30,12 @@ import com.github.lombrozo.jsmith.antlr.GenerationContext;
  * LexerCharSet rule.
  * @since 0.1
  */
-public final class LexerCharSet implements RuleDefinition {
+public final class LexerCharSet implements Rule {
 
     /**
      * Parent rule.
      */
-    private final RuleDefinition parent;
+    private final Rule parent;
 
 
     /**
@@ -62,7 +62,7 @@ public final class LexerCharSet implements RuleDefinition {
      * @param parent Parent rule.
      * @param text Text.
      */
-    public LexerCharSet(final RuleDefinition parent, final String text) {
+    public LexerCharSet(final Rule parent, final String text) {
         this(parent, new Rand(), text);
     }
 
@@ -72,14 +72,14 @@ public final class LexerCharSet implements RuleDefinition {
      * @param rand Random generator.
      * @param text Text.
      */
-    public LexerCharSet(final RuleDefinition parent, final Rand rand, final String text) {
+    public LexerCharSet(final Rule parent, final Rand rand, final String text) {
         this.parent = parent;
         this.rand = rand;
         this.text = text;
     }
 
     @Override
-    public RuleDefinition parent() {
+    public Rule parent() {
         return this.parent;
     }
 
@@ -89,7 +89,7 @@ public final class LexerCharSet implements RuleDefinition {
     }
 
     @Override
-    public void append(final RuleDefinition rule) {
+    public void append(final Rule rule) {
         throw new UnsupportedOperationException("LexerCharSet cannot have children");
     }
 }

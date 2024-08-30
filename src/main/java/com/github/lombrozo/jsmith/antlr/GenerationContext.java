@@ -25,7 +25,7 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.random.Convergence;
 import com.github.lombrozo.jsmith.random.Rand;
-import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 
 /**
  *
@@ -33,7 +33,7 @@ import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
  */
 public final class GenerationContext {
     private final Rand rand;
-    private final Convergence<RuleDefinition> convergence;
+    private final Convergence<Rule> convergence;
 
     public GenerationContext() {
         this(new Rand(), new Convergence<>());
@@ -41,7 +41,7 @@ public final class GenerationContext {
 
     public GenerationContext(
         final Rand rand,
-        final Convergence<RuleDefinition> convergence
+        final Convergence<Rule> convergence
     ) {
         this.rand = rand;
         this.convergence = convergence;
@@ -51,11 +51,11 @@ public final class GenerationContext {
         return this.rand;
     }
 
-    public Convergence<RuleDefinition> convergence() {
+    public Convergence<Rule> convergence() {
         return this.convergence.copy();
     }
 
-    public GenerationContext withConvergence(final Convergence<RuleDefinition> convergence) {
+    public GenerationContext withConvergence(final Convergence<Rule> convergence) {
         return new GenerationContext(this.rand, convergence);
     }
 

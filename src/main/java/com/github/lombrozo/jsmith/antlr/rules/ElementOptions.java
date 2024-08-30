@@ -34,7 +34,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * @since 0.1
  */
 public final class ElementOptions extends Unimplemented {
-    public ElementOptions(final RuleDefinition parent) {
+    public ElementOptions(final Rule parent) {
         super(parent);
     }
 
