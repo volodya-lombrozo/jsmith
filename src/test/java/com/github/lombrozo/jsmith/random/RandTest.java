@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith;
+package com.github.lombrozo.jsmith.random;
 
 import java.util.logging.Logger;
 import org.hamcrest.MatcherAssert;
@@ -53,7 +53,7 @@ final class RandTest {
     void checksRandomizer() {
         MatcherAssert.assertThat(
             "We expect that the randomizer will generate a number from 0 to 4",
-            new Rand().nextInt(5),
+            new Rand().range(5),
             Matchers.anyOf(
                 Matchers.equalTo(0),
                 Matchers.equalTo(1),

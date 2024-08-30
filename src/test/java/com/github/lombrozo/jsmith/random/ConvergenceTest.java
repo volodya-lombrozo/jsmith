@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith;
+package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.rules.AltList;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
+import com.github.lombrozo.jsmith.random.Convergence;
 import java.util.Collections;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;

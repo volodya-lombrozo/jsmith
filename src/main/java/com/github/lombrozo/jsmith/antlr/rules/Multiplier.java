@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.Rand;
+import com.github.lombrozo.jsmith.random.Rand;
 import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.Collections;
 
@@ -140,7 +140,7 @@ public interface Multiplier {
         @Override
         public String generate(final RuleDefinition rule, final GenerationContext context) {
             return new Several(
-                Collections.nCopies(this.rand.nextInt(this.limit) + 1, rule)
+                Collections.nCopies(this.rand.range(this.limit) + 1, rule)
             ).generate(context);
         }
     }
@@ -189,7 +189,7 @@ public interface Multiplier {
         @Override
         public String generate(final RuleDefinition rule, final GenerationContext context) {
             return new Several(
-                Collections.nCopies(this.rand.nextInt(this.limit), rule)
+                Collections.nCopies(this.rand.range(this.limit), rule)
             ).generate(context);
         }
     }

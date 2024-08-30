@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.Convergence;
+import com.github.lombrozo.jsmith.random.Convergence;
 import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.ArrayList;
 import java.util.List;

@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.Rand;
+import com.github.lombrozo.jsmith.random.Rand;
 import com.github.lombrozo.jsmith.antlr.GenerationContext;
 
 /**

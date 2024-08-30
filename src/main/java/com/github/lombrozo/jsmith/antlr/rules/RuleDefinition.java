@@ -38,8 +38,8 @@ public interface RuleDefinition {
     RuleDefinition parent();
 
     /**
-     * Generate random code.
-     * @return Random code.
+     * Generate code.
+     * @return Generated code.
      */
     String generate(final GenerationContext context);
 

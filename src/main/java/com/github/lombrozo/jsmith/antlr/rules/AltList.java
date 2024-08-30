@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.Convergence;
+import com.github.lombrozo.jsmith.random.Convergence;
 import com.github.lombrozo.jsmith.antlr.GenerationContext;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +65,7 @@ public final class AltList implements RuleDefinition {
     public AltList(final RuleDefinition parent) {
         this(parent, new ArrayList<>(0));
     }
-    
+
     /**
      * Constructor.
      * @param parent Parent rule.

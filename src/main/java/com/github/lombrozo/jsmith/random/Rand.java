@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith;
+package com.github.lombrozo.jsmith.random;
 
 import com.mifmif.common.regex.Generex;
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -41,24 +42,15 @@ public final class Rand {
      * Default constructor.
      */
     public Rand() {
-        this(new Random());
+        this(new SecureRandom());
     }
 
     /**
      * Constructor.
-     * @param random Java random.
+     * @param rand Java random.
      */
-    public Rand(final Random random) {
-        this.random = random;
-    }
-
-    /**
-     * Generates a random integer.
-     * @param bound Bound.
-     * @return Random integer.
-     */
-    public int nextInt(int bound) {
-        return this.random.nextInt(bound);
+    public Rand(final Random rand) {
+        this.random = rand;
     }
 
     /**
@@ -67,6 +59,15 @@ public final class Rand {
      */
     public boolean flip() {
         return this.random.nextBoolean();
+    }
+
+    /**
+     * Generates a random integer.
+     * @param bound Bound.
+     * @return Random integer.
+     */
+    public int range(int bound) {
+        return this.random.nextInt(bound);
     }
 
     /**
@@ -82,7 +83,7 @@ public final class Rand {
      * Generates a random double.
      * @return Random double.
      */
-    public double nextDouble() {
+    double floating() {
         return this.random.nextDouble();
     }
 

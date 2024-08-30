@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith;
+package com.github.lombrozo.jsmith.random;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -182,7 +182,7 @@ public final class Convergence<T> {
             .mapToDouble(Double::doubleValue)
             .max()
             .orElseThrow(() -> new IllegalStateException("No elements"));
-        final double random = this.rand.nextDouble() * total;
+        final double random = this.rand.floating() * total;
         double sum = 0;
         for (final Map.Entry<T, Double> entry : current.entrySet()) {
             sum += entry.getValue();
