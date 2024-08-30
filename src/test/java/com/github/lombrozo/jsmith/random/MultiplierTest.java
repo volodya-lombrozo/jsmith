@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.rules;
+package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,9 @@ final class MultiplierTest {
     void generatesZeroOrMore() {
         MatcherAssert.assertThat(
             "We expect that the 'zero or more' multiplier will generate zero or more elements",
-            new Multiplier.ZeroOrMore().generate(new Literal("a"), new GenerationContext()),
+            new Multiplier.ZeroOrMore()
+                .repeat(new Literal("a"))
+                .generate(new GenerationContext()),
             Matchers.anyOf(
                 Matchers.emptyString(),
                 Matchers.equalTo("a"),
@@ -51,7 +54,9 @@ final class MultiplierTest {
     void generatesOneOrMore() {
         MatcherAssert.assertThat(
             "We expect that the 'one or more' multiplier will generate one or more elements",
-            new Multiplier.OneOrMore().generate(new Literal("a"), new GenerationContext()),
+            new Multiplier.OneOrMore()
+                .repeat(new Literal("a"))
+                .generate(new GenerationContext()),
             Matchers.anyOf(
                 Matchers.equalTo("a"),
                 Matchers.containsString("aa")
@@ -63,7 +68,9 @@ final class MultiplierTest {
     void generatesZeroOrOne() {
         MatcherAssert.assertThat(
             "We expect that the 'zero or one' multiplier will generate zero or one element",
-            new Multiplier.ZeroOrOne().generate(new Literal("a"), new GenerationContext()),
+            new Multiplier.ZeroOrOne()
+                .repeat(new Literal("a"))
+                .generate(new GenerationContext()),
             Matchers.anyOf(
                 Matchers.emptyString(),
                 Matchers.equalTo("a")
@@ -75,7 +82,7 @@ final class MultiplierTest {
     void generatesExactlyOne() {
         MatcherAssert.assertThat(
             "We expect that the 'exactly one' multiplier will generate exactly one element",
-            new Multiplier.One().generate(new Literal("a"), new GenerationContext()),
+            new Multiplier.One().repeat(new Literal("a")).generate(new GenerationContext()),
             Matchers.equalTo("a")
         );
     }

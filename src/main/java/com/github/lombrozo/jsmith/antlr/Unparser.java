@@ -96,7 +96,7 @@ public final class Unparser {
     /**
      * Apply the rule and produce a random string corresponding to the rule.
      * @param rule Rule.
-     * @return Random string corresponding to the rule.
+     * @return Code string corresponding to the rule.
      */
     private String apply(final String rule, final GenerationContext context) {
         if (!this.rules.containsKey(rule)) {

@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.rules;
+package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
  * WARNING: This is NOT a part of the ANTLR grammar!
  * @since 0.1
  */
-public final class Several implements RuleDefinition {
+final class Several implements RuleDefinition {
 
     /**
      * All children of the current node.

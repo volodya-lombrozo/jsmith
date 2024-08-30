@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,9 +75,9 @@ public final class Element implements RuleDefinition {
         final String result;
         final RuleDefinition first = this.children.get(0);
         if (first instanceof Atom) {
-            result = this.multiplier().generate(first, context);
+            result = this.multiplier().repeat(first).generate(context);
         } else if (first instanceof LabeledElement) {
-            result = this.multiplier().generate(first, context);
+            result = this.multiplier().repeat(first).generate(context);
         } else if (first instanceof Ebnf) {
             result = first.generate(context);
         } else {

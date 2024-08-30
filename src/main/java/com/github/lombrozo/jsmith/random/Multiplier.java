@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.rules;
+package com.github.lombrozo.jsmith.random;
 
-import com.github.lombrozo.jsmith.random.Rand;
-import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.antlr.rules.Empty;
+import com.github.lombrozo.jsmith.antlr.rules.RuleDefinition;
 import java.util.Collections;
 
 /**
@@ -35,16 +35,16 @@ import java.util.Collections;
  * like {@code +}, {@code *}, {@code ?}.
  * @since 0.1
  */
+@FunctionalInterface
 public interface Multiplier {
 
     /**
-     * Generate a string based on the rule and the multiplier.
+     * Multiply element based on the implementation.
      *
-     * @param rule Rule to repeat.
-     * @param context
+     * @param element Element to repeat.
      * @return Generated string by the repetition.
      */
-    String generate(final RuleDefinition rule, final GenerationContext context);
+    RuleDefinition repeat(final RuleDefinition element);
 
     /**
      * Exactly one repetition.
@@ -53,8 +53,8 @@ public interface Multiplier {
     final class One implements Multiplier {
 
         @Override
-        public String generate(final RuleDefinition rule, final GenerationContext context) {
-            return rule.generate(context);
+        public RuleDefinition repeat(final RuleDefinition element) {
+            return element;
         }
     }
 
@@ -85,14 +85,14 @@ public interface Multiplier {
         }
 
         @Override
-        public String generate(final RuleDefinition rule, final GenerationContext context) {
-            final String result;
+        public RuleDefinition repeat(final RuleDefinition element) {
+            final RuleDefinition res;
             if (this.rand.flip()) {
-                result = rule.generate(context);
+                res = element;
             } else {
-                result = "";
+                res = new Empty();
             }
-            return result;
+            return res;
         }
     }
 
@@ -138,10 +138,8 @@ public interface Multiplier {
         }
 
         @Override
-        public String generate(final RuleDefinition rule, final GenerationContext context) {
-            return new Several(
-                Collections.nCopies(this.rand.range(this.limit) + 1, rule)
-            ).generate(context);
+        public RuleDefinition repeat(final RuleDefinition element) {
+            return new Several(Collections.nCopies(this.rand.range(this.limit) + 1, element));
         }
     }
 
@@ -187,10 +185,8 @@ public interface Multiplier {
         }
 
         @Override
-        public String generate(final RuleDefinition rule, final GenerationContext context) {
-            return new Several(
-                Collections.nCopies(this.rand.range(this.limit), rule)
-            ).generate(context);
+        public RuleDefinition repeat(final RuleDefinition element) {
+            return new Several(Collections.nCopies(this.rand.range(this.limit), element));
         }
     }
 }
