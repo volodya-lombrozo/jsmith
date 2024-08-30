@@ -140,14 +140,6 @@ public final class Convergence<T> {
         );
     }
 
-    private Map<T, Map<T, Double>> wightsCopy() {
-        final Map<T, Map<T, Double>> copy = new HashMap<>(0);
-        for (final Map.Entry<T, Map<T, Double>> entry : this.weights.entrySet()) {
-            copy.put(entry.getKey(), new HashMap<>(entry.getValue()));
-        }
-        return copy;
-    }
-
     /**
      * Choose one of the child elements from a parent element.
      * @param from The main parent element which has child elements.
@@ -167,7 +159,7 @@ public final class Convergence<T> {
      * @param elements Child elements.
      * @return Chosen element.
      */
-    public T choose(final T from, final T... elements) {
+    T choose(final T from, final T... elements) {
         final Map<T, Double> current = this.weights.computeIfAbsent(
             from, key -> this.init(elements)
         );
@@ -219,5 +211,13 @@ public final class Convergence<T> {
         if (this.verbose) {
             Convergence.LOG.info(msg);
         }
+    }
+
+    private Map<T, Map<T, Double>> wightsCopy() {
+        final Map<T, Map<T, Double>> copy = new HashMap<>(0);
+        for (final Map.Entry<T, Map<T, Double>> entry : this.weights.entrySet()) {
+            copy.put(entry.getKey(), new HashMap<>(entry.getValue()));
+        }
+        return copy;
     }
 }

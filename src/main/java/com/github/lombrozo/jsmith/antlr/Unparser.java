@@ -79,7 +79,7 @@ public final class Unparser {
      * @param rule Rule.
      * @return String representation of the parser rule.
      */
-    public String generate(final String rule, final GenerationContext context) {
+    public String generate(final String rule, final Context context) {
         if (this.stack.incrementAndGet() > 500) {
             throw new RecursionException(
                 String.format(
@@ -98,7 +98,7 @@ public final class Unparser {
      * @param rule Rule.
      * @return Code string corresponding to the rule.
      */
-    private String apply(final String rule, final GenerationContext context) {
+    private String apply(final String rule, final Context context) {
         if (!this.rules.containsKey(rule)) {
             throw new IllegalStateException(
                 String.format("Rule not found: %s. All available rules: [%s]", rule, this.rules)

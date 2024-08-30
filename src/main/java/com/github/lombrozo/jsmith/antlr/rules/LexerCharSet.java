@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.random.Rand;
-import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.antlr.Context;
 
 /**
  * LexerCharSet rule.
@@ -84,7 +84,7 @@ public final class LexerCharSet implements Rule {
     }
 
     @Override
-    public String generate(final GenerationContext context) {
+    public String generate(final Context context) {
         return this.rand.regex(this.text);
     }
 

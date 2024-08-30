@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.RecursionException;
 import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
 import com.github.lombrozo.jsmith.antlr.Unparser;
@@ -80,7 +80,7 @@ public final class Ruleref implements Rule {
     }
 
     @Override
-    public String generate(final GenerationContext context) {
+    public String generate(final Context context) {
         try {
             return this.unparser.generate(this.ref, context);
         } catch (final RecursionException exception) {

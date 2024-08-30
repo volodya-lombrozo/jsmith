@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.random.Convergence;
-import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.antlr.Context;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,13 +77,13 @@ public final class RuleAltList implements Rule {
     }
 
     @Override
-    public String generate(final GenerationContext context) {
+    public String generate(final Context context) {
         if (this.alternatives.isEmpty()) {
             throw new IllegalStateException("RuleAltList should have at least one alternative");
         }
-        final Convergence<Rule> convergence = context.convergence();
+        final Convergence<Rule> convergence = context.strategy();
         final Rule choose = convergence.choose(this, this.alternatives);
-        final GenerationContext conv = context.withConvergence(convergence);
+        final Context conv = context.withConvergence(convergence);
         return choose.generate(conv);
     }
 

@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.antlr.Context;
 
 /**
  * Empty rule.
@@ -39,7 +39,7 @@ public final class Empty implements Rule {
     }
 
     @Override
-    public String generate(final GenerationContext context) {
+    public String generate(final Context context) {
         return "";
     }
 

@@ -21,37 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.rules;
+package com.github.lombrozo.jsmith.random;
 
-import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import java.util.List;
 
-/**
- * Rule block.
- * The ruleBlock definition in ANTLR grammar:
- * {@code
- * ruleBlock
- *     : {@link RuleAltList}
- *     ;
- * }
- * @since 0.1
- */
-public final class RuleBlock extends Unimplemented {
+public interface ChoosingStrategy {
 
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     */
-    public RuleBlock(final Rule parent) {
-        super(parent);
-    }
+    Rule choose(final Rule from, List<Rule> elements);
 
-    @Override
-    public String generate(final Context context) {
-        return super.generate(context);
-    }
 
-    @Override
-    public String toString() {
-        return "ruleBlock";
-    }
 }

@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +68,7 @@ public final class Element implements Rule {
     }
 
     @Override
-    public String generate(final GenerationContext context) {
+    public String generate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException("Element should have at least one child");
         }

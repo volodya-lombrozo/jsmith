@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.random.Convergence;
-import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.antlr.Context;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,8 +106,8 @@ public final class LexerAtom implements Rule {
     }
 
     @Override
-    public String generate(final GenerationContext context) {
-        final Convergence<Rule> convergence = context.convergence();
+    public String generate(final Context context) {
+        final Convergence<Rule> convergence = context.strategy();
         return convergence.choose(this, this.elems)
             .generate(context.withConvergence(convergence));
     }

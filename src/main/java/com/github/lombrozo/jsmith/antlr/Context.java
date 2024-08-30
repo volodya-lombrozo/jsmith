@@ -23,40 +23,30 @@
  */
 package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.random.Convergence;
-import com.github.lombrozo.jsmith.random.Rand;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.random.Convergence;
 
 /**
  *
  * @since 0.1
  */
-public final class GenerationContext {
-    private final Rand rand;
+public final class Context {
     private final Convergence<Rule> convergence;
 
-    public GenerationContext() {
-        this(new Rand(), new Convergence<>());
+    public Context() {
+        this(new Convergence<>());
     }
 
-    public GenerationContext(
-        final Rand rand,
-        final Convergence<Rule> convergence
-    ) {
-        this.rand = rand;
+    public Context(final Convergence<Rule> convergence) {
         this.convergence = convergence;
     }
 
-    public Rand rand() {
-        return this.rand;
-    }
-
-    public Convergence<Rule> convergence() {
+    public Convergence<Rule> strategy() {
         return this.convergence.copy();
     }
 
-    public GenerationContext withConvergence(final Convergence<Rule> convergence) {
-        return new GenerationContext(this.rand, convergence);
+    public Context withConvergence(final Convergence<Rule> convergence) {
+        return new Context(convergence);
     }
 
 }

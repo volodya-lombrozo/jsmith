@@ -25,7 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.random.Multiplier;
 import com.github.lombrozo.jsmith.random.Rand;
-import com.github.lombrozo.jsmith.antlr.GenerationContext;
+import com.github.lombrozo.jsmith.antlr.Context;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -108,7 +108,7 @@ public final class EbnfSuffix implements Rule {
     }
 
     @Override
-    public String generate(final GenerationContext context) {
+    public String generate(final Context context) {
         if (Objects.isNull(this.operation)) {
             throw new IllegalArgumentException(
                 String.format(
