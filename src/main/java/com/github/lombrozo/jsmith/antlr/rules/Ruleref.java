@@ -25,7 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.RecursionException;
-import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
+import com.github.lombrozo.jsmith.antlr.view.ProductionsChain;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 
 /**

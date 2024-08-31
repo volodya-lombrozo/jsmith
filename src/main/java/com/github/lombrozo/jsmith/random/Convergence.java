@@ -213,6 +213,10 @@ public final class Convergence<T> {
         }
     }
 
+    /**
+     * Copy weights deeply.
+     * @return Copy of the weights deeply.
+     */
     private Map<T, Map<T, Double>> wightsCopy() {
         final Map<T, Map<T, Double>> copy = new HashMap<>(0);
         for (final Map.Entry<T, Map<T, Double>> entry : this.weights.entrySet()) {

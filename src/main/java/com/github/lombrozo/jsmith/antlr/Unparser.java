@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
+import com.github.lombrozo.jsmith.antlr.view.ProductionsChain;
 import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
 import java.util.HashMap;
 import java.util.Map;

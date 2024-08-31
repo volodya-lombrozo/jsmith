@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 /**
- * This package contains tests for the representation of the different ANTLR grammar elements.
+ * Contains classes that help to represent the grammar in a human-readable form.
  * @since 0.1
  */
-package com.github.lombrozo.jsmith.antlr.representation;
+package com.github.lombrozo.jsmith.antlr.view;

@@ -25,7 +25,7 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
-import com.github.lombrozo.jsmith.antlr.representation.ProductionsChain;
+import com.github.lombrozo.jsmith.antlr.view.ProductionsChain;
 import com.github.lombrozo.jsmith.antlr.rules.Action;
 import com.github.lombrozo.jsmith.antlr.rules.ActionBlock;
 import com.github.lombrozo.jsmith.antlr.rules.ActionScopeName;

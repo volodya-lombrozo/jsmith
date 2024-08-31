@@ -57,4 +57,5 @@ final class ConvergenceTest {
             Matchers.equalTo(desired)
         );
     }
+
 }
