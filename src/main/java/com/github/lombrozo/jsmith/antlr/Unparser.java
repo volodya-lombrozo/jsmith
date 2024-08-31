@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr;
 
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.ProductionsChain;
 import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public final class Unparser {
     /**
      * All the parser rules.
      */
-    private final Map<String, ParserRuleSpec> rules;
+    private final Map<String, Rule> rules;
 
     private final AtomicInteger stack;
 
@@ -59,18 +60,19 @@ public final class Unparser {
      * Constructor.
      * @param all All the parser rules.
      */
-    private Unparser(final Map<String, ParserRuleSpec> all) {
+    private Unparser(final Map<String, Rule> all) {
         this.rules = all;
         this.stack = new AtomicInteger(0);
     }
 
     /**
      * Add a parser rule.
+     * @param name Rule name.
      * @param rule Parser rule.
      * @return This unparser.
      */
-    public Unparser with(final ParserRuleSpec rule) {
-        this.rules.put(rule.name(), rule);
+    public Unparser with(final String name, final Rule rule) {
+        this.rules.put(name, rule);
         return this;
     }
 

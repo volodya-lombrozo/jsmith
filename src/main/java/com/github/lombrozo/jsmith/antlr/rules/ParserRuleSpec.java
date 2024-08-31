@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * The rule definition in ANTLR grammar:
  * {@code
  * parserRuleSpec
- *     : ruleModifiers? RULE_REF argActionBlock? ruleReturns? throwsSpec? localsSpec? rulePrequel* COLON {@link RuleBlock} SEMI
+ *     : ruleModifiers? RULE_REF {@link ArgActionBlock}? ruleReturns? throwsSpec? localsSpec? rulePrequel* COLON {@link RuleBlock} SEMI
  *         exceptionGroup
  *     ;
  * }
@@ -87,13 +87,5 @@ public final class ParserRuleSpec implements Rule {
     @Override
     public String toString() {
         return String.format("parserRuleSpec(%s)", this.name);
-    }
-
-    /**
-     * Rule name.
-     * @return Rule name.
-     */
-    public String name() {
-        return this.name;
     }
 }

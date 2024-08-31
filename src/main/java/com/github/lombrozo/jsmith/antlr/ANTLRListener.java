@@ -165,10 +165,11 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterParserRuleSpec(final ANTLRv4Parser.ParserRuleSpecContext ctx) {
-        final ParserRuleSpec rule = new ParserRuleSpec(ctx.RULE_REF().getText(), this.current);
+        final String name = ctx.RULE_REF().getText();
+        final ParserRuleSpec rule = new ParserRuleSpec(name, this.current);
         this.current.append(rule);
         this.current = rule;
-        this.unparser.with(rule);
+        this.unparser.with(name, rule);
         super.enterParserRuleSpec(ctx);
     }
 
