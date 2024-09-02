@@ -93,7 +93,7 @@ public final class TerminalDef implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return String.format("terminalDef(%s)", this.text);
     }
 }

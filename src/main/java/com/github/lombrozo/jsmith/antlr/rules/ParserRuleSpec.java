@@ -85,7 +85,7 @@ public final class ParserRuleSpec implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return String.format("parserRuleSpec(%s)", this.name);
     }
 }

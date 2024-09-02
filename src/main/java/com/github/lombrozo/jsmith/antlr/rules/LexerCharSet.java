@@ -92,4 +92,9 @@ public final class LexerCharSet implements Rule {
     public void append(final Rule rule) {
         throw new UnsupportedOperationException("LexerCharSet cannot have children");
     }
+
+    @Override
+    public String name() {
+        return "lexerCharSet(not-a-rule)";
+    }
 }

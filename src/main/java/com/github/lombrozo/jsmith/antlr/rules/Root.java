@@ -74,7 +74,7 @@ public final class Root implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "root";
     }
 }

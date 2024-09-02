@@ -130,7 +130,7 @@ public final class EbnfSuffix implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return String.format(
             "ebnfSuffix(%s%s)", this.operation, Optional.ofNullable(this.question).orElse("")
         );

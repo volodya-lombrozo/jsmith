@@ -42,4 +42,9 @@ public final class ElementOption extends Unimplemented {
     public ElementOption(final Rule parent) {
         super(parent);
     }
+
+    @Override
+    public String name() {
+        return "elementOption";
+    }
 }

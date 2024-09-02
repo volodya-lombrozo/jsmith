@@ -86,7 +86,8 @@ public final class LexerElements implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "lexerElements";
     }
+
 }

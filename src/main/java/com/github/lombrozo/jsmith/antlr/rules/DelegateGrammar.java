@@ -45,7 +45,7 @@ public final class DelegateGrammar extends Unimplemented {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "delegateGrammar";
     }
 }

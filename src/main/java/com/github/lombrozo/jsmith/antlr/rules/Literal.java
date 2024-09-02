@@ -126,7 +126,7 @@ public final class Literal implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return String.format("literal(%s)", this.text);
     }
 }

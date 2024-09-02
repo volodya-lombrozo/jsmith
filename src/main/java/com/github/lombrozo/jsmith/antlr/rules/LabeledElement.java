@@ -9,7 +9,16 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     ;
  */
 public final class LabeledElement extends Unimplemented {
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     */
     public LabeledElement(final Rule parent) {
         super(parent);
+    }
+
+    @Override
+    public String name() {
+        return "labeledElement";
     }
 }

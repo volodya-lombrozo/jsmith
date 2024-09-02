@@ -46,7 +46,7 @@ public final class ActionScopeName extends Unimplemented {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "actionScopeName";
     }
 }

@@ -73,7 +73,7 @@ public final class CharacterRange implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return String.format("characterRange(%s)", this.text);
     }
 }

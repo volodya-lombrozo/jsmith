@@ -44,7 +44,7 @@ public final class Action extends Unimplemented {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "action_";
     }
 }

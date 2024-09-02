@@ -101,7 +101,7 @@ public final class Ruleref implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return String.format("ruleref(%s)", this.ref);
     }
 }

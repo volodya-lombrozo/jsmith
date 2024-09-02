@@ -38,4 +38,9 @@ public final class Identifier extends Unimplemented {
     public Identifier(final Rule parent) {
         super(parent);
     }
+
+    @Override
+    public String name() {
+        return "identifier";
+    }
 }

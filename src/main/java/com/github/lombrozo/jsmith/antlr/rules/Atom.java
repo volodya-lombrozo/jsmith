@@ -69,12 +69,12 @@ public final class Atom implements Rule {
     }
 
     @Override
-    public String generate(final Context context) {
-        return this.item.generate(context);
+    public String name() {
+        return "atom";
     }
 
     @Override
-    public String toString() {
-        return "atom";
+    public String generate(final Context context) {
+        return this.item.generate(context);
     }
 }

@@ -49,4 +49,9 @@ public final class LexerBlock extends Unimplemented {
     public LexerBlock(final Rule parent) {
         super(parent);
     }
+
+    @Override
+    public String name() {
+        return "lexerBlock";
+    }
 }

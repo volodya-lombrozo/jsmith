@@ -45,7 +45,7 @@ public final class PredicateOption extends Unimplemented {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "predicateOption";
     }
 }

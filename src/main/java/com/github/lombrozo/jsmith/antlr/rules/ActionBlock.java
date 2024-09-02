@@ -49,4 +49,9 @@ public final class ActionBlock extends Unimplemented {
     public ActionBlock(final Rule parent) {
         super(parent);
     }
+
+    @Override
+    public String name() {
+        return "actionBlock";
+    }
 }

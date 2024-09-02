@@ -92,7 +92,7 @@ public final class LexerRuleSpec implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return String.format("lexerRuleSpec(%s)", this.name);
     }
 
@@ -100,7 +100,7 @@ public final class LexerRuleSpec implements Rule {
      * Get rule name.
      * @return Rule name.
      */
-    public String name() {
+    public String key() {
         return this.name;
     }
 }

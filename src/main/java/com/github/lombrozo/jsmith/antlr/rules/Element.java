@@ -94,7 +94,7 @@ public final class Element implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "element";
     }
 

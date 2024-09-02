@@ -49,6 +49,12 @@ public interface Rule {
      */
     void append(final Rule rule);
 
+    /**
+     * Rule name.
+     * @return Rule name.
+     */
+    String name();
+
 
     /**
      * The default implementation of the generate method.

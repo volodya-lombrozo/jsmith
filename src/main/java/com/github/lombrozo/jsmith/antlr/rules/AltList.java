@@ -112,7 +112,7 @@ public final class AltList implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return String.format("altList(size=%d)", this.alternatives.size());
     }
 }

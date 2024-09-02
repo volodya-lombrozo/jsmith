@@ -62,7 +62,7 @@ public final class Unlexer {
      * @return This unlexer.
      */
     public Unlexer with(final LexerRuleSpec rule) {
-        this.rules.put(rule.name(), rule);
+        this.rules.put(rule.key(), rule);
         return this;
     }
 

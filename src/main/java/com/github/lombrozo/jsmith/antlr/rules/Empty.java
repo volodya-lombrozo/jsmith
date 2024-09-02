@@ -48,7 +48,7 @@ public final class Empty implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "empty";
     }
 }

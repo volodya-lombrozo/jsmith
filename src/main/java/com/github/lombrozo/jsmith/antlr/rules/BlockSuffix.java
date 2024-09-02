@@ -42,4 +42,9 @@ public final class BlockSuffix extends Unimplemented {
     public BlockSuffix(final Rule parent) {
         super(parent);
     }
+
+    @Override
+    public String name() {
+        return "blockSuffix";
+    }
 }

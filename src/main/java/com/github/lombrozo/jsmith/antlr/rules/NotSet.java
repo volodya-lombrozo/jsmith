@@ -42,4 +42,9 @@ public final class NotSet extends Unimplemented {
     public NotSet(final Rule parent) {
         super(parent);
     }
+
+    @Override
+    public String name() {
+        return "notSet";
+    }
 }

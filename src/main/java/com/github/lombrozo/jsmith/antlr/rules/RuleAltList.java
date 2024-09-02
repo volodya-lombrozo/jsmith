@@ -93,7 +93,7 @@ public final class RuleAltList implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return String.format(
             "ruleAltList(alternatives=%d, id=%s)",
             this.alternatives.size(),

@@ -118,7 +118,8 @@ public final class LexerAtom implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "lexerAtom";
     }
+
 }

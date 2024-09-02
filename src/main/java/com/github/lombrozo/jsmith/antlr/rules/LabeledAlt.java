@@ -10,12 +10,17 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  */
 public final class LabeledAlt extends Unimplemented {
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     */
     public LabeledAlt(final Rule parent) {
         super(parent);
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return String.format("labeledAlt(id=%d)", System.identityHashCode(this));
     }
 }

@@ -86,7 +86,7 @@ public final class Ebnf implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "ebnf";
     }
 }

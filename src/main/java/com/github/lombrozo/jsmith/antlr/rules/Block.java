@@ -84,4 +84,9 @@ public final class Block implements Rule {
     public void append(final Rule rule) {
         this.elements.add(rule);
     }
+
+    @Override
+    public String name() {
+        return "block";
+    }
 }

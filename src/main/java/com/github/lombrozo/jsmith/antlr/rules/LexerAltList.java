@@ -40,4 +40,9 @@ public final class LexerAltList extends Unimplemented {
     public LexerAltList(final Rule parent) {
         super(parent);
     }
+
+    @Override
+    public String name() {
+        return "lexerAltList";
+    }
 }

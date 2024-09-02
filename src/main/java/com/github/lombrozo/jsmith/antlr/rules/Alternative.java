@@ -91,7 +91,8 @@ public final class Alternative implements Rule {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return "alternative";
     }
+
 }
