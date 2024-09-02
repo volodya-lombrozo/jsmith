@@ -74,6 +74,11 @@ public final class Element implements Rule {
         }
         final String result;
         final Rule first = this.children.get(0);
+        //TODO! REMOVE INSTANCEOF!!!!!
+        //TODO! REMOVE INSTANCEOF!!!!!
+        //TODO! REMOVE INSTANCEOF!!!!!
+        //TODO! REMOVE INSTANCEOF!!!!!
+        //TODO! REMOVE INSTANCEOF!!!!!
         if (first instanceof Atom) {
             result = this.multiplier().repeat(first).generate(context);
         } else if (first instanceof LabeledElement) {
@@ -81,6 +86,11 @@ public final class Element implements Rule {
         } else {
             result = first.generate(context);
         }
+        //TODO! REMOVE INSTANCEOF!!!!!
+        //TODO! REMOVE INSTANCEOF!!!!!
+        //TODO! REMOVE INSTANCEOF!!!!!
+        //TODO! REMOVE INSTANCEOF!!!!!
+        //TODO! REMOVE INSTANCEOF!!!!!
         return result;
     }
 
