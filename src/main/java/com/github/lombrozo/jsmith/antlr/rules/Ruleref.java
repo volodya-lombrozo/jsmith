@@ -25,7 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.RecursionException;
-import com.github.lombrozo.jsmith.antlr.view.ProductionsChain;
+import com.github.lombrozo.jsmith.antlr.view.RulesChain;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 
 /**
@@ -87,7 +87,7 @@ public final class Ruleref implements Rule {
             throw new IllegalStateException(
                 String.format(
                     "Recursion detected in rule reference %s",
-                    new ProductionsChain(this).tree()
+                    new RulesChain(this).tree()
                 ),
                 exception
             );

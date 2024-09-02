@@ -24,8 +24,7 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.ProductionsChain;
-import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
+import com.github.lombrozo.jsmith.antlr.view.RulesChain;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -86,7 +85,7 @@ public final class Unparser {
             throw new RecursionException(
                 String.format(
                     "Recursion detected in rule: %n%s%n",
-                    new ProductionsChain(this.rules.get(rule)).tree()
+                    new RulesChain(this.rules.get(rule)).tree()
                 )
             );
         }

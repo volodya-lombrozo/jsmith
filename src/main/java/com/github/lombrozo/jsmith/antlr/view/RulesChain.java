@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  * Used for logging of the current chain of {@link Rule} objects.
  * @since 0.1
  */
-public final class ProductionsChain {
+public final class RulesChain {
 
     /**
      * The lowest child.
@@ -43,7 +43,7 @@ public final class ProductionsChain {
      * Constructor.
      * @param start The lowest child.
      */
-    public ProductionsChain(final Rule start) {
+    public RulesChain(final Rule start) {
         this.child = start;
     }
 
@@ -67,7 +67,7 @@ public final class ProductionsChain {
     private String tree(final Rule node) {
         final String result;
         if (node == node.parent()) {
-            result = String.format("%s\n", node);
+            result = String.format("%s\n", node.name());
         } else {
             final String prev = this.tree(node.parent());
             final int length = prev.split("\n").length;
@@ -77,7 +77,7 @@ public final class ProductionsChain {
                 Stream.generate(() -> " ")
                     .limit(2 + ((length - 1) * 5L))
                     .collect(Collectors.joining()),
-                node
+                node.name()
             );
         }
         return result;

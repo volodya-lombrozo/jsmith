@@ -25,7 +25,7 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
-import com.github.lombrozo.jsmith.antlr.view.ProductionsChain;
+import com.github.lombrozo.jsmith.antlr.view.RulesChain;
 import com.github.lombrozo.jsmith.antlr.rules.Action;
 import com.github.lombrozo.jsmith.antlr.rules.ActionBlock;
 import com.github.lombrozo.jsmith.antlr.rules.ActionScopeName;
@@ -131,7 +131,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
             throw new RecursionException(
                 String.format(
                     "Recursion detected in rule: %n%s%n",
-                    new ProductionsChain(this.current).tree()
+                    new RulesChain(this.current).tree()
                 )
             );
         }

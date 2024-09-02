@@ -66,7 +66,7 @@ final class Several implements Rule {
     }
 
     @Override
-    public String toString() {
-        return "several";
+    public String name() {
+        return "several(not-a-rule)";
     }
 }

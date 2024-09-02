@@ -32,16 +32,16 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link ProductionsChain}.
+ * Test case for {@link RulesChain}.
  * @since 0.1
  */
-final class ProductionsChainTest {
+final class RulesChainTest {
 
     @Test
     void printsChain() {
         MatcherAssert.assertThat(
             "We expect that the tree will be printed correctly",
-            new ProductionsChain(
+            new RulesChain(
                 new EbnfSuffix(
                     new LexerElement(
                         new LexerElements(
