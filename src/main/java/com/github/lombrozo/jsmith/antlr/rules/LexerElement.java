@@ -80,18 +80,7 @@ public final class LexerElement implements Rule {
 
     @Override
     public String generate(final Context context) {
-        final Rule first = this.children.get(0);
-        if (first instanceof LexerAtom) {
-            return this.multiplier().repeat(first).generate(context);
-        } else if (first instanceof LexerBlock) {
-            return this.multiplier().repeat(first).generate(context);
-        } else if (first instanceof ActionBlock) {
-            return this.multiplier().repeat(first).generate(context);
-        } else {
-            throw new IllegalStateException(
-                String.format("Unrecognized element type '%s' for '%s' element", first, this)
-            );
-        }
+        return this.multiplier().repeat(this.children.get(0)).generate(context);
     }
 
     @Override

@@ -58,11 +58,12 @@ public final class Unlexer {
 
     /**
      * Add a new lexer rule.
+     * @param name Rule name.
      * @param rule Lexer rule.
      * @return This unlexer.
      */
-    public Unlexer with(final LexerRuleSpec rule) {
-        this.rules.put(rule.key(), rule);
+    public Unlexer with(final String name, final LexerRuleSpec rule) {
+        this.rules.put(name, rule);
         return this;
     }
 

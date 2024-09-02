@@ -37,13 +37,14 @@ final class TerminalDefTest {
     @Test
     void retrievesLexerRule() {
         final Unlexer unlexer = new Unlexer();
-        final LexerRuleSpec rule = new LexerRuleSpec("PLUS");
+        final String name = "PLUS";
+        final LexerRuleSpec rule = new LexerRuleSpec(name);
         final String text = "+";
         rule.append(new Literal(text));
-        unlexer.with(rule);
+        unlexer.with(name, rule);
         MatcherAssert.assertThat(
             "We expect that the lexer rule will be retrieved and this rule will generate the text",
-            new TerminalDef(unlexer, "PLUS").generate(),
+            new TerminalDef(unlexer, name).generate(),
             Matchers.equalTo(text)
         );
     }

@@ -78,12 +78,8 @@ public final class Element implements Rule {
             result = this.multiplier().repeat(first).generate(context);
         } else if (first instanceof LabeledElement) {
             result = this.multiplier().repeat(first).generate(context);
-        } else if (first instanceof Ebnf) {
-            result = first.generate(context);
         } else {
-            throw new IllegalStateException(
-                String.format("Unrecognized element type '%s' for '%s' element", first, this)
-            );
+            result = first.generate(context);
         }
         return result;
     }

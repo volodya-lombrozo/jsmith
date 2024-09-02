@@ -95,12 +95,4 @@ public final class LexerRuleSpec implements Rule {
     public String name() {
         return String.format("lexerRuleSpec(%s)", this.name);
     }
-
-    /**
-     * Get rule name.
-     * @return Rule name.
-     */
-    public String key() {
-        return this.name;
-    }
 }

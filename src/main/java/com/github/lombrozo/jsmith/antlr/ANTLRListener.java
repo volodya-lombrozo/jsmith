@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
+import com.github.lombrozo.jsmith.antlr.rules.Traced;
 import com.github.lombrozo.jsmith.antlr.view.RulesChain;
 import com.github.lombrozo.jsmith.antlr.rules.Action;
 import com.github.lombrozo.jsmith.antlr.rules.ActionBlock;
@@ -103,18 +104,22 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
      * Constructor.
      * @param unparser Unparser.
      * @param unlexer Unlexer.
-     * @param current Current rule.
+     * @param root Current rule.
      */
     private ANTLRListener(
         final Unparser unparser,
         final Unlexer unlexer,
-        final Rule current
+        final Rule root
     ) {
         this.unparser = unparser;
         this.unlexer = unlexer;
-        this.current = current;
+        this.current = new Traced(root);
     }
 
+    /**
+     * Get unparser that understands parser rules and can generate code.
+     * @return Unparser.
+     */
     public Unparser unparser() {
         return this.unparser;
     }
@@ -166,108 +171,93 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     @Override
     public void enterParserRuleSpec(final ANTLRv4Parser.ParserRuleSpecContext ctx) {
         final String name = ctx.RULE_REF().getText();
-        final ParserRuleSpec rule = new ParserRuleSpec(name, this.current);
-        this.current.append(rule);
-        this.current = rule;
+        final Rule rule = new ParserRuleSpec(name, this.current);
         this.unparser.with(name, rule);
+        this.down(rule);
         super.enterParserRuleSpec(ctx);
     }
 
     @Override
     public void exitParserRuleSpec(final ANTLRv4Parser.ParserRuleSpecContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitParserRuleSpec(ctx);
     }
 
     @Override
     public void enterAltList(final ANTLRv4Parser.AltListContext ctx) {
-        final Rule list = new AltList(this.current);
-        this.current.append(list);
-        this.current = list;
+        this.down(new AltList(this.current));
         super.enterAltList(ctx);
     }
 
     @Override
     public void exitAltList(final ANTLRv4Parser.AltListContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitAltList(ctx);
     }
 
     @Override
     public void enterRuleAltList(final ANTLRv4Parser.RuleAltListContext ctx) {
-        final Rule list = new RuleAltList(this.current);
-        this.current.append(list);
-        this.current = list;
+        this.down(new RuleAltList(this.current));
         super.enterRuleAltList(ctx);
     }
 
     @Override
     public void exitRuleAltList(final ANTLRv4Parser.RuleAltListContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitRuleAltList(ctx);
     }
 
     @Override
     public void enterAlternative(final ANTLRv4Parser.AlternativeContext ctx) {
-        final Rule alternative = new Alternative(this.current);
-        this.current.append(alternative);
-        this.current = alternative;
+        this.down(new Alternative(this.current));
         super.enterAlternative(ctx);
     }
 
     @Override
     public void exitAlternative(final ANTLRv4Parser.AlternativeContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitAlternative(ctx);
     }
 
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
-        final Rule element = new Element(this.current);
-        this.current.append(element);
-        this.current = element;
+        this.down(new Element(this.current));
         super.enterElement(ctx);
     }
 
     @Override
     public void exitElement(final ANTLRv4Parser.ElementContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitElement(ctx);
     }
 
     @Override
     public void enterAtom(final ANTLRv4Parser.AtomContext ctx) {
-        final Rule atom = new Atom(this.current);
-        this.current.append(atom);
-        this.current = atom;
+        this.down(new Atom(this.current));
         super.enterAtom(ctx);
     }
 
     @Override
     public void exitAtom(final ANTLRv4Parser.AtomContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitAtom(ctx);
     }
 
     @Override
     public void enterRuleref(final ANTLRv4Parser.RulerefContext ctx) {
-        final String text = ctx.getText();
-        final Ruleref ruleref = new Ruleref(this.current, text, this.unparser);
-        this.current.append(ruleref);
-        this.current = ruleref;
+        this.down(new Ruleref(this.current, ctx.getText(), this.unparser));
         super.enterRuleref(ctx);
     }
 
     @Override
     public void exitRuleref(final ANTLRv4Parser.RulerefContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitRuleref(ctx);
     }
 
     @Override
     public void enterTerminalDef(final ANTLRv4Parser.TerminalDefContext ctx) {
-        final String text = ctx.getText();
-        this.current.append(new TerminalDef(this.current, this.unlexer, text));
+        this.current.append(new TerminalDef(this.current, this.unlexer, ctx.getText()));
         super.enterTerminalDef(ctx);
     }
 
@@ -279,15 +269,13 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterEbnf(final ANTLRv4Parser.EbnfContext ctx) {
-        final Ebnf ebnf = new Ebnf(this.current);
-        this.current.append(ebnf);
-        this.current = ebnf;
+        this.down(new Ebnf(this.current));
         super.enterEbnf(ctx);
     }
 
     @Override
     public void exitEbnf(final ANTLRv4Parser.EbnfContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitEbnf(ctx);
     }
 
@@ -315,95 +303,83 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterBlock(final ANTLRv4Parser.BlockContext ctx) {
-        final Rule block = new Block(this.current);
-        this.current.append(block);
-        this.current = block;
+        this.down(new Block(this.current));
         super.enterBlock(ctx);
     }
 
     @Override
     public void exitBlock(final ANTLRv4Parser.BlockContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitBlock(ctx);
     }
 
     @Override
     public void enterBlockSuffix(final ANTLRv4Parser.BlockSuffixContext ctx) {
-        final Rule suffix = new BlockSuffix(this.current);
-        this.current.append(suffix);
-        this.current = suffix;
+        this.down(new BlockSuffix(this.current));
         super.enterBlockSuffix(ctx);
     }
 
     @Override
     public void exitBlockSuffix(final ANTLRv4Parser.BlockSuffixContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitBlockSuffix(ctx);
     }
 
     @Override
     public void enterLexerRuleSpec(final ANTLRv4Parser.LexerRuleSpecContext ctx) {
-        final String text = ctx.TOKEN_REF().getText();
-        final LexerRuleSpec rule = new LexerRuleSpec(this.current, text);
-        this.unlexer.with(rule);
-        this.current.append(rule);
-        this.current = rule;
+        final String name = ctx.TOKEN_REF().getText();
+        final LexerRuleSpec rule = new LexerRuleSpec(this.current, name);
+        this.unlexer.with(name, rule);
+        this.down(rule);
         super.enterLexerRuleSpec(ctx);
     }
 
     @Override
     public void exitLexerRuleSpec(final ANTLRv4Parser.LexerRuleSpecContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitLexerRuleSpec(ctx);
     }
 
     @Override
     public void enterLexerAltList(final ANTLRv4Parser.LexerAltListContext ctx) {
-        final Rule list = new LexerAltList(this.current);
-        this.current.append(list);
-        this.current = list;
+        this.down(new LexerAltList(this.current));
         super.enterLexerAltList(ctx);
     }
 
     @Override
     public void exitLexerAltList(final ANTLRv4Parser.LexerAltListContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitLexerAltList(ctx);
     }
 
     @Override
     public void enterLexerAlt(final ANTLRv4Parser.LexerAltContext ctx) {
-        final Rule alternative = new Alternative(this.current);
-        this.current.append(alternative);
-        this.current = alternative;
+        this.down(new Alternative(this.current));
         super.enterLexerAlt(ctx);
     }
 
     @Override
     public void exitLexerAlt(final ANTLRv4Parser.LexerAltContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitLexerAlt(ctx);
     }
 
     @Override
     public void enterLexerElements(final ANTLRv4Parser.LexerElementsContext ctx) {
-        final Rule elements = new LexerElements(this.current);
-        this.current.append(elements);
-        this.current = elements;
+        this.down(new LexerElements(this.current));
         super.enterLexerElements(ctx);
     }
 
     @Override
     public void exitLexerElements(final ANTLRv4Parser.LexerElementsContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitLexerElements(ctx);
     }
 
     @Override
     public void enterLexerElement(final ANTLRv4Parser.LexerElementContext ctx) {
         final Rule element = new LexerElement(this.current);
-        this.current.append(element);
-        this.current = element;
+        this.down(element);
         super.enterLexerElement(ctx);
         if (Objects.nonNull(ctx.QUESTION())) {
             element.append(new EbnfSuffix("?"));
@@ -412,7 +388,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void exitLexerElement(final ANTLRv4Parser.LexerElementContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitLexerElement(ctx);
     }
 
@@ -424,37 +400,32 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         } else if (ctx.DOT() != null) {
             atom.append(new Literal(ctx.DOT().getText()));
         }
-        this.current.append(atom);
-        this.current = atom;
+        this.down(atom);
         super.enterLexerAtom(ctx);
     }
 
 
     @Override
     public void exitLexerAtom(final ANTLRv4Parser.LexerAtomContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitLexerAtom(ctx);
     }
 
-
     @Override
     public void enterAction_(final ANTLRv4Parser.Action_Context ctx) {
-        final Rule action = new Action(this.current);
-        this.current.append(action);
-        this.current = action;
+        this.down(new Action(this.current));
         super.enterAction_(ctx);
     }
 
     @Override
     public void exitAction_(final ANTLRv4Parser.Action_Context ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitAction_(ctx);
     }
 
     @Override
     public void enterCharacterRange(final ANTLRv4Parser.CharacterRangeContext ctx) {
-        final String text = ctx.getText();
-        this.current.append(new CharacterRange(this.current, text));
+        this.current.append(new CharacterRange(this.current, ctx.getText()));
         super.enterCharacterRange(ctx);
     }
 
@@ -466,212 +437,197 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLabeledElement(final ANTLRv4Parser.LabeledElementContext ctx) {
-        final Rule element = new LabeledElement(this.current);
-        this.current.append(element);
-        this.current = element;
+        this.down(new LabeledElement(this.current));
         super.enterLabeledElement(ctx);
     }
 
     @Override
     public void exitLabeledElement(final ANTLRv4Parser.LabeledElementContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitLabeledElement(ctx);
     }
 
-
     @Override
     public void enterIdentifier(final ANTLRv4Parser.IdentifierContext ctx) {
-        final Rule identifier = new Identifier(this.current);
-        this.current.append(identifier);
-        this.current = identifier;
+        this.down(new Identifier(this.current));
         super.enterIdentifier(ctx);
     }
 
     @Override
     public void exitIdentifier(final ANTLRv4Parser.IdentifierContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitIdentifier(ctx);
     }
 
     @Override
     public void enterActionBlock(final ANTLRv4Parser.ActionBlockContext ctx) {
-        final Rule block = new ActionBlock(this.current);
-        this.current.append(block);
-        this.current = block;
+        this.down(new ActionBlock(this.current));
         super.enterActionBlock(ctx);
     }
 
     @Override
     public void exitActionBlock(final ANTLRv4Parser.ActionBlockContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitActionBlock(ctx);
     }
 
     @Override
     public void enterPredicateOptions(final ANTLRv4Parser.PredicateOptionsContext ctx) {
-        final Rule options = new PredicateOptions(this.current);
-        this.current.append(options);
-        this.current = options;
+        this.down(new PredicateOptions(this.current));
         super.enterPredicateOptions(ctx);
     }
 
     @Override
     public void exitPredicateOptions(final ANTLRv4Parser.PredicateOptionsContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitPredicateOptions(ctx);
     }
 
     @Override
     public void enterPredicateOption(final ANTLRv4Parser.PredicateOptionContext ctx) {
-        final Rule option = new PredicateOption(this.current);
-        this.current.append(option);
-        this.current = option;
+        this.down(new PredicateOption(this.current));
         super.enterPredicateOption(ctx);
     }
 
     @Override
     public void exitPredicateOption(final ANTLRv4Parser.PredicateOptionContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitPredicateOption(ctx);
     }
 
     @Override
     public void enterElementOption(final ANTLRv4Parser.ElementOptionContext ctx) {
-        final Rule option = new ElementOption(this.current);
-        this.current.append(option);
-        this.current = option;
+        this.down(new ElementOption(this.current));
         super.enterElementOption(ctx);
     }
 
     @Override
     public void exitElementOption(final ANTLRv4Parser.ElementOptionContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitElementOption(ctx);
     }
 
     @Override
     public void enterRuleBlock(final ANTLRv4Parser.RuleBlockContext ctx) {
-        final Rule block = new RuleBlock(this.current);
-        this.current.append(block);
-        this.current = block;
+        this.down(new RuleBlock(this.current));
         super.enterRuleBlock(ctx);
     }
 
     @Override
     public void exitRuleBlock(final ANTLRv4Parser.RuleBlockContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitRuleBlock(ctx);
     }
 
     @Override
     public void enterLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
-        final Rule alt = new LabeledAlt(this.current);
-        this.current.append(alt);
-        this.current = alt;
+        this.down(new LabeledAlt(this.current));
         super.enterLabeledAlt(ctx);
     }
 
     @Override
     public void exitLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitLabeledAlt(ctx);
     }
 
     @Override
     public void enterActionScopeName(final ANTLRv4Parser.ActionScopeNameContext ctx) {
-        Rule name = new ActionScopeName(this.current);
-        this.current.append(name);
-        this.current = name;
+        this.down(new ActionScopeName(this.current));
         super.enterActionScopeName(ctx);
     }
 
     @Override
     public void exitActionScopeName(final ANTLRv4Parser.ActionScopeNameContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitActionScopeName(ctx);
     }
 
     @Override
     public void enterArgActionBlock(final ANTLRv4Parser.ArgActionBlockContext ctx) {
-        final Rule rule = new ArgActionBlock(this.current);
-        this.current.append(rule);
-        this.current = rule;
+        this.down(new ArgActionBlock(this.current));
         super.enterArgActionBlock(ctx);
     }
 
     @Override
     public void exitArgActionBlock(final ANTLRv4Parser.ArgActionBlockContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitArgActionBlock(ctx);
     }
 
     @Override
     public void enterDelegateGrammar(final ANTLRv4Parser.DelegateGrammarContext ctx) {
-        final Rule rule = new DelegateGrammar(this.current);
-        this.current.append(rule);
-        this.current = rule;
+        this.down(new DelegateGrammar(this.current));
         super.enterDelegateGrammar(ctx);
     }
 
     @Override
     public void exitDelegateGrammar(final ANTLRv4Parser.DelegateGrammarContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitDelegateGrammar(ctx);
     }
 
     @Override
     public void enterDelegateGrammars(final ANTLRv4Parser.DelegateGrammarsContext ctx) {
-        final Rule rule = new DelegateGrammars(this.current);
-        this.current.append(rule);
-        this.current = rule;
+        this.down(new DelegateGrammars(this.current));
         super.enterDelegateGrammars(ctx);
     }
 
     @Override
     public void exitDelegateGrammars(final ANTLRv4Parser.DelegateGrammarsContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitDelegateGrammars(ctx);
     }
 
     @Override
     public void enterElementOptions(final ANTLRv4Parser.ElementOptionsContext ctx) {
-        final Rule rule = new ElementOptions(this.current);
-        this.current.append(rule);
-        this.current = rule;
+        this.down(new ElementOptions(this.current));
         super.enterElementOptions(ctx);
     }
 
     @Override
     public void exitElementOptions(final ANTLRv4Parser.ElementOptionsContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitElementOptions(ctx);
     }
 
     @Override
     public void enterLexerBlock(final ANTLRv4Parser.LexerBlockContext ctx) {
-        final Rule rule = new LexerBlock(this.current);
-        this.current.append(rule);
-        this.current = rule;
+        this.down(new LexerBlock(this.current));
         super.enterLexerBlock(ctx);
     }
 
     @Override
     public void exitLexerBlock(final ANTLRv4Parser.LexerBlockContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitLexerBlock(ctx);
     }
 
     @Override
     public void enterNotSet(final ANTLRv4Parser.NotSetContext ctx) {
-        final Rule rule = new NotSet(this.current);
-        this.current.append(rule);
-        this.current = rule;
+        this.down(new NotSet(this.current));
         super.enterNotSet(ctx);
     }
 
     @Override
     public void exitNotSet(final ANTLRv4Parser.NotSetContext ctx) {
-        this.current = this.current.parent();
+        this.up();
         super.exitNotSet(ctx);
+    }
+
+    /**
+     * Go down in the generation tree.
+     * @param rule Rule to go down.
+     */
+    private void down(final Rule rule) {
+        this.current.append(new Traced(rule));
+        this.current = rule;
+    }
+
+    /**
+     * Go up in the generation tree.
+     */
+    private void up() {
+        this.current = this.current.parent();
     }
 }
