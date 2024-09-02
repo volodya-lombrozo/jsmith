@@ -25,6 +25,9 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.random.Convergence;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -32,13 +35,19 @@ import com.github.lombrozo.jsmith.random.Convergence;
  */
 public final class Context {
     private final Convergence<Rule> convergence;
+    private final List<Rule> chain;
 
     public Context() {
         this(new Convergence<>());
     }
 
     public Context(final Convergence<Rule> convergence) {
+        this(convergence, new ArrayList<>(0));
+    }
+
+    public Context(final Convergence<Rule> convergence, final List<Rule> chain) {
         this.convergence = convergence;
+        this.chain = chain;
     }
 
     public Convergence<Rule> strategy() {
@@ -46,7 +55,19 @@ public final class Context {
     }
 
     public Context withConvergence(final Convergence<Rule> convergence) {
-        return new Context(convergence);
+        return new Context(convergence, this.chain);
     }
 
+    public Context next(final Rule rule) {
+        final List<Rule> chain = new LinkedList<>(this.chain);
+        chain.add(rule);
+        return new Context(this.convergence, chain);
+    }
+
+    public String trace() {
+        return this.chain.stream()
+            .map(Rule::name)
+            .reduce((a, b) -> String.format("%s -> %s", a, b))
+            .orElse("");
+    }
 }
