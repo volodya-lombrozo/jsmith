@@ -26,8 +26,10 @@ package com.github.lombrozo.jsmith.antlr;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.random.Convergence;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
@@ -58,16 +60,26 @@ public final class Context {
         return new Context(convergence, this.chain);
     }
 
+    /**
+     * Returns the next context with the rule added to the path.
+     * @param rule The rule to add to the path.
+     * @return The next context with the rule added to the path.
+     */
     public Context next(final Rule rule) {
-        final List<Rule> chain = new LinkedList<>(this.chain);
-        chain.add(rule);
-        return new Context(this.convergence, chain);
+        return new Context(
+            this.convergence,
+            Stream.concat(
+                this.chain.stream(),
+                Stream.of(rule)
+            ).collect(Collectors.toList())
+        );
     }
 
-    public String trace() {
-        return this.chain.stream()
-            .map(Rule::name)
-            .reduce((a, b) -> String.format("%s -> %s", a, b))
-            .orElse("");
+    /**
+     * Returns the path of the rules that were visited during the generation.
+     * @return The path of the rules that were visited during the generation.
+     */
+    public List<Rule> path() {
+        return Collections.unmodifiableList(this.chain);
     }
 }

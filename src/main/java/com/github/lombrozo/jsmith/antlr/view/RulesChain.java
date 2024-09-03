@@ -30,6 +30,13 @@ import java.util.stream.Stream;
 /**
  * Chain of {@link Rule} objects.
  * Used for logging of the current chain of {@link Rule} objects.
+ * Output example:
+ * {@code
+ * empty
+ *   └──lexerElements
+ *        └──lexerElement
+ *             └──ebnfSuffix(+)
+ * }
  * @since 0.1
  */
 public final class RulesChain {

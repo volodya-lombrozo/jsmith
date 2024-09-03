@@ -21,33 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.rules;
+package com.github.lombrozo.jsmith.antlr.view;
 
-import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Trace;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * Test case for {@link Traced}.
+ * Simplest representation of the generation trace.
+ * Example of the trace:
+ * {@code
+ * literal(1) -> literal(2) -> literal(3)
+ * }
  * @since 0.1
  */
-final class TracedTest {
+public final class Trace {
 
-    @Test
-    void tracesRule() {
-        final Cage cage = new Cage();
-        final Rule root = new Traced(new Root());
-        final Rule alternatives = new Traced(new AltList());
-        root.append(alternatives);
-        alternatives.append(cage);
-        root.generate(new Context());
-        MatcherAssert.assertThat(
-            "We expect that the rule will be traced",
-            new Trace(cage.trapped().path()).line(),
-            Matchers.equalTo("root -> altList(size=1)")
-        );
+    /**
+     * Nodes that were visited during the generation.
+     */
+    private final List<Rule> visited;
+
+    /**
+     * Constructor.
+     * @param visited Nodes that were visited during the generation.
+     */
+    public Trace(final Rule... visited) {
+        this(Arrays.asList(visited));
     }
 
+    /**
+     * Constructor.
+     * @param visited Nodes that were visited during the generation.
+     */
+    public Trace(final List<Rule> visited) {
+        this.visited = visited;
+    }
+
+    /**
+     * Line representation of the trace.
+     * @return Line representation of the trace.
+     */
+    public String line() {
+        return this.visited.stream()
+            .map(Rule::name)
+            .reduce((a, b) -> String.format("%s -> %s", a, b))
+            .orElse("");
+    }
 }

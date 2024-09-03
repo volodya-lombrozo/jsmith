@@ -21,33 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.rules;
+package com.github.lombrozo.jsmith.antlr.view;
 
-import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Trace;
+import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link Traced}.
+ * Test cases for {@link Trace}.
  * @since 0.1
  */
-final class TracedTest {
+final class TraceTest {
 
     @Test
-    void tracesRule() {
-        final Cage cage = new Cage();
-        final Rule root = new Traced(new Root());
-        final Rule alternatives = new Traced(new AltList());
-        root.append(alternatives);
-        alternatives.append(cage);
-        root.generate(new Context());
+    void printsTrace() {
         MatcherAssert.assertThat(
-            "We expect that the rule will be traced",
-            new Trace(cage.trapped().path()).line(),
-            Matchers.equalTo("root -> altList(size=1)")
+            "We expect that the trace will be printed correctly",
+            new Trace(new Literal("1"), new Literal("2"), new Literal("3")).line(),
+            Matchers.equalTo("literal(1) -> literal(2) -> literal(3)")
         );
-    }
 
+    }
 }
