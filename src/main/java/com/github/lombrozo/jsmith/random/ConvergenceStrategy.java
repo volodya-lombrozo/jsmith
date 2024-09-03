@@ -24,32 +24,50 @@
 package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.tree.TreeNode;
 
+/**
+ * Convergence strategy.
+ * Here is the simplest implementation of the {@link ChoosingStrategy}.
+ * It uses the {@link Convergence} to choose the next rule.
+ * Pay attention that the single instance of the strategy must be used only for single generation
+ * branch.
+ * So, we need to copy the strategy for each new generation branch.
+ * Otherwise, the convergence state will be shared between the branches
+ * which will lead to the infinite recursion.
+ * You can read more about this implementation from this interesting
+ * <a href="https://eli.thegreenplace.net/2010/01/28/generating-random-sentences-from-a-context-free-grammar/">article</a>.
+ * @since 0.1
+ */
 public final class ConvergenceStrategy implements ChoosingStrategy {
 
-    private final TreeNode root = new TreeNode();
+    /**
+     * Convergence state.
+     */
+    private final Convergence<Rule> convergence;
+
+    /**
+     * The default constructor.
+     */
+    public ConvergenceStrategy() {
+        this(new Convergence<>());
+    }
+
+    /**
+     * Constructor.
+     * @param convergence The convergence state.
+     */
+    public ConvergenceStrategy(final Convergence<Rule> convergence) {
+        this.convergence = convergence;
+    }
 
     @Override
-    public Rule choose(final List<Rule> path, final List<Rule> elements) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public Rule choose(final Rule parent, final List<Rule> children) {
+        return this.convergence.choose(parent, children);
     }
 
-
-    static class TreeNode {
-
-        private final List<TreeNode> children;
-
-        public TreeNode() {
-            this(new ArrayList<>(0));
-        }
-
-        public TreeNode(final List<TreeNode> children) {
-            this.children = children;
-        }
+    @Override
+    public ChoosingStrategy copy() {
+        return new ConvergenceStrategy(this.convergence.copy());
     }
-
-
 }

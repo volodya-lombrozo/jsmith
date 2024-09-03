@@ -24,7 +24,6 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.random.Convergence;
 import java.util.ArrayList;
 import java.util.List;
 

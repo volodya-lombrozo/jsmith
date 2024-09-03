@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  * Should be used in {@link Rand}.
  * @since 0.1
  */
-public final class Convergence<T> {
+final class Convergence<T> {
 
     /**
      * Logger.
@@ -73,16 +73,8 @@ public final class Convergence<T> {
     /**
      * Default constructor.
      */
-    public Convergence() {
+    Convergence() {
         this(0.5d);
-    }
-
-    /**
-     * Constructor.
-     * @param factor Factor of convergence.
-     */
-    public Convergence(final double factor) {
-        this(factor, false);
     }
 
     /**
@@ -90,8 +82,16 @@ public final class Convergence<T> {
      * @param factor Factor of convergence.
      * @param verbose Do we need to log changes in the weights?
      */
-    public Convergence(final double factor, final boolean verbose) {
+    Convergence(final double factor, final boolean verbose) {
         this(factor, 1.0d, new Rand(), verbose);
+    }
+
+    /**
+     * Constructor.
+     * @param factor Factor of convergence.
+     */
+    private Convergence(final double factor) {
+        this(factor, false);
     }
 
     /**
@@ -101,7 +101,7 @@ public final class Convergence<T> {
      * @param rand Random generator.
      * @param verbose Verbose mode.
      */
-    public Convergence(
+    private Convergence(
         final double factor,
         final double weight,
         final Rand rand,
@@ -110,7 +110,7 @@ public final class Convergence<T> {
         this(factor, weight, new HashMap<>(0), rand, verbose);
     }
 
-    public Convergence(
+    private Convergence(
         final double factor,
         final double weight,
         final Map<T, Map<T, Double>> weights,
@@ -147,7 +147,7 @@ public final class Convergence<T> {
      * @return Chosen element.
      */
     @SuppressWarnings("unchecked")
-    public T choose(final T from, final Collection<T> elements) {
+    T choose(final T from, final Collection<T> elements) {
         return this.choose(from, (T[]) elements.toArray(new Object[0]));
     }
 

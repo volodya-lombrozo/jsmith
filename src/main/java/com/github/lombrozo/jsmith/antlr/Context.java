@@ -24,7 +24,8 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.random.Convergence;
+import com.github.lombrozo.jsmith.random.ChoosingStrategy;
+import com.github.lombrozo.jsmith.random.ConvergenceStrategy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,43 +33,70 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *
+ * Context of the generation.
  * @since 0.1
  */
 public final class Context {
-    private final Convergence<Rule> convergence;
-    private final List<Rule> chain;
 
+    /**
+     * Strategy used in the generation.
+     */
+    private final ChoosingStrategy strategy;
+
+    /**
+     * Path of the rules that were visited during the generation.
+     */
+    private final List<Rule> visited;
+
+    /**
+     * Constructor.
+     * Uses the default {@link ConvergenceStrategy}.
+     */
     public Context() {
-        this(new Convergence<>());
+        this(new ConvergenceStrategy());
     }
 
-    public Context(final Convergence<Rule> convergence) {
-        this(convergence, new ArrayList<>(0));
+    /**
+     * Constructor.
+     * @param strategy The strategy used in the generation.
+     */
+    public Context(final ChoosingStrategy strategy) {
+        this(strategy, new ArrayList<>(0));
     }
 
-    public Context(final Convergence<Rule> convergence, final List<Rule> chain) {
-        this.convergence = convergence;
-        this.chain = chain;
-    }
-
-    public Convergence<Rule> strategy() {
-        return this.convergence;
+    /**
+     * Constructor.
+     * @param strat The strategy used in the generation.
+     * @param chain The path of the rules that were visited during the generation.
+     */
+    public Context(final ChoosingStrategy strat, final List<Rule> chain) {
+        this.strategy = strat;
+        this.visited = chain;
     }
 
     /**
      * Returns the next context with the rule added to the path.
+     * Pay attention that each time when we proceed to the next rule, we create a new context.
+     * The new context contains the copy of the {@link ChoosingStrategy} and the new path.
      * @param rule The rule to add to the path.
      * @return The next context with the rule added to the path.
      */
     public Context next(final Rule rule) {
         return new Context(
-            this.convergence.copy(),
+            this.strategy.copy(),
             Stream.concat(
-                this.chain.stream(),
+                this.visited.stream(),
                 Stream.of(rule)
             ).collect(Collectors.toList())
         );
+    }
+
+    /**
+     * Returns the strategy used in the generation.
+     * @return The strategy used in the generation.
+     */
+    public ChoosingStrategy strategy() {
+        return this.strategy;
     }
 
     /**
@@ -76,6 +104,6 @@ public final class Context {
      * @return The path of the rules that were visited during the generation.
      */
     public List<Rule> path() {
-        return Collections.unmodifiableList(this.chain);
+        return Collections.unmodifiableList(this.visited);
     }
 }
