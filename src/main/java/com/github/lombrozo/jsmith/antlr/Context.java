@@ -66,6 +66,14 @@ public final class Context {
 
     /**
      * Constructor.
+     * @param chain The path of the rules that were visited during the generation.
+     */
+    public Context(final List<Rule> chain) {
+        this(new ConvergenceStrategy(), chain);
+    }
+
+    /**
+     * Constructor.
      * @param strat The strategy used in the generation.
      * @param chain The path of the rules that were visited during the generation.
      */

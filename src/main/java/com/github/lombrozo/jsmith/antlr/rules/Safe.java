@@ -24,71 +24,85 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Unparser;
+import com.github.lombrozo.jsmith.antlr.RecursionException;
+import com.github.lombrozo.jsmith.antlr.view.Trace;
+import java.util.List;
 
 /**
- * Parser rule reference.
- * The rule definition in ANTLR grammar:
- * {@code
- * ruleref
- *     : RULE_REF {@link ArgActionBlock}? {@link ElementOptions}?
- *     ;
- * }
+ * Safe rule.
+ * This is NOT an ANTLR grammar rule!
+ * Rule that ensures that the recursion is not detected.
  * @since 0.1
- * @todo #1:30min Add more test cases for rule ref.
- *  Currently we handle only the case when the rule reference is a simple string.
- *  We need to add more test cases to cover the cases with argActionBlock and elementOptions.
  */
-public final class Ruleref implements Rule {
+public final class Safe implements Rule {
 
     /**
-     * Parent rule.
+     * Default max recursion depth.
      */
-    private final Rule parent;
+    private static final int DEFAULT = 200;
 
     /**
-     * Rule reference.
+     * Original rule.
+     * All the calls are delegated to this rule.
      */
-    private final String ref;
+    private final Rule original;
 
     /**
-     * Unparser.
+     * Max allowed recursion depth.
      */
-    private final Unparser unparser;
+    private final int limit;
 
     /**
      * Constructor.
-     * @param parent Parent rule.
-     * @param ref Rule reference.
-     * @param unparser Unparser.
      */
-    public Ruleref(
-        final Rule parent,
-        final String ref,
-        final Unparser unparser
-    ) {
-        this.parent = parent;
-        this.ref = ref;
-        this.unparser = unparser;
+    public Safe() {
+        this(new Root());
+    }
+
+    /**
+     * Constructor.
+     * @param original Original rule.
+     */
+    public Safe(final Rule original) {
+        this(original, Safe.DEFAULT);
+    }
+
+    /**
+     * Constructor.
+     * @param original Original rule.
+     * @param limit Max allowed recursion depth.
+     */
+    public Safe(final Rule original, final int limit) {
+        this.original = original;
+        this.limit = limit;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.original.parent();
     }
 
     @Override
     public String generate(final Context context) {
-        return this.unparser.generate(this.ref, context);
+        final List<Rule> path = context.path();
+        if (path.size() >= this.limit) {
+            throw new RecursionException(
+                String.format(
+                    "Long generation path! Most probably you have a recursion here: %s",
+                    new Trace(path).line()
+                )
+            );
+        }
+        return this.original.generate(context);
     }
 
     @Override
     public void append(final Rule rule) {
-        throw new UnsupportedOperationException("Reference cannot have children yet");
+        this.original.append(rule);
     }
 
     @Override
     public String name() {
-        return String.format("ruleref(%s)", this.ref);
+        return this.original.name();
     }
 }

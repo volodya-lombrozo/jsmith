@@ -57,7 +57,7 @@ public final class ConvergenceStrategy implements ChoosingStrategy {
      * Constructor.
      * @param convergence The convergence state.
      */
-    public ConvergenceStrategy(final Convergence<Rule> convergence) {
+    private ConvergenceStrategy(final Convergence<Rule> convergence) {
         this.convergence = convergence;
     }
 

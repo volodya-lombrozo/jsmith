@@ -26,7 +26,6 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -52,24 +51,6 @@ final class RulerefTest {
             ),
             ruleref.generate(),
             Matchers.equalTo(expected)
-        );
-    }
-
-    @Test
-    void detectsRecursion() {
-        final String ref = "reference";
-        final Unparser unparser = new Unparser();
-        final ParserRuleSpec rule = new ParserRuleSpec(ref, new Empty());
-        final Rule recursive = new Ruleref(new Empty(), ref, unparser);
-        rule.append(recursive);
-        unparser.with(ref, rule);
-        Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> recursive.generate(),
-            String.format(
-                "We expect that %s will throw an exception because of recursion, but it didn't happen",
-                recursive
-            )
         );
     }
 

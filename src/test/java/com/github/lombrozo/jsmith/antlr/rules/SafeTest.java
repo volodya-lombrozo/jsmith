@@ -21,21 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr;
+package com.github.lombrozo.jsmith.antlr.rules;
+
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.RecursionException;
+import java.util.Collections;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * Recursion exception.
- * This exception is thrown when the recursion is detected.
- * @since 0.1
+ * Safe rule test cases {@link Safe}.
  */
-public final class RecursionException extends RuntimeException {
+final class SafeTest {
 
-    /**
-     * Constructor.
-     * @param message Message.
-     */
-    public RecursionException(final String message) {
-        super(message);
+    @Test
+    void detectsRecursion() {
+        MatcherAssert.assertThat(
+            "We expect meaningful exception message",
+            Assertions.assertThrows(
+                RecursionException.class,
+                () -> new Safe().generate(
+                    new Context(Collections.nCopies(200, new Literal("long chain")))
+                ),
+                "We expect recursion will be detected"
+            ).getMessage(),
+            Matchers.containsString(
+                "Long generation path! Most probably you have a recursion here:"
+            )
+        );
     }
-
 }

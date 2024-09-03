@@ -53,6 +53,4 @@ public interface ChoosingStrategy {
      * @return New instance of the strategy.
      */
     ChoosingStrategy copy();
-
-
 }

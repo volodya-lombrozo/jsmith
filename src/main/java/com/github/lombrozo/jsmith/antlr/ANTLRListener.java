@@ -25,8 +25,6 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
-import com.github.lombrozo.jsmith.antlr.rules.Traced;
-import com.github.lombrozo.jsmith.antlr.view.RulesChain;
 import com.github.lombrozo.jsmith.antlr.rules.Action;
 import com.github.lombrozo.jsmith.antlr.rules.ActionBlock;
 import com.github.lombrozo.jsmith.antlr.rules.ActionScopeName;
@@ -60,15 +58,16 @@ import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.PredicateOption;
 import com.github.lombrozo.jsmith.antlr.rules.PredicateOptions;
 import com.github.lombrozo.jsmith.antlr.rules.Root;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.rules.RuleAltList;
 import com.github.lombrozo.jsmith.antlr.rules.RuleBlock;
-import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.rules.Ruleref;
+import com.github.lombrozo.jsmith.antlr.rules.Safe;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
+import com.github.lombrozo.jsmith.antlr.rules.Traced;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -122,30 +121,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
      */
     public Unparser unparser() {
         return this.unparser;
-    }
-
-    @Override
-    public void enterEveryRule(final ParserRuleContext ctx) {
-        Rule parent = this.current;
-        int size = 0;
-        while (!(parent instanceof Root)) {
-            parent = parent.parent();
-            size++;
-        }
-        if (size > 50) {
-            throw new RecursionException(
-                String.format(
-                    "Recursion detected in rule: %n%s%n",
-                    new RulesChain(this.current).tree()
-                )
-            );
-        }
-        super.enterEveryRule(ctx);
-    }
-
-    @Override
-    public void exitEveryRule(final ParserRuleContext ctx) {
-        super.exitEveryRule(ctx);
     }
 
     @Override
@@ -620,7 +595,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
      * @param rule Rule to go down.
      */
     private void down(final Rule rule) {
-        this.current.append(new Traced(rule));
+        this.current.append(new Traced(new Safe(rule)));
         this.current = rule;
     }
 
