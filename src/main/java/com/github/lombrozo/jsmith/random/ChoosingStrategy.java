@@ -28,7 +28,7 @@ import java.util.List;
 
 public interface ChoosingStrategy {
 
-    Rule choose(final Rule from, List<Rule> elements);
+    Rule choose(final List<Rule> path, List<Rule> elements);
 
 
 }

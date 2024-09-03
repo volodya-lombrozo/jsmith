@@ -23,7 +23,6 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.random.Convergence;
 import com.github.lombrozo.jsmith.antlr.Context;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -99,9 +98,9 @@ public final class AltList implements Rule {
         if (this.alternatives.isEmpty()) {
             result = "";
         } else {
-            final Convergence<Rule> convergence = context.strategy();
-            result = convergence.choose(this, this.alternatives)
-                .generate(context.withConvergence(convergence));
+            result = context.strategy()
+                .choose(this, this.alternatives)
+                .generate(context);
         }
         return result;
     }

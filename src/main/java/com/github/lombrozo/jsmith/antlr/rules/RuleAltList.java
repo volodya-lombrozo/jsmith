@@ -23,7 +23,6 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.random.Convergence;
 import com.github.lombrozo.jsmith.antlr.Context;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +60,11 @@ public final class RuleAltList implements Rule {
     /**
      * Constructor.
      * @param parent Parent rule.
-     * @param alternatives All alternatives of the current node.
+     * @param alts All alternatives of the current node.
      */
-    public RuleAltList(
-        final Rule parent,
-        final List<Rule> alternatives
-    ) {
+    public RuleAltList(final Rule parent, final List<Rule> alts) {
         this.parent = parent;
-        this.alternatives = alternatives;
+        this.alternatives = alts;
     }
 
     @Override
@@ -81,10 +77,9 @@ public final class RuleAltList implements Rule {
         if (this.alternatives.isEmpty()) {
             throw new IllegalStateException("RuleAltList should have at least one alternative");
         }
-        final Convergence<Rule> convergence = context.strategy();
-        final Rule choose = convergence.choose(this, this.alternatives);
-        final Context conv = context.withConvergence(convergence);
-        return choose.generate(conv);
+        return context.strategy()
+            .choose(this, this.alternatives)
+            .generate(context);
     }
 
     @Override

@@ -53,11 +53,7 @@ public final class Context {
     }
 
     public Convergence<Rule> strategy() {
-        return this.convergence.copy();
-    }
-
-    public Context withConvergence(final Convergence<Rule> convergence) {
-        return new Context(convergence, this.chain);
+        return this.convergence;
     }
 
     /**
@@ -67,7 +63,7 @@ public final class Context {
      */
     public Context next(final Rule rule) {
         return new Context(
-            this.convergence,
+            this.convergence.copy(),
             Stream.concat(
                 this.chain.stream(),
                 Stream.of(rule)

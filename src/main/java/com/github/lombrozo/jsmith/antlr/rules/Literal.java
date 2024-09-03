@@ -129,4 +129,9 @@ public final class Literal implements Rule {
     public String name() {
         return String.format("literal(%s)", this.text);
     }
+
+    @Override
+    public String toString() {
+        return this.name();
+    }
 }

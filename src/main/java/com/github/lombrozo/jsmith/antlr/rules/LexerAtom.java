@@ -23,8 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.random.Convergence;
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.random.Convergence;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,32 +70,9 @@ public final class LexerAtom implements Rule {
     /**
      * Constructor.
      * @param parent Parent rule.
-     * @param convergence Convergence strategy.
-     */
-    public LexerAtom(final Rule parent, final Convergence<Rule> convergence) {
-        this(parent, new ArrayList<>(0), convergence);
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
      * @param elems Children rules.
      */
-    private LexerAtom(final Rule parent, final List<Rule> elems) {
-        this(parent, elems, new Convergence<>());
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param elems Children rules.
-     * @param convergence Convergence strategy.
-     */
-    public LexerAtom(
-        final Rule parent,
-        final List<Rule> elems,
-        final Convergence<Rule> convergence
-    ) {
+    public LexerAtom(final Rule parent, final List<Rule> elems) {
         this.parent = parent;
         this.elems = elems;
     }
@@ -107,9 +84,7 @@ public final class LexerAtom implements Rule {
 
     @Override
     public String generate(final Context context) {
-        final Convergence<Rule> convergence = context.strategy();
-        return convergence.choose(this, this.elems)
-            .generate(context.withConvergence(convergence));
+        return context.strategy().choose(this, this.elems).generate();
     }
 
     @Override
