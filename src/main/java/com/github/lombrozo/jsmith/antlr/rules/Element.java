@@ -44,6 +44,11 @@ import java.util.List;
 public final class Element implements Rule {
 
     /**
+     * Element name.
+     */
+    private static final String NAME = "element";
+
+    /**
      * Parent rule.
      */
     private final Rule parent;
@@ -74,23 +79,13 @@ public final class Element implements Rule {
         }
         final String result;
         final Rule first = this.children.get(0);
-        //TODO! REMOVE INSTANCEOF!!!!!
-        //TODO! REMOVE INSTANCEOF!!!!!
-        //TODO! REMOVE INSTANCEOF!!!!!
-        //TODO! REMOVE INSTANCEOF!!!!!
-        //TODO! REMOVE INSTANCEOF!!!!!
-        if (first instanceof Atom) {
-            result = this.multiplier().repeat(first).generate(context);
-        } else if (first instanceof LabeledElement) {
+        if (Atom.is(first) || LabeledElement.is(first) || Ebnf.is(first)) {
             result = this.multiplier().repeat(first).generate(context);
         } else {
-            result = first.generate(context);
+            throw new IllegalStateException(
+                String.format("Unknown element type: %s", first.name())
+            );
         }
-        //TODO! REMOVE INSTANCEOF!!!!!
-        //TODO! REMOVE INSTANCEOF!!!!!
-        //TODO! REMOVE INSTANCEOF!!!!!
-        //TODO! REMOVE INSTANCEOF!!!!!
-        //TODO! REMOVE INSTANCEOF!!!!!
         return result;
     }
 
@@ -101,7 +96,7 @@ public final class Element implements Rule {
 
     @Override
     public String name() {
-        return "element";
+        return Element.NAME;
     }
 
     /**

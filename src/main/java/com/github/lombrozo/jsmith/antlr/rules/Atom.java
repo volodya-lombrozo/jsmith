@@ -41,6 +41,11 @@ import com.github.lombrozo.jsmith.antlr.Context;
 public final class Atom implements Rule {
 
     /**
+     * Atom name.
+     */
+    private static final String NAME = "atom";
+
+    /**
      * Parent rule.
      */
     private final Rule parent;
@@ -70,11 +75,20 @@ public final class Atom implements Rule {
 
     @Override
     public String name() {
-        return "atom";
+        return NAME;
     }
 
     @Override
     public String generate(final Context context) {
         return this.item.generate(context);
+    }
+
+    /**
+     * Check if the rule is an atom.
+     * @param rule Rule.
+     * @return True if the rule is an atom.
+     */
+    public static boolean is(final Rule rule) {
+        return Atom.NAME.equals(rule.name());
     }
 }

@@ -9,6 +9,12 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     ;
  */
 public final class LabeledElement extends Unimplemented {
+
+    /**
+     * Labeled element name.
+     */
+    private static final String NAME = "labeledElement";
+
     /**
      * Constructor.
      * @param parent Parent rule.
@@ -19,6 +25,15 @@ public final class LabeledElement extends Unimplemented {
 
     @Override
     public String name() {
-        return "labeledElement";
+        return LabeledElement.NAME;
+    }
+
+    /**
+     * Check if the rule is labeled element.
+     * @param rule Rule.
+     * @return True if the rule is labeled element.
+     */
+    public static boolean is(final Rule rule) {
+        return LabeledElement.NAME.equals(rule.name());
     }
 }

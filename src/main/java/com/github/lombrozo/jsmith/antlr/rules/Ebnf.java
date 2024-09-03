@@ -41,6 +41,11 @@ import java.util.stream.Collectors;
 public final class Ebnf implements Rule {
 
     /**
+     * This rule name.
+     */
+    private static final String NAME = "ebnf";
+
+    /**
      * Parent rule.
      */
     private final Rule parent;
@@ -68,6 +73,15 @@ public final class Ebnf implements Rule {
         this.children = children;
     }
 
+    /**
+     * Check if the rule is Ebnf.
+     * @param rule Rule.
+     * @return True if the rule is Ebnf.
+     */
+    public static boolean is(final Rule rule) {
+        return Ebnf.NAME.equals(rule.name());
+    }
+
     @Override
     public Rule parent() {
         return this.parent;
@@ -87,6 +101,6 @@ public final class Ebnf implements Rule {
 
     @Override
     public String name() {
-        return "ebnf";
+        return Ebnf.NAME;
     }
 }
