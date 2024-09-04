@@ -28,14 +28,11 @@ import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link RandomScript}.
  * @since 0.1
- * @todo #1:90min Control Recursive RandomScript generation.
- *  Currently, if we run one of this tests many times we can encounter StackOverflowError.
- *  We need to control the recursive generation of RandomScript to avoid this error.
- *  Most probably some researches mentioned this problem and we can use their solutions.
  */
 final class RandomScriptTest {
 
@@ -81,6 +78,22 @@ final class RandomScriptTest {
         this.logger.info(String.format("Generated Letters example:%n%s%n", example));
         MatcherAssert.assertThat(
             "We expect that the example for Letter grammar will be generated successfully and what is the most important - the grammar combined from two separate files - LettersLexer and LettersParser",
+            example,
+            Matchers.not(Matchers.emptyString())
+        );
+    }
+
+    @RepeatedTest(10)
+    void generatesWordsAndNumbersGrammarUsingCombinedGrammar() {
+        final RandomScript script = new RandomScript(
+            new ResourceOf("grammars/separated/WordsAndNumbersLexer.g4"),
+            new ResourceOf("grammars/separated/WordsAndNumbersParser.g4")
+        );
+        this.logger.info(String.format("WordsAndNumbers spec (lisp format): %s", script.spec()));
+        final String example = script.generate("words");
+        this.logger.info(String.format("Generated WordsAndNumbers example:%n%s%n", example));
+        MatcherAssert.assertThat(
+            "We expect that the example for WordsAndNumbers grammar will be generated successfully and what is the most important - the grammar combined from two separate files - WordsAndNumbersLexer and WordsAndNumbersParser",
             example,
             Matchers.not(Matchers.emptyString())
         );
