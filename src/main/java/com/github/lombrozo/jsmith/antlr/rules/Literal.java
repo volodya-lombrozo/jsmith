@@ -74,6 +74,16 @@ public final class Literal implements Rule {
         throw new UnsupportedOperationException("Literal cannot have children yet");
     }
 
+    @Override
+    public String name() {
+        return String.format("literal(%s)", this.text);
+    }
+
+    @Override
+    public String toString() {
+        return this.name();
+    }
+
     /**
      * Replace escape sequences.
      * For example:
@@ -87,6 +97,22 @@ public final class Literal implements Rule {
      * @return String with replaced escape sequences.
      */
     private static String replaceEscapes(final String original) {
+        try {
+            return Literal.tryToReplaceEscapes(original);
+        } catch (final IllegalArgumentException exception) {
+            throw new IllegalArgumentException(
+                String.format("Failed to replace escape sequences in '%s'", original),
+                exception
+            );
+        }
+    }
+
+    /**
+     * Try to replace escape sequences.
+     * @param original Original string.
+     * @return String with replaced escape sequences.
+     */
+    private static String tryToReplaceEscapes(final String original) {
         final Matcher matcher = Literal.SPECIAL.matcher(original);
         final StringBuffer result = new StringBuffer(original.length());
         while (matcher.find()) {
@@ -107,10 +133,10 @@ public final class Literal implements Rule {
                 case "f":
                     replacement = "\f";
                     break;
-                case "\\":
+                case "\\\\":
                     replacement = "\\";
                     break;
-                case "\"":
+                case "\\\"":
                     replacement = "\"";
                     break;
                 case "'":
@@ -123,15 +149,5 @@ public final class Literal implements Rule {
         }
         matcher.appendTail(result);
         return result.toString();
-    }
-
-    @Override
-    public String name() {
-        return String.format("literal(%s)", this.text);
-    }
-
-    @Override
-    public String toString() {
-        return this.name();
     }
 }

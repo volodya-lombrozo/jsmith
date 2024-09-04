@@ -29,7 +29,8 @@ final class SyntaxGenerationIT {
         return Stream.of(
             Arguments.of("grammars/Simple.g4", "expr"),
             Arguments.of("grammars/Arithmetic.g4", "prog"),
-            Arguments.of("grammars/Recursive.g4", "expr")
+            Arguments.of("grammars/Recursive.g4", "expr"),
+            Arguments.of("grammars/Json.g4", "json")
         );
     }
 
