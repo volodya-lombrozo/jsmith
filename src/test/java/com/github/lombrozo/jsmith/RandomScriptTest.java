@@ -69,4 +69,20 @@ final class RandomScriptTest {
             Matchers.not(Matchers.emptyString())
         );
     }
+
+    @RepeatedTest(10)
+    void generatesLetterGrammarUsingCombinedGrammar() {
+        final RandomScript script = new RandomScript(
+            new ResourceOf("grammars/separated/LettersParser.g4"),
+            new ResourceOf("grammars/separated/LettersLexer.g4")
+        );
+        this.logger.info(String.format("Letters spec (lisp format): %s", script.spec()));
+        final String example = script.generate("sentences");
+        this.logger.info(String.format("Generated Letters example:%n%s%n", example));
+        MatcherAssert.assertThat(
+            "We expect that the example for Letter grammar will be generated successfully and what is the most important - the grammar combined from two separate files - LettersLexer and LettersParser",
+            example,
+            Matchers.not(Matchers.emptyString())
+        );
+    }
 }

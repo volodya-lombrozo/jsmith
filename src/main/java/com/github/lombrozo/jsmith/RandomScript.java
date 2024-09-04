@@ -25,6 +25,11 @@ package com.github.lombrozo.jsmith;
 
 import com.github.lombrozo.jsmith.antlr.ANTLRListener;
 import com.github.lombrozo.jsmith.antlr.Context;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -34,33 +39,45 @@ import org.cactoos.text.UncheckedText;
 
 public final class RandomScript {
 
-    private final String grammar;
+    private final List<String> grammars;
 
-    public RandomScript(final Input input) {
-        this(new UncheckedText(new TextOf(input)).asString());
+    public RandomScript(final Input... grammars) {
+        this(
+            Arrays.stream(grammars)
+                .map(TextOf::new)
+                .map(UncheckedText::new)
+                .map(UncheckedText::asString)
+                .collect(Collectors.toList())
+        );
     }
 
-    private RandomScript(final String grammar) {
-        this.grammar = grammar;
+    public RandomScript(final List<String> grammars) {
+        this.grammars = grammars;
     }
 
     public String generate(final String rule) {
         final ANTLRListener listener = new ANTLRListener();
-        new ParseTreeWalker().walk(listener, this.parser().grammarSpec());
+        for (final String grammar : this.grammars) {
+            new ParseTreeWalker().walk(listener, RandomScript.parser(grammar).grammarSpec());
+        }
         return listener.unparser().generate(rule, new Context());
     }
 
     String spec() {
-        final ANTLRv4Parser parser = this.parser();
-        final ANTLRv4Parser.GrammarSpecContext spec = parser.grammarSpec();
-        return spec.toStringTree(parser);
+        List<String> res = new ArrayList<>(0);
+        for (final String grammar : this.grammars) {
+            final ANTLRv4Parser parser = RandomScript.parser(grammar);
+            final ANTLRv4Parser.GrammarSpecContext spec = parser.grammarSpec();
+            res.add(spec.toStringTree(parser));
+        }
+        return String.join("\n", res);
     }
 
-    private ANTLRv4Parser parser() {
+    private static ANTLRv4Parser parser(final String grammar) {
         return new ANTLRv4Parser(
             new CommonTokenStream(
                 new ANTLRv4Lexer(
-                    CharStreams.fromString(this.grammar)
+                    CharStreams.fromString(grammar)
                 )
             )
         );
