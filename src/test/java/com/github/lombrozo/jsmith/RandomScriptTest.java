@@ -103,7 +103,7 @@ final class RandomScriptTest {
     void generatesJsonGrammarSuccessfully() {
         final RandomScript script = new RandomScript(new ResourceOf("grammars/Json.g4"));
         this.logger.info(String.format("Json spec (lisp format): %s", script.spec()));
-        final String example = script.generate("obj");
+        final String example = script.generate("json");
         this.logger.info(String.format("Generated Json example:%n%s%n", example));
         MatcherAssert.assertThat(
             "We expect that the example for Json grammar will be generated successfully",

@@ -40,6 +40,11 @@ import com.github.lombrozo.jsmith.antlr.Unlexer;
 public final class TerminalDef implements Rule {
 
     /**
+     * End of file terminal.
+     */
+    private static final String END_OF_FILE = "EOF";
+
+    /**
      * Parent rule.
      */
     private final Rule parent;
@@ -82,9 +87,15 @@ public final class TerminalDef implements Rule {
 
     @Override
     public String generate(final Context context) {
-        return this.unlexer.find(this.text)
-            .orElseGet(() -> new Literal(this.text))
-            .generate(context);
+        final String result;
+        if (this.text.equals(TerminalDef.END_OF_FILE)) {
+            result = "";
+        } else {
+            result = this.unlexer.find(this.text)
+                .orElseGet(() -> new Literal(this.text))
+                .generate(context);
+        }
+        return result;
     }
 
     @Override

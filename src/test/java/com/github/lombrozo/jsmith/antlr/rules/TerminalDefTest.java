@@ -58,4 +58,13 @@ final class TerminalDefTest {
             Matchers.equalTo(text)
         );
     }
+
+    @Test
+    void ignoresEndOfFile() {
+        MatcherAssert.assertThat(
+            "We expect that the end of file will be ignored",
+            new TerminalDef(new Unlexer(), "EOF").generate(),
+            Matchers.equalTo("")
+        );
+    }
 }
