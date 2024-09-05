@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.RecursionException;
 import com.github.lombrozo.jsmith.antlr.view.Trace;
+import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ import java.util.List;
  * Rule that ensures that the recursion is not detected.
  * @since 0.1
  */
-public final class Safe implements Rule {
+public final class Safe implements Rule, Suffix {
 
     /**
      * Default max recursion depth.
@@ -104,5 +105,20 @@ public final class Safe implements Rule {
     @Override
     public String name() {
         return this.original.name();
+    }
+
+    @Override
+    public Multiplier multiplier() {
+        if (this.original instanceof Suffix) {
+            return ((Suffix) this.original).multiplier();
+        } else {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Rule '%s' with name '%s' doesn't support multiplier",
+                    this.original.getClass().getSimpleName(),
+                    this.original.name()
+                )
+            );
+        }
     }
 }

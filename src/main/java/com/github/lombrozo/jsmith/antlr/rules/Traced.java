@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.random.Multiplier;
 
 /**
  * Traced rule.
@@ -31,7 +32,7 @@ import com.github.lombrozo.jsmith.antlr.Context;
  * In other words, it's a decorator for a real rule.
  * @since 0.1
  */
-public final class Traced implements Rule {
+public final class Traced implements Rule, Suffix {
 
     /**
      * Real rule.
@@ -64,5 +65,20 @@ public final class Traced implements Rule {
     @Override
     public String name() {
         return this.rule.name();
+    }
+
+    @Override
+    public Multiplier multiplier() {
+        if (this.rule instanceof Suffix) {
+            return ((Suffix) this.rule).multiplier();
+        } else {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Rule '%s' with name '%s' doesn't support multiplier",
+                    this.rule.getClass().getSimpleName(),
+                    this.rule.name()
+                )
+            );
+        }
     }
 }

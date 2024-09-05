@@ -123,11 +123,15 @@ public final class Ebnf implements Rule {
             return new Multiplier.One();
         } else {
             final Rule first = this.children.get(1);
-            if (first instanceof BlockSuffix) {
-                return ((BlockSuffix) first).multiplier();
+            if (first instanceof Suffix) {
+                return ((Suffix) first).multiplier();
             } else {
                 throw new IllegalStateException(
-                    String.format("Unknown block suffix type: %s", first.name())
+                    String.format(
+                        "Unknown block suffix type: '%s' and name '%s'",
+                        first.getClass().getSimpleName(),
+                        first.name()
+                    )
                 );
             }
         }

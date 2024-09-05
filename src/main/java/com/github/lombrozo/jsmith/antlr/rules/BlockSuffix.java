@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * }
  * @since 0.1
  */
-public final class BlockSuffix implements Rule {
+public final class BlockSuffix implements Rule, Suffix {
 
     /**
      * This rule name.
@@ -107,13 +107,14 @@ public final class BlockSuffix implements Rule {
      * Get multiplier.
      * @return Multiplier.
      */
-    Multiplier multiplier() {
+    @Override
+    public Multiplier multiplier() {
         if (this.children.isEmpty()) {
             return new Multiplier.One();
         } else {
             final Rule first = this.children.get(0);
-            if (first instanceof EbnfSuffix) {
-                return ((EbnfSuffix) first).multiplier();
+            if (first instanceof Suffix) {
+                return ((Suffix) first).multiplier();
             } else {
                 throw new IllegalStateException(
                     String.format("Unknown block suffix type: %s", first.name())

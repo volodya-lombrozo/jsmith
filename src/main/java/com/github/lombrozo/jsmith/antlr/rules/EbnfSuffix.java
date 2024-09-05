@@ -41,7 +41,7 @@ import java.util.Optional;
  * }
  * @since 0.1
  */
-public final class EbnfSuffix implements Rule {
+public final class EbnfSuffix implements Rule, Suffix {
 
     /**
      * Parent rule.
@@ -140,7 +140,8 @@ public final class EbnfSuffix implements Rule {
      * Multiply rule based on ebfn suffix.
      * @return Multiplied rule.
      */
-    Multiplier multiplier() {
+    @Override
+    public Multiplier multiplier() {
         final Multiplier result;
         switch (this.operation) {
             case "?":
