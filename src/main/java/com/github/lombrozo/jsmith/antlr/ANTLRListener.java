@@ -45,6 +45,7 @@ import com.github.lombrozo.jsmith.antlr.rules.ElementOptions;
 import com.github.lombrozo.jsmith.antlr.rules.Identifier;
 import com.github.lombrozo.jsmith.antlr.rules.LabeledAlt;
 import com.github.lombrozo.jsmith.antlr.rules.LabeledElement;
+import com.github.lombrozo.jsmith.antlr.rules.LexerAlt;
 import com.github.lombrozo.jsmith.antlr.rules.LexerAltList;
 import com.github.lombrozo.jsmith.antlr.rules.LexerAtom;
 import com.github.lombrozo.jsmith.antlr.rules.LexerBlock;
@@ -329,7 +330,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerAlt(final ANTLRv4Parser.LexerAltContext ctx) {
-        this.down(new Alternative(this.current));
+        this.down(new LexerAlt(this.current));
         super.enterLexerAlt(ctx);
     }
 
@@ -589,6 +590,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         this.up();
         super.exitNotSet(ctx);
     }
+
 
     /**
      * Go down in the generation tree.

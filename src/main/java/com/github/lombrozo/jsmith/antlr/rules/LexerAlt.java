@@ -23,74 +23,30 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.Context;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * LexerAltList rule.
+ * LexerAlt rule.
  * The ANTLR grammar definition:
  * {@code
- * lexerAltList
- *     : {@link LexerAlt} (OR {@link LexerAlt})*
+ * lexerAlt
+ *     : lexerElements lexerCommands?
+ *     |
+ *     // explicitly allow empty alts
  *     ;
  * }
  * @since 0.1
  */
-public final class LexerAltList implements Rule {
-
-    /**
-     * Parent rule.
-     */
-    private final Rule parent;
-
-    /**
-     * Children rules.
-     */
-    private final List<Rule> children;
-
-    /**
-     * Constructor.
-     */
-    public LexerAltList() {
-        this(new Root());
-    }
+public final class LexerAlt extends Unimplemented {
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
-    public LexerAltList(final Rule parent) {
-        this(parent, new ArrayList<>(0));
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param children Children rules.
-     */
-    public LexerAltList(final Rule parent, final List<Rule> children) {
-        this.parent = parent;
-        this.children = children;
-    }
-
-    @Override
-    public Rule parent() {
-        return this.parent;
-    }
-
-    @Override
-    public String generate(final Context context) {
-        return context.strategy().choose(this, this.children).generate(context);
-    }
-
-    @Override
-    public void append(final Rule rule) {
-        this.children.add(rule);
+    public LexerAlt(final Rule parent) {
+        super(parent);
     }
 
     @Override
     public String name() {
-        return "lexerAltList";
+        return "lexerAlt";
     }
 }
