@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,6 +55,13 @@ public final class Ebnf implements Rule {
      * Block and suffix.
      */
     private final List<Rule> children;
+
+    /**
+     * Constructor.
+     */
+    public Ebnf() {
+        this(new Root());
+    }
 
     /**
      * Constructor.
@@ -89,9 +97,11 @@ public final class Ebnf implements Rule {
 
     @Override
     public String generate(final Context context) {
-        return this.children.stream()
-            .map(rule -> rule.generate(context))
-            .collect(Collectors.joining(" "));
+        if (this.children.isEmpty()) {
+            throw new IllegalStateException(
+                "Ebnf should have at least one 'Block', but it's empty");
+        }
+        return this.multiplier().repeat(this.children.get(0)).generate(context);
     }
 
     @Override
@@ -103,4 +113,24 @@ public final class Ebnf implements Rule {
     public String name() {
         return Ebnf.NAME;
     }
+
+    /**
+     * Get multiplier.
+     * @return Multiplier.
+     */
+    private Multiplier multiplier() {
+        if (this.children.size() <= 1) {
+            return new Multiplier.One();
+        } else {
+            final Rule first = this.children.get(1);
+            if (first instanceof BlockSuffix) {
+                return ((BlockSuffix) first).multiplier();
+            } else {
+                throw new IllegalStateException(
+                    String.format("Unknown block suffix type: %s", first.name())
+                );
+            }
+        }
+    }
+
 }

@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.random.Multiplier;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * BlockSuffix rule.
  * The ANTLR grammar definition:
@@ -33,18 +39,95 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class BlockSuffix extends Unimplemented {
+public final class BlockSuffix implements Rule {
+
+    /**
+     * This rule name.
+     */
+    private static final String NAME = "blockSuffix";
+
+    /**
+     * Parent rule.
+     */
+    private final Rule parent;
+
+    /**
+     * Children rules.
+     */
+    private final List<Rule> children;
+
+    /**
+     * Constructor.
+     */
+    public BlockSuffix() {
+        this(new Root());
+    }
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public BlockSuffix(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param children Children rules.
+     */
+    public BlockSuffix(final Rule parent, final List<Rule> children) {
+        this.parent = parent;
+        this.children = children;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.parent;
+    }
+
+    @Override
+    public String generate(final Context context) {
+        return this.children.stream()
+            .map(rule -> rule.generate(context))
+            .collect(Collectors.joining(" "));
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.children.add(rule);
     }
 
     @Override
     public String name() {
-        return "blockSuffix";
+        return BlockSuffix.NAME;
+    }
+
+    /**
+     * Get multiplier.
+     * @return Multiplier.
+     */
+    Multiplier multiplier() {
+        if (this.children.isEmpty()) {
+            return new Multiplier.One();
+        } else {
+            final Rule first = this.children.get(0);
+            if (first instanceof EbnfSuffix) {
+                return ((EbnfSuffix) first).multiplier();
+            } else {
+                throw new IllegalStateException(
+                    String.format("Unknown block suffix type: %s", first.name())
+                );
+            }
+        }
+    }
+
+    /**
+     * Check if the rule is BlockSuffix.
+     * @param rule Rule.
+     * @return True if the rule is BlockSuffix.
+     */
+    public static boolean is(final Rule rule) {
+        return rule.name().equals(BlockSuffix.NAME);
     }
 }
