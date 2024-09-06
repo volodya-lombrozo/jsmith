@@ -135,15 +135,11 @@ public final class SyntaxGuard {
             new Synced<>(
                 () -> {
                     try {
-
-                        for (final String grammar : grammars) {
-                            final String name = SyntaxGuard.grammarName(grammar);
-                            final Path gpath = temp.resolve(String.format("%s.g4", name));
-                            Files.write(gpath, grammar.getBytes(StandardCharsets.UTF_8));
-                            final Tool tool = new Tool(new String[]{gpath.toString()});
-                            tool.processGrammarsOnCommandLine();
-                        }
-
+                        new Tool(
+                            grammars.stream()
+                                .map(grammar -> SyntaxGuard.save(grammar, temp))
+                                .toArray(String[]::new)
+                        ).processGrammarsOnCommandLine();
                         ToolProvider.getSystemJavaCompiler().run(
                             System.in,
                             System.out,
@@ -169,6 +165,21 @@ public final class SyntaxGuard {
                 }
             )
         );
+    }
+
+    private static String save(final String grammar, final Path where) {
+        try {
+            return Files.write(
+                where.resolve(
+                    String.format("%s.g4", SyntaxGuard.grammarName(grammar))),
+                grammar.getBytes(StandardCharsets.UTF_8)
+            ).toString();
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                "Something went wrong during grammar saving",
+                exception
+            );
+        }
     }
 
     /**
