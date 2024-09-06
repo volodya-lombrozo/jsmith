@@ -40,6 +40,12 @@ import org.cactoos.text.UncheckedText;
  *  The starting point: <a href="https://stackoverflow.com/questions/5762067/in-antlr-3-how-do-i-generate-a-lexer-and-parser-at-runtime-instead-of-ahead-o">here.</a>
  */
 public final class SyntaxGuard {
+
+    /**
+     * Pattern to check if the name has a suffix.
+     */
+    private static final Pattern HAS_SUFFIX = Pattern.compile("Lexer|Parser");
+
     /**
      * Top rule name.
      */
@@ -134,39 +140,38 @@ public final class SyntaxGuard {
         return new Sticky<>(
             new Synced<>(
                 () -> {
-                    try {
-                        new Tool(
-                            grammars.stream()
-                                .map(grammar -> SyntaxGuard.save(grammar, temp))
-                                .toArray(String[]::new)
-                        ).processGrammarsOnCommandLine();
-                        ToolProvider.getSystemJavaCompiler().run(
-                            System.in,
-                            System.out,
-                            System.err,
-                            Files.list(temp).filter(Files::isRegularFile)
-                                .filter(java -> java.getFileName().toString().endsWith(".java"))
-                                .map(Path::toString)
-                                .toArray(String[]::new)
-                        );
-                        final String general = SyntaxGuard.grammarName(grammars.get(0))
-                            .replace("Lexer", "")
-                            .replace("Parser", "");
-                        return new Environment(
-                            SyntaxGuard.load(String.format("%sLexer", general), temp),
-                            SyntaxGuard.load(String.format("%sParser", general), temp)
-                        );
-                    } catch (final IOException exception) {
-                        throw new IllegalStateException(
-                            "Something went wrong during ANTLR grammar compilation",
-                            exception
-                        );
-                    }
+                    new Tool(
+                        grammars.stream()
+                            .map(grammar -> SyntaxGuard.save(grammar, temp))
+                            .toArray(String[]::new)
+                    ).processGrammarsOnCommandLine();
+                    ToolProvider.getSystemJavaCompiler().run(
+                        System.in,
+                        System.out,
+                        System.err,
+                        Files.list(temp).filter(Files::isRegularFile)
+                            .filter(java -> java.getFileName().toString().endsWith(".java"))
+                            .map(Path::toString)
+                            .toArray(String[]::new)
+                    );
+                    final String name = SyntaxGuard.HAS_SUFFIX.matcher(
+                            SyntaxGuard.grammarName(grammars.get(0)))
+                        .replaceAll("");
+                    return new Environment(
+                        SyntaxGuard.load(String.format("%sLexer", name), temp),
+                        SyntaxGuard.load(String.format("%sParser", name), temp)
+                    );
                 }
             )
         );
     }
 
+    /**
+     * Save grammar to the file.
+     * @param grammar Grammar text.
+     * @param where Where to save.
+     * @return Path to the saved grammar.
+     */
     private static String save(final String grammar, final Path where) {
         try {
             return Files.write(
