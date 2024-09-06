@@ -50,7 +50,6 @@ public final class RandomScript {
                 .collect(Collectors.toList())
         );
     }
-
     public RandomScript(final List<String> grammars) {
         this.grammars = grammars;
     }

@@ -52,7 +52,7 @@ final class SyntaxGuardTest {
     @Test
     void validatesCorrectSynax(@TempDir final Path temp) {
         Assertions.assertDoesNotThrow(
-            () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR, SyntaxGuardTest.TOP)
+            () -> new SyntaxGuard(temp, SyntaxGuardTest.TOP, SyntaxGuardTest.GRAMMAR)
                 .verify("1 + 1"),
             "We expect that the code will be verified without errors"
         );
@@ -64,7 +64,7 @@ final class SyntaxGuardTest {
             "We expect that the code will be verified with errors and error message will be informative",
             Assertions.assertThrows(
                 InvalidSyntax.class,
-                () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR, SyntaxGuardTest.TOP)
+                () -> new SyntaxGuard(temp, SyntaxGuardTest.TOP, SyntaxGuardTest.GRAMMAR)
                     .verify("1 - 1"),
                 "We expect that the code will be verified with errors"
             ).getMessage(),
@@ -78,7 +78,7 @@ final class SyntaxGuardTest {
             "We expect that the empty code will be verified with errors and error message will be informative",
             Assertions.assertThrows(
                 InvalidSyntax.class,
-                () -> new SyntaxGuard(temp, SyntaxGuardTest.GRAMMAR, SyntaxGuardTest.TOP)
+                () -> new SyntaxGuard(temp, SyntaxGuardTest.TOP, SyntaxGuardTest.GRAMMAR)
                     .verify(""),
                 "We expect that the empty code will be verified with errors"
             ).getMessage(),

@@ -8,8 +8,11 @@ import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import javax.tools.ToolProvider;
 import org.antlr.v4.Tool;
 import org.antlr.v4.runtime.CharStream;
@@ -50,21 +53,31 @@ public final class SyntaxGuard {
 
     /**
      * Constructor.
+     *
      * @param temp Temporary directory.
-     * @param input ANTLR grammar input.
      * @param top Top rule name.
+     * @param grammars ANTLR grammar input.
      */
-    public SyntaxGuard(final Path temp, final Input input, final String top) {
-        this(temp, new UncheckedText(new TextOf(input)).asString(), top);
+    public SyntaxGuard(final Path temp, final String top, final Input... grammars) {
+        this(
+            temp,
+            top,
+            Arrays.stream(grammars)
+                .map(TextOf::new)
+                .map(UncheckedText::new)
+                .map(UncheckedText::asString)
+                .collect(Collectors.toList())
+        );
     }
 
     /**
      * Constructor.
+     *
      * @param temp Temporary directory.
-     * @param grammar ANTLR grammar text.
      * @param top Top rule name.
+     * @param grammar ANTLR grammar text.
      */
-    SyntaxGuard(final Path temp, final String grammar, final String top) {
+    SyntaxGuard(final Path temp, final String top, final List<String> grammar) {
         this(top, SyntaxGuard.prestructor(temp, grammar));
     }
 
@@ -114,19 +127,23 @@ public final class SyntaxGuard {
     /**
      * Prepare environment.
      * @param temp Temporary directory where to store generated classes.
-     * @param grammar ANTLR grammar text.
+     * @param grammars ANTLR grammar texts.
      * @return Environment that contains lexer and parser classes.
      */
-    private static Sticky<Environment> prestructor(final Path temp, final String grammar) {
+    private static Sticky<Environment> prestructor(final Path temp, final List<String> grammars) {
         return new Sticky<>(
             new Synced<>(
                 () -> {
                     try {
-                        final String name = SyntaxGuard.grammarName(grammar);
-                        final Path gpath = temp.resolve(String.format("%s.g4", name));
-                        Files.write(gpath, grammar.getBytes(StandardCharsets.UTF_8));
-                        final Tool tool = new Tool(new String[]{gpath.toString()});
-                        tool.processGrammarsOnCommandLine();
+
+                        for (final String grammar : grammars) {
+                            final String name = SyntaxGuard.grammarName(grammar);
+                            final Path gpath = temp.resolve(String.format("%s.g4", name));
+                            Files.write(gpath, grammar.getBytes(StandardCharsets.UTF_8));
+                            final Tool tool = new Tool(new String[]{gpath.toString()});
+                            tool.processGrammarsOnCommandLine();
+                        }
+
                         ToolProvider.getSystemJavaCompiler().run(
                             System.in,
                             System.out,
@@ -136,9 +153,12 @@ public final class SyntaxGuard {
                                 .map(Path::toString)
                                 .toArray(String[]::new)
                         );
+                        final String general = SyntaxGuard.grammarName(grammars.get(0))
+                            .replace("Lexer", "")
+                            .replace("Parser", "");
                         return new Environment(
-                            SyntaxGuard.load(String.format("%sLexer", name), temp),
-                            SyntaxGuard.load(String.format("%sParser", name), temp)
+                            SyntaxGuard.load(String.format("%sLexer", general), temp),
+                            SyntaxGuard.load(String.format("%sParser", general), temp)
                         );
                     } catch (final IOException exception) {
                         throw new IllegalStateException(

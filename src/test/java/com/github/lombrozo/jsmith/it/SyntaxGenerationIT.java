@@ -27,33 +27,31 @@ final class SyntaxGenerationIT {
      */
     static Stream<Arguments> syntax() {
         return Stream.of(
-            Arguments.of("grammars/Simple.g4", "expr"),
-            Arguments.of("grammars/Arithmetic.g4", "prog"),
-            Arguments.of("grammars/Recursive.g4", "expr"),
-            Arguments.of("grammars/Json.g4", "json")
+            Arguments.of(Stream.of("grammars/Simple.g4"), "expr"),
+            Arguments.of(Stream.of("grammars/Arithmetic.g4"), "prog"),
+            Arguments.of(Stream.of("grammars/Recursive.g4"), "expr"),
+            Arguments.of(Stream.of("grammars/Json.g4"), "json"),
+            Arguments.of(
+                Stream.of(
+                    "grammars/separated/XMLLexer.g4",
+                    "grammars/separated/XMLParser.g4"
+                ),
+                "document"
+            )
         );
     }
 
-    //todo: Combined Grammars?
-    //todo: Combined Grammars?
-    //todo: Combined Grammars?
-    //todo: Combined Grammars?
-    //todo: Combined Grammars?
-    //todo: Combined Grammars?
-    //todo: Combined Grammars?
-    //todo: Combined Grammars?
-    //todo: Combined Grammars?
-    //todo: Combined Grammars?
     @ParameterizedTest(name = "Generates programs for {0} grammar with top rule {1}")
     @MethodSource("syntax")
     void generatesSyntaxForGrammar(
-        final String name,
+        final Stream<String> definitions,
         final String top,
         @TempDir final Path temp
     ) {
-        final Input grammar = new ResourceOf(name);
-        final RandomScript script = new RandomScript(grammar);
-        final SyntaxGuard guard = new SyntaxGuard(temp, grammar, top);
+        final Input[] grammars = definitions.map(ResourceOf::new)
+            .toArray(Input[]::new);
+        final RandomScript script = new RandomScript(grammars);
+        final SyntaxGuard guard = new SyntaxGuard(temp, top, grammars);
         Assertions.assertDoesNotThrow(
             () -> Stream.generate(() -> top)
                 .map(script::generate)
