@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.random.Rand;
+import java.util.regex.Pattern;
 
 /**
  * CharacterRange rule.
@@ -37,6 +38,16 @@ import com.github.lombrozo.jsmith.random.Rand;
  * @since 0.1
  */
 public final class CharacterRange implements Rule {
+
+    /**
+     * Redundant characters.
+     */
+    private static final Pattern REDUNDANT = Pattern.compile("[ ']");
+
+    /**
+     * Dots that separate the range.
+     */
+    private static final Pattern DOTS = Pattern.compile("\\.\\.");
 
     /**
      * Parent rule.
@@ -76,12 +87,19 @@ public final class CharacterRange implements Rule {
 
     @Override
     public String generate(final Context context) {
-        final String[] split = this.text.replace(" ", "").split("\\.\\.");
-        final int start = split[0].replace("'", "").codePoints().sum();
-        final int end = split[1].replace("'", "").codePoints().sum();
-        final int range = this.rand.range(start, end);
-        final char[] chars = Character.toChars(range);
-        return String.valueOf(chars);
+        final String[] pair = CharacterRange.DOTS.split(
+            CharacterRange.REDUNDANT.matcher(this.text).replaceAll("")
+        );
+        final int start;
+        final int end;
+        if (pair.length < 2) {
+            start = pair[0].codePoints().sum();
+            end = start;
+        } else {
+            start = pair[0].codePoints().sum();
+            end = pair[1].codePoints().sum();
+        }
+        return String.valueOf(Character.toChars(this.rand.range(start, end)));
     }
 
     @Override
