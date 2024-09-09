@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.random.Rand;
 
 /**
  * CharacterRange rule.
@@ -47,6 +48,8 @@ public final class CharacterRange implements Rule {
      */
     private final String text;
 
+    private final Rand rand;
+
     /**
      * Constructor.
      * @param text Range text.
@@ -63,6 +66,7 @@ public final class CharacterRange implements Rule {
     public CharacterRange(final Rule parent, final String text) {
         this.parent = parent;
         this.text = text;
+        this.rand = new Rand();
     }
 
     @Override
@@ -72,7 +76,12 @@ public final class CharacterRange implements Rule {
 
     @Override
     public String generate(final Context context) {
-        return this.text;
+        final String[] split = this.text.replace(" ", "").split("\\.\\.");
+        final int start = split[0].replace("'", "").codePoints().sum();
+        final int end = split[1].replace("'", "").codePoints().sum();
+        final int range = this.rand.range(start, end);
+        final char[] chars = Character.toChars(range);
+        return String.valueOf(chars);
     }
 
     @Override

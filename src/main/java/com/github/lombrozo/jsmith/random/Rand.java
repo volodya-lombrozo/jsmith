@@ -71,6 +71,26 @@ public final class Rand {
     }
 
     /**
+     * Generates a random integer in a range.
+     * @param min Minimum.
+     * @param max Maximum.
+     * @return Random integer.
+     */
+    public int range(int min, int max) {
+        return this.random.nextInt(max - min + 1) + min;
+    }
+
+    /**
+     * Generates a random char in a range.
+     * @param min Minimum char.
+     * @param max Maximum char.
+     * @return Random char.
+     */
+    public char range(char min, char max) {
+        return this.range(max, min);
+    }
+
+    /**
      * Generates a random string for a given regex.
      * @param regex Regex for which to generate a string.
      * @return Random string.

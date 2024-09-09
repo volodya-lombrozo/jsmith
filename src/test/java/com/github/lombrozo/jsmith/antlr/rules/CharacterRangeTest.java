@@ -42,10 +42,12 @@ final class CharacterRangeTest {
     @ParameterizedTest(name = "Generates symbols for {0}")
     @MethodSource("ranges")
     void generatesSymbols(final String range, List<String> allowed) {
+        final String generated = new CharacterRange(range).generate();
+        System.out.println(generated);
         MatcherAssert.assertThat(
             "The generated symbol should be in the allowed range",
             allowed,
-            Matchers.hasItem(Matchers.equalTo(new CharacterRange(range).generate()))
+            Matchers.hasItem(Matchers.equalTo(generated))
         );
     }
 
@@ -57,11 +59,12 @@ final class CharacterRangeTest {
     private static Stream<Arguments> ranges() {
         return Stream.of(
             Arguments.of("a .. d", Arrays.asList("a", "b", "c", "d")),
+            Arguments.of("'a'..'d'", Arrays.asList("a", "b", "c", "d")),
             Arguments.of("A .. C", Arrays.asList("A", "B", "C")),
             Arguments.of("1 .. 3", Arrays.asList("1", "2", "3")),
             Arguments.of("!..#", Arrays.asList("!", "\"", "#")),
             Arguments.of("m..m", Collections.singletonList("m")),
-            Arguments.of("😊..😋", Arrays.asList("😊", "😃", "😄", "😅", "😆", "😇", "😈", "😉", "😊", "😋")),
+            Arguments.of("😈..😋", Arrays.asList("😈", "😉", "😊", "😋")),
             Arguments.of(
                 "'\u0300' ..'\u036F'",
                 Arrays.asList(
