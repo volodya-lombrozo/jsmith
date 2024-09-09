@@ -71,15 +71,6 @@ public final class Unparser {
      * @return String representation of the parser rule.
      */
     public String generate(final String rule, final Context context) {
-        return this.apply(rule, context);
-    }
-
-    /**
-     * Apply the rule and produce a random string corresponding to the rule.
-     * @param rule Rule.
-     * @return Code string corresponding to the rule.
-     */
-    private String apply(final String rule, final Context context) {
         if (!this.rules.containsKey(rule)) {
             throw new IllegalStateException(
                 String.format("Rule not found: %s. All available rules: [%s]", rule, this.rules)
@@ -87,5 +78,4 @@ public final class Unparser {
         }
         return this.rules.get(rule).generate(context);
     }
-
 }

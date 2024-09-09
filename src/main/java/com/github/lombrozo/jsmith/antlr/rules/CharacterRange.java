@@ -49,6 +49,14 @@ public final class CharacterRange implements Rule {
 
     /**
      * Constructor.
+     * @param text Range text.
+     */
+    public CharacterRange(final String text) {
+        this(new Root(), text);
+    }
+
+    /**
+     * Constructor.
      * @param parent Parent rule.
      * @param text Range text.
      */
