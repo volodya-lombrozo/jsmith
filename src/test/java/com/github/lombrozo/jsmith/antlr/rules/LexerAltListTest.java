@@ -41,7 +41,7 @@ final class LexerAltListTest {
         list.append(new Literal("2"));
         MatcherAssert.assertThat(
             "Generated string should be one of the alternatives",
-            list.generate(new Context()),
+            list.generate(new Context()).output(),
             Matchers.oneOf("1", "2")
         );
     }

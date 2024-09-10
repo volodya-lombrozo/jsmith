@@ -61,7 +61,7 @@ final class EbnfSuffixTest {
     ) {
         MatcherAssert.assertThat(
             "We expect that the EBNF suffix will be generated",
-            new EbnfSuffix(operation, question).generate(),
+            new EbnfSuffix(operation, question).generate().output(),
             Matchers.equalTo(expected)
         );
     }
@@ -70,7 +70,7 @@ final class EbnfSuffixTest {
     void throwsExceptionWhenOperationIsNull() {
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new EbnfSuffix(null).generate(),
+            () -> new EbnfSuffix(null).generate().output(),
             "We expect that an exception will be thrown when the operation is null"
         );
     }

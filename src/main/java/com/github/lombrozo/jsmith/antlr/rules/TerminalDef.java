@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Text;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 
 /**
@@ -86,10 +87,10 @@ public final class TerminalDef implements Rule {
     }
 
     @Override
-    public String generate(final Context context) {
-        final String result;
+    public Text generate(final Context context) {
+        final Text result;
         if (this.text.equals(TerminalDef.END_OF_FILE)) {
-            result = "";
+            result = new Text(this, "");
         } else {
             result = this.unlexer.find(this.text)
                 .orElseGet(() -> new Literal(this.text))

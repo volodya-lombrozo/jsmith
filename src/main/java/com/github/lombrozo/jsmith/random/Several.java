@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Text;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,10 +55,13 @@ final class Several implements Rule {
     }
 
     @Override
-    public String generate(final Context context) {
-        return this.all.stream()
-            .map(rule -> rule.generate(context))
-            .collect(Collectors.joining());
+    public Text generate(final Context context) {
+        return new Text(
+            this,
+            this.all.stream()
+                .map(rule -> rule.generate(context))
+                .collect(Text.joining())
+        );
     }
 
     @Override

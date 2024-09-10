@@ -37,11 +37,9 @@ final class LexerCharSetTest {
     @ParameterizedTest
     @ValueSource(strings = {"a", "b", "[a-c]", "[a-z]", "[a-zA-Z]", "[a-zA-Z0-9]", "[a-zA-Z0-9_]"})
     void generatesCharSequences(final String sequence) {
-        final Rule set = new LexerCharSet(sequence);
-        final String generated = set.generate();
         MatcherAssert.assertThat(
             "We expect that the generated string will match the sequence",
-            generated,
+            new LexerCharSet(sequence).generate().output(),
             Matchers.matchesRegex(sequence)
         );
     }

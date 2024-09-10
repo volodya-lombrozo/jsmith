@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Text;
 
 /**
  * Atom.
@@ -79,7 +80,7 @@ public final class Atom implements Rule {
     }
 
     @Override
-    public String generate(final Context context) {
+    public Text generate(final Context context) {
         return this.item.generate(context);
     }
 

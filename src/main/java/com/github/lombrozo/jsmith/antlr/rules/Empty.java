@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Text;
 
 /**
  * Empty rule.
@@ -39,8 +40,8 @@ public final class Empty implements Rule {
     }
 
     @Override
-    public String generate(final Context context) {
-        return "";
+    public Text generate(final Context context) {
+        return new Text(this, "");
     }
 
     @Override

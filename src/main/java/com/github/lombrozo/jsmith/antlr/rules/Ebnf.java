@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Text;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +97,7 @@ public final class Ebnf implements Rule {
     }
 
     @Override
-    public String generate(final Context context) {
+    public Text generate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException(
                 "Ebnf should have at least one 'Block', but it's empty");

@@ -43,7 +43,7 @@ final class LexerElementTest {
         element.append(new EbnfSuffix("?"));
         MatcherAssert.assertThat(
             "We expect that the atom element will be printed correctly with the correct number of repetitions",
-            element.generate(),
+            element.generate().output(),
             Matchers.anyOf(
                 Matchers.emptyString(),
                 Matchers.equalTo("a")
@@ -60,7 +60,7 @@ final class LexerElementTest {
         element.append(atom);
         MatcherAssert.assertThat(
             "We expect that the atom element will be printed correctly without the number of repetitions",
-            element.generate(),
+            element.generate().output(),
             Matchers.equalTo("a")
         );
     }
@@ -75,7 +75,7 @@ final class LexerElementTest {
         element.append(new EbnfSuffix("+"));
         MatcherAssert.assertThat(
             "We expect that the lexer block will be printed correctly with the correct number of repetitions",
-            element.generate(),
+            element.generate().output(),
             Matchers.anyOf(
                 Matchers.equalTo("b"),
                 Matchers.containsString("bb")
@@ -92,7 +92,7 @@ final class LexerElementTest {
         element.append(block);
         MatcherAssert.assertThat(
             "We expect that the lexer block will be printed exactly once",
-            element.generate(),
+            element.generate().output(),
             Matchers.equalTo("b")
         );
     }
@@ -106,7 +106,7 @@ final class LexerElementTest {
         element.append(action);
         MatcherAssert.assertThat(
             "We expect that the action block will be printed exactly once",
-            element.generate(),
+            element.generate().output(),
             Matchers.equalTo("c")
         );
     }
@@ -121,7 +121,7 @@ final class LexerElementTest {
         element.append(new EbnfSuffix("?"));
         MatcherAssert.assertThat(
             "We expect that the action block will be printed once or not at all",
-            element.generate(),
+            element.generate().output(),
             Matchers.anyOf(
                 Matchers.emptyString(),
                 Matchers.equalTo("c")

@@ -44,7 +44,7 @@ final class TerminalDefTest {
         unlexer.with(name, rule);
         MatcherAssert.assertThat(
             "We expect that the lexer rule will be retrieved and this rule will generate the text",
-            new TerminalDef(unlexer, name).generate(),
+            new TerminalDef(unlexer, name).generate().output(),
             Matchers.equalTo(text)
         );
     }
@@ -54,7 +54,7 @@ final class TerminalDefTest {
         final String text = "-";
         MatcherAssert.assertThat(
             "We expect that the literal will be retrieved",
-            new TerminalDef(new Unlexer(), text).generate(),
+            new TerminalDef(new Unlexer(), text).generate().output(),
             Matchers.equalTo(text)
         );
     }
@@ -63,7 +63,7 @@ final class TerminalDefTest {
     void ignoresEndOfFile() {
         MatcherAssert.assertThat(
             "We expect that the end of file will be ignored",
-            new TerminalDef(new Unlexer(), "EOF").generate(),
+            new TerminalDef(new Unlexer(), "EOF").generate().output(),
             Matchers.equalTo("")
         );
     }

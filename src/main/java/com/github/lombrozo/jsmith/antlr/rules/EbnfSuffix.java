@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Text;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import com.github.lombrozo.jsmith.random.Rand;
 import com.github.lombrozo.jsmith.antlr.Context;
@@ -108,7 +109,7 @@ public final class EbnfSuffix implements Rule, Suffix {
     }
 
     @Override
-    public String generate(final Context context) {
+    public Text generate(final Context context) {
         if (Objects.isNull(this.operation)) {
             throw new IllegalArgumentException(
                 String.format(
@@ -117,10 +118,13 @@ public final class EbnfSuffix implements Rule, Suffix {
                 )
             );
         }
-        return String.format(
-            "%s%s",
-            this.operation,
-            Optional.ofNullable(this.question).orElse("")
+        return new Text(
+            this,
+            String.format(
+                "%s%s",
+                this.operation,
+                Optional.ofNullable(this.question).orElse("")
+            )
         );
     }
 

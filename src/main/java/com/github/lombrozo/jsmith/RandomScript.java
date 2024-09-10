@@ -50,6 +50,7 @@ public final class RandomScript {
                 .collect(Collectors.toList())
         );
     }
+
     public RandomScript(final List<String> grammars) {
         this.grammars = grammars;
     }
@@ -59,7 +60,7 @@ public final class RandomScript {
         for (final String grammar : this.grammars) {
             new ParseTreeWalker().walk(listener, RandomScript.parser(grammar).grammarSpec());
         }
-        return listener.unparser().generate(rule, new Context());
+        return listener.unparser().generate(rule, new Context()).output();
     }
 
     String spec() {

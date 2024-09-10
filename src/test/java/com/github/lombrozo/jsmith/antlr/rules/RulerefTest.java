@@ -49,7 +49,7 @@ final class RulerefTest {
                 "We expect that %s will invoke the linked rule to generate output, but it didn't happen",
                 ruleref
             ),
-            ruleref.generate(),
+            ruleref.generate().output(),
             Matchers.equalTo(expected)
         );
     }

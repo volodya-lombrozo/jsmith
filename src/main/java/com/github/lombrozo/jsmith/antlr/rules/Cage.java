@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Text;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -61,9 +62,9 @@ final class Cage implements Rule {
     }
 
     @Override
-    public String generate(final Context context) {
+    public Text generate(final Context context) {
         this.trap.set(context);
-        return "";
+        return new Text(this, "");
     }
 
     @Override

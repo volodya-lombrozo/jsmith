@@ -45,7 +45,7 @@ final class CharacterRangeTest {
         MatcherAssert.assertThat(
             "The generated symbol should be in the allowed range",
             allowed,
-            Matchers.hasItem(Matchers.equalTo(new CharacterRange(range).generate()))
+            Matchers.hasItem(Matchers.equalTo(new CharacterRange(range).generate().output()))
         );
     }
 

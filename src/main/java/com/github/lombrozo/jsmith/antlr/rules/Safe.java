@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.RecursionException;
+import com.github.lombrozo.jsmith.antlr.Text;
 import com.github.lombrozo.jsmith.antlr.view.Trace;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.List;
@@ -84,7 +85,7 @@ public final class Safe implements Rule, Suffix {
     }
 
     @Override
-    public String generate(final Context context) {
+    public Text generate(final Context context) {
         final List<Rule> path = context.path();
         if (path.size() >= this.limit) {
             throw new RecursionException(

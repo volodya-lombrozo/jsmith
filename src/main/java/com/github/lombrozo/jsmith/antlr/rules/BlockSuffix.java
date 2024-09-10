@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Text;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,10 +88,13 @@ public final class BlockSuffix implements Rule, Suffix {
     }
 
     @Override
-    public String generate(final Context context) {
-        return this.children.stream()
-            .map(rule -> rule.generate(context))
-            .collect(Collectors.joining(" "));
+    public Text generate(final Context context) {
+        return new Text(
+            this,
+            this.children.stream()
+                .map(rule -> rule.generate(context))
+                .collect(Text.joining())
+        );
     }
 
     @Override

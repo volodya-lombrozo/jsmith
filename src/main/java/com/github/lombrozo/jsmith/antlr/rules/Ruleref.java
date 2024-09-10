@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Text;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 
 /**
@@ -78,7 +79,7 @@ public final class Ruleref implements Rule {
     }
 
     @Override
-    public String generate(final Context context) {
+    public Text generate(final Context context) {
         return this.unparser.generate(this.ref, context);
     }
 

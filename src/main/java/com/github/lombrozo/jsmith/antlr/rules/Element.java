@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Text;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,11 +74,11 @@ public final class Element implements Rule {
     }
 
     @Override
-    public String generate(final Context context) {
+    public Text generate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException("Element should have at least one child");
         }
-        final String result;
+        final Text result;
         final Rule first = this.children.get(0);
         if (Atom.is(first) || LabeledElement.is(first) || Ebnf.is(first)) {
             result = this.multiplier().repeat(first).generate(context);

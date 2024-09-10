@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Text;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,9 +65,11 @@ public final class Literal implements Rule {
     }
 
     @Override
-    public String generate(final Context context) {
-        return Literal.APOSTROPHE.matcher(Literal.replaceEscapes(this.text)).replaceAll("");
-
+    public Text generate(final Context context) {
+        return new Text(
+            this,
+            Literal.APOSTROPHE.matcher(Literal.replaceEscapes(this.text)).replaceAll("")
+        );
     }
 
     @Override

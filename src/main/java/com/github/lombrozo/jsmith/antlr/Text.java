@@ -24,58 +24,48 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.stream.Collector;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * Unparser that contains all parser rules.
- * It generates a string representation of the parser rule.
+ * Text representation.
  * @since 0.1
  */
-public final class Unparser {
+@ToString
+@EqualsAndHashCode
+public final class Text {
 
     /**
-     * All the parser rules.
+     * Delimiter.
      */
-    private final Map<String, Rule> rules;
+    private static final String DELIMITER = " ";
 
     /**
-     * Default constructor.
+     * Who writes the text.
      */
-    public Unparser() {
-        this(new HashMap<>(0));
+    private final Rule writer;
+
+    /**
+     * Generated text.
+     */
+    private final String output;
+
+    public Text(final Rule writer, final String output) {
+        this.writer = writer;
+        this.output = output;
     }
 
-    /**
-     * Constructor.
-     * @param all All the parser rules.
-     */
-    private Unparser(final Map<String, Rule> all) {
-        this.rules = all;
+    public String output() {
+        return this.output;
     }
 
-    /**
-     * Add a parser rule.
-     * @param name Rule name.
-     * @param rule Parser rule.
-     * @return This unparser.
-     */
-    public Unparser with(final String name, final Rule rule) {
-        this.rules.put(name, rule);
-        return this;
-    }
-
-    /**
-     * Generate a string representation of the parser rule.
-     * @param rule Rule.
-     * @return String representation of the parser rule.
-     */
-    public Text generate(final String rule, final Context context) {
-        if (!this.rules.containsKey(rule)) {
-            throw new IllegalStateException(
-                String.format("Rule not found: %s. All available rules: [%s]", rule, this.rules)
-            );
-        }
-        return this.rules.get(rule).generate(context);
+    public static Collector<Text, ?, String> joining() {
+        return Collector.of(
+            StringBuilder::new,
+            (sb, text) -> sb.append(text.output()),
+            (sb1, sb2) -> sb1.append(Text.DELIMITER).append(sb2),
+            StringBuilder::toString
+        );
     }
 }
