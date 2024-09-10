@@ -23,9 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -45,7 +48,9 @@ final class CharacterRangeTest {
         MatcherAssert.assertThat(
             "The generated symbol should be in the allowed range",
             allowed,
-            Matchers.hasItem(Matchers.equalTo(new CharacterRange(range).generate().output()))
+            Matchers.hasItem(
+                Matchers.equalTo(new CharacterRange(range).generate(new Context()).output())
+            )
         );
     }
 
@@ -64,6 +69,18 @@ final class CharacterRangeTest {
             Arguments.of("m..m", Collections.singletonList("m")),
             Arguments.of("😈..😋", Arrays.asList("😈", "😉", "😊", "😋")),
             Arguments.of("'\u00B7'", Collections.singletonList("\u00B7")),
+            Arguments.of(
+                "'\u203F'..'\u2040'",
+                IntStream.rangeClosed('\u203F', '\u2040')
+                    .mapToObj(i -> String.valueOf((char) i))
+                    .collect(Collectors.toList())
+            ),
+            Arguments.of(
+                "'\\u203F'..'\\u2040'",
+                IntStream.rangeClosed('\u203F', '\u2040')
+                    .mapToObj(i -> String.valueOf((char) i))
+                    .collect(Collectors.toList())
+            ),
             Arguments.of(
                 "'\u0300' ..'\u036F'",
                 Arrays.asList(

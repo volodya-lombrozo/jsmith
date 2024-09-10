@@ -91,6 +91,31 @@ public final class CharacterRange implements Rule {
 
     @Override
     public Text generate(final Context context) {
+        try {
+            return this.tryGenerate();
+        } catch (final IllegalArgumentException exception) {
+            throw new IllegalArgumentException(
+                String.format("Can't choose random character from '%s' range", this.text),
+                exception
+            );
+        }
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        throw new UnsupportedOperationException("CharacterRange cannot have children yet");
+    }
+
+    @Override
+    public String name() {
+        return String.format("characterRange(%s)", this.text);
+    }
+
+    /**
+     * Try to generate a random character from the range.
+     * @return Random character.
+     */
+    private Text tryGenerate() {
         final String[] pair = CharacterRange.DOTS.split(
             CharacterRange.REDUNDANT.matcher(this.text).replaceAll("")
         );
@@ -107,15 +132,5 @@ public final class CharacterRange implements Rule {
             this,
             String.valueOf(Character.toChars(this.rand.range(start, end)))
         );
-    }
-
-    @Override
-    public void append(final Rule rule) {
-        throw new UnsupportedOperationException("CharacterRange cannot have children yet");
-    }
-
-    @Override
-    public String name() {
-        return String.format("characterRange(%s)", this.text);
     }
 }

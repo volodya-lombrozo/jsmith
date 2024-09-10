@@ -77,6 +77,11 @@ public final class Rand {
      * @return Random integer.
      */
     public int range(int min, int max) {
+        if (min > max) {
+            throw new IllegalArgumentException(
+                String.format("Min should be less than max, but min = %d, max = %d", min, max)
+            );
+        }
         return this.random.nextInt(max - min + 1) + min;
     }
 
