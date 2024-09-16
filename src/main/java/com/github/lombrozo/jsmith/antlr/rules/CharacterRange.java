@@ -122,15 +122,33 @@ public final class CharacterRange implements Rule {
         final int start;
         final int end;
         if (pair.length < 2) {
-            start = pair[0].codePoints().sum();
+            start = CharacterRange.code(pair[0]);
             end = start;
         } else {
-            start = pair[0].codePoints().sum();
-            end = pair[1].codePoints().sum();
+            start = CharacterRange.code(pair[0]);
+            end = CharacterRange.code(pair[1]);
         }
         return new Text(
             this,
             String.valueOf(Character.toChars(this.rand.range(start, end)))
         );
+    }
+
+    /**
+     * Convert a character to an int code.
+     * Unicode's characters are supported.
+     * Several examples:
+     * a->97, A->65, 1->49, !->33, 😈->128520, \u00B7->183, \u203F->8255, \u2040->8262.
+     * @param character Character.
+     * @return Code.
+     */
+    private static int code(final String character) {
+        int result;
+        if (character.startsWith("\\u")) {
+            result = Integer.parseInt(character.substring(2), 16);
+        } else {
+            result = character.codePoints().sum();
+        }
+        return result;
     }
 }
