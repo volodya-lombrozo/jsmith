@@ -28,13 +28,15 @@ import com.github.lombrozo.jsmith.antlr.rules.LexerAtom;
 import com.github.lombrozo.jsmith.antlr.rules.LexerBlock;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import com.github.lombrozo.jsmith.antlr.rules.Root;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test for {@link OutputTree}.
+ * Test for {@link TextTree}.
  * @since 0.1
  */
-final class OutputTreeTest {
+final class TextTreeTest {
 
     @Test
     void outputsTree() {
@@ -46,8 +48,16 @@ final class OutputTreeTest {
         root.append(atom);
         root.append(block);
         final Text generated = root.generate(new Context());
-
-        System.out.println(new OutputTree(generated).output());
+        MatcherAssert.assertThat(
+            "We expect that the text tree will be printed correctly",
+            new TextTree(generated).output(),
+            Matchers.equalTo(
+                String.join(
+                    "\n",
+                    "root\tlexerAtom\tliteral(a): 'a'",
+                    "\t\tlexerBlock\tliteral(b): 'b'"
+                )
+            )
+        );
     }
-
 }

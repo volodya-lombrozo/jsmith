@@ -24,9 +24,6 @@
 package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,7 +33,7 @@ import java.util.stream.Stream;
  * It is useful for debugging purposes when we need to investigate the output path.
  * @since 0.1
  */
-public final class OutputTree {
+public final class TextTree implements Text {
 
     /**
      * Original output.
@@ -47,14 +44,31 @@ public final class OutputTree {
      * Constructor.
      * @param original Original output.
      */
-    public OutputTree(final Text original) {
+    public TextTree(final Text original) {
         this.original = original;
     }
 
+    @Override
+    public Rule writer() {
+        return this.original.writer();
+    }
+
+    @Override
+    public List<Text> children() {
+        return this.original.children();
+    }
+
+    @Override
     public String output() {
         return this.travers(this.original, 1);
     }
 
+    /**
+     * Recursive traversing of the tree.
+     * @param current Current node.
+     * @param deep Deep of the current node.
+     * @return String representation of the tree.
+     */
     private String travers(final Text current, final int deep) {
         if (current.children().isEmpty()) {
             return String.format("%s: '%s'", current.writer().name(), current.output());
@@ -66,9 +80,14 @@ public final class OutputTree {
                     .map(child -> this.travers(child, deep + 1))
                     .collect(
                         Collectors.joining(
-                            "\n\t" + Stream.generate(() -> "\t").limit(deep)
-                                .collect(Collectors.joining())
-                        ))
+                            String.format(
+                                "\n\t%s",
+                                Stream.generate(() -> "\t")
+                                    .limit(deep)
+                                    .collect(Collectors.joining())
+                            )
+                        )
+                    )
             );
         }
     }
