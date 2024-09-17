@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.HashMap;
 import java.util.Map;
 

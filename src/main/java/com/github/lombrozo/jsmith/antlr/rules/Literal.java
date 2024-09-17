@@ -24,7 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Text;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,6 +48,11 @@ public final class Literal implements Rule {
     private static final Pattern SPECIAL = Pattern.compile("\\\\([nrtbf\"'\\\\])");
 
     /**
+     * Parent rule.
+     */
+    private final Rule parent;
+
+    /**
      * Text of the literal.
      */
     private final String text;
@@ -56,17 +62,27 @@ public final class Literal implements Rule {
      * @param text Text of the literal.
      */
     public Literal(final String text) {
+        this(new Root(), text);
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param text Text of the literal.
+     */
+    public Literal(final Rule parent, final String text) {
+        this.parent = parent;
         this.text = text;
     }
 
     @Override
     public Rule parent() {
-        throw new UnsupportedOperationException("Literal cannot have parent");
+        return this.parent;
     }
 
     @Override
     public Text generate(final Context context) {
-        return new Text(
+        return new TextLeaf(
             this,
             Literal.APOSTROPHE.matcher(Literal.replaceEscapes(this.text)).replaceAll("")
         );

@@ -21,51 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr;
+package com.github.lombrozo.jsmith.antlr.view;
 
-import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.stream.Collector;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.rules.LexerAtom;
+import com.github.lombrozo.jsmith.antlr.rules.LexerBlock;
+import com.github.lombrozo.jsmith.antlr.rules.Literal;
+import com.github.lombrozo.jsmith.antlr.rules.Root;
+import org.junit.jupiter.api.Test;
 
 /**
- * Text representation.
+ * Test for {@link OutputTree}.
  * @since 0.1
  */
-@ToString
-@EqualsAndHashCode
-public final class Text {
+final class OutputTreeTest {
 
-    /**
-     * Delimiter.
-     */
-    private static final String DELIMITER = " ";
+    @Test
+    void outputsTree() {
+        final Root root = new Root();
+        final LexerAtom atom = new LexerAtom(root);
+        atom.append(new Literal(atom, "a"));
+        final LexerBlock block = new LexerBlock(root);
+        block.append(new Literal(block, "b"));
+        root.append(atom);
+        root.append(block);
+        final Text generated = root.generate(new Context());
 
-    /**
-     * Who writes the text.
-     */
-    private final Rule writer;
-
-    /**
-     * Generated text.
-     */
-    private final String output;
-
-    public Text(final Rule writer, final String output) {
-        this.writer = writer;
-        this.output = output;
+        System.out.println(new OutputTree(generated).output());
     }
 
-    public String output() {
-        return this.output;
-    }
-
-    public static Collector<Text, ?, String> joining() {
-        return Collector.of(
-            StringBuilder::new,
-            (sb, text) -> sb.append(text.output()),
-            (sb1, sb2) -> sb1.append(Text.DELIMITER).append(sb2),
-            StringBuilder::toString
-        );
-    }
 }

@@ -24,7 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Text;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,9 +79,10 @@ public final class RuleAltList implements Rule {
         if (this.alternatives.isEmpty()) {
             throw new IllegalStateException("RuleAltList should have at least one alternative");
         }
-        return context.strategy()
-            .choose(this, this.alternatives)
-            .generate(context);
+        return new TextNode(
+            this,
+            context.strategy().choose(this, this.alternatives).generate(context)
+        );
     }
 
     @Override

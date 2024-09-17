@@ -24,7 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Text;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.random.Rand;
 import java.util.regex.Pattern;
 
@@ -128,7 +129,7 @@ public final class CharacterRange implements Rule {
             start = CharacterRange.code(pair[0]);
             end = CharacterRange.code(pair[1]);
         }
-        return new Text(
+        return new TextLeaf(
             this,
             String.valueOf(Character.toChars(this.rand.range(start, end)))
         );

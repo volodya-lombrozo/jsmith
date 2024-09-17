@@ -21,57 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.random;
+package com.github.lombrozo.jsmith.antlr.view;
 
-import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.antlr.view.TextNode;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-/**
- * Rule that has several children.
- * WARNING: This is NOT a part of the ANTLR grammar!
- * @since 0.1
- */
-final class Several implements Rule {
+@ToString
+@EqualsAndHashCode
+public final class TextLeaf implements Text {
+    private final Rule writer;
 
-    /**
-     * All children of the current node.
-     */
-    private final List<? extends Rule> all;
+    private final String output;
 
-    /**
-     * Constructor.
-     * @param all All children of the current node.
-     */
-    Several(final List<? extends Rule> all) {
-        this.all = all;
+    public TextLeaf(final Rule writer, final String output) {
+        this.writer = writer;
+        this.output = output;
     }
 
     @Override
-    public Rule parent() {
-        throw new UnsupportedOperationException("'Several' node doesn't have a parent node");
+    public Rule writer() {
+        return this.writer;
     }
 
     @Override
-    public Text generate(final Context context) {
-        return new TextNode(
-            this,
-            this.all.stream()
-                .map(rule -> rule.generate(context))
-                .collect(Collectors.toList())
-        );
+    public List<Text> children() {
+        return Collections.emptyList();
     }
 
     @Override
-    public void append(final Rule rule) {
-        throw new UnsupportedOperationException("'Several' node cannot add children");
-    }
-
-    @Override
-    public String name() {
-        return "several(not-a-rule)";
+    public String output() {
+        return this.output;
     }
 }

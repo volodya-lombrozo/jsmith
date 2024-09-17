@@ -23,10 +23,11 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.Text;
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import com.github.lombrozo.jsmith.random.Rand;
-import com.github.lombrozo.jsmith.antlr.Context;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -118,7 +119,7 @@ public final class EbnfSuffix implements Rule, Suffix {
                 )
             );
         }
-        return new Text(
+        return new TextLeaf(
             this,
             String.format(
                 "%s%s",

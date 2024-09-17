@@ -21,30 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.rules;
+package com.github.lombrozo.jsmith.antlr.view;
+
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import java.util.List;
 
 /**
- * Rule block.
- * The ruleBlock definition in ANTLR grammar:
- * {@code
- * ruleBlock
- *     : {@link RuleAltList}
- *     ;
- * }
- * @since 0.1
+ * Generation output.
  */
-public final class RuleBlock extends Unimplemented {
+public interface Text {
 
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     */
-    public RuleBlock(final Rule parent) {
-        super(parent);
-    }
+    Rule writer();
 
-    @Override
-    public String name() {
-        return "ruleBlock";
-    }
+    List<Text> children();
+
+    String output();
+
 }

@@ -21,57 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.random;
+package com.github.lombrozo.jsmith.antlr.view;
 
-import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.antlr.view.TextNode;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Rule that has several children.
- * WARNING: This is NOT a part of the ANTLR grammar!
+ * It is an informative output of the generated text.
+ * It is useful for debugging purposes when we need to investigate the output path.
  * @since 0.1
  */
-final class Several implements Rule {
+public final class OutputTree {
 
     /**
-     * All children of the current node.
+     * Original output.
      */
-    private final List<? extends Rule> all;
+    private final Text original;
 
     /**
      * Constructor.
-     * @param all All children of the current node.
+     * @param original Original output.
      */
-    Several(final List<? extends Rule> all) {
-        this.all = all;
+    public OutputTree(final Text original) {
+        this.original = original;
     }
 
-    @Override
-    public Rule parent() {
-        throw new UnsupportedOperationException("'Several' node doesn't have a parent node");
+    public String output() {
+        return String.format("%s -----> %s", path(this.original.writer()), this.original.output());
     }
 
-    @Override
-    public Text generate(final Context context) {
-        return new TextNode(
-            this,
-            this.all.stream()
-                .map(rule -> rule.generate(context))
-                .collect(Collectors.toList())
-        );
-    }
-
-    @Override
-    public void append(final Rule rule) {
-        throw new UnsupportedOperationException("'Several' node cannot add children");
-    }
-
-    @Override
-    public String name() {
-        return "several(not-a-rule)";
+    List<Rule> path(final Rule rule) {
+        List<Rule> res = new ArrayList<>();
+        res.add(rule);
+        if (rule.parent() == rule) {
+            return res;
+        } else {
+            res.addAll(path(rule.parent()));
+        }
+        return res;
     }
 }

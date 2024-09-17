@@ -24,7 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Text;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public final class LexerAltList implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        return context.strategy().choose(this, this.children).generate(context);
+        return new TextNode(this, context.strategy().choose(this, this.children).generate(context));
     }
 
     @Override

@@ -24,7 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Text;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 
 /**
  * Empty rule.
@@ -41,7 +42,7 @@ public final class Empty implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        return new Text(this, "");
+        return new TextLeaf(this, "");
     }
 
     @Override

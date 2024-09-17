@@ -25,9 +25,9 @@ package com.github.lombrozo.jsmith;
 
 import com.github.lombrozo.jsmith.antlr.ANTLRListener;
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.CharStreams;
@@ -56,11 +56,15 @@ public final class RandomScript {
     }
 
     public String generate(final String rule) {
+        return this.generateText(rule).output();
+    }
+
+    public Text generateText(final String rule) {
         final ANTLRListener listener = new ANTLRListener();
         for (final String grammar : this.grammars) {
             new ParseTreeWalker().walk(listener, RandomScript.parser(grammar).grammarSpec());
         }
-        return listener.unparser().generate(rule, new Context()).output();
+        return listener.unparser().generate(rule, new Context());
     }
 
     String spec() {

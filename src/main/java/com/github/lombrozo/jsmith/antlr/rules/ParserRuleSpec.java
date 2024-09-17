@@ -24,7 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Text;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,9 +76,9 @@ public final class ParserRuleSpec implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        return new Text(
+        return new TextNode(
             this,
-            this.list.stream().map(rule -> rule.generate(context)).collect(Text.joining())
+            this.list.stream().map(rule -> rule.generate(context)).collect(Collectors.toList())
         );
     }
 

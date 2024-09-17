@@ -24,11 +24,11 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Text;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Ebnf rule.
@@ -102,7 +102,7 @@ public final class Ebnf implements Rule {
             throw new IllegalStateException(
                 "Ebnf should have at least one 'Block', but it's empty");
         }
-        return this.multiplier().repeat(this.children.get(0)).generate(context);
+        return new TextNode(this, this.multiplier().repeat(this.children.get(0)).generate(context));
     }
 
     @Override

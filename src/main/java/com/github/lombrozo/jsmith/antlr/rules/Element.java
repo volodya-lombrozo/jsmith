@@ -24,7 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Text;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,13 @@ public final class Element implements Rule {
 
     /**
      * Constructor.
+     */
+    public Element() {
+        this(new Root());
+    }
+
+    /**
+     * Constructor.
      * @param parent Parent rule.
      */
     public Element(final Rule parent) {
@@ -81,7 +89,7 @@ public final class Element implements Rule {
         final Text result;
         final Rule first = this.children.get(0);
         if (Atom.is(first) || LabeledElement.is(first) || Ebnf.is(first)) {
-            result = this.multiplier().repeat(first).generate(context);
+            result = new TextNode(this, this.multiplier().repeat(first).generate(context));
         } else {
             throw new IllegalStateException(
                 String.format("Unknown element type: %s", first.name())

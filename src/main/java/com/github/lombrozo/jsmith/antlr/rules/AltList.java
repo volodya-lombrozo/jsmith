@@ -24,7 +24,9 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Text;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -97,11 +99,14 @@ public final class AltList implements Rule {
     public Text generate(final Context context) {
         final Text result;
         if (this.alternatives.isEmpty()) {
-            result = new Text(this, "");
+            result = new TextLeaf(this, "");
         } else {
-            result = context.strategy()
-                .choose(this, this.alternatives)
-                .generate(context);
+            result = new TextNode(
+                this,
+                context.strategy()
+                    .choose(this, this.alternatives)
+                    .generate(context)
+            );
         }
         return result;
     }
