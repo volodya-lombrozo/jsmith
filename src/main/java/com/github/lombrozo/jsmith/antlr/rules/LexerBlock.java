@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import lombok.ToString;
+
 /**
  * LexerBlock rule.
  * The ANTLR grammar definition:
@@ -33,6 +35,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
+@ToString
 public final class LexerBlock extends Unimplemented {
 
     /**

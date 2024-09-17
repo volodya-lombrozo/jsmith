@@ -25,7 +25,11 @@ package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * It is an informative output of the generated text.
@@ -48,17 +52,25 @@ public final class OutputTree {
     }
 
     public String output() {
-        return String.format("%s -----> %s", path(this.original.writer()), this.original.output());
+        return this.travers(this.original, 1);
     }
 
-    List<Rule> path(final Rule rule) {
-        List<Rule> res = new ArrayList<>();
-        res.add(rule);
-        if (rule.parent() == rule) {
-            return res;
+    private String travers(final Text current, final int deep) {
+        if (current.children().isEmpty()) {
+            return String.format("%s: '%s'", current.writer().name(), current.output());
         } else {
-            res.addAll(path(rule.parent()));
+            return String.format(
+                "%s\t%s",
+                current.writer().name(),
+                current.children().stream()
+                    .map(child -> this.travers(child, deep + 1))
+                    .collect(
+                        Collectors.joining(
+                            "\n\t" + Stream.generate(() -> "\t").limit(deep)
+                                .collect(Collectors.joining())
+                        ))
+            );
         }
-        return res;
     }
+
 }
