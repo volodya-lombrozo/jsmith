@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,35 +61,127 @@ public final class TextTree implements Text {
 
     @Override
     public String output() {
-        return this.travers(this.original, 1);
+        final Columns all = new Columns();
+        this.travers(all, this.original, 0);
+        return all.toString();
     }
 
-    /**
-     * Recursive traversing of the tree.
-     * @param current Current node.
-     * @param deep Deep of the current node.
-     * @return String representation of the tree.
-     */
-    private String travers(final Text current, final int deep) {
+
+    private void travers(final Columns all, final Text current, final int deep) {
         if (current.children().isEmpty()) {
-            return String.format("%s: '%s'", current.writer().name(), current.output());
+            final Column column = all.get(deep);
+            column.write(current.writer().name());
+            final Column res = all.resulting();
+            res.write(current.output());
         } else {
-            return String.format(
-                "%s\t%s",
-                current.writer().name(),
-                current.children().stream()
-                    .map(child -> this.travers(child, deep + 1))
-                    .collect(
-                        Collectors.joining(
-                            String.format(
-                                "\n\t%s",
-                                Stream.generate(() -> "\t")
-                                    .limit(deep)
-                                    .collect(Collectors.joining())
-                            )
-                        )
-                    )
-            );
+            final Column column = all.get(deep);
+            column.write(current.writer().name());
+            final int width = this.width(current) - 1;
+            Stream.generate(() -> " ").limit(width).forEach(column::write);
+            for (final Text child : current.children()) {
+                this.travers(all, child, deep + 1);
+            }
+        }
+    }
+
+    private int width(final Text text) {
+        if (text.children().isEmpty()) {
+            return 1;
+        }
+        return text.children().stream()
+            .mapToInt(this::width)
+            .sum();
+    }
+
+    private final class Columns {
+
+        private final List<Column> all;
+        private final Column res;
+
+        public Columns() {
+            this(new ArrayList<>(0));
+        }
+
+        public Columns(final List<Column> all) {
+            this.all = all;
+            this.res = new Column();
+        }
+
+        public Column next() {
+            final Column column = new Column();
+            this.all.add(column);
+            return column;
+        }
+
+        public Column get(final int deep) {
+            if (this.all.size() <= deep) {
+                this.all.add(new Column());
+            }
+            return this.all.get(deep);
+        }
+
+        public Column resulting() {
+            return this.res;
+        }
+
+        @Override
+        public String toString() {
+            final int size = this.rows();
+            String res = "";
+            for (int row = 0; row < size; row++) {
+                String line = "";
+                for (int col = 0; col < this.all.size(); col++) {
+                    final Column column = this.all.get(col);
+                    final String pretty = column.pretty(row, column.maxLength());
+                    line += pretty;
+                }
+                line += this.res.pretty(row, this.res.maxLength());
+                res += line + "\n";
+            }
+            return res;
+        }
+
+        public int rows() {
+            return this.all.stream()
+                .mapToInt(col -> col.paths.size())
+                .max()
+                .orElse(0);
+        }
+    }
+
+    private final class Column {
+
+        private List<String> paths;
+
+        public Column() {
+            this(new ArrayList<>(0));
+        }
+
+        public Column(final List<String> paths) {
+            this.paths = paths;
+        }
+
+        public void write(final String path) {
+            this.paths.add(path);
+        }
+
+        String pretty(final int row, final int maxLength) {
+            if (row >= this.paths.size()) {
+                return Stream.generate(() -> " ")
+                    .limit(maxLength)
+                    .collect(Collectors.joining());
+            }
+            final String original = this.paths.get(row);
+            final String offset = Stream.generate(() -> " ").limit(maxLength - original.length())
+                .collect(Collectors.joining());
+            return original + offset;
+        }
+
+        int maxLength() {
+            return this.paths.stream()
+                .map(String::length)
+                .max(Integer::compareTo)
+                .orElse(0) + 2;
         }
     }
 
