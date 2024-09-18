@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith;
 
+import com.github.lombrozo.jsmith.antlr.view.TextTree;
 import java.util.logging.Logger;
 import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
@@ -119,7 +120,7 @@ final class RandomScriptTest {
             new ResourceOf("grammars/separated/XMLParser.g4")
         );
         this.logger.info(String.format("XML spec (lisp format): %s", script.spec()));
-        final String example = script.generate("document");
+        final String example = new TextTree(script.generateText("document")).output();
         this.logger.info(String.format("Generated XML example:%n%s%n", example));
         MatcherAssert.assertThat(
             "We expect that the example for XML grammar will be generated successfully and what is the most important - the grammar combined from two separate files - XMLLexer.g4 and XMLParser.g4",

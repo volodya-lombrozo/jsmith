@@ -24,10 +24,13 @@
 package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.rules.AltList;
+import com.github.lombrozo.jsmith.antlr.rules.Atom;
 import com.github.lombrozo.jsmith.antlr.rules.LexerAtom;
 import com.github.lombrozo.jsmith.antlr.rules.LexerBlock;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import com.github.lombrozo.jsmith.antlr.rules.Root;
+import com.github.lombrozo.jsmith.antlr.rules.RuleAltList;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -39,7 +42,7 @@ import org.junit.jupiter.api.Test;
 final class TextTreeTest {
 
     @Test
-    void outputsTree() {
+    void outputsSimpleTree() {
         final Root root = new Root();
         final LexerAtom atom = new LexerAtom(root);
         atom.append(new Literal(atom, "a"));
@@ -59,5 +62,19 @@ final class TextTreeTest {
                 )
             )
         );
+    }
+
+    @Test
+    void outputsComplexTreeWithDifferentLengths() {
+        final Root root = new Root();
+        final TextNode text = new TextNode(
+            root,
+            new TextLeaf(new RuleAltList(root), "a"),
+            new TextNode(new Atom(root),
+                new TextLeaf(root, "b1"),
+                new TextLeaf(root, "b2")),
+            new TextLeaf(root, "c")
+        );
+        System.out.println(new TextTree(text).output());
     }
 }
