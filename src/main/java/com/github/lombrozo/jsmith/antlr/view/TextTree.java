@@ -69,6 +69,17 @@ public final class TextTree implements Text {
 
     }
 
+
+    private int width(final Text text) {
+        if (text.children().isEmpty()) {
+            return 1;
+        }
+        return text.children().stream()
+            .mapToInt(this::width)
+            .sum();
+    }
+
+
     private void travers(final Table table, final Text current, final int x, final int y) {
         if (current.children().isEmpty()) {
             final Cell writer = new Cell(y, x, current.writer().name());
@@ -80,10 +91,11 @@ public final class TextTree implements Text {
             table.put(cell);
             final List<Text> children = current.children();
             final int size = children.size();
+            int prev = 0;
             for (int index = 0; index < size; ++index) {
                 final Text child = children.get(index);
-//                final int width = this.width(child);
-                this.travers(table, child, x + 1, y + index);
+                this.travers(table, child, x + 1, y + prev);
+                prev += this.width(child);
             }
         }
     }
