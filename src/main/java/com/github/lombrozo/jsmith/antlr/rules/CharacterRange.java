@@ -144,12 +144,13 @@ public final class CharacterRange implements Rule {
      * @return Code.
      */
     private static int code(final String character) {
-        int result;
-        if (character.startsWith("\\u")) {
-            result = Integer.parseInt(character.substring(2), 16);
-        } else {
-            result = character.codePoints().sum();
-        }
-        return result;
+        return new UnicodeChar(character).chararcter();
+//        int result;
+//        if (character.startsWith("\\u")) {
+//            result = Integer.parseInt(character.substring(2), 16);
+//        } else {
+//            result = character.codePoints().sum();
+//        }
+//        return result;
     }
 }

@@ -117,6 +117,9 @@ public final class Literal implements Rule {
      */
     private static String replaceEscapes(final String original) {
         try {
+            if (original.replaceAll("'", "").startsWith("\\u")) {
+                return new UnicodeChar(original.replaceAll("'", "")).unescaped();
+            }
             return Literal.tryToReplaceEscapes(original);
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(

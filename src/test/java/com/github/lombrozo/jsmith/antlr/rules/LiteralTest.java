@@ -76,7 +76,9 @@ final class LiteralTest {
             Arguments.of("'\\b'", "\b"),
             Arguments.of("'\b'", "\b"),
             Arguments.of("'\\\"'", "\""),
-            Arguments.of("'\\\"'", "\"")
+            Arguments.of("'\\\"'", "\""),
+            Arguments.of("\u00B7", "\u00B7"),
+            Arguments.of("'\\u203F'", "\u203F")
         );
     }
 }
