@@ -63,12 +63,9 @@ public final class TextTree implements Text {
 
     @Override
     public String output() {
-        final int width = TextTree.width(this.original);
-        final Table table = new Table(width);
+        final Table table = new Table(TextTree.width(this.original));
         this.travers(table, this.original, 0, 0);
         return table.toString();
-
-
     }
 
     private static int width(final Text text) {
@@ -77,7 +74,6 @@ public final class TextTree implements Text {
         }
         return text.children().stream().mapToInt(TextTree::width).sum();
     }
-
 
     private void travers(final Table table, final Text current, final int x, final int y) {
         if (current.children().isEmpty()) {
@@ -117,30 +113,42 @@ public final class TextTree implements Text {
 
         @Override
         public String toString() {
-            final int numRows = this.numRows() + 1;
-            final int numColumns = this.numColumns() + 1;
-            String[][] map = new String[numRows][numColumns];
-            for (int i = 0; i < numRows; ++i) {
-                for (int j = 0; j < numColumns; ++j) {
-                    map[i][j] = Stream.generate(() -> " ")
+            final int rows = this.numRows() + 1;
+            final int columns = this.numColumns() + 1;
+            final String[][] map = new String[rows][columns];
+            for (int i = 0; i < rows; ++i) {
+                for (int j = 0; j < columns; ++j) {
+                    map[i][j] = Stream.generate(() -> "-")
                         .limit(this.columnWidth(j))
-                        .collect(
-                            Collectors.joining());
+                        .collect(Collectors.joining());
                 }
             }
             for (final Cell cell : this.cells) {
                 final int width = this.columnWidth(cell.column());
                 map[cell.row()][cell.column()] = cell.pretty(width);
             }
-
-            for (int i = 0; i < numRows; ++i) {
-                for (int j = 0; j < numColumns; ++j) {
-                    System.out.print(map[i][j]);
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[i].length; j++) {
+                    final int length = map[i][j].length();
+                    if (map[i][j].replace("-", "").isEmpty()) {
+                        map[i][j] = Stream.generate(() -> " ")
+                            .limit(length-2)
+                            .collect(Collectors.joining("", " ", "|"));
+                    } else {
+                        break;
+                    }
                 }
-                System.out.print(" " + this.results.get(i).text);
-                System.out.println();
             }
-            return Arrays.deepToString(map);
+            final List<String> lines = new ArrayList<>(0);
+            for (int i = 0; i < rows; ++i) {
+                lines.add(
+                    Stream.concat(
+                        Arrays.stream(map[i]),
+                        Stream.of(String.format("--> %s", this.results.get(i).text()))
+                    ).collect(Collectors.joining(" "))
+                );
+            }
+            return String.join("\n", lines);
         }
 
         private int numRows() {
@@ -162,7 +170,7 @@ public final class TextTree implements Text {
                 .filter(cell -> cell.column() == column)
                 .mapToInt(Cell::length)
                 .max()
-                .orElse(0) + 2;
+                .orElse(0);
         }
 
 
@@ -175,6 +183,10 @@ public final class TextTree implements Text {
         public Result(final int row, final String text) {
             this.row = row;
             this.text = text;
+        }
+
+        public String text() {
+            return this.text;
         }
     }
 
@@ -208,11 +220,13 @@ public final class TextTree implements Text {
         }
 
         public String pretty(final int maxLength) {
-            final String original = this.text;
-            final String offset = Stream.generate(() -> " ").limit(maxLength - original.length())
-                .collect(Collectors.joining());
-            return original + offset;
+            return String.format(
+                "%s%s",
+                this.text,
+                Stream.generate(() -> "-")
+                    .limit(maxLength - this.text.length())
+                    .collect(Collectors.joining())
+            );
         }
-
     }
 }

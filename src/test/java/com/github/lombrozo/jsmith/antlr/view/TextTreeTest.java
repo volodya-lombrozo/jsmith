@@ -24,7 +24,6 @@
 package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.rules.AltList;
 import com.github.lombrozo.jsmith.antlr.rules.Atom;
 import com.github.lombrozo.jsmith.antlr.rules.LexerAtom;
 import com.github.lombrozo.jsmith.antlr.rules.LexerBlock;
