@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -61,128 +62,136 @@ public final class TextTree implements Text {
 
     @Override
     public String output() {
-        final Columns all = new Columns();
-        this.travers(all, this.original, 0);
-        return all.toString();
+        final Table table = new Table(new ArrayList<>(0));
+        this.travers(table, this.original, 0, 0);
+        return table.toString();
+
+
     }
 
-
-    private void travers(final Columns all, final Text current, final int deep) {
+    private void travers(final Table table, final Text current, final int x, final int y) {
         if (current.children().isEmpty()) {
-            final Column column = all.get(deep);
-            column.write(current.writer().name());
-            final Column res = all.resulting();
-            res.write(current.output());
+            final Cell writer = new Cell(y, x, current.writer().name());
+            final Cell result = Cell.result(y, current.output());
+            table.put(writer);
+            table.put(result);
         } else {
-            final Column column = all.get(deep);
-            column.write(current.writer().name());
-            final int width = this.width(current) - 1;
-            Stream.generate(() -> " ").limit(width).forEach(column::write);
-            for (final Text child : current.children()) {
-                this.travers(all, child, deep + 1);
+            final Cell cell = new Cell(y, x, current.writer().name());
+            table.put(cell);
+            final List<Text> children = current.children();
+            final int size = children.size();
+            for (int index = 0; index < size; ++index) {
+                final Text child = children.get(index);
+//                final int width = this.width(child);
+                this.travers(table, child, x + 1, y + index);
             }
         }
     }
 
-    private int width(final Text text) {
-        if (text.children().isEmpty()) {
-            return 1;
-        }
-        return text.children().stream()
-            .mapToInt(this::width)
-            .sum();
-    }
+    private final class Table {
 
-    private final class Columns {
+        private final List<Cell> cells;
 
-        private final List<Column> all;
-        private final Column res;
-
-        public Columns() {
-            this(new ArrayList<>(0));
+        public Table(final List<Cell> cells) {
+            this.cells = cells;
         }
 
-        public Columns(final List<Column> all) {
-            this.all = all;
-            this.res = new Column();
-        }
-
-        public Column next() {
-            final Column column = new Column();
-            this.all.add(column);
-            return column;
-        }
-
-        public Column get(final int deep) {
-            if (this.all.size() <= deep) {
-                this.all.add(new Column());
-            }
-            return this.all.get(deep);
-        }
-
-        public Column resulting() {
-            return this.res;
+        public void put(final Cell writer) {
+            this.cells.add(writer);
         }
 
         @Override
         public String toString() {
-            final int size = this.rows();
-            String res = "";
-            for (int row = 0; row < size; row++) {
-                String line = "";
-                for (int col = 0; col < this.all.size(); col++) {
-                    final Column column = this.all.get(col);
-                    final String pretty = column.pretty(row, column.maxLength());
-                    line += pretty;
+            final int numRows = this.numRows() + 1;
+            final int numColumns = this.numColumns() + 1;
+            String[][] map = new String[numRows][numColumns];
+            for (int i = 0; i < numRows; ++i) {
+                for (int j = 0; j < numColumns; ++j) {
+                    map[i][j] = Stream.generate(() -> " ")
+                        .limit(this.columnWidth(j))
+                        .collect(
+                            Collectors.joining());
                 }
-                line += this.res.pretty(row, this.res.maxLength());
-                res += line + "\n";
             }
-            return res;
+            for (final Cell cell : this.cells) {
+                final int width = this.columnWidth(cell.column());
+                map[cell.row()][cell.column()] = cell.pretty(width);
+            }
+
+            for (int i = 0; i < numRows; ++i) {
+                for (int j = 0; j < numColumns; ++j) {
+                    System.out.print(map[i][j]);
+                }
+                System.out.println();
+            }
+
+            return Arrays.deepToString(map);
         }
 
-        public int rows() {
-            return this.all.stream()
-                .mapToInt(col -> col.paths.size())
+        private int numRows() {
+            return this.cells.stream()
+                .mapToInt(Cell::row)
                 .max()
                 .orElse(0);
         }
+
+        private int numColumns() {
+            return this.cells.stream()
+                .mapToInt(Cell::column)
+                .max()
+                .orElse(0);
+        }
+
+        private int columnWidth(final int column) {
+            return this.cells.stream()
+                .filter(cell -> cell.column() == column)
+                .mapToInt(Cell::length)
+                .max()
+                .orElse(0) + 2;
+        }
+
+
     }
 
-    private final class Column {
+    private static final class Cell {
 
-        private List<String> paths;
+        private final int row;
+        private final int column;
 
-        public Column() {
-            this(new ArrayList<>(0));
+        private final String text;
+
+        public Cell(
+            final int row,
+            final int column,
+            final String text
+        ) {
+            this.row = row;
+            this.column = column;
+            this.text = text;
         }
 
-        public Column(final List<String> paths) {
-            this.paths = paths;
+        public int row() {
+            return this.row;
         }
 
-        public void write(final String path) {
-            this.paths.add(path);
+        public int column() {
+            return this.column;
         }
 
-        String pretty(final int row, final int maxLength) {
-            if (row >= this.paths.size()) {
-                return Stream.generate(() -> " ")
-                    .limit(maxLength)
-                    .collect(Collectors.joining());
-            }
-            final String original = this.paths.get(row);
+        public int length() {
+            return this.text.length();
+        }
+
+        public String pretty(final int maxLength) {
+            final String original = this.text;
             final String offset = Stream.generate(() -> " ").limit(maxLength - original.length())
                 .collect(Collectors.joining());
             return original + offset;
         }
 
-        int maxLength() {
-            return this.paths.stream()
-                .map(String::length)
-                .max(Integer::compareTo)
-                .orElse(0) + 2;
+        public static Cell result(final int row, final String text) {
+            return new Cell(row, 10, text);
         }
-    }
 
+    }
 }
