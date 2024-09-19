@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.view;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -62,30 +63,26 @@ public final class TextTree implements Text {
 
     @Override
     public String output() {
-        final Table table = new Table(new ArrayList<>(0));
+        final int width = TextTree.width(this.original);
+        final Table table = new Table(width);
         this.travers(table, this.original, 0, 0);
         return table.toString();
 
 
     }
 
-
-    private int width(final Text text) {
+    private static int width(final Text text) {
         if (text.children().isEmpty()) {
             return 1;
         }
-        return text.children().stream()
-            .mapToInt(this::width)
-            .sum();
+        return text.children().stream().mapToInt(TextTree::width).sum();
     }
 
 
     private void travers(final Table table, final Text current, final int x, final int y) {
         if (current.children().isEmpty()) {
-            final Cell writer = new Cell(y, x, current.writer().name());
-            final Cell result = Cell.result(y, current.output());
-            table.put(writer);
-            table.put(result);
+            table.put(new Cell(y, x, current.writer().name()));
+            table.put(new Result(y, current.output()));
         } else {
             final Cell cell = new Cell(y, x, current.writer().name());
             table.put(cell);
@@ -95,7 +92,7 @@ public final class TextTree implements Text {
             for (int index = 0; index < size; ++index) {
                 final Text child = children.get(index);
                 this.travers(table, child, x + 1, y + prev);
-                prev += this.width(child);
+                prev += TextTree.width(child);
             }
         }
     }
@@ -103,13 +100,19 @@ public final class TextTree implements Text {
     private final class Table {
 
         private final List<Cell> cells;
+        private final List<Result> results;
 
-        public Table(final List<Cell> cells) {
-            this.cells = cells;
+        public Table(int size) {
+            this.cells = new ArrayList<>(0);
+            this.results = new ArrayList<>(Collections.nCopies(size, new Result(0, "")));
         }
 
         public void put(final Cell writer) {
             this.cells.add(writer);
+        }
+
+        public void put(final Result result) {
+            this.results.set(result.row, result);
         }
 
         @Override
@@ -134,9 +137,9 @@ public final class TextTree implements Text {
                 for (int j = 0; j < numColumns; ++j) {
                     System.out.print(map[i][j]);
                 }
+                System.out.print(" " + this.results.get(i).text);
                 System.out.println();
             }
-
             return Arrays.deepToString(map);
         }
 
@@ -163,6 +166,16 @@ public final class TextTree implements Text {
         }
 
 
+    }
+
+    private static final class Result {
+        private final int row;
+        private final String text;
+
+        public Result(final int row, final String text) {
+            this.row = row;
+            this.text = text;
+        }
     }
 
     private static final class Cell {
@@ -199,10 +212,6 @@ public final class TextTree implements Text {
             final String offset = Stream.generate(() -> " ").limit(maxLength - original.length())
                 .collect(Collectors.joining());
             return original + offset;
-        }
-
-        public static Cell result(final int row, final String text) {
-            return new Cell(row, 10, text);
         }
 
     }
