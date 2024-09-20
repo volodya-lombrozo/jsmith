@@ -35,6 +35,10 @@ import java.util.stream.Stream;
  * It is an informative output of the generated text.
  * It is useful for debugging purposes when we need to investigate the output path.
  * @since 0.1
+ * @todo #1:90min Beautify {@link TextTree} output.
+ *  Currently we have rather ugly {@link TextTree} output.
+ *  We can understand what is going on, but it would be much better
+ *  to see a more readable output.
  */
 public final class TextTree implements Text {
 
@@ -131,8 +135,9 @@ public final class TextTree implements Text {
                 for (int j = 0; j < map[i].length; j++) {
                     final int length = map[i][j].length();
                     if (map[i][j].replace("-", "").isEmpty()) {
+
                         map[i][j] = Stream.generate(() -> " ")
-                            .limit(length-2)
+                            .limit(length - 2)
                             .collect(Collectors.joining("", " ", "|"));
                     } else {
                         break;

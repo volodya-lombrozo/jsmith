@@ -66,14 +66,29 @@ final class TextTreeTest {
     @Test
     void outputsComplexTreeWithDifferentLengths() {
         final Root root = new Root();
-        final TextNode text = new TextNode(
-            root,
-            new TextLeaf(new RuleAltList(root), "a"),
-            new TextNode(new Atom(root),
-                new TextLeaf(root, "b1"),
-                new TextLeaf(root, "b2")),
-            new TextLeaf(root, "c")
+        MatcherAssert.assertThat(
+            "We expect to get beautifully formatted tree",
+            new TextTree(
+                new TextNode(
+                    root,
+                    new TextLeaf(new RuleAltList(root), "a"),
+                    new TextNode(
+                        new Atom(root),
+                        new TextLeaf(root, "b1"),
+                        new TextLeaf(root, "b2")
+                    ),
+                    new TextLeaf(root, "c")
+                )
+            ).output(),
+            Matchers.equalTo(
+                String.join(
+                    "\n",
+                    "root ruleAltList(alternatives=0, id=733672688) ---- --> a",
+                    "   | atom------------------------------------- root --> b1",
+                    "   |                                         | root --> b2",
+                    "   | root------------------------------------- ---- --> c"
+                )
+            )
         );
-        System.out.println(new TextTree(text).output());
     }
 }
