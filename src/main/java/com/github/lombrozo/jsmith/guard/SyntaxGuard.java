@@ -3,7 +3,6 @@ package com.github.lombrozo.jsmith.guard;
 import com.github.lombrozo.jsmith.antlr.view.LimitedText;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextTree;
-import com.github.lombrozo.jsmith.antlr.view.Trace;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -118,7 +117,7 @@ public final class SyntaxGuard {
             Logger.getLogger(SyntaxGuard.class.getSimpleName()).severe(
                 String.format(
                     "Generated code tree: '%n%s%n' is wrong",
-                    new LimitedText(new TextTree(code)).output()
+                    new TextTree(code).output()
                 )
             );
             throw new IllegalStateException(

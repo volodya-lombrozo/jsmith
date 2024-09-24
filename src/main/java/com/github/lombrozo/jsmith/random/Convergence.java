@@ -74,7 +74,7 @@ final class Convergence<T> {
      * Default constructor.
      */
     Convergence() {
-        this(0.5d);
+        this(0.8d);
     }
 
     /**

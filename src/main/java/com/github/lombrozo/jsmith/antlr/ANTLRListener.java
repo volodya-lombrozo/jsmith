@@ -50,6 +50,10 @@ import com.github.lombrozo.jsmith.antlr.rules.LexerAltList;
 import com.github.lombrozo.jsmith.antlr.rules.LexerAtom;
 import com.github.lombrozo.jsmith.antlr.rules.LexerBlock;
 import com.github.lombrozo.jsmith.antlr.rules.LexerCharSet;
+import com.github.lombrozo.jsmith.antlr.rules.LexerCommand;
+import com.github.lombrozo.jsmith.antlr.rules.LexerCommandExpr;
+import com.github.lombrozo.jsmith.antlr.rules.LexerCommandName;
+import com.github.lombrozo.jsmith.antlr.rules.LexerCommands;
 import com.github.lombrozo.jsmith.antlr.rules.LexerElement;
 import com.github.lombrozo.jsmith.antlr.rules.LexerElements;
 import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
@@ -591,6 +595,53 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         super.exitNotSet(ctx);
     }
 
+    @Override
+    public void enterLexerCommands(final ANTLRv4Parser.LexerCommandsContext ctx) {
+        this.down(new LexerCommands(this.current));
+        super.enterLexerCommands(ctx);
+    }
+
+    @Override
+    public void exitLexerCommands(final ANTLRv4Parser.LexerCommandsContext ctx) {
+        this.up();
+        super.exitLexerCommands(ctx);
+    }
+
+    @Override
+    public void enterLexerCommand(final ANTLRv4Parser.LexerCommandContext ctx) {
+        this.down(new LexerCommand(this.current));
+        super.enterLexerCommand(ctx);
+    }
+
+    @Override
+    public void exitLexerCommand(final ANTLRv4Parser.LexerCommandContext ctx) {
+        this.up();
+        super.exitLexerCommand(ctx);
+    }
+
+    @Override
+    public void enterLexerCommandName(final ANTLRv4Parser.LexerCommandNameContext ctx) {
+        this.down((new LexerCommandName(this.current)));
+        super.enterLexerCommandName(ctx);
+    }
+
+    @Override
+    public void exitLexerCommandName(final ANTLRv4Parser.LexerCommandNameContext ctx) {
+        this.up();
+        super.exitLexerCommandName(ctx);
+    }
+
+    @Override
+    public void enterLexerCommandExpr(final ANTLRv4Parser.LexerCommandExprContext ctx) {
+        this.down(new LexerCommandExpr(this.current));
+        super.enterLexerCommandExpr(ctx);
+    }
+
+    @Override
+    public void exitLexerCommandExpr(final ANTLRv4Parser.LexerCommandExprContext ctx) {
+        this.up();
+        super.exitLexerCommandExpr(ctx);
+    }
 
     /**
      * Go down in the generation tree.

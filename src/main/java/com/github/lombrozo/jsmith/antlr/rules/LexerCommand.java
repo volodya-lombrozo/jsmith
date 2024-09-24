@@ -24,29 +24,28 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 /**
- * LexerAlt rule.
+ * LexerCommand rule.
  * The ANTLR grammar definition:
  * {@code
- * lexerAlt
- *     : {@link LexerElements} {@link LexerCommands}?
- *     |
- *     // explicitly allow empty alts
+ * lexerCommand
+ *     : {@link LexerCommandName} LPAREN {@link LexerCommandExpr} RPAREN
+ *     | {@link LexerCommandName}
  *     ;
  * }
  * @since 0.1
  */
-public final class LexerAlt extends Unimplemented {
+public final class LexerCommand extends Unimplemented {
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
-    public LexerAlt(final Rule parent) {
+    public LexerCommand(final Rule parent) {
         super(parent);
     }
 
     @Override
     public String name() {
-        return "lexerAlt";
+        return "lexerCommand";
     }
 }
