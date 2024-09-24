@@ -1,6 +1,7 @@
 package com.github.lombrozo.jsmith.it;
 
 import com.github.lombrozo.jsmith.RandomScript;
+import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.guard.SyntaxGuard;
 import java.nio.file.Path;
 import java.util.logging.Logger;
@@ -54,7 +55,7 @@ final class SyntaxGenerationIT {
         final SyntaxGuard guard = new SyntaxGuard(temp, top, grammars);
         Assertions.assertDoesNotThrow(
             () -> Stream.generate(() -> top)
-                .map(script::generate)
+                .map(script::generateText)
                 .limit(50)
                 .peek(SyntaxGenerationIT::logProgram)
                 .forEach(guard::verifySilently),
@@ -66,8 +67,8 @@ final class SyntaxGenerationIT {
      * Logs the generated program.
      * @param program The generated program.
      */
-    private static void logProgram(final String program) {
+    private static void logProgram(final Text program) {
         Logger.getLogger(SyntaxGenerationIT.class.getSimpleName())
-            .info(String.format("Generated program: %n%s%n", program));
+            .info(String.format("Generated program: %n%s%n", program.output()));
     }
 }

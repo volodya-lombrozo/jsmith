@@ -1,5 +1,9 @@
 package com.github.lombrozo.jsmith.guard;
 
+import com.github.lombrozo.jsmith.antlr.view.LimitedText;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextTree;
+import com.github.lombrozo.jsmith.antlr.view.Trace;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -10,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -106,11 +111,20 @@ public final class SyntaxGuard {
      * The same as {@link SyntaxGuard#verify(String)} but without checked exceptions.
      * @param code Generated code.
      */
-    public void verifySilently(final String code) {
+    public void verifySilently(final Text code) {
         try {
-            this.verify(code);
+            this.verify(code.output());
         } catch (final InvalidSyntax exception) {
-            throw new IllegalStateException(exception);
+            Logger.getLogger(SyntaxGuard.class.getSimpleName()).severe(
+                String.format(
+                    "Generated code tree: '%n%s%n' is wrong",
+                    new LimitedText(new TextTree(code)).output()
+                )
+            );
+            throw new IllegalStateException(
+                String.format("Generated code '%s' is wrong", code.output()),
+                exception
+            );
         }
     }
 
