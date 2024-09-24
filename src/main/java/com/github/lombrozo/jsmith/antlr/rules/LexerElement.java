@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,10 @@ public final class LexerElement implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        return this.multiplier().repeat(this.children.get(0)).generate(context);
+        return new TextNode(
+            this,
+            this.multiplier().repeat(this.children.get(0)).generate(context)
+        );
     }
 
     @Override

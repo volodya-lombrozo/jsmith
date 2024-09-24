@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * The ANTLR rule definition:
  * {@code
  * lexerRuleSpec
- *     : FRAGMENT? TOKEN_REF optionsSpec? COLON {@link LexerRuleBlock} SEMI
+ *     : FRAGMENT? TOKEN_REF {@link OptionsSpec}? COLON {@link LexerRuleBlock} SEMI
  *     ;
  * }
  * @since 0.1

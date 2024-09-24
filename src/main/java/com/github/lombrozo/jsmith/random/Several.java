@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.random;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,12 +58,18 @@ final class Several implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        return new TextNode(
-            this,
-            this.all.stream()
-                .map(rule -> rule.generate(context))
-                .collect(Collectors.toList())
-        );
+        final Text result;
+        if (this.all.isEmpty()) {
+            result = new TextLeaf(this, "");
+        } else {
+            result = new TextNode(
+                this,
+                this.all.stream()
+                    .map(rule -> rule.generate(context))
+                    .collect(Collectors.toList())
+            );
+        }
+        return result;
     }
 
     @Override

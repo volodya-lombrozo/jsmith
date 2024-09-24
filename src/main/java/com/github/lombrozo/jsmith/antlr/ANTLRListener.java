@@ -56,9 +56,13 @@ import com.github.lombrozo.jsmith.antlr.rules.LexerCommandName;
 import com.github.lombrozo.jsmith.antlr.rules.LexerCommands;
 import com.github.lombrozo.jsmith.antlr.rules.LexerElement;
 import com.github.lombrozo.jsmith.antlr.rules.LexerElements;
+import com.github.lombrozo.jsmith.antlr.rules.LexerRuleBlock;
 import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import com.github.lombrozo.jsmith.antlr.rules.NotSet;
+import com.github.lombrozo.jsmith.antlr.rules.Option;
+import com.github.lombrozo.jsmith.antlr.rules.OptionValue;
+import com.github.lombrozo.jsmith.antlr.rules.OptionsSpec;
 import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.PredicateOption;
 import com.github.lombrozo.jsmith.antlr.rules.PredicateOptions;
@@ -641,6 +645,54 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     public void exitLexerCommandExpr(final ANTLRv4Parser.LexerCommandExprContext ctx) {
         this.up();
         super.exitLexerCommandExpr(ctx);
+    }
+
+    @Override
+    public void enterLexerRuleBlock(final ANTLRv4Parser.LexerRuleBlockContext ctx) {
+        this.down(new LexerRuleBlock(this.current));
+        super.enterLexerRuleBlock(ctx);
+    }
+
+    @Override
+    public void exitLexerRuleBlock(final ANTLRv4Parser.LexerRuleBlockContext ctx) {
+        this.up();
+        super.exitLexerRuleBlock(ctx);
+    }
+
+    @Override
+    public void enterOptionsSpec(final ANTLRv4Parser.OptionsSpecContext ctx) {
+        this.down(new OptionsSpec(this.current));
+        super.enterOptionsSpec(ctx);
+    }
+
+    @Override
+    public void exitOptionsSpec(final ANTLRv4Parser.OptionsSpecContext ctx) {
+        this.up();
+        super.exitOptionsSpec(ctx);
+    }
+
+    @Override
+    public void enterOption(final ANTLRv4Parser.OptionContext ctx) {
+        this.down(new Option(this.current));
+        super.enterOption(ctx);
+    }
+
+    @Override
+    public void exitOption(final ANTLRv4Parser.OptionContext ctx) {
+        this.up();
+        super.exitOption(ctx);
+    }
+
+    @Override
+    public void enterOptionValue(final ANTLRv4Parser.OptionValueContext ctx) {
+        this.down(new OptionValue(this.current));
+        super.enterOptionValue(ctx);
+    }
+
+    @Override
+    public void exitOptionValue(final ANTLRv4Parser.OptionValueContext ctx) {
+        this.up();
+        super.exitOptionValue(ctx);
     }
 
     /**
