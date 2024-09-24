@@ -24,27 +24,29 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 /**
- * NotSet rule.
+ * SetElement rule.
  * The ANTLR grammar definition:
  * {@code
- * notSet
- *     : NOT {@link SetElement}
- *     | NOT {@link BlockSet}
+ * setElement
+ *     : TOKEN_REF {@link ElementOptions}?
+ *     | STRING_LITERAL {@link ElementOptions}?
+ *     | {@link CharacterRange}
+ *     | LEXER_CHAR_SET
  *     ;
- * }
- * @since 0.1
+ *  }
  */
-public final class NotSet extends Unimplemented {
+public final class SetElement extends Unimplemented {
+
     /**
      * Constructor.
      * @param parent Parent rule.
      */
-    public NotSet(final Rule parent) {
+    public SetElement(final Rule parent) {
         super(parent);
     }
 
     @Override
     public String name() {
-        return "notSet";
+        return "setElement";
     }
 }

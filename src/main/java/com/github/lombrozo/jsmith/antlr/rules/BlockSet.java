@@ -24,27 +24,27 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 /**
- * NotSet rule.
+ * BlockSet rule.
  * The ANTLR grammar definition:
  * {@code
- * notSet
- *     : NOT {@link SetElement}
- *     | NOT {@link BlockSet}
+ * blockSet
+ *     : LPAREN {@link SetElement} (OR {@link SetElement})* RPAREN
  *     ;
  * }
  * @since 0.1
  */
-public final class NotSet extends Unimplemented {
+public final class BlockSet extends Unimplemented {
+
     /**
      * Constructor.
      * @param parent Parent rule.
      */
-    public NotSet(final Rule parent) {
+    public BlockSet(final Rule parent) {
         super(parent);
     }
 
     @Override
     public String name() {
-        return "notSet";
+        return "blockSet";
     }
 }

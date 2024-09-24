@@ -33,6 +33,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Alternative;
 import com.github.lombrozo.jsmith.antlr.rules.ArgActionBlock;
 import com.github.lombrozo.jsmith.antlr.rules.Atom;
 import com.github.lombrozo.jsmith.antlr.rules.Block;
+import com.github.lombrozo.jsmith.antlr.rules.BlockSet;
 import com.github.lombrozo.jsmith.antlr.rules.BlockSuffix;
 import com.github.lombrozo.jsmith.antlr.rules.CharacterRange;
 import com.github.lombrozo.jsmith.antlr.rules.DelegateGrammar;
@@ -72,6 +73,7 @@ import com.github.lombrozo.jsmith.antlr.rules.RuleAltList;
 import com.github.lombrozo.jsmith.antlr.rules.RuleBlock;
 import com.github.lombrozo.jsmith.antlr.rules.Ruleref;
 import com.github.lombrozo.jsmith.antlr.rules.Safe;
+import com.github.lombrozo.jsmith.antlr.rules.SetElement;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
 import com.github.lombrozo.jsmith.antlr.rules.Traced;
 import java.util.Objects;
@@ -693,6 +695,34 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     public void exitOptionValue(final ANTLRv4Parser.OptionValueContext ctx) {
         this.up();
         super.exitOptionValue(ctx);
+    }
+
+    @Override
+    public void enterBlockSet(final ANTLRv4Parser.BlockSetContext ctx) {
+        this.down(new BlockSet(this.current));
+        super.enterBlockSet(ctx);
+    }
+
+    @Override
+    public void exitBlockSet(final ANTLRv4Parser.BlockSetContext ctx) {
+        this.up();
+        super.exitBlockSet(ctx);
+    }
+
+    @Override
+    public void enterSetElement(final ANTLRv4Parser.SetElementContext ctx) {
+        final SetElement set = new SetElement(this.current);
+        if (ctx.LEXER_CHAR_SET() != null) {
+            set.append(new LexerCharSet(set, ctx.LEXER_CHAR_SET().getText()));
+        }
+        this.down(set);
+        super.enterSetElement(ctx);
+    }
+
+    @Override
+    public void exitSetElement(final ANTLRv4Parser.SetElementContext ctx) {
+        this.up();
+        super.exitSetElement(ctx);
     }
 
     /**
