@@ -23,6 +23,13 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * SetElement rule.
  * The ANTLR grammar definition:
@@ -35,18 +42,85 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     ;
  *  }
  */
-public final class SetElement extends Unimplemented {
+public final class SetElement implements Rule, Negatable {
+
+    /**
+     * Parent rule.
+     */
+    private final Rule parent;
+
+    /**
+     * Children rules.
+     */
+    private final List<Rule> children;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public SetElement(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param children Children rules.
+     */
+    public SetElement(final Rule parent, final List<Rule> children) {
+        this.parent = parent;
+        this.children = children;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.parent;
+    }
+
+    @Override
+    public Text generate(final Context context) {
+        return new TextNode(
+            this,
+            this.children.stream()
+                .map(Rule::generate)
+                .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.children.add(rule);
     }
 
     @Override
     public String name() {
         return "setElement";
+    }
+
+    @Override
+    public Text negate() {
+        if (this.children.isEmpty()) {
+            throw new IllegalStateException(
+                "SetElement rule is empty, either SetElement or BlockSet should be added before generation"
+            );
+        }
+        if (this.children.stream().anyMatch(rule -> !(rule instanceof Negatable))) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "SetElement rule must contain negatable rules, but found non-negatable rules: [%s]",
+                    this.children.stream()
+                        .filter(rule -> !(rule instanceof Negatable))
+                        .map(Rule::name)
+                        .collect(Collectors.joining(", "))
+                )
+            );
+        }
+        return new TextNode(
+            this,
+            this.children.stream()
+                .map(Negatable.class::cast)
+                .map(Negatable::negate)
+                .collect(Collectors.toList())
+        );
     }
 }

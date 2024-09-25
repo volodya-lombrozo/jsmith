@@ -23,25 +23,22 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import com.github.lombrozo.jsmith.antlr.view.Text;
 
 /**
- * Test cases for {@link LexerCharSet}.
+ * Negatable element that can be inverted.
  * @since 0.1
+ * @todo #1:90min Do we need this interface?
+ *  We use many 'instance of' checks to determine if the element is negatable.
+ *  Maybe we should use the visitor pattern instead?
+ *  Or something else?
  */
-final class LexerCharSetTest {
+public interface Negatable {
 
-    @ParameterizedTest
-    @ValueSource(strings = {"a", "b", "[a-c]", "[a-z]", "[a-zA-Z]", "[a-zA-Z0-9]", "[a-zA-Z0-9_]"})
-    void generatesCharSequences(final String sequence) {
-        MatcherAssert.assertThat(
-            "We expect that the generated string will match the sequence",
-            new LexerCharSet(sequence).generate().output(),
-            Matchers.matchesRegex(sequence)
-        );
-    }
+    /**
+     * Invert the element.
+     * @return Inverted element.
+     */
+    Text negate();
 
 }

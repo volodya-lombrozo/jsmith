@@ -29,19 +29,31 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * Test cases for {@link LexerCharSet}.
+ * Test for {@link NotSet}.
  * @since 0.1
  */
-final class LexerCharSetTest {
+final class NotSetTest {
 
     @ParameterizedTest
-    @ValueSource(strings = {"a", "b", "[a-c]", "[a-z]", "[a-zA-Z]", "[a-zA-Z0-9]", "[a-zA-Z0-9_]"})
-    void generatesCharSequences(final String sequence) {
+    @ValueSource(strings = {"a", "b", "[<\"]*", "[<']*", "[\"\\\u0000-\u001F]"})
+    void negatesLexerCharSet(final String sequence) {
+        final String negated;
+        if (sequence.startsWith("[")) {
+            negated = sequence.substring(0, 1) + "^" + sequence.substring(1);
+        } else {
+            negated = "[^" + sequence + "]";
+        }
+        final Root roo = new Root();
+        final NotSet not = new NotSet(roo);
+        final SetElement element = new SetElement(not);
+        element.append(new LexerCharSet(negated));
+        not.append(element);
+        final String output = not.generate().output();
+        System.out.println(output);
         MatcherAssert.assertThat(
-            "We expect that the generated string will match the sequence",
-            new LexerCharSet(sequence).generate().output(),
-            Matchers.matchesRegex(sequence)
+            "We expect that the generated string will not match the sequence",
+            output,
+            Matchers.not(Matchers.matchesRegex(sequence))
         );
     }
-
 }

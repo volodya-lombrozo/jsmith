@@ -36,7 +36,7 @@ import java.util.List;
  * Rule that ensures that the recursion is not detected.
  * @since 0.1
  */
-public final class Safe implements Rule, Suffix {
+public final class Safe implements Rule, Suffix, Negatable {
 
     /**
      * Default max recursion depth.
@@ -116,6 +116,21 @@ public final class Safe implements Rule, Suffix {
             throw new IllegalArgumentException(
                 String.format(
                     "Rule '%s' with name '%s' doesn't support multiplier",
+                    this.original.getClass().getSimpleName(),
+                    this.original.name()
+                )
+            );
+        }
+    }
+
+    @Override
+    public Text negate() {
+        if (this.original instanceof Negatable) {
+            return ((Negatable) this.original).negate();
+        } else {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Rule '%s' with name '%s' doesn't support negation",
                     this.original.getClass().getSimpleName(),
                     this.original.name()
                 )

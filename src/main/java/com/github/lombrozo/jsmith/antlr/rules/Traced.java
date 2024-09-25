@@ -33,7 +33,7 @@ import com.github.lombrozo.jsmith.random.Multiplier;
  * In other words, it's a decorator for a real rule.
  * @since 0.1
  */
-public final class Traced implements Rule, Suffix {
+public final class Traced implements Rule, Suffix, Negatable {
 
     /**
      * Real rule.
@@ -76,6 +76,21 @@ public final class Traced implements Rule, Suffix {
             throw new IllegalArgumentException(
                 String.format(
                     "Rule '%s' with name '%s' doesn't support multiplier",
+                    this.rule.getClass().getSimpleName(),
+                    this.rule.name()
+                )
+            );
+        }
+    }
+
+    @Override
+    public Text negate() {
+        if (this.rule instanceof Negatable) {
+            return ((Negatable) this.rule).negate();
+        } else {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Rule '%s' with name '%s' doesn't support negation",
                     this.rule.getClass().getSimpleName(),
                     this.rule.name()
                 )

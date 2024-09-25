@@ -23,8 +23,14 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * NotSet rule.
+ * Inverts children's rules.
  * The ANTLR grammar definition:
  * {@code
  * notSet
@@ -34,13 +40,65 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class NotSet extends Unimplemented {
+public final class NotSet implements Rule {
+
+    /**
+     * Parent rule.
+     */
+    private final Rule parent;
+
+    /**
+     * Children rules.
+     */
+    private final List<Rule> children;
+
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public NotSet(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param children Children rules.
+     */
+    public NotSet(final Rule parent, final List<Rule> children) {
+        this.parent = parent;
+        this.children = children;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.parent;
+    }
+
+    @Override
+    public Text generate(final Context context) {
+        if (this.children.isEmpty()) {
+            throw new IllegalStateException(
+                "NotSet rule is empty, either SetElement or BlockSet should be added before generation"
+            );
+        }
+        final Rule rule = this.children.get(0);
+        if (rule instanceof Negatable) {
+            return ((Negatable) rule).negate();
+        } else {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Rule '%s' with name '%s' doesn't support negation",
+                    rule.getClass().getSimpleName(),
+                    rule.name()
+                )
+            );
+        }
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.children.add(rule);
     }
 
     @Override

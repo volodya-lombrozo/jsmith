@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
  * }
  * @since 0.1
  */
-public final class CharacterRange implements Rule {
+public final class CharacterRange implements Rule, Negatable {
 
     /**
      * Redundant characters.
@@ -145,12 +145,10 @@ public final class CharacterRange implements Rule {
      */
     private static int code(final String character) {
         return new UnicodeChar(character).chararcter();
-//        int result;
-//        if (character.startsWith("\\u")) {
-//            result = Integer.parseInt(character.substring(2), 16);
-//        } else {
-//            result = character.codePoints().sum();
-//        }
-//        return result;
+    }
+
+    @Override
+    public Text negate() {
+        throw new UnsupportedOperationException("CharacterRange cannot be negated yet");
     }
 }

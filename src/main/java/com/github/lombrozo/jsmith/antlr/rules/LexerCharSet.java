@@ -32,7 +32,7 @@ import com.github.lombrozo.jsmith.random.Rand;
  * LexerCharSet rule.
  * @since 0.1
  */
-public final class LexerCharSet implements Rule {
+public final class LexerCharSet implements Rule, Negatable {
 
     /**
      * Parent rule.
@@ -101,5 +101,10 @@ public final class LexerCharSet implements Rule {
     @Override
     public String name() {
         return String.format("lexerCharSet('%s')", this.text);
+    }
+
+    @Override
+    public Text negate() {
+        throw new UnsupportedOperationException("LexerCharSet cannot be negated yet");
     }
 }
