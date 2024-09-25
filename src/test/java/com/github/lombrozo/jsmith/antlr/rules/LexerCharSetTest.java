@@ -45,4 +45,17 @@ final class LexerCharSetTest {
     }
 
 
+    @ParameterizedTest
+    @ValueSource(strings = {"~[<\"]*", "~[<']*"})
+    void negatesCharSequences(final String sequence) {
+        final String output = new LexerCharSet(sequence).generate().output();
+        System.out.println(output);
+        MatcherAssert.assertThat(
+            "We expect that the generated string will not match the sequence",
+            output,
+            Matchers.not(Matchers.matchesRegex(sequence))
+        );
+    }
+
+
 }

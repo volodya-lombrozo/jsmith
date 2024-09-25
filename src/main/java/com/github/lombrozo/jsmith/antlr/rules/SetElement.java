@@ -31,7 +31,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     : TOKEN_REF {@link ElementOptions}?
  *     | STRING_LITERAL {@link ElementOptions}?
  *     | {@link CharacterRange}
- *     | LEXER_CHAR_SET
+ *     | {@link LexerCharSet}
  *     ;
  *  }
  */

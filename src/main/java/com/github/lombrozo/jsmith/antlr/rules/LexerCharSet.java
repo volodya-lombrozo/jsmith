@@ -100,6 +100,6 @@ public final class LexerCharSet implements Rule {
 
     @Override
     public String name() {
-        return "lexerCharSet(not-a-rule)";
+        return String.format("lexerCharSet('%s')", this.text);
     }
 }

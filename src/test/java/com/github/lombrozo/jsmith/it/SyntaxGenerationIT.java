@@ -4,6 +4,9 @@ import com.github.lombrozo.jsmith.RandomScript;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.guard.SyntaxGuard;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 import org.cactoos.Input;
@@ -28,12 +31,12 @@ final class SyntaxGenerationIT {
      */
     static Stream<Arguments> syntax() {
         return Stream.of(
-            Arguments.of(Stream.of("grammars/Simple.g4"), "expr"),
-            Arguments.of(Stream.of("grammars/Arithmetic.g4"), "prog"),
-            Arguments.of(Stream.of("grammars/Recursive.g4"), "expr"),
-            Arguments.of(Stream.of("grammars/Json.g4"), "json"),
+            Arguments.of(Collections.singletonList("grammars/Simple.g4"), "expr"),
+            Arguments.of(Collections.singletonList("grammars/Arithmetic.g4"), "prog"),
+            Arguments.of(Collections.singletonList("grammars/Recursive.g4"), "expr"),
+            Arguments.of(Collections.singletonList("grammars/Json.g4"), "json"),
             Arguments.of(
-                Stream.of(
+                Arrays.asList(
                     "grammars/separated/XMLLexer.g4",
                     "grammars/separated/XMLParser.g4"
                 ),
@@ -45,11 +48,11 @@ final class SyntaxGenerationIT {
     @ParameterizedTest(name = "Generates programs for {0} grammar with top rule {1}")
     @MethodSource("syntax")
     void generatesSyntaxForGrammar(
-        final Stream<String> definitions,
+        final List<String> definitions,
         final String top,
         @TempDir final Path temp
     ) {
-        final Input[] grammars = definitions.map(ResourceOf::new)
+        final Input[] grammars = definitions.stream().map(ResourceOf::new)
             .toArray(Input[]::new);
         final RandomScript script = new RandomScript(grammars);
         final SyntaxGuard guard = new SyntaxGuard(temp, top, grammars);
