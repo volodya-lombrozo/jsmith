@@ -105,6 +105,15 @@ public final class LexerCharSet implements Rule, Negatable {
 
     @Override
     public Text negate() {
-        throw new UnsupportedOperationException("LexerCharSet cannot be negated yet");
+        final String negated;
+        if (this.text.startsWith("[")) {
+            negated = String.format("%s^%s", this.text.substring(0, 1), this.text.substring(1));
+        } else {
+            negated = String.format("[^%s]", this.text);
+        }
+        return new TextLeaf(
+            this,
+            this.rand.regex(negated)
+        );
     }
 }
