@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +85,7 @@ public final class NotSet implements Rule {
         }
         final Rule rule = this.children.get(0);
         if (rule instanceof Negatable) {
-            return ((Negatable) rule).negate();
+            return new TextNode(this, ((Negatable) rule).negate());
         } else {
             throw new IllegalArgumentException(
                 String.format(

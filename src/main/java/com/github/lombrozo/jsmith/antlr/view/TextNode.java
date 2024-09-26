@@ -36,20 +36,25 @@ import lombok.ToString;
 public final class TextNode implements Text {
 
     /**
-     * Delimiter.
+     * Default delimiter.
      */
     private static final String DELIMITER = "";
-
     private final Rule writer;
     private final List<Text> children;
+    private final String delimiter;
 
     public TextNode(final Rule writer, final Text... children) {
         this(writer, Arrays.asList(children));
     }
 
     public TextNode(final Rule writer, final List<Text> children) {
+        this(writer, children, TextNode.DELIMITER);
+    }
+
+    public TextNode(final Rule writer, final List<Text> children, final String delimiter) {
         this.writer = writer;
         this.children = children;
+        this.delimiter = delimiter;
     }
 
     @Override
@@ -67,6 +72,6 @@ public final class TextNode implements Text {
         return
             this.children.stream()
                 .map(Text::output)
-                .collect(Collectors.joining(TextNode.DELIMITER));
+                .collect(Collectors.joining(this.delimiter));
     }
 }

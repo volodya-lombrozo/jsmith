@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 final class NotSetTest {
 
     @ParameterizedTest
-    @ValueSource(strings = {"a", "b", "[<\"]*", "[<']*", "[\"\\\u0000-\u001F]"})
+    @ValueSource(strings = {"a", "b", "[<\"]*", "[<']*", "[\u0000-\u001F]"})
     void negatesLexerCharSet(final String sequence) {
         final Root roo = new Root();
         final NotSet not = new NotSet(roo);

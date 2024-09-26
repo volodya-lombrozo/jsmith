@@ -23,8 +23,6 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import java.util.stream.Stream;
-
 public final class UnicodeChar {
 
     private final String text;

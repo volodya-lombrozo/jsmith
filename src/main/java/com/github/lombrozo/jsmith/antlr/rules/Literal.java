@@ -114,8 +114,9 @@ public final class Literal implements Rule {
      * }
      * @param original Original string.
      * @return String with replaced escape sequences.
+     * @todo #1:90min Make it separate class.
      */
-    private static String replaceEscapes(final String original) {
+    public static String replaceEscapes(final String original) {
         try {
             if (original.replaceAll("'", "").startsWith("\\u")) {
                 return new UnicodeChar(original.replaceAll("'", "")).unescaped();

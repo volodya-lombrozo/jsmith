@@ -27,6 +27,8 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.random.Rand;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * LexerCharSet rule.
@@ -89,7 +91,7 @@ public final class LexerCharSet implements Rule, Negatable {
     public Text generate(final Context context) {
         return new TextLeaf(
             this,
-            this.rand.regex(this.text)
+            this.rand.regex(Literal.replaceEscapes(this.text))
         );
     }
 
@@ -106,14 +108,42 @@ public final class LexerCharSet implements Rule, Negatable {
     @Override
     public Text negate() {
         final String negated;
-        if (this.text.startsWith("[")) {
-            negated = String.format("%s^%s", this.text.substring(0, 1), this.text.substring(1));
+        final String replaced = Literal.replaceEscapes(this.text);
+        if (replaced.startsWith("[")) {
+            negated = String.format("%s^%s", replaced.substring(0, 1), replaced.substring(1));
         } else {
-            negated = String.format("[^%s]", this.text);
+            negated = String.format("[^%s]", replaced);
         }
         return new TextLeaf(
             this,
-            this.rand.regex(negated)
+            this.rand.regex(LexerCharSet.unescapeUnicodes(negated))
         );
+    }
+
+    /**
+     * Replace escape sequences in the string.
+     * @param rawString String with escape sequences.
+     * @return String with replaced escape sequences.
+     * @todo #1:90min Refactor this method!
+     */
+    public static String unescapeUnicodes(final String rawString) {
+        // Regular expression to detect Unicode escape sequences (e.g., \u0000)
+        Pattern unicodePattern = Pattern.compile("\\\\u([0-9A-Fa-f]{4})");
+        // Matcher to find all occurrences of Unicode sequences
+        Matcher matcher = unicodePattern.matcher(rawString);
+        // Create a StringBuffer to store the modified string
+        StringBuffer resultString = new StringBuffer();
+        // Process each Unicode escape sequence
+        while (matcher.find()) {
+            // Get the hex value of the Unicode sequence
+            String hexValue = matcher.group(1);
+            // Convert hex value to the corresponding Unicode character
+            char unicodeChar = (char) Integer.parseInt(hexValue, 16);
+            // Replace the escape sequence with the actual Unicode character
+            matcher.appendReplacement(resultString, String.valueOf(unicodeChar));
+        }
+        // Append the rest of the string
+        matcher.appendTail(resultString);
+        return resultString.toString();
     }
 }

@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -35,7 +36,18 @@ import org.junit.jupiter.params.provider.ValueSource;
 final class LexerCharSetTest {
 
     @ParameterizedTest
-    @ValueSource(strings = {"a", "b", "[a-c]", "[a-z]", "[a-zA-Z]", "[a-zA-Z0-9]", "[a-zA-Z0-9_]"})
+    @ValueSource(strings = {
+        "a",
+        "b",
+        "[a-c]",
+        "[a-z]",
+        "[a-zA-Z]",
+        "[a-zA-Z0-9]",
+        "[a-zA-Z0-9_]",
+        "[\"\\\u0000-\u001F]",
+        "[ \t\r\n]",
+        "[ \\t\\r\\n]"
+    })
     void generatesCharSequences(final String sequence) {
         MatcherAssert.assertThat(
             "We expect that the generated string will match the sequence",
@@ -44,4 +56,27 @@ final class LexerCharSetTest {
         );
     }
 
+    @Test
+    void unescapesSequences() {
+        MatcherAssert.assertThat(
+            "We expect that ANTLR escape sequences will be unescaped",
+            new LexerCharSet("[ \\t\\r\\n]").generate().output(),
+            Matchers.anyOf(
+                Matchers.equalTo(" "),
+                Matchers.equalTo("\t"),
+                Matchers.equalTo("\r"),
+                Matchers.equalTo("\n")
+            )
+        );
+    }
+
+    @Test
+    void negatesControlCharacters() {
+        final String sequence = "[\"\\\\\\u0000-\\u001F]";
+        MatcherAssert.assertThat(
+            "We expect that the generated string will not match the sequence",
+            new LexerCharSet(sequence).negate().output(),
+            Matchers.not(Matchers.matchesRegex(sequence))
+        );
+    }
 }
