@@ -36,6 +36,7 @@ final class SyntaxGenerationIT {
             Arguments.of(Collections.singletonList("grammars/Recursive.g4"), "expr"),
             Arguments.of(Collections.singletonList("grammars/Json.g4"), "json"),
             Arguments.of(Collections.singletonList("grammars/CSV.g4"), "csvFile"),
+            Arguments.of(Collections.singletonList("grammars/http.g4"), "http_message"),
             Arguments.of(
                 Arrays.asList(
                     "grammars/separated/XMLLexer.g4",
