@@ -131,4 +131,17 @@ final class RandomScriptTest {
             Matchers.not(Matchers.emptyString())
         );
     }
+
+    @RepeatedTest(10)
+    void generatesCsv() {
+        final RandomScript script = new RandomScript(new ResourceOf("grammars/CSV.g4"));
+        this.logger.info(String.format("CSV spec (lisp format): %s", script.spec()));
+        final String example = script.generate("csvFile");
+        this.logger.info(String.format("Generated CSV example:%n%s%n", example));
+        MatcherAssert.assertThat(
+            "We expect that the example for CSV grammar will be generated successfully",
+            example,
+            Matchers.not(Matchers.emptyString())
+        );
+    }
 }

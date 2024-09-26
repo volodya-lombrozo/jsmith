@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import com.github.lombrozo.jsmith.random.Rand;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
  * WARNING: This is NOT a part of the ANTLR grammar!
  * @since 0.1
  */
-public final class Literal implements Rule {
+public final class Literal implements Rule, Negatable {
 
     /**
      * Apostrophe pattern.
@@ -172,5 +173,13 @@ public final class Literal implements Rule {
         }
         matcher.appendTail(result);
         return result.toString();
+    }
+
+    @Override
+    public Text negate() {
+        return new TextLeaf(
+            this,
+            new Rand().regex(String.format("[^%s]", this.text))
+        );
     }
 }

@@ -46,6 +46,20 @@ final class LiteralTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("examples")
+    void negatesSymbols(final String input) {
+        MatcherAssert.assertThat(
+            "We expect that the literal will generate the negated symbol",
+            new Literal(input).negate().output(),
+            Matchers.not(
+                Matchers.containsString(
+                    Literal.replaceEscapes(input.replaceAll("'", ""))
+                )
+            )
+        );
+    }
+
     /**
      * Test cases for {@link #generatesSymbols(String, String)} test.
      * @return Stream of test cases.

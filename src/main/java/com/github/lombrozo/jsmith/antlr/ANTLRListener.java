@@ -715,6 +715,9 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
         if (ctx.LEXER_CHAR_SET() != null) {
             set.append(new LexerCharSet(set, ctx.LEXER_CHAR_SET().getText()));
         }
+        if (ctx.STRING_LITERAL() != null) {
+            set.append(new Literal(ctx.STRING_LITERAL().getText()));
+        }
         this.down(set);
         super.enterSetElement(ctx);
     }
