@@ -64,6 +64,10 @@ public final class DotTree implements Text {
 
     @Override
     public String output() {
+        // STYLING:
+        // You can also play with
+        // ranksep=5.0; // Default is typically around 0.5
+        // nodesep=1.0; // Default is typically around 0.25
         final StringBuilder builder = new StringBuilder();
         builder.append("digraph JsmithGenerativeTree{\n");
         final HashMap<String, String> labels = new HashMap<>();

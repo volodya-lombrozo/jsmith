@@ -121,7 +121,8 @@ public final class SyntaxGuard {
                     new TextTree(code).output()
                 )
             );
-            this.saveDot(code);
+//            Todo make SyntaxGuard configurable to save dot file
+//            this.saveDot(code);
             throw new IllegalStateException(
                 String.format("Generated code '%s' is wrong", code.output()),
                 exception
