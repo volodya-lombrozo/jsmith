@@ -39,30 +39,32 @@ final class DotTreeTest {
 
     @Test
     void convertsSimpleTree() {
-        MatcherAssert.assertThat(
-            new DotTree(
-                new TextNode(
-                    new Root(),
-                    Arrays.asList(
-                        new TextLeaf(new Literal("a"), "a"),
-                        new TextLeaf(new Literal("b"), "b"),
-                        new TextNode(
-                            new Literal("c"),
-                            Arrays.asList(
-                                new TextLeaf(new Literal("d"), "d"),
-                                new TextLeaf(new Literal("e"), "e"),
-                                new TextLeaf(new Literal("a"), "a")
-                            )
-                        ),
-                        new TextNode(
-                            new Literal("f"),
-                            Collections.singletonList(
-                                new TextLeaf(new Literal("d"), "d")
-                            )
+        final String output = new DotTree(
+            new TextNode(
+                new Root(),
+                Arrays.asList(
+                    new TextLeaf(new Literal("a"), "a"),
+                    new TextLeaf(new Literal("b"), "b"),
+                    new TextNode(
+                        new Literal("c"),
+                        Arrays.asList(
+                            new TextLeaf(new Literal("d"), "d"),
+                            new TextLeaf(new Literal("e"), "e"),
+                            new TextLeaf(new Literal("a"), "a")
+                        )
+                    ),
+                    new TextNode(
+                        new Literal("f"),
+                        Collections.singletonList(
+                            new TextLeaf(new Literal("d"), "d")
                         )
                     )
                 )
-            ).output(),
+            )
+        ).output();
+        System.out.println(output);
+        MatcherAssert.assertThat(
+            output,
             Matchers.equalTo(
                 String.join(
                     "\n",

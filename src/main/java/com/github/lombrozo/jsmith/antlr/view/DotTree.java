@@ -25,8 +25,11 @@ package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.rules.Root;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Tree in DOT format.
@@ -64,10 +67,22 @@ public final class DotTree implements Text {
         final StringBuilder builder = new StringBuilder();
         builder.append("digraph JsmithGenerativeTree{\n");
         final HashMap<String, String> labels = new HashMap<>();
-        this.travers(new TextLeaf(new Root(), "root"), this.origin, builder, labels);
+        final List<String> leafs = new ArrayList<>();
+        this.travers(new TextLeaf(new Root(), "root"), this.origin, builder, labels, leafs);
         builder.append("// Node labels\n");
         labels.entrySet().forEach(e -> builder.append(
             String.format("\"#%s\" [label=\"%s\"];\n", e.getKey(), e.getValue()))
+        );
+        builder.append(
+            leafs.stream()
+                .map(s -> String.format("  \"#%s\"", s))
+                .collect(
+                    Collectors.joining(
+                        "\n",
+                        " subgraph cluster_leafs {\nrank=same\n",
+                        "\n  }\n"
+                    )
+                )
         );
         builder.append("}");
         return builder.toString();
@@ -84,15 +99,23 @@ public final class DotTree implements Text {
         final Text parent,
         final Text current,
         final StringBuilder builder,
-        final HashMap<String, String> labels
+        final HashMap<String, String> labels,
+        final List<String> leafs
     ) {
         final int pnumber = System.identityHashCode(parent);
         final int cnumber = System.identityHashCode(current);
         labels.put(String.valueOf(cnumber), current.writer().name());
         labels.put(String.valueOf(pnumber), parent.writer().name());
         builder.append(String.format("\"#%d\" -> \"#%d\";\n", pnumber, cnumber));
+        if (current.children().isEmpty()) {
+            final String leaf = current.output();
+            final String nleaf = UUID.randomUUID().toString();
+            leafs.add(nleaf);
+            labels.put(nleaf, leaf);
+            builder.append(String.format("\"#%d\" -> \"#%s\";\n", cnumber, nleaf));
+        }
         for (final Text child : current.children()) {
-            this.travers(current, child, builder, labels);
+            this.travers(current, child, builder, labels, leafs);
         }
     }
 }
