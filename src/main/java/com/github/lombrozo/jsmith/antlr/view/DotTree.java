@@ -25,8 +25,15 @@ package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.rules.Root;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Tree in DOT format.
+ * You can read more about the format
+ * <a href="https://graphviz.gitlab.io">here</a>
+ * @since 0.1
+ */
 public final class DotTree implements Text {
 
     /**
@@ -56,22 +63,36 @@ public final class DotTree implements Text {
     public String output() {
         final StringBuilder builder = new StringBuilder();
         builder.append("digraph JsmithGenerativeTree{\n");
-        this.travers(new TextLeaf(new Root(), "root"), this.origin, builder);
+        final HashMap<String, String> labels = new HashMap<>();
+        this.travers(new TextLeaf(new Root(), "root"), this.origin, builder, labels);
+        builder.append("// Node labels\n");
+        labels.entrySet().forEach(e -> builder.append(
+            String.format("\"#%s\" [label=\"%s\"];\n", e.getKey(), e.getValue()))
+        );
         builder.append("}");
         return builder.toString();
     }
 
-
-    private void travers(final Text parent, final Text current, final StringBuilder builder) {
-        builder.append(
-            String.format(
-                "\"%s\" -> \"%s\";\n",
-                parent.writer().name(),
-                current.writer().name()
-            )
-        );
+    /**
+     * Traverses the tree.
+     * @param parent Parent node.
+     * @param current Current node.
+     * @param builder Builder where to append transitions.
+     * @param labels All node labels.
+     */
+    private void travers(
+        final Text parent,
+        final Text current,
+        final StringBuilder builder,
+        final HashMap<String, String> labels
+    ) {
+        final int pnumber = System.identityHashCode(parent);
+        final int cnumber = System.identityHashCode(current);
+        labels.put(String.valueOf(cnumber), current.writer().name());
+        labels.put(String.valueOf(pnumber), parent.writer().name());
+        builder.append(String.format("\"#%d\" -> \"#%d\";\n", pnumber, cnumber));
         for (final Text child : current.children()) {
-            this.travers(current, child, builder);
+            this.travers(current, child, builder, labels);
         }
     }
 }

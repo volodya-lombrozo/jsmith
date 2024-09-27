@@ -26,6 +26,9 @@ package com.github.lombrozo.jsmith.antlr.view;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import com.github.lombrozo.jsmith.antlr.rules.Root;
 import java.util.Arrays;
+import java.util.Collections;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -36,23 +39,57 @@ final class DotTreeTest {
 
     @Test
     void convertsSimpleTree() {
-        final TextNode tree = new TextNode(
-            new Root(),
-            Arrays.asList(
-                new TextLeaf(new Literal("a"), "a"),
-                new TextLeaf(new Literal("b"), "b"),
+        MatcherAssert.assertThat(
+            new DotTree(
                 new TextNode(
-                    new Literal("c"),
+                    new Root(),
                     Arrays.asList(
-                        new TextLeaf(new Literal("d"), "d"),
-                        new TextLeaf(new Literal("e"), "e")
+                        new TextLeaf(new Literal("a"), "a"),
+                        new TextLeaf(new Literal("b"), "b"),
+                        new TextNode(
+                            new Literal("c"),
+                            Arrays.asList(
+                                new TextLeaf(new Literal("d"), "d"),
+                                new TextLeaf(new Literal("e"), "e"),
+                                new TextLeaf(new Literal("a"), "a")
+                            )
+                        ),
+                        new TextNode(
+                            new Literal("f"),
+                            Collections.singletonList(
+                                new TextLeaf(new Literal("d"), "d")
+                            )
+                        )
                     )
+                )
+            ).output(),
+            Matchers.equalTo(
+                String.join(
+                    "\n",
+                    "digraph JsmithGenerativeTree{",
+                    "\"#1558021762\" -> \"#225290371\";",
+                    "\"#225290371\" -> \"#733672688\";",
+                    "\"#225290371\" -> \"#297927961\";",
+                    "\"#225290371\" -> \"#1891546521\";",
+                    "\"#1891546521\" -> \"#1312884893\";",
+                    "\"#1891546521\" -> \"#849373393\";",
+                    "\"#1891546521\" -> \"#868964689\";",
+                    "\"#225290371\" -> \"#912011468\";",
+                    "\"#912011468\" -> \"#1881129850\";",
+                    "// Node labels",
+                    "\"#297927961\" [label=\"literal(b)\"];",
+                    "\"#868964689\" [label=\"literal(a)\"];",
+                    "\"#912011468\" [label=\"literal(f)\"];",
+                    "\"#849373393\" [label=\"literal(e)\"];",
+                    "\"#225290371\" [label=\"root\"];",
+                    "\"#1881129850\" [label=\"literal(d)\"];",
+                    "\"#733672688\" [label=\"literal(a)\"];",
+                    "\"#1558021762\" [label=\"root\"];",
+                    "\"#1891546521\" [label=\"literal(c)\"];",
+                    "\"#1312884893\" [label=\"literal(d)\"];",
+                    "}"
                 )
             )
         );
-        //todo: good assertions are needed!
-        final String output = new DotTree(tree).output();
-        System.out.println(output);
     }
-
 }

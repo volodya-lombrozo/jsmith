@@ -1,5 +1,6 @@
 package com.github.lombrozo.jsmith.guard;
 
+import com.github.lombrozo.jsmith.antlr.view.DotTree;
 import com.github.lombrozo.jsmith.antlr.view.LimitedText;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextTree;
@@ -120,8 +121,31 @@ public final class SyntaxGuard {
                     new TextTree(code).output()
                 )
             );
+            this.saveDot(code);
             throw new IllegalStateException(
                 String.format("Generated code '%s' is wrong", code.output()),
+                exception
+            );
+        }
+    }
+
+    /**
+     * Save '.dot' file in case of syntax error.
+     * @param code Generated code.
+     */
+    private void saveDot(final Text code) {
+        try {
+            final Path file = Files.createTempFile("jsmith-", ".dot");
+            Files.write(
+                file,
+                new DotTree(code).output().getBytes(StandardCharsets.UTF_8)
+            );
+            Logger.getLogger(SyntaxGuard.class.getSimpleName()).severe(
+                String.format("Dot file saved to: file://%s", file)
+            );
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                "Something went wrong during '.dot' file saving",
                 exception
             );
         }
