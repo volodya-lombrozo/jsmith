@@ -98,7 +98,7 @@ public final class SetElement implements Rule, Negatable {
     }
 
     @Override
-    public Text negate() {
+    public Text negate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException(
                 "SetElement rule is empty, either SetElement or BlockSet should be added before generation"
@@ -119,7 +119,7 @@ public final class SetElement implements Rule, Negatable {
             this,
             this.children.stream()
                 .map(Negatable.class::cast)
-                .map(Negatable::negate)
+                .map(negatable -> negatable.negate(context))
                 .collect(Collectors.toList())
         );
     }

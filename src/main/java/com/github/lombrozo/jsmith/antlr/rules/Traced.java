@@ -84,9 +84,9 @@ public final class Traced implements Rule, Suffix, Negatable {
     }
 
     @Override
-    public Text negate() {
+    public Text negate(final Context context) {
         if (this.rule instanceof Negatable) {
-            return ((Negatable) this.rule).negate();
+            return ((Negatable) this.rule).negate(context);
         } else {
             throw new IllegalArgumentException(
                 String.format(

@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -51,7 +52,7 @@ final class LiteralTest {
     void negatesSymbols(final String input) {
         MatcherAssert.assertThat(
             "We expect that the literal will generate the negated symbol",
-            new Literal(input).negate().output(),
+            new Literal(input).negate(new Context()).output(),
             Matchers.not(
                 Matchers.containsString(
                     Literal.replaceEscapes(input.replaceAll("'", ""))

@@ -96,17 +96,7 @@ public final class LexerCharSet implements Rule, Negatable {
     }
 
     @Override
-    public void append(final Rule rule) {
-        throw new UnsupportedOperationException("LexerCharSet cannot have children");
-    }
-
-    @Override
-    public String name() {
-        return String.format("lexerCharSet('%s')", this.text);
-    }
-
-    @Override
-    public Text negate() {
+    public Text negate(Context context) {
         final String negated;
         final String replaced = Literal.replaceEscapes(this.text);
         if (replaced.startsWith("[")) {
@@ -118,6 +108,16 @@ public final class LexerCharSet implements Rule, Negatable {
             this,
             this.rand.regex(LexerCharSet.unescapeUnicodes(negated))
         );
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        throw new UnsupportedOperationException("LexerCharSet cannot have children");
+    }
+
+    @Override
+    public String name() {
+        return String.format("lexerCharSet('%s')", this.text);
     }
 
     /**

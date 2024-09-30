@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 
 /**
@@ -39,6 +40,6 @@ public interface Negatable {
      * Invert the element.
      * @return Inverted element.
      */
-    Text negate();
+    Text negate(Context context);
 
 }

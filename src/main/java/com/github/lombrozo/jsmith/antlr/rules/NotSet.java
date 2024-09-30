@@ -85,7 +85,7 @@ public final class NotSet implements Rule {
         }
         final Rule rule = this.children.get(0);
         if (rule instanceof Negatable) {
-            return new TextNode(this, ((Negatable) rule).negate());
+            return new TextNode(this, ((Negatable) rule).negate(context));
         } else {
             throw new IllegalArgumentException(
                 String.format(

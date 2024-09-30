@@ -85,7 +85,17 @@ public final class Literal implements Rule, Negatable {
     public Text generate(final Context context) {
         return new TextLeaf(
             this,
-            Literal.APOSTROPHE.matcher(Literal.replaceEscapes(this.text)).replaceAll("")
+            Literal.APOSTROPHE.matcher(
+                Literal.replaceEscapes(this.withoutApostrophes())
+            ).replaceAll("")
+        );
+    }
+
+    @Override
+    public Text negate(final Context context) {
+        return new TextLeaf(
+            this,
+            new Rand().regex(String.format("[^%s]", this.text))
         );
     }
 
@@ -102,6 +112,14 @@ public final class Literal implements Rule, Negatable {
     @Override
     public String toString() {
         return this.name();
+    }
+
+    private String withoutApostrophes() {
+        if (this.text.startsWith("'") && this.text.endsWith("'")) {
+            return this.text.substring(1, this.text.length() - 1);
+        } else {
+            return this.text;
+        }
     }
 
     /**
@@ -173,13 +191,5 @@ public final class Literal implements Rule, Negatable {
         }
         matcher.appendTail(result);
         return result.toString();
-    }
-
-    @Override
-    public Text negate() {
-        return new TextLeaf(
-            this,
-            new Rand().regex(String.format("[^%s]", this.text))
-        );
     }
 }

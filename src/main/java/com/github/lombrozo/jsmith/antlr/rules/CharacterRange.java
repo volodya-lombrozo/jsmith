@@ -103,6 +103,11 @@ public final class CharacterRange implements Rule, Negatable {
     }
 
     @Override
+    public Text negate(Context context) {
+        throw new UnsupportedOperationException("CharacterRange cannot be negated yet");
+    }
+
+    @Override
     public void append(final Rule rule) {
         throw new UnsupportedOperationException("CharacterRange cannot have children yet");
     }
@@ -145,10 +150,5 @@ public final class CharacterRange implements Rule, Negatable {
      */
     private static int code(final String character) {
         return new UnicodeChar(character).chararcter();
-    }
-
-    @Override
-    public Text negate() {
-        throw new UnsupportedOperationException("CharacterRange cannot be negated yet");
     }
 }

@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -75,7 +76,7 @@ final class LexerCharSetTest {
         final String sequence = "[\"\\\\\\u0000-\\u001F]";
         MatcherAssert.assertThat(
             "We expect that the generated string will not match the sequence",
-            new LexerCharSet(sequence).negate().output(),
+            new LexerCharSet(sequence).negate(new Context()).output(),
             Matchers.not(Matchers.matchesRegex(sequence))
         );
     }
