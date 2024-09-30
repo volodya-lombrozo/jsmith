@@ -75,7 +75,13 @@ public final class DotTree implements Text {
         this.travers(new TextLeaf(new Root(), "root"), this.origin, builder, labels, leafs);
         builder.append("// Node labels\n");
         labels.entrySet().forEach(e -> builder.append(
-            String.format("\"#%s\" [label=\"%s\"];\n", e.getKey(), e.getValue()))
+                String.format(
+                    "\"#%s\" [label=\"%s\" tooltip=\"%s\"];\n",
+                    e.getKey(),
+                    e.getValue(),
+                    labels.get(e.getKey())
+                )
+            )
         );
         builder.append(
             leafs.stream()
@@ -110,13 +116,38 @@ public final class DotTree implements Text {
         final int cnumber = System.identityHashCode(current);
         labels.put(String.valueOf(cnumber), current.writer().name());
         labels.put(String.valueOf(pnumber), parent.writer().name());
-        builder.append(String.format("\"#%d\" -> \"#%d\";\n", pnumber, cnumber));
+        builder.append(
+            String.format(
+                "\"#%d\" -> \"#%d\" [tooltip=\"%s\"];\n",
+                pnumber,
+                cnumber,
+                String.format("%s -> %s", parent.writer().name(), current.writer().name())
+            )
+        );
         if (current.children().isEmpty()) {
             final String leaf = current.output();
             final String nleaf = UUID.randomUUID().toString();
             leafs.add(nleaf);
             labels.put(nleaf, leaf);
-            builder.append(String.format("\"#%d\" -> \"#%s\";\n", cnumber, nleaf));
+            builder.append(
+                String.format(
+                    "\"#%d\" -> \"#%s\" [label=\"%s\" tooltip=\"%s\"];\n",
+                    cnumber,
+                    nleaf,
+                    String.format(
+                        "%s -> %s -> %s",
+                        parent.writer().name(),
+                        current.writer().name(),
+                        leaf
+                    ),
+                    String.format(
+                        "%s -> %s -> %s",
+                        parent.writer().name(),
+                        current.writer().name(),
+                        leaf
+                    )
+                )
+            );
         }
         for (final Text child : current.children()) {
             this.travers(current, child, builder, labels, leafs);
