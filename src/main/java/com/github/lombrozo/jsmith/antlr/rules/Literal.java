@@ -78,6 +78,7 @@ public final class Literal implements Rule, Negatable {
 
     @Override
     public Text generate(final Context context) {
+        //
         return new TextLeaf(
             this,
             Literal.replaceEscapes(this.withoutApostrophes())
