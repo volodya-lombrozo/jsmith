@@ -55,7 +55,7 @@ final class LiteralTest {
             new Literal(input).negate(new Context()).output(),
             Matchers.not(
                 Matchers.containsString(
-                    Literal.replaceEscapes(input.replaceAll("'", ""))
+                    Literal.replaceEscapes(Literal.withoutApostrophes(input))
                 )
             )
         );
@@ -76,6 +76,8 @@ final class LiteralTest {
             Arguments.of("'!'", "!"),
             Arguments.of("'('", "("),
             Arguments.of("')'", ")"),
+            Arguments.of("'''", "'"),
+            Arguments.of("'\\''", "'"),
             Arguments.of("NEWLINE", "NEWLINE"),
             Arguments.of("ID", "ID"),
             Arguments.of("INT", "INT"),

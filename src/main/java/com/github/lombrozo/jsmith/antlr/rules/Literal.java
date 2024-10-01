@@ -39,11 +39,6 @@ import java.util.regex.Pattern;
 public final class Literal implements Rule, Negatable {
 
     /**
-     * Apostrophe pattern.
-     */
-    private static final Pattern APOSTROPHE = Pattern.compile("'", Pattern.LITERAL);
-
-    /**
      * Special characters pattern.
      */
     private static final Pattern SPECIAL = Pattern.compile("\\\\([nrtbf\"'\\\\])");
@@ -85,9 +80,7 @@ public final class Literal implements Rule, Negatable {
     public Text generate(final Context context) {
         return new TextLeaf(
             this,
-            Literal.APOSTROPHE.matcher(
-                Literal.replaceEscapes(this.withoutApostrophes())
-            ).replaceAll("")
+            Literal.replaceEscapes(this.withoutApostrophes())
         );
     }
 
@@ -95,7 +88,7 @@ public final class Literal implements Rule, Negatable {
     public Text negate(final Context context) {
         return new TextLeaf(
             this,
-            new Rand().regex(String.format("[^%s]", this.text))
+            new Rand().regex(String.format("[^%s]", this.generate(context).output()))
         );
     }
 
@@ -115,10 +108,14 @@ public final class Literal implements Rule, Negatable {
     }
 
     private String withoutApostrophes() {
-        if (this.text.startsWith("'") && this.text.endsWith("'")) {
-            return this.text.substring(1, this.text.length() - 1);
+        return Literal.withoutApostrophes(this.text);
+    }
+
+    static String withoutApostrophes(final String text) {
+        if (text.startsWith("'") && text.endsWith("'")) {
+            return text.substring(1, text.length() - 1);
         } else {
-            return this.text;
+            return text;
         }
     }
 
@@ -181,7 +178,7 @@ public final class Literal implements Rule, Negatable {
                 case "\\\"":
                     replacement = "\"";
                     break;
-                case "'":
+                case "\\'":
                     replacement = "'";
                     break;
                 default:
