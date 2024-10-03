@@ -236,26 +236,6 @@ sub_delims
     | Equals
     ;
 
-LColumn
-    : '('
-    ;
-
-RColumn
-    : ')'
-    ;
-
-SemiColon
-    : ';'
-    ;
-
-Equals
-    : '='
-    ;
-
-Period
-    : ','
-    ;
-
 /*
  CRLF = CR  LF ; Internet standard newline
  */
@@ -384,11 +364,7 @@ HTAB
 vCHAR
     : ALPHA
     | DIGIT
-    | VCHAR
-    ;
-
-VCHAR
-    : ExclamationMark
+    | ExclamationMark
     | '"'
     | Hashtag
     | DollarSign
@@ -425,6 +401,26 @@ VCHAR
 
 OBS_TEXT
     : '\u0080' ..'\u00ff'
+    ;
+
+LColumn
+    : '('
+    ;
+
+RColumn
+    : ')'
+    ;
+
+SemiColon
+    : ';'
+    ;
+
+Equals
+    : '='
+    ;
+
+Period
+    : ','
     ;
 
 /*
