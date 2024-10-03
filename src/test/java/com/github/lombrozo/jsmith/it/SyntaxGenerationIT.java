@@ -71,7 +71,8 @@ final class SyntaxGenerationIT {
         } catch (final IllegalText exception) {
             exception.saveDot();
             Assertions.fail(
-                "We expect that the randomly generated code will be verified without errors"
+                "We expect that the randomly generated code will be verified without errors",
+                exception
             );
         }
     }

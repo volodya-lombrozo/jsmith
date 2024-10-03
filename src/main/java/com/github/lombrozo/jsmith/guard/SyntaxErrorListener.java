@@ -67,7 +67,8 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
         final BitSet ambigAlts,
         final ATNConfigSet configs
     ) {
-        this.errors.add(String.format("Ambiguity from %s to %s", start, stop));
+        //todo: Ignore Ambiguity issues
+//        this.errors.add(String.format("Ambiguity from %s to %s", start, stop));
     }
 
     @Override
@@ -79,9 +80,10 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
         final BitSet conflictingAlts,
         final ATNConfigSet configs
     ) {
-        this.errors.add(
-            String.format("Attempting full context from %s to %s", startIndex, stopIndex)
-        );
+        //todo: Ignore Ambiguity issues
+//        this.errors.add(
+//            String.format("Attempting full context from %s to %s", startIndex, stopIndex)
+//        );
     }
 
     @Override
@@ -100,7 +102,7 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
 
     public void report() throws InvalidSyntax {
         if (!this.errors.isEmpty()) {
-            throw new InvalidSyntax(this.errors.stream().collect(Collectors.joining(" ")));
+            throw new InvalidSyntax(this.errors.stream().collect(Collectors.joining("\n")));
         }
     }
 

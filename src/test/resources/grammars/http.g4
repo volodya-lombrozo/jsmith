@@ -95,7 +95,7 @@ http_name
  header-field = field-name  ":"  OWS  field-value  OWS 
  */
 header_field
-    : field_name Colon field_value
+    : field_name Colon (SP | HTAB)* field_value (SP | HTAB)*
     ;
 
 /*
@@ -116,16 +116,14 @@ token
  field-value = ( field-content / obs-fold )
  */
 field_value
-    : (field_content
-//    | obs_fold
-    )+
+    : (field_content | obs_fold)+
     ;
 
 /*
  field-content = field-vchar [ 1*( SP / HTAB )  field-vchar ]
  */
 field_content
-    : field_vchar //((SP | '\t')+ field_vchar)?
+    : field_vchar ((SP | HTAB)+ field_vchar)?
     ;
 
 /*
@@ -155,12 +153,6 @@ obs_fold
  */
 //message_body: OCTET*;
 
-/*
- SP = %x20 ; space
- */
-SP
-    : ' '
-    ;
 
 /*
  pchar = unreserved / pct‑encoded / sub‑delims / ":" / "@"
@@ -267,6 +259,94 @@ tchar
     | ALPHA
     ;
 
+/*
+ OWS = ( SP / HTAB ) ; optional whitespace
+ */
+//OWS
+//    : SP
+//    | HTAB
+//    ;
+
+/*
+ SP = %x20 ; space
+ */
+SP
+    : ' '
+    ;
+
+
+/*
+ HTAB = %x09 ; horizontal tab
+ */
+HTAB
+    : '\t'
+    ;
+
+/*
+ VCHAR = %x21-7E ; visible (printing) characters
+ */
+vCHAR
+    : ALPHA
+    | DIGIT
+    | ExclamationMark
+    | '"'
+    | Hashtag
+    | DollarSign
+    | Percent
+    | Ampersand
+    | SQuote
+    | LColumn
+    | RColumn
+    | RColumn
+    | Star
+    | Plus
+    | Period
+    | Minus
+    | Dot
+    | Slash
+    | Colon
+    | SemiColon
+    | '<'
+    | Equals
+    | '>'
+    | QuestionMark
+    | At
+    | '['
+    | '\\'
+    | Caret
+    | Underscore
+    | ']'
+    | BackQuote
+    | '{'
+    | '}'
+    | VBar
+    | Tilde
+    ;
+
+OBS_TEXT
+    : '\u0080' ..'\u00ff'
+    ;
+
+LColumn
+    : '('
+    ;
+
+RColumn
+    : ')'
+    ;
+
+SemiColon
+    : ';'
+    ;
+
+Equals
+    : '='
+    ;
+
+Period
+    : ','
+    ;
+
 Minus
     : '-'
     ;
@@ -343,85 +423,6 @@ VBar
     : '|'
     ;
 
-/*
- OWS = ( SP / HTAB ) ; optional whitespace
- */
-OWS
-    : SP
-    | HTAB
-    ;
-
-/*
- HTAB = %x09 ; horizontal tab
- */
-HTAB
-    : [\t]
-    ;
-
-/*
- VCHAR = %x21-7E ; visible (printing) characters
- */
-vCHAR
-    : ALPHA
-    | DIGIT
-    | ExclamationMark
-    | '"'
-    | Hashtag
-    | DollarSign
-    | Percent
-    | Ampersand
-    | SQuote
-    | LColumn
-    | RColumn
-    | RColumn
-    | Star
-    | Plus
-    | Period
-    | Minus
-    | Dot
-    | Slash
-    | Colon
-    | SemiColon
-    | '<'
-    | Equals
-    | '>'
-    | QuestionMark
-    | At
-    | '['
-    | '\\'
-    | Caret
-    | Underscore
-    | ']'
-    | BackQuote
-    | '{'
-    | '}'
-    | VBar
-    | Tilde
-    ;
-
-OBS_TEXT
-    : '\u0080' ..'\u00ff'
-    ;
-
-LColumn
-    : '('
-    ;
-
-RColumn
-    : ')'
-    ;
-
-SemiColon
-    : ';'
-    ;
-
-Equals
-    : '='
-    ;
-
-Period
-    : ','
-    ;
 
 /*
  OCTET = %x00-FF ; 8 bits of data

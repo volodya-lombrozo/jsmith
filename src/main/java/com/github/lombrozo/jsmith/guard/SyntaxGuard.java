@@ -116,7 +116,7 @@ public final class SyntaxGuard {
             Logger.getLogger(SyntaxGuard.class.getSimpleName()).severe(
                 String.format(
                     "Generated code tree: '%n%s%n' is wrong",
-                    new TextTree(code).output()
+                    code.output()
                 )
             );
             throw new IllegalText(
