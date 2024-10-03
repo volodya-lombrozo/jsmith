@@ -23,41 +23,21 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
-import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.Collections;
-import java.util.List;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+public final class Attributes {
 
-@ToString
-@EqualsAndHashCode
-public final class TextLeaf implements Text {
-    private final Rule writer;
+    private final boolean rule;
 
-    private final String output;
-
-    public TextLeaf(final Rule writer, final String output) {
-        this.writer = writer;
-        this.output = output;
+    public Attributes() {
+        this(false);
     }
 
-    @Override
-    public Rule writer() {
-        return this.writer;
+    public Attributes(final boolean rule) {
+        this.rule = rule;
     }
 
-    @Override
-    public List<Text> children() {
-        return Collections.emptyList();
+    boolean isRule() {
+        return this.rule;
     }
 
-    @Override
-    public String output() {
-        return this.output;
-    }
 
-    @Override
-    public Attributes attributes() {
-        return new Attributes(true);
-    }
 }

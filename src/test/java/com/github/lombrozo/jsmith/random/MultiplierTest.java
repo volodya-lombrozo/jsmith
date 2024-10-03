@@ -88,5 +88,4 @@ final class MultiplierTest {
             Matchers.equalTo("a")
         );
     }
-
 }

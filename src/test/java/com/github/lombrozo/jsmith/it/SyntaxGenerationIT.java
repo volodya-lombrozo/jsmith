@@ -1,7 +1,9 @@
 package com.github.lombrozo.jsmith.it;
 
 import com.github.lombrozo.jsmith.RandomScript;
+import com.github.lombrozo.jsmith.antlr.rules.Root;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.guard.IllegalText;
 import com.github.lombrozo.jsmith.guard.SyntaxGuard;
 import java.nio.file.Path;
@@ -13,6 +15,7 @@ import java.util.stream.Stream;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -71,6 +74,19 @@ final class SyntaxGenerationIT {
                 "We expect that the randomly generated code will be verified without errors"
             );
         }
+    }
+
+    //todo: remove me
+//http://lab.antlr.org
+    @Test
+    void verifyGeneratedResult(@TempDir Path tmp) {
+        final String input = "GET //%EE/%EE%EE%EE/%EE%EE HTTP/7.6\n" +
+            "2566:__\n" +
+            "\n";
+
+        final SyntaxGuard guard = new SyntaxGuard(
+            tmp, "http_message", new ResourceOf("grammars/http.g4"));
+        guard.verifySilently(new TextLeaf(new Root(), input));
     }
 
     /**

@@ -37,4 +37,13 @@ public interface Text {
 
     String output();
 
+    /**
+     * Node attributes.
+     * @return Node attributes.
+     * @todo #1:30min Remove default implementation of attributes method.
+     *  It should be implemented in the classes that implement this interface.
+     */
+    default Attributes attributes() {
+        return new Attributes();
+    }
 }

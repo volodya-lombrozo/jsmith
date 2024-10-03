@@ -24,21 +24,33 @@
 package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.stream.Collectors;
 
-@ToString
-@EqualsAndHashCode
-public final class TextLeaf implements Text {
+public final class RuleTextNode implements Text {
+
+    /**
+     * Default delimiter.
+     */
+    private static final String DELIMITER = "";
     private final Rule writer;
+    private final List<Text> children;
+    private final String delimiter;
 
-    private final String output;
+    public RuleTextNode(final Rule writer, final Text... children) {
+        this(writer, Arrays.asList(children));
+    }
 
-    public TextLeaf(final Rule writer, final String output) {
+    public RuleTextNode(final Rule writer, final List<Text> children) {
+        this(writer, children, RuleTextNode.DELIMITER);
+    }
+
+    public RuleTextNode(final Rule writer, final List<Text> children, final String delimiter) {
         this.writer = writer;
-        this.output = output;
+        this.children = children;
+        this.delimiter = delimiter;
     }
 
     @Override
@@ -48,12 +60,15 @@ public final class TextLeaf implements Text {
 
     @Override
     public List<Text> children() {
-        return Collections.emptyList();
+        return Collections.unmodifiableList(this.children);
     }
 
     @Override
     public String output() {
-        return this.output;
+        return
+            this.children.stream()
+                .map(Text::output)
+                .collect(Collectors.joining(this.delimiter));
     }
 
     @Override

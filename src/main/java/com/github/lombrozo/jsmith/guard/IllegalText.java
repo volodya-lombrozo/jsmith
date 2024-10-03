@@ -25,7 +25,9 @@ package com.github.lombrozo.jsmith.guard;
 
 import com.github.lombrozo.jsmith.antlr.view.DotTree;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -56,16 +58,57 @@ public final class IllegalText extends RuntimeException {
             final Path file = Files.createTempFile("jsmith-", ".dot");
             Files.write(
                 file,
-                new DotTree(this.origin).output().getBytes(StandardCharsets.UTF_8)
+                new DotTree(
+                    this.origin,
+                    new DotTree.RulesOnly()
+                ).output().getBytes(StandardCharsets.UTF_8)
             );
             Logger.getLogger(SyntaxGuard.class.getSimpleName()).severe(
                 String.format("Dot file saved to: file://%s", file)
             );
+            this.tryToGenerateSvg(file);
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 "Something went wrong during '.dot' file saving",
                 exception
             );
+        }
+    }
+
+    private void tryToGenerateSvg(final Path file) {
+        final String outputName = file.getFileName().toString().replaceAll(".dot", ".svg");
+        final Path svg = file.getParent().resolve(outputName);
+        final ProcessBuilder processBuilder = new ProcessBuilder(
+            "dot", "-Tsvg", "-o",
+            svg.toString(),
+            file.toString()
+        );
+        try {
+            // Start the process
+            Process process = processBuilder.start();
+            // Read the standard output (if the command produces output)
+            BufferedReader stdOutput = new BufferedReader(
+                new InputStreamReader(process.getInputStream()));
+            String s;
+            while ((s = stdOutput.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            // Read the standard error (to capture any errors from the command)
+            BufferedReader stdError = new BufferedReader(
+                new InputStreamReader(process.getErrorStream()));
+            while ((s = stdError.readLine()) != null) {
+                System.err.println(s);
+            }
+
+            // Wait for the process to complete and get the exit code
+            int exitCode = process.waitFor();
+            System.out.println("Process exited with code: " + exitCode);
+            Logger.getLogger(SyntaxGuard.class.getSimpleName()).severe(
+                String.format("SVG file saved to: file://%s", svg)
+            );
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

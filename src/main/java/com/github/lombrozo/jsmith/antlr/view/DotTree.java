@@ -26,9 +26,11 @@ package com.github.lombrozo.jsmith.antlr.view;
 import com.github.lombrozo.jsmith.antlr.rules.Root;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -44,12 +46,23 @@ public final class DotTree implements Text {
      */
     private final Text origin;
 
+    private final List<Predicate<Text>> filters;
+
     /**
      * Constructor.
      * @param origin Origin text.
      */
     public DotTree(final Text origin) {
+        this(origin, new ArrayList<>(0));
+    }
+
+    public DotTree(final Text origin, Predicate<Text>... filters) {
+        this(origin, Arrays.asList(filters));
+    }
+
+    public DotTree(final Text origin, final List<Predicate<Text>> filters) {
         this.origin = origin;
+        this.filters = filters;
     }
 
     @Override
@@ -112,45 +125,60 @@ public final class DotTree implements Text {
         final HashMap<String, String> labels,
         final List<String> leafs
     ) {
-        final int pnumber = System.identityHashCode(parent);
-        final int cnumber = System.identityHashCode(current);
-        labels.put(String.valueOf(cnumber), current.writer().name());
-        labels.put(String.valueOf(pnumber), parent.writer().name());
-        builder.append(
-            String.format(
-                "\"#%d\" -> \"#%d\" [tooltip=\"%s\"];\n",
-                pnumber,
-                cnumber,
-                String.format("%s -> %s", parent.writer().name(), current.writer().name())
-            )
-        );
-        if (current.children().isEmpty()) {
-            final String leaf = current.output();
-            final String nleaf = UUID.randomUUID().toString();
-            leafs.add(nleaf);
-            labels.put(nleaf, leaf);
+        if (this.filters.stream().anyMatch(filter -> filter.test(current))) {
+            for (final Text child : current.children()) {
+                this.travers(parent, child, builder, labels, leafs);
+            }
+        } else {
+            final int pnumber = System.identityHashCode(parent);
+            final int cnumber = System.identityHashCode(current);
+            labels.put(String.valueOf(cnumber), current.writer().name());
+            labels.put(String.valueOf(pnumber), parent.writer().name());
             builder.append(
                 String.format(
-                    "\"#%d\" -> \"#%s\" [label=\"%s\" tooltip=\"%s\"];\n",
+                    "\"#%d\" -> \"#%d\" [tooltip=\"%s\"];\n",
+                    pnumber,
                     cnumber,
-                    nleaf,
-                    String.format(
-                        "%s -> %s -> %s",
-                        parent.writer().name(),
-                        current.writer().name(),
-                        leaf
-                    ),
-                    String.format(
-                        "%s -> %s -> %s",
-                        parent.writer().name(),
-                        current.writer().name(),
-                        leaf
-                    )
+                    String.format("%s -> %s", parent.writer().name(), current.writer().name())
                 )
             );
+            if (current.children().isEmpty()) {
+                final String leaf = current.output();
+                final String nleaf = UUID.randomUUID().toString();
+                leafs.add(nleaf);
+                labels.put(nleaf, leaf);
+                builder.append(
+                    String.format(
+                        "\"#%d\" -> \"#%s\" [label=\"%s\" tooltip=\"%s\"];\n",
+                        cnumber,
+                        nleaf,
+                        String.format(
+                            "%s -> %s -> %s",
+                            parent.writer().name(),
+                            current.writer().name(),
+                            leaf
+                        ),
+                        String.format(
+                            "%s -> %s -> %s",
+                            parent.writer().name(),
+                            current.writer().name(),
+                            leaf
+                        )
+                    )
+                );
+            }
+            for (final Text child : current.children()) {
+                this.travers(current, child, builder, labels, leafs);
+            }
         }
-        for (final Text child : current.children()) {
-            this.travers(current, child, builder, labels, leafs);
+    }
+
+
+    public static class RulesOnly implements Predicate<Text> {
+
+        @Override
+        public boolean test(final Text text) {
+            return !text.attributes().isRule();
         }
     }
 }

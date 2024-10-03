@@ -95,7 +95,7 @@ http_name
  header-field = field-name  ":"  OWS  field-value  OWS 
  */
 header_field
-    : field_name Colon OWS* field_value OWS*
+    : field_name Colon field_value
     ;
 
 /*
@@ -116,14 +116,16 @@ token
  field-value = ( field-content / obs-fold )
  */
 field_value
-    : (field_content | obs_fold)+
+    : (field_content
+//    | obs_fold
+    )+
     ;
 
 /*
  field-content = field-vchar [ 1*( SP / HTAB )  field-vchar ]
  */
 field_content
-    : field_vchar ((SP | HTAB)+ field_vchar)?
+    : field_vchar //((SP | '\t')+ field_vchar)?
     ;
 
 /*
@@ -373,7 +375,7 @@ OWS
  HTAB = %x09 ; horizontal tab
  */
 HTAB
-    : '\t'
+    : [\t]
     ;
 
 /*
