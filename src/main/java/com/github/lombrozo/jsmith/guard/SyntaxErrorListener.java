@@ -95,9 +95,10 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
         final int prediction,
         final ATNConfigSet configs
     ) {
-        this.errors.add(
-            String.format("Context sensitivity from %s to %s", startIndex, stopIndex)
-        );
+        //todo: Ignore Context Sensitivity issues
+//        this.errors.add(
+//            String.format("Context sensitivity from %s to %s", startIndex, stopIndex)
+//        );
     }
 
     public void report() throws InvalidSyntax {
