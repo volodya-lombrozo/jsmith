@@ -57,7 +57,14 @@ request_line
  ; → RFC 7231 – Section 4.3.8
  */
 method
-    : token
+    : 'GET'
+    | 'HEAD'
+    | 'POST'
+    | 'PUT'
+    | 'DELETE'
+    | 'CONNECT'
+    | 'OPTIONS'
+    | 'TRACE'
     ;
 
 /*
