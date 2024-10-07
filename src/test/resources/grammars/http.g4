@@ -197,11 +197,6 @@ obs_fold
     ;
 
 /*
- message-body = *OCTET
- */
-message_body: OCTET*;
-
-/*
  pchar = unreserved / pct‑encoded / sub‑delims / ":" / "@"
  */
 pchar
@@ -392,19 +387,6 @@ VBar
 DIGIT
     : [0-9]
     ;
-
-/*
- HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
- */
-//HEXDIG
-//    : DIGIT
-//    | 'A'
-//    | 'B'
-//    | 'C'
-//    | 'D'
-//    | 'E'
-//    | 'F'
-//    ;
 
 /*
  ALPHA = %x41‑5A / %x61‑7A ; A‑Z / a‑z
