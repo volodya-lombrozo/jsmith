@@ -47,7 +47,7 @@ start_line
  request-line = method SP request‑target SP HTTP‑version CRLF
  */
 request_line
-    : method SP request_target SP http_version CRLF
+    : method SP request_target SP HTTP_VERSION CRLF
     ;
 
 /*
@@ -71,14 +71,14 @@ request_target
  origin-form = absolute-path  [ "?"  query ]
  */
 origin_form
-    : absolute_path (QuestionMark query)?
+    : absolute_path (QUESTION_MARK query)?
     ;
 
 /*
  absolute-path = 1*( "/" segment )
  */
 absolute_path
-    : (Slash segment)+
+    : (SLASH segment)+
     ;
 
 /*
@@ -92,28 +92,28 @@ segment
  query = *( pchar /  "/" /  "?" )
  */
 query
-    : (pchar | Slash | QuestionMark)*
+    : (pchar | SLASH | QUESTION_MARK)*
     ;
 
-/*
- HTTP-version = HTTP-name '/' DIGIT  "." DIGIT
- */
-http_version
-    : http_name Slash DIGIT Dot DIGIT
-    ;
+///*
+// HTTP-version = HTTP-name '/' DIGIT  "." DIGIT
+// */
+//http_version
+//    : http_name SLASH DIGIT DOT DIGIT
+//    ;
 
 /*
  HTTP-name = %x48.54.54.50 ; "HTTP", case-sensitive
  */
 http_name
-    : 'HTTP'
+    : HTTP_NAME
     ;
 
 /*
  header-field = field-name  ":"  OWS  field-value  OWS
  */
 header_field
-    : field_name Colon ows field_value ows
+    : field_name COLON ows field_value ows
     ;
 
 /*
@@ -135,22 +135,21 @@ token
  "|" / "~" / DIGIT / ALPHA
  */
 tchar
-    : hexdig
-    | ExclamationMark
-    | DollarSign
-    | Hashtag
-    | Percent
-    | Ampersand
-    | SQuote
-    | Star
-    | Plus
-    | Minus
-    | Dot
-    | Caret
-    | Underscore
-    | BackQuote
-    | VBar
-    | Tilde
+    : EXCLAMATION_MARK
+    | DOLLAR_SIGN
+    | HASHTAG
+    | PERCENT
+    | AMPERSAND
+    | SQUOTE
+    | STAR
+    | PLUS
+    | MINUS
+    | DOT
+    | CARET
+    | UNDERSCORE
+    | BACK_QUOTE
+    | VBAR
+    | TILDE
     | DIGIT
     | ALPHA
     ;
@@ -179,14 +178,7 @@ ows : (SP | HTAB)*;
  */
 field_vchar
     : vchar
-    | obs_text
-    ;
-
-/*
- obs-text = %x80-FF
- */
-obs_text
-    : OBS_TEXT
+    | OBS_TEXT
     ;
 
 /*
@@ -199,36 +191,31 @@ obs_fold
 /*
  message-body = *OCTET
  */
-message_body: OCTET*;
+//message_body: OCTET*;
 
 /*
  pchar = unreserved / pct‑encoded / sub‑delims / ":" / "@"
  */
 pchar
     : unreserved
-    | pct_encoded
+    | PCT_ENCODED
     | sub_delims
-    | hexdig
-    | Colon
-    | At
+    | COLON
+    | AT
     ;
+
+///*
+// pct-encoded = "%"  HEXDIG HEXDIG
+// */
+//pct_encoded
+//    : PERCENT hexdig hexdig
+//    ;
 
 /*
- pct-encoded = "%"  HEXDIG HEXDIG
+ HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
  */
-pct_encoded
-    : Percent hexdig hexdig
-    ;
-
-hexdig
-    : DIGIT
-    | 'A'
-    | 'B'
-    | 'C'
-    | 'D'
-    | 'E'
-    | 'F'
-    ;
+//hexdig
+//    : DIGIT | HEX; // | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
 /*
  unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
@@ -236,182 +223,198 @@ hexdig
 unreserved
     : ALPHA
     | DIGIT
-    | Minus
-    | Dot
-    | Underscore
-    | Tilde
+    | MINUS
+    | DOT
+    | UNDERSCORE
+    | TILDE
     ;
 
 /*
  sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
  */
 sub_delims
-    : ExclamationMark
-    | DollarSign
-    | Ampersand
-    | SQuote
-    | LColumn
-    | RColumn
-    | Star
-    | Plus
-    | Period
-    | SemiColon
-    | Equals
+    : EXCLAMATION_MARK
+    | DOLLAR_SIGN
+    | AMPERSAND
+    | SQUOTE
+    | LCOLUMN
+    | RCOLUMN
+    | STAR
+    | PLUS
+    | PERIOD
+    | SEMI_COLON
+    | EQUALS
     ;
 
 vchar
-    : hexdig
-    | LColumn
-    | RColumn
-    | SemiColon
-    | Equals
-    | Period
-    | Minus
-    | Dot
-    | Underscore
-    | Tilde
-    | QuestionMark
-    | Slash
-    | ExclamationMark
-    | Colon
-    | At
-    | DollarSign
-    | Hashtag
-    | Ampersand
-    | Percent
-    | SQuote
-    | Star
-    | Plus
-    | Caret
-    | BackQuote
-    | VBar
+    : LCOLUMN
+    | RCOLUMN
+    | SEMI_COLON
+    | EQUALS
+    | PERIOD
+    | MINUS
+    | DOT
+    | UNDERSCORE
+    | TILDE
+    | QUESTION_MARK
+    | SLASH
+    | EXCLAMATION_MARK
+    | COLON
+    | AT
+    | DOLLAR_SIGN
+    | HASHTAG
+    | AMPERSAND
+    | PERCENT
+    | SQUOTE
+    | STAR
+    | PLUS
+    | CARET
+    | BACK_QUOTE
+    | VBAR
     | ALPHA
     | DIGIT
     | VCHAR
     ;
 
-LColumn
+/*
+ HTTP-name = %x48.54.54.50 ; "HTTP", case-sensitive
+ */
+HTTP_NAME: 'HTTP';
+
+LCOLUMN
     : '('
     ;
 
-RColumn
+RCOLUMN
     : ')'
     ;
 
-SemiColon
+SEMI_COLON
     : ';'
     ;
 
-Equals
+EQUALS
     : '='
     ;
 
-Period
+PERIOD
     : ','
     ;
 
-Minus
+MINUS
     : '-'
     ;
 
-Dot
+DOT
     : '.'
     ;
 
-Underscore
+UNDERSCORE
     : '_'
     ;
 
-Tilde
+TILDE
     : '~'
     ;
 
-QuestionMark
+QUESTION_MARK
     : '?'
     ;
 
-Slash
+SLASH
     : '/'
     ;
 
-ExclamationMark
+EXCLAMATION_MARK
     : '!'
     ;
 
-Colon
+COLON
     : ':'
     ;
 
-At
+AT
     : '@'
     ;
 
-DollarSign
+DOLLAR_SIGN
     : '$'
     ;
 
-Hashtag
+HASHTAG
     : '#'
     ;
 
-Ampersand
+AMPERSAND
     : '&'
     ;
 
-Percent
+PERCENT
     : '%'
     ;
 
-SQuote
+SQUOTE
     : '\''
     ;
 
-Star
+STAR
     : '*'
     ;
 
-Plus
+PLUS
     : '+'
     ;
 
-Caret
+CARET
     : '^'
     ;
 
-BackQuote
+BACK_QUOTE
     : '`'
     ;
 
-VBar
+VBAR
     : '|'
+    ;
+
+/*
+ pct-encoded = "%"  HEXDIG HEXDIG
+ */
+PCT_ENCODED
+    : PERCENT HEXDIG HEXDIG
+    ;
+
+/*
+ HTTP-version = HTTP-name '/' DIGIT  "." DIGIT
+ */
+HTTP_VERSION
+    : HTTP_NAME SLASH DIGIT DOT DIGIT
+    ;
+
+
+fragment HEXDIG
+    : [0-9A-F]
+    ;
+
+/*
+ ALPHA = %x41‑5A / %x61‑7A ; A‑Z / a‑z
+ */
+fragment ALPHA
+    : [A-Za-z]
     ;
 
 /*
  DIGIT = %x30‑39 ; 0-9
  */
-DIGIT
+fragment DIGIT
     : [0-9]
     ;
 
 /*
  HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
  */
-//HEXDIG
-//    : DIGIT
-//    | 'A'
-//    | 'B'
-//    | 'C'
-//    | 'D'
-//    | 'E'
-//    | 'F'
-//    ;
-
-/*
- ALPHA = %x41‑5A / %x61‑7A ; A‑Z / a‑z
- */
-ALPHA
-    : [A-Za-z]
-    ;
+//fragment HEXDIG
+//    : DIGIT | [A-F];
 
 /*
  VCHAR = %x21-7E ; visible (printing) characters
@@ -420,6 +423,9 @@ VCHAR
     : '\u0021' .. '\u007e'
     ;
 
+/*
+obs-text = %x80-FF
+*/
 OBS_TEXT
     : '\u0080' ..'\u00ff'
     ;
@@ -445,6 +451,8 @@ CRLF
     : '\r\n' | '\n'
     ;
 
+/*
 OCTET
     : .
     ;
+*/
