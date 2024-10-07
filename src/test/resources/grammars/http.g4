@@ -71,14 +71,14 @@ request_target
  origin-form = absolute-path  [ "?"  query ]
  */
 origin_form
-    : absolute_path (QuestionMark query)?
+    : absolute_path ('?' query)?
     ;
 
 /*
  absolute-path = 1*( "/" segment )
  */
 absolute_path
-    : (Slash segment)+
+    : ('/' segment)+
     ;
 
 /*
@@ -92,28 +92,22 @@ segment
  query = *( pchar /  "/" /  "?" )
  */
 query
-    : (pchar | Slash | QuestionMark)*
+    : (pchar | '/' | '?')*
     ;
 
 /*
  HTTP-version = HTTP-name '/' DIGIT  "." DIGIT
- */
-http_version
-    : http_name Slash DIGIT Dot DIGIT
-    ;
-
-/*
  HTTP-name = %x48.54.54.50 ; "HTTP", case-sensitive
  */
-http_name
-    : 'HTTP'
+http_version
+    : 'HTTP' '/' DIGIT '.' DIGIT
     ;
 
 /*
  header-field = field-name  ":"  OWS  field-value  OWS
  */
 header_field
-    : field_name Colon ows field_value ows
+    : field_name ':' ows field_value ows
     ;
 
 /*
