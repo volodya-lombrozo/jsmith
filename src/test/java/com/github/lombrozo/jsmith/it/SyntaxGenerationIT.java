@@ -1,13 +1,10 @@
 package com.github.lombrozo.jsmith.it;
 
 import com.github.lombrozo.jsmith.RandomScript;
-import com.github.lombrozo.jsmith.antlr.rules.Root;
 import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.guard.IllegalText;
 import com.github.lombrozo.jsmith.guard.SyntaxGuard;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -15,7 +12,6 @@ import java.util.stream.Stream;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -32,6 +28,16 @@ final class SyntaxGenerationIT {
     /**
      * Provides grammar files and top rules.
      * @return Stream of arguments.
+     * @todo #1:90min Add XML Grammar Verification
+     *  Currently this grammar is disabled because we don't know what to do
+     *  with skipped tokens like spaces and new lines. If we use space as a
+     *  separator, we will have a lot of false positives. We need to find a
+     *  way to verify XML grammar.
+     *  To add the grammar use this code:
+     *  Arguments.of(Arrays.asList(
+     *    "grammars/separated/XMLLexer.g4",
+     *    "grammars/separated/XMLParser.g4"
+     *  ), "document")
      */
     static Stream<Arguments> syntax() {
         return Stream.of(
@@ -40,14 +46,7 @@ final class SyntaxGenerationIT {
             Arguments.of(Collections.singletonList("grammars/Recursive.g4"), "expr"),
             Arguments.of(Collections.singletonList("grammars/Json.g4"), "json"),
             Arguments.of(Collections.singletonList("grammars/CSV.g4"), "csvFile"),
-            Arguments.of(Collections.singletonList("grammars/http.g4"), "http_message"),
-            Arguments.of(
-                Arrays.asList(
-                    "grammars/separated/XMLLexer.g4",
-                    "grammars/separated/XMLParser.g4"
-                ),
-                "document"
-            )
+            Arguments.of(Collections.singletonList("grammars/http.g4"), "http_message")
         );
     }
 
@@ -75,19 +74,6 @@ final class SyntaxGenerationIT {
                 exception
             );
         }
-    }
-
-    //todo: remove me
-//http://lab.antlr.org
-    @Test
-    void verifyGeneratedResult(@TempDir Path tmp) {
-        final String input = "GET //%EE/%EE%EE%EE/%EE%EE HTTP/7.6\n" +
-            "2566:__\n" +
-            "\n";
-
-        final SyntaxGuard guard = new SyntaxGuard(
-            tmp, "http_message", new ResourceOf("grammars/http.g4"));
-        guard.verifySilently(new TextLeaf(new Root(), input));
     }
 
     /**
