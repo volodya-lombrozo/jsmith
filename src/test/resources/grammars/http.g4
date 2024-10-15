@@ -129,8 +129,7 @@ token
  "|" / "~" / DIGIT / ALPHA
  */
 tchar
-    : hexdig
-    | ExclamationMark
+    : ExclamationMark
     | DollarSign
     | Hashtag
     | Percent
@@ -146,6 +145,7 @@ tchar
     | VBar
     | Tilde
     | DIGIT
+    | HEX_LETTER
     | ALPHA
     ;
 
@@ -209,14 +209,12 @@ pct_encoded
     : Percent hexdig hexdig
     ;
 
+/*
+ HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
+*/
 hexdig
     : DIGIT
-    | 'A'
-    | 'B'
-    | 'C'
-    | 'D'
-    | 'E'
-    | 'F'
+    | HEX_LETTER
     ;
 
 /*
@@ -249,8 +247,7 @@ sub_delims
     ;
 
 vchar
-    : hexdig
-    | LColumn
+    : LColumn
     | RColumn
     | SemiColon
     | Equals
@@ -274,6 +271,7 @@ vchar
     | Caret
     | BackQuote
     | VBar
+    | HEX_LETTER
     | ALPHA
     | DIGIT
     | VCHAR
@@ -382,6 +380,11 @@ DIGIT
     : [0-9]
     ;
 
+ /*
+ HEX_LETTER = "A" / "B" / "C" / "D" / "E" / "F"
+ */
+HEX_LETTER: [A-F];
+
 /*
  ALPHA = %x41‑5A / %x61‑7A ; A‑Z / a‑z
  */
@@ -419,8 +422,4 @@ HTAB
  */
 CRLF
     : '\r\n' | '\n'
-    ;
-
-OCTET
-    : .
     ;
