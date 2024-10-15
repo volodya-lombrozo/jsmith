@@ -129,21 +129,21 @@ token
  "|" / "~" / DIGIT / ALPHA
  */
 tchar
-    : ExclamationMark
-    | DollarSign
-    | Hashtag
-    | Percent
-    | Ampersand
-    | SQuote
-    | Star
-    | Plus
-    | Minus
-    | Dot
-    | Caret
-    | Underscore
-    | BackQuote
-    | VBar
-    | Tilde
+    : EXCLAMATION_MARK
+    | DOLLAR_SIGN
+    | HASHTAG
+    | PERCENT
+    | AMPERSAND
+    | SQUOTE
+    | STAR
+    | PLUS
+    | MINUS
+    | DOT
+    | CARET
+    | UNDERSCORE
+    | BACK_QUOTE
+    | VBAR
+    | TILDE
     | DIGIT
     | HEX_LETTER
     | ALPHA
@@ -198,15 +198,15 @@ pchar
     | pct_encoded
     | sub_delims
     | hexdig
-    | Colon
-    | At
+    | COLON
+    | AT
     ;
 
 /*
  pct-encoded = "%"  HEXDIG HEXDIG
  */
 pct_encoded
-    : Percent hexdig hexdig
+    : PERCENT hexdig hexdig
     ;
 
 /*
@@ -223,153 +223,156 @@ hexdig
 unreserved
     : ALPHA
     | DIGIT
-    | Minus
-    | Dot
-    | Underscore
-    | Tilde
+    | MINUS
+    | DOT
+    | UNDERSCORE
+    | TILDE
     ;
 
 /*
  sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
  */
 sub_delims
-    : ExclamationMark
-    | DollarSign
-    | Ampersand
-    | SQuote
-    | LColumn
-    | RColumn
-    | Star
-    | Plus
-    | Period
-    | SemiColon
-    | Equals
+    : EXCLAMATION_MARK
+    | DOLLAR_SIGN
+    | AMPERSAND
+    | SQUOTE
+    | LCOLUMN
+    | RCOLUMN
+    | STAR
+    | PLUS
+    | PERIOD
+    | SEMICOLON
+    | EQUALS
     ;
 
+/*
+VCHAR = %x21-7E ; visible (printing) characters
+*/
 vchar
-    : LColumn
-    | RColumn
-    | SemiColon
-    | Equals
-    | Period
-    | Minus
-    | Dot
-    | Underscore
-    | Tilde
-    | QuestionMark
-    | Slash
-    | ExclamationMark
-    | Colon
-    | At
-    | DollarSign
-    | Hashtag
-    | Ampersand
-    | Percent
-    | SQuote
-    | Star
-    | Plus
-    | Caret
-    | BackQuote
-    | VBar
+    : LCOLUMN
+    | RCOLUMN
+    | SEMICOLON
+    | EQUALS
+    | PERIOD
+    | MINUS
+    | DOT
+    | UNDERSCORE
+    | TILDE
+    | QUESTION_MARK
+    | SLASH
+    | EXCLAMATION_MARK
+    | COLON
+    | AT
+    | DOLLAR_SIGN
+    | HASHTAG
+    | AMPERSAND
+    | PERCENT
+    | SQUOTE
+    | STAR
+    | PLUS
+    | CARET
+    | BACK_QUOTE
+    | VBAR
     | HEX_LETTER
     | ALPHA
     | DIGIT
     | VCHAR
     ;
 
-LColumn
+LCOLUMN
     : '('
     ;
 
-RColumn
+RCOLUMN
     : ')'
     ;
 
-SemiColon
+SEMICOLON
     : ';'
     ;
 
-Equals
+EQUALS
     : '='
     ;
 
-Period
+PERIOD
     : ','
     ;
 
-Minus
+MINUS
     : '-'
     ;
 
-Dot
+DOT
     : '.'
     ;
 
-Underscore
+UNDERSCORE
     : '_'
     ;
 
-Tilde
+TILDE
     : '~'
     ;
 
-QuestionMark
+QUESTION_MARK
     : '?'
     ;
 
-Slash
+SLASH
     : '/'
     ;
 
-ExclamationMark
+EXCLAMATION_MARK
     : '!'
     ;
 
-Colon
+COLON
     : ':'
     ;
 
-At
+AT
     : '@'
     ;
 
-DollarSign
+DOLLAR_SIGN
     : '$'
     ;
 
-Hashtag
+HASHTAG
     : '#'
     ;
 
-Ampersand
+AMPERSAND
     : '&'
     ;
 
-Percent
+PERCENT
     : '%'
     ;
 
-SQuote
+SQUOTE
     : '\''
     ;
 
-Star
+STAR
     : '*'
     ;
 
-Plus
+PLUS
     : '+'
     ;
 
-Caret
+CARET
     : '^'
     ;
 
-BackQuote
+BACK_QUOTE
     : '`'
     ;
 
-VBar
+VBAR
     : '|'
     ;
 
@@ -399,6 +402,9 @@ VCHAR
     : '\u0021' .. '\u007e'
     ;
 
+/*
+ OBS_TEXT = %x80-FF
+*/
 OBS_TEXT
     : '\u0080' ..'\u00ff'
     ;
