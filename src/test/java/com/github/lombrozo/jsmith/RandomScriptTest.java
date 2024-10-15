@@ -144,4 +144,22 @@ final class RandomScriptTest {
             Matchers.not(Matchers.emptyString())
         );
     }
+
+    @RepeatedTest(10)
+    void generatesJava8ReducedGrammarSuccessfully() {
+        final RandomScript script = new RandomScript(
+            new ResourceOf("grammars/separated/Java8ReducedLexer.g4"),
+            new ResourceOf("grammars/separated/Java8ReducedParser.g4")
+        );
+        this.logger.info(String.format("Java 8 Reduced spec (lisp format): %s", script.spec()));
+        final Text document = script.generateText("compilationUnit");
+        this.logger.info(String.format("Java 8 Reduced:%n%s%n", document.output()));
+        final String example = new TextTree(document).output();
+        this.logger.info(String.format("Generated tree for Java 8 Reduced:%n%s%n", example));
+        MatcherAssert.assertThat(
+            "We expect that the example for Java 8 Reduced grammar will be generated successfully and what is the most important - the grammar combined from two separate files - Java8ReducedLexer.g4 and Java8ReducedParser.g4",
+            example,
+            Matchers.not(Matchers.emptyString())
+        );
+    }
 }
