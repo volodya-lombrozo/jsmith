@@ -234,11 +234,7 @@ compilationUnit
     ;
 
 packageDeclaration
-    : packageModifier* 'package' packageName ';'
-    ;
-
-packageModifier
-    : annotation
+    : 'package' SPACE packageName ';'
     ;
 
 importDeclaration
@@ -249,24 +245,24 @@ importDeclaration
     ;
 
 singleTypeImportDeclaration
-    : 'import' typeName ';'
+    : 'import' SPACE typeName ';' NL
     ;
 
 typeImportOnDemandDeclaration
-    : 'import' packageOrTypeName '.' '*' ';'
+    : 'import' SPACE packageOrTypeName '.' '*' ';' NL
     ;
 
 singleStaticImportDeclaration
-    : 'import' 'static' typeName '.' Identifier ';'
+    : 'import' SPACE 'static' SPACE typeName '.' Identifier ';' NL
     ;
 
 staticImportOnDemandDeclaration
-    : 'import' 'static' typeName '.' '*' ';'
+    : 'import' SPACE 'static' SPACE typeName '.' '*' ';' NL
     ;
 
 typeDeclaration
     : classDeclaration
-    | interfaceDeclaration
+//    | interfaceDeclaration
     | ';'
     ;
 
@@ -276,11 +272,11 @@ typeDeclaration
 
 classDeclaration
     : normalClassDeclaration
-    | enumDeclaration
+//    | enumDeclaration
     ;
 
 normalClassDeclaration
-    : classModifier* 'class' Identifier typeParameters? superclass? superinterfaces? classBody
+    : (classModifier SPACE)* 'class' SPACE Identifier classBody
     ;
 
 classModifier
@@ -315,22 +311,24 @@ interfaceTypeList
     ;
 
 classBody
-    : '{' classBodyDeclaration* '}'
+    : '{' classBodyDeclaration* '}' NL
     ;
 
 classBodyDeclaration
     : classMemberDeclaration
-    | instanceInitializer
-    | staticInitializer
-    | constructorDeclaration
+//    | instanceInitializer
+//    | staticInitializer
+//    | constructorDeclaration
     ;
 
 classMemberDeclaration
-    : fieldDeclaration
-    | methodDeclaration
-    | classDeclaration
-    | interfaceDeclaration
-    | ';'
+    :
+//    fieldDeclaration
+//    | methodDeclaration
+//    | classDeclaration
+//    | interfaceDeclaration
+//    |
+    ';'
     ;
 
 fieldDeclaration

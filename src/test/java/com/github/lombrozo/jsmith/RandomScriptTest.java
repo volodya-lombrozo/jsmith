@@ -30,7 +30,6 @@ import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link RandomScript}.
@@ -154,11 +153,9 @@ final class RandomScriptTest {
         this.logger.info(String.format("Java 8 Reduced spec (lisp format): %s", script.spec()));
         final Text document = script.generateText("compilationUnit");
         this.logger.info(String.format("Java 8 Reduced:%n%s%n", document.output()));
-        final String example = new TextTree(document).output();
-        this.logger.info(String.format("Generated tree for Java 8 Reduced:%n%s%n", example));
         MatcherAssert.assertThat(
             "We expect that the example for Java 8 Reduced grammar will be generated successfully and what is the most important - the grammar combined from two separate files - Java8ReducedLexer.g4 and Java8ReducedParser.g4",
-            example,
+            document.output(),
             Matchers.not(Matchers.emptyString())
         );
     }
