@@ -59,13 +59,6 @@ public final class Ebnf implements Rule {
 
     /**
      * Constructor.
-     */
-    public Ebnf() {
-        this(new Root());
-    }
-
-    /**
-     * Constructor.
      * @param parent Parent rule.
      */
     public Ebnf(final Rule parent) {
@@ -74,21 +67,19 @@ public final class Ebnf implements Rule {
 
     /**
      * Constructor.
-     * @param parent Parent rule.
-     * @param children Children rules.
      */
-    public Ebnf(final Rule parent, final List<Rule> children) {
-        this.parent = parent;
-        this.children = children;
+    Ebnf() {
+        this(new Root());
     }
 
     /**
-     * Check if the rule is Ebnf.
-     * @param rule Rule.
-     * @return True if the rule is Ebnf.
+     * Constructor.
+     * @param parent Parent rule.
+     * @param children Children rules.
      */
-    public static boolean is(final Rule rule) {
-        return Ebnf.NAME.equals(rule.name());
+    private Ebnf(final Rule parent, final List<Rule> children) {
+        this.parent = parent;
+        this.children = children;
     }
 
     @Override
@@ -116,6 +107,15 @@ public final class Ebnf implements Rule {
     }
 
     /**
+     * Check if the rule is Ebnf.
+     * @param rule Rule.
+     * @return True if the rule is Ebnf.
+     */
+    static boolean isEbnf(final Rule rule) {
+        return Ebnf.NAME.equals(rule.name());
+    }
+
+    /**
      * Get multiplier.
      * @return Multiplier.
      */
@@ -137,5 +137,4 @@ public final class Ebnf implements Rule {
             }
         }
     }
-
 }

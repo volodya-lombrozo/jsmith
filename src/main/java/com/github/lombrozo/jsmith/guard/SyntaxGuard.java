@@ -249,12 +249,12 @@ public final class SyntaxGuard {
 
         /**
          * Constructor.
-         * @param lexer Lexer class.
-         * @param parser Parser class.
+         * @param clexer Lexer class.
+         * @param cparser Parser class.
          */
-        Environment(final Class<?> lexer, final Class<?> parser) {
-            this.lexer = lexer;
-            this.parser = parser;
+        Environment(final Class<?> clexer, final Class<?> cparser) {
+            this.lexer = clexer;
+            this.parser = cparser;
         }
 
         /**

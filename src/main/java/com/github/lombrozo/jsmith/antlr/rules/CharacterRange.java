@@ -68,14 +68,6 @@ public final class CharacterRange implements Rule, Negatable {
 
     /**
      * Constructor.
-     * @param text Range text.
-     */
-    public CharacterRange(final String text) {
-        this(new Root(), text);
-    }
-
-    /**
-     * Constructor.
      * @param parent Parent rule.
      * @param text Range text.
      */
@@ -83,6 +75,14 @@ public final class CharacterRange implements Rule, Negatable {
         this.parent = parent;
         this.text = text;
         this.rand = new Rand();
+    }
+
+    /**
+     * Constructor.
+     * @param text Range text.
+     */
+    CharacterRange(final String text) {
+        this(new Root(), text);
     }
 
     @Override
@@ -103,7 +103,7 @@ public final class CharacterRange implements Rule, Negatable {
     }
 
     @Override
-    public Text negate(Context context) {
+    public Text negate(final Context context) {
         throw new UnsupportedOperationException("CharacterRange cannot be negated yet");
     }
 

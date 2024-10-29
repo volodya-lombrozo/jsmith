@@ -88,7 +88,7 @@ public final class Element implements Rule {
         }
         final Text result;
         final Rule first = this.children.get(0);
-        if (Atom.is(first) || LabeledElement.is(first) || Ebnf.is(first)) {
+        if (Atom.is(first) || LabeledElement.is(first) || Ebnf.isEbnf(first)) {
             result = new TextNode(this, this.multiplier().repeat(first).generate(context));
         } else {
             throw new IllegalStateException(

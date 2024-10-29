@@ -37,10 +37,14 @@ import java.util.regex.Pattern;
 public final class LexerCharSet implements Rule, Negatable {
 
     /**
+     * Unicode pattern.
+     */
+    private static Pattern UNICODE = Pattern.compile("\\\\u([0-9A-Fa-f]{4})");
+
+    /**
      * Parent rule.
      */
     private final Rule parent;
-
 
     /**
      * Random generator.
@@ -124,26 +128,17 @@ public final class LexerCharSet implements Rule, Negatable {
      * Replace escape sequences in the string.
      * @param rawString String with escape sequences.
      * @return String with replaced escape sequences.
-     * @todo #1:90min Refactor this method!
      */
-    public static String unescapeUnicodes(final String rawString) {
-        // Regular expression to detect Unicode escape sequences (e.g., \u0000)
-        Pattern unicodePattern = Pattern.compile("\\\\u([0-9A-Fa-f]{4})");
-        // Matcher to find all occurrences of Unicode sequences
-        Matcher matcher = unicodePattern.matcher(rawString);
-        // Create a StringBuffer to store the modified string
-        StringBuffer resultString = new StringBuffer();
-        // Process each Unicode escape sequence
+    private static String unescapeUnicodes(final String rawString) {
+        final Matcher matcher = LexerCharSet.UNICODE.matcher(rawString);
+        final StringBuffer res = new StringBuffer(0);
         while (matcher.find()) {
-            // Get the hex value of the Unicode sequence
-            String hexValue = matcher.group(1);
-            // Convert hex value to the corresponding Unicode character
-            char unicodeChar = (char) Integer.parseInt(hexValue, 16);
-            // Replace the escape sequence with the actual Unicode character
-            matcher.appendReplacement(resultString, String.valueOf(unicodeChar));
+            matcher.appendReplacement(
+                res,
+                String.valueOf((char) Integer.parseInt(matcher.group(1), 16))
+            );
         }
-        // Append the rest of the string
-        matcher.appendTail(resultString);
-        return resultString.toString();
+        matcher.appendTail(res);
+        return res.toString();
     }
 }

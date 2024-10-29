@@ -132,7 +132,7 @@ public final class Literal implements Rule, Negatable {
      * @return String with replaced escape sequences.
      * @todo #1:90min Make it separate class.
      */
-    public static String replaceEscapes(final String original) {
+    static String replaceEscapes(final String original) {
         try {
             if (original.replaceAll("'", "").startsWith("\\u")) {
                 return new UnicodeChar(original.replaceAll("'", "")).unescaped();
