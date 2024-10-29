@@ -234,7 +234,7 @@ compilationUnit
     ;
 
 packageDeclaration
-    : 'package' SPACE packageName ';'
+    : 'package' SPACE packageName ';' NL
     ;
 
 importDeclaration
