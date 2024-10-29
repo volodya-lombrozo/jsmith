@@ -1,7 +1,6 @@
 package com.github.lombrozo.jsmith.guard;
 
 import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.antlr.view.TextTree;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -218,7 +217,7 @@ public final class SyntaxGuard {
      * @param name Class name.
      * @return Loaded class.
      */
-    private static Class<?> load(String name, Path temp) {
+    private static Class<?> load(final String name, final Path temp) {
         try {
             return new URLClassLoader(
                 new URL[]{temp.toFile().toURI().toURL()}

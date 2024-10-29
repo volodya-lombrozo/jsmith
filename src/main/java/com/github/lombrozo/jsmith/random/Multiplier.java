@@ -71,17 +71,17 @@ public interface Multiplier {
 
         /**
          * Constructor.
-         */
-        public ZeroOrOne() {
-            this(new Rand());
-        }
-
-        /**
-         * Constructor.
          * @param rand Random generator.
          */
         public ZeroOrOne(final Rand rand) {
             this.rand = rand;
+        }
+
+        /**
+         * Constructor.
+         */
+        ZeroOrOne() {
+            this(new Rand());
         }
 
         @Override
@@ -115,7 +115,7 @@ public interface Multiplier {
         /**
          * Constructor.
          */
-        public OneOrMore() {
+        OneOrMore() {
             this(new Rand());
         }
 
@@ -132,7 +132,7 @@ public interface Multiplier {
          * @param rand Random generator.
          * @param limit Limit of repetitions.
          */
-        public OneOrMore(final Rand rand, final int limit) {
+        OneOrMore(final Rand rand, final int limit) {
             this.rand = rand;
             this.limit = limit;
         }
@@ -161,13 +161,6 @@ public interface Multiplier {
 
         /**
          * Constructor.
-         */
-        public ZeroOrMore() {
-            this(new Rand());
-        }
-
-        /**
-         * Constructor.
          * @param rand Random generator.
          */
         public ZeroOrMore(final Rand rand) {
@@ -176,10 +169,17 @@ public interface Multiplier {
 
         /**
          * Constructor.
+         */
+        ZeroOrMore() {
+            this(new Rand());
+        }
+
+        /**
+         * Constructor.
          * @param rand Random generator.
          * @param limit Limit of repetitions.
          */
-        public ZeroOrMore(final Rand rand, final int limit) {
+        ZeroOrMore(final Rand rand, final int limit) {
             this.rand = rand;
             this.limit = limit;
         }

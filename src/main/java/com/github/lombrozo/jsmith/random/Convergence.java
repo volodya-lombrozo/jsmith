@@ -117,9 +117,6 @@ final class Convergence<T> {
         final Rand rand,
         final boolean verbose
     ) {
-        if (factor < 0 || factor > 1) {
-            throw new IllegalArgumentException("Factor must be between 0 and 1");
-        }
         this.factor = factor;
         this.weight = weight;
         this.weights = weights;
@@ -160,15 +157,18 @@ final class Convergence<T> {
      * @return Chosen element.
      */
     T choose(final T from, final T... elements) {
-        final Map<T, Double> current = this.weights.computeIfAbsent(
-            from, key -> this.init(elements)
-        );
+        if (this.factor < 0 || this.factor > 1) {
+            throw new IllegalArgumentException("Factor must be between 0 and 1");
+        }
         if (elements.length == 0) {
             throw new IllegalArgumentException(
                 String.format("No elements to choose from for '%s' element", from)
             );
         }
-        this.log(String.format("Weights for '%s': '%s'", from, current));
+        final Map<T, Double> current = this.weights.computeIfAbsent(
+            from, key -> this.init(elements)
+        );
+        this.info(String.format("Weights for '%s': '%s'", from, current));
         final double total = current.values()
             .stream()
             .mapToDouble(Double::doubleValue)
@@ -179,7 +179,7 @@ final class Convergence<T> {
         for (final Map.Entry<T, Double> entry : current.entrySet()) {
             sum += entry.getValue();
             if (sum >= random) {
-                this.log(
+                this.info(
                     String.format("Chosen '%s' with weight '%s'", entry.getKey(), entry.getValue())
                 );
                 current.put(entry.getKey(), entry.getValue() * this.factor);
@@ -207,7 +207,7 @@ final class Convergence<T> {
      * Log a message if verbose mode is enabled.
      * @param msg Message to print.
      */
-    private void log(final String msg) {
+    private void info(final String msg) {
         if (this.verbose) {
             Convergence.LOG.info(msg);
         }

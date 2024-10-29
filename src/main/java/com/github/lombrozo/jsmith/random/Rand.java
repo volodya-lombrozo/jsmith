@@ -76,7 +76,7 @@ public final class Rand {
      * @param max Maximum.
      * @return Random integer.
      */
-    public int range(int min, int max) {
+    public int range(final int min, final int max) {
         if (min > max) {
             throw new IllegalArgumentException(
                 String.format("Min should be less than max, but min = %d, max = %d", min, max)
@@ -91,7 +91,7 @@ public final class Rand {
      * @param max Maximum char.
      * @return Random char.
      */
-    public char range(char min, char max) {
+    public char range(final char min, final char max) {
         return this.range(max, min);
     }
 

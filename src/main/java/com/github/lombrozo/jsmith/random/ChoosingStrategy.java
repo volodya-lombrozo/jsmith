@@ -43,7 +43,7 @@ public interface ChoosingStrategy {
      * @param children List of children rules.
      * @return Chosen rule.
      */
-    Rule choose(final Rule parent, List<Rule> children);
+    Rule choose(Rule parent, List<Rule> children);
 
     /**
      * Copy the strategy and all its internal state.

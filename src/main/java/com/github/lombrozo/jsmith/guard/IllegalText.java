@@ -43,11 +43,12 @@ public final class IllegalText extends RuntimeException {
 
     /**
      * Constructor.
-     * @param ouput Error message.
+     * @param output Error message.
+     *
      */
-    public IllegalText(final String message, final Text ouput, final Throwable cause) {
+    IllegalText(final String message, final Text output, final Throwable cause) {
         super(message, cause);
-        this.origin = ouput;
+        this.origin = output;
     }
 
     /**
