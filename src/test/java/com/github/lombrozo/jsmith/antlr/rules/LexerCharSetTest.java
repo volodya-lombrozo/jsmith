@@ -52,7 +52,7 @@ final class LexerCharSetTest {
     void generatesCharSequences(final String sequence) {
         MatcherAssert.assertThat(
             "We expect that the generated string will match the sequence",
-            new LexerCharSet(sequence).generate().output(),
+            new LexerCharSet(sequence).generate(new Context()).output(),
             Matchers.matchesRegex(sequence)
         );
     }
@@ -61,7 +61,7 @@ final class LexerCharSetTest {
     void unescapesSequences() {
         MatcherAssert.assertThat(
             "We expect that ANTLR escape sequences will be unescaped",
-            new LexerCharSet("[ \\t\\r\\n]").generate().output(),
+            new LexerCharSet("[ \\t\\r\\n]").generate(new Context()).output(),
             Matchers.anyOf(
                 Matchers.equalTo(" "),
                 Matchers.equalTo("\t"),

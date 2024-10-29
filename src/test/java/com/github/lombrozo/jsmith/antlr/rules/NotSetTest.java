@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,7 +45,7 @@ final class NotSetTest {
         not.append(element);
         MatcherAssert.assertThat(
             "We expect that the generated string will not match the sequence",
-            not.generate().output(),
+            not.generate(new Context()).output(),
             Matchers.not(Matchers.matchesRegex(sequence))
         );
     }

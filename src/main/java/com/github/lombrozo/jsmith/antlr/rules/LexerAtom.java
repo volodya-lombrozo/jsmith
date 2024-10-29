@@ -87,7 +87,7 @@ public final class LexerAtom implements Rule {
     public Text generate(final Context context) {
         return new TextNode(
             this,
-            context.strategy().choose(this, this.elems).generate()
+            context.strategy().choose(this, this.elems).generate(context)
         );
     }
 

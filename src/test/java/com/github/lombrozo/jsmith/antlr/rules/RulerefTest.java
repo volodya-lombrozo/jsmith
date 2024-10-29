@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -49,7 +50,7 @@ final class RulerefTest {
                 "We expect that %s will invoke the linked rule to generate output, but it didn't happen",
                 ruleref
             ),
-            ruleref.generate().output(),
+            ruleref.generate(new Context()).output(),
             Matchers.equalTo(expected)
         );
     }

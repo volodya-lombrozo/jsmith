@@ -82,7 +82,7 @@ public final class SetElement implements Rule, Negatable {
         return new TextNode(
             this,
             this.children.stream()
-                .map(Rule::generate)
+                .map(rule -> rule.generate(context))
                 .collect(Collectors.toList())
         );
     }

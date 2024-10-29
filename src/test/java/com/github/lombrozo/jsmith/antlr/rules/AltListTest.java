@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,9 @@ final class AltListTest {
     void generatesOneOfTheAlternativesFromMany() {
         MatcherAssert.assertThat(
             "We expect that exactly one option will be chosen from the list of alternatives",
-            new AltList(new Empty(), new Literal("1"), new Literal("2")).generate().output(),
+            new AltList(new Empty(), new Literal("1"), new Literal("2"))
+                .generate(new Context())
+                .output(),
             Matchers.either(Matchers.equalTo("1")).or(Matchers.equalTo("2"))
         );
     }
@@ -47,7 +50,9 @@ final class AltListTest {
     void generatesOneAlternativeFromSingle() {
         MatcherAssert.assertThat(
             "We expect that the only option will be chosen from the list of alternatives",
-            new AltList(new Empty(), new Literal("1")).generate().output(),
+            new AltList(new Empty(), new Literal("1"))
+                .generate(new Context())
+                .output(),
             Matchers.equalTo("1")
         );
     }
@@ -56,7 +61,7 @@ final class AltListTest {
     void generatesNothing() {
         MatcherAssert.assertThat(
             "We expect that nothing will be generated",
-            new AltList(new Empty()).generate().output(),
+            new AltList(new Empty()).generate(new Context()).output(),
             Matchers.equalTo("")
         );
     }

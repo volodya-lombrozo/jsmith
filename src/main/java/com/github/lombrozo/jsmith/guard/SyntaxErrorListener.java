@@ -26,7 +26,6 @@ package com.github.lombrozo.jsmith.guard;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
@@ -34,15 +33,31 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
+/**
+ * ANTLR syntax error listener.
+ * This listener is used in {@link SyntaxGuard}.
+ * It collects all syntax errors and throws {@link InvalidSyntax} exception if any errors are found.
+ * @since 0.1
+ */
 public final class SyntaxErrorListener implements ANTLRErrorListener {
 
+    /**
+     * All syntax errors.
+     */
     private final List<String> errors;
 
-    public SyntaxErrorListener() {
+    /**
+     * Constructor.
+     */
+    SyntaxErrorListener() {
         this(new ArrayList<>(0));
     }
 
-    public SyntaxErrorListener(final List<String> errors) {
+    /**
+     * Constructor.
+     * @param errors All syntax errors.
+     */
+    private SyntaxErrorListener(final List<String> errors) {
         this.errors = errors;
     }
 
@@ -67,8 +82,7 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
         final BitSet ambigAlts,
         final ATNConfigSet configs
     ) {
-        //todo: Ignore Ambiguity issues
-//        this.errors.add(String.format("Ambiguity from %s to %s", start, stop));
+        // We ignore Ambiguity issues
     }
 
     @Override
@@ -80,10 +94,7 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
         final BitSet conflictingAlts,
         final ATNConfigSet configs
     ) {
-        //todo: Ignore Ambiguity issues
-//        this.errors.add(
-//            String.format("Attempting full context from %s to %s", startIndex, stopIndex)
-//        );
+        // We ignore Full Context issues
     }
 
     @Override
@@ -95,16 +106,16 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
         final int prediction,
         final ATNConfigSet configs
     ) {
-        //todo: Ignore Context Sensitivity issues
-//        this.errors.add(
-//            String.format("Context sensitivity from %s to %s", startIndex, stopIndex)
-//        );
+        // We ignore Context Sensitivity issues
     }
 
-    public void report() throws InvalidSyntax {
+    /**
+     * Report all syntax errors.
+     * @throws InvalidSyntax If any syntax errors are found.
+     */
+    void report() throws InvalidSyntax {
         if (!this.errors.isEmpty()) {
-            throw new InvalidSyntax(this.errors.stream().collect(Collectors.joining("\n")));
+            throw new InvalidSyntax(String.join("\n", this.errors));
         }
     }
-
 }

@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -44,7 +45,7 @@ final class TerminalDefTest {
         unlexer.with(name, rule);
         MatcherAssert.assertThat(
             "We expect that the lexer rule will be retrieved and this rule will generate the text",
-            new TerminalDef(unlexer, name).generate().output(),
+            new TerminalDef(unlexer, name).generate(new Context()).output(),
             Matchers.equalTo(text)
         );
     }
@@ -54,7 +55,7 @@ final class TerminalDefTest {
         final String text = "-";
         MatcherAssert.assertThat(
             "We expect that the literal will be retrieved",
-            new TerminalDef(new Unlexer(), text).generate().output(),
+            new TerminalDef(new Unlexer(), text).generate(new Context()).output(),
             Matchers.equalTo(text)
         );
     }
@@ -63,7 +64,7 @@ final class TerminalDefTest {
     void ignoresEndOfFile() {
         MatcherAssert.assertThat(
             "We expect that the end of file will be ignored",
-            new TerminalDef(new Unlexer(), "EOF").generate().output(),
+            new TerminalDef(new Unlexer(), "EOF").generate(new Context()).output(),
             Matchers.equalTo("")
         );
     }

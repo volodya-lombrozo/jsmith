@@ -240,12 +240,12 @@ public final class SyntaxGuard {
         /**
          * Lexer class.
          */
-        private final Class<?> lexer;
+        private final Class<?> clexer;
 
         /**
          * Parser class.
          */
-        private final Class<?> parser;
+        private final Class<?> cparser;
 
         /**
          * Constructor.
@@ -253,8 +253,8 @@ public final class SyntaxGuard {
          * @param cparser Parser class.
          */
         Environment(final Class<?> clexer, final Class<?> cparser) {
-            this.lexer = clexer;
-            this.parser = cparser;
+            this.clexer = clexer;
+            this.cparser = cparser;
         }
 
         /**
@@ -264,7 +264,7 @@ public final class SyntaxGuard {
          */
         Lexer lexer(final String code) {
             try {
-                return (Lexer) this.lexer.getDeclaredConstructor(CharStream.class)
+                return (Lexer) this.clexer.getDeclaredConstructor(CharStream.class)
                     .newInstance(CharStreams.fromString(code));
             } catch (final NoSuchMethodException | IllegalAccessException |
                            InvocationTargetException | InstantiationException exception) {
@@ -282,7 +282,7 @@ public final class SyntaxGuard {
          */
         Parser parser(final Lexer lexer) {
             try {
-                return (Parser) this.parser.getDeclaredConstructor(TokenStream.class)
+                return (Parser) this.cparser.getDeclaredConstructor(TokenStream.class)
                     .newInstance(new CommonTokenStream(lexer));
             } catch (final NoSuchMethodException | IllegalAccessException |
                            InvocationTargetException | InstantiationException exception) {
@@ -300,7 +300,7 @@ public final class SyntaxGuard {
          */
         void parse(final Parser parser, final String top) {
             try {
-                this.parser.getMethod(top).invoke(parser);
+                this.cparser.getMethod(top).invoke(parser);
             } catch (final NoSuchMethodException | IllegalAccessException |
                            InvocationTargetException exception) {
                 throw new IllegalStateException(

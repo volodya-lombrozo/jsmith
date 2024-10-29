@@ -42,7 +42,7 @@ public interface Rule {
      * Generate code.
      * @return Generated code.
      */
-    Text generate(final Context context);
+    Text generate(Context context);
 
     /**
      * Append child rule.
@@ -55,14 +55,4 @@ public interface Rule {
      * @return Rule name.
      */
     String name();
-
-    /**
-     * The default implementation of the generate method.
-     * @return Generated string.
-     * @todo #1:30min Remove the default implementation of the generate method.
-     */
-    default Text generate() {
-        return this.generate(new Context());
-    }
-
 }

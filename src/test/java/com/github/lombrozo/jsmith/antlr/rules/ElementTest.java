@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ final class ElementTest {
         element.append(atom);
         MatcherAssert.assertThat(
             "We expect that the element with an atom will be generated correctly",
-            element.generate().output(),
+            element.generate(new Context()).output(),
             Matchers.equalTo(number)
         );
     }
@@ -59,7 +60,7 @@ final class ElementTest {
         element.append(new EbnfSuffix("*"));
         MatcherAssert.assertThat(
             "We expect that the element with EBNF suffix will be generated correctly",
-            element.generate().output(),
+            element.generate(new Context()).output(),
             Matchers.anyOf(
                 Matchers.equalTo(""),
                 Matchers.equalTo("1"),
