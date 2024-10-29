@@ -51,7 +51,7 @@ public final class RandomScript {
         );
     }
 
-    public RandomScript(final List<String> grammars) {
+    private RandomScript(final List<String> grammars) {
         this.grammars = grammars;
     }
 

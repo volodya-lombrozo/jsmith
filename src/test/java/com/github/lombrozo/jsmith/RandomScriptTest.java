@@ -147,8 +147,8 @@ final class RandomScriptTest {
     @RepeatedTest(10)
     void generatesJava8ReducedGrammarSuccessfully() {
         final RandomScript script = new RandomScript(
-            new ResourceOf("grammars/separated/Java8ReducedLexer.g4"),
-            new ResourceOf("grammars/separated/Java8ReducedParser.g4")
+            new ResourceOf("grammars/Java8ReducedLexer.g4"),
+            new ResourceOf("grammars/Java8ReducedParser.g4")
         );
         this.logger.info(String.format("Java 8 Reduced spec (lisp format): %s", script.spec()));
         final Text document = script.generateText("compilationUnit");

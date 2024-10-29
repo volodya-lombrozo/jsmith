@@ -34,29 +34,11 @@ import org.junit.jupiter.api.Test;
 class RandomJavaClassTest {
 
     @Test
-    void retrievesTheName() {
-        MatcherAssert.assertThat(
-            "Name of the class is not equal to the expected one",
-            new RandomJavaClass().name(),
-            Matchers.equalTo("HelloWorld")
-        );
-    }
-
-    @Test
     void retrievesTheSourceCode() {
         MatcherAssert.assertThat(
-            "Source code of the class is not equal to the expected 'hello-world' program",
+            "We expect that random class will generate at least something",
             new RandomJavaClass().src(),
-            Matchers.equalTo(
-                String.join(
-                    "\n",
-                    "public class HelloWorld {",
-                    "    public static void main(String[] args) {",
-                    "        System.out.println(\"Hello, World!\");",
-                    "    }",
-                    "}"
-                )
-            )
+            Matchers.not(Matchers.emptyString())
         );
     }
 }
