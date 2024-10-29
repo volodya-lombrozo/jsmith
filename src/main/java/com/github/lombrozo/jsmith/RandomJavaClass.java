@@ -68,6 +68,6 @@ public final class RandomJavaClass {
         return new RandomScript(
             new ResourceOf(this.parser),
             new ResourceOf(this.lexer)
-        ).generate(this.rule);
+        ).generate(this.rule).output();
     }
 }

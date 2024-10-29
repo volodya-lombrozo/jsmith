@@ -63,7 +63,7 @@ final class SyntaxGenerationIT {
         final SyntaxGuard guard = new SyntaxGuard(temp, top, grammars);
         try {
             Stream.generate(() -> top)
-                .map(script::generateText)
+                .map(script::generate)
                 .limit(50)
                 .peek(SyntaxGenerationIT::logProgram)
                 .forEach(guard::verifySilently);

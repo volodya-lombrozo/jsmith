@@ -44,8 +44,8 @@ final class RandomScriptTest {
     @RepeatedTest(10)
     void generatesSimpleGrammarSuccessfully() {
         final RandomScript script = new RandomScript(new ResourceOf("grammars/Simple.g4"));
-        this.logger.info(String.format("Simple spec (lisp format): %s", script.spec()));
-        final String example = script.generate("expr");
+        this.logger.info(String.format("Simple spec (lisp format): %s", script.specification()));
+        final String example = script.generate("expr").output();
         this.logger.info(String.format("Generated simple example:%n%s%n", example));
         MatcherAssert.assertThat(
             "We expect that the example for Simple grammar will be generated successfully",
@@ -57,8 +57,9 @@ final class RandomScriptTest {
     @RepeatedTest(10)
     void generatesArithmeticGrammarSuccessfully() {
         final RandomScript script = new RandomScript(new ResourceOf("grammars/Arithmetic.g4"));
-        this.logger.info(String.format("Arithmetic spec (lisp format): %s", script.spec()));
-        final String example = script.generate("stat");
+        this.logger.info(
+            String.format("Arithmetic spec (lisp format): %s", script.specification()));
+        final String example = script.generate("stat").output();
         this.logger.info(String.format("Generated Arithmetic example:%n%s%n", example));
         MatcherAssert.assertThat(
             "We expect that the example for Arithmetic grammar will be generated successfully",
@@ -73,8 +74,8 @@ final class RandomScriptTest {
             new ResourceOf("grammars/separated/LettersParser.g4"),
             new ResourceOf("grammars/separated/LettersLexer.g4")
         );
-        this.logger.info(String.format("Letters spec (lisp format): %s", script.spec()));
-        final String example = script.generate("sentences");
+        this.logger.info(String.format("Letters spec (lisp format): %s", script.specification()));
+        final String example = script.generate("sentences").output();
         this.logger.info(String.format("Generated Letters example:%n%s%n", example));
         MatcherAssert.assertThat(
             "We expect that the example for Letter grammar will be generated successfully and what is the most important - the grammar combined from two separate files - LettersLexer and LettersParser",
@@ -89,8 +90,9 @@ final class RandomScriptTest {
             new ResourceOf("grammars/separated/WordsAndNumbersLexer.g4"),
             new ResourceOf("grammars/separated/WordsAndNumbersParser.g4")
         );
-        this.logger.info(String.format("WordsAndNumbers spec (lisp format): %s", script.spec()));
-        final String example = script.generate("words");
+        this.logger.info(
+            String.format("WordsAndNumbers spec (lisp format): %s", script.specification()));
+        final String example = script.generate("words").output();
         this.logger.info(String.format("Generated WordsAndNumbers example:%n%s%n", example));
         MatcherAssert.assertThat(
             "We expect that the example for WordsAndNumbers grammar will be generated successfully and what is the most important - the grammar combined from two separate files - WordsAndNumbersLexer and WordsAndNumbersParser",
@@ -102,8 +104,8 @@ final class RandomScriptTest {
     @RepeatedTest(10)
     void generatesJsonGrammarSuccessfully() {
         final RandomScript script = new RandomScript(new ResourceOf("grammars/Json.g4"));
-        this.logger.info(String.format("Json spec (lisp format): %s", script.spec()));
-        final String example = script.generate("json");
+        this.logger.info(String.format("Json spec (lisp format): %s", script.specification()));
+        final String example = script.generate("json").output();
         this.logger.info(String.format("Generated Json example:%n%s%n", example));
         MatcherAssert.assertThat(
             "We expect that the example for Json grammar will be generated successfully",
@@ -118,8 +120,8 @@ final class RandomScriptTest {
             new ResourceOf("grammars/separated/XMLLexer.g4"),
             new ResourceOf("grammars/separated/XMLParser.g4")
         );
-        this.logger.info(String.format("XML spec (lisp format): %s", script.spec()));
-        final Text document = script.generateText("document");
+        this.logger.info(String.format("XML spec (lisp format): %s", script.specification()));
+        final Text document = script.generate("document");
         this.logger.info(String.format("XML document:%n%s%n", document.output()));
         final String example = document.output();
         this.logger.info(String.format("Generated tree:%n%s%n", example));
@@ -133,8 +135,8 @@ final class RandomScriptTest {
     @RepeatedTest(10)
     void generatesCsv() {
         final RandomScript script = new RandomScript(new ResourceOf("grammars/CSV.g4"));
-        this.logger.info(String.format("CSV spec (lisp format): %s", script.spec()));
-        final String example = script.generate("csvFile");
+        this.logger.info(String.format("CSV spec (lisp format): %s", script.specification()));
+        final String example = script.generate("csvFile").output();
         this.logger.info(String.format("Generated CSV example:%n%s%n", example));
         MatcherAssert.assertThat(
             "We expect that the example for CSV grammar will be generated successfully",
@@ -149,8 +151,9 @@ final class RandomScriptTest {
             new ResourceOf("grammars/Java8ReducedLexer.g4"),
             new ResourceOf("grammars/Java8ReducedParser.g4")
         );
-        this.logger.info(String.format("Java 8 Reduced spec (lisp format): %s", script.spec()));
-        final Text document = script.generateText("compilationUnit");
+        this.logger.info(
+            String.format("Java 8 Reduced spec (lisp format): %s", script.specification()));
+        final Text document = script.generate("compilationUnit");
         this.logger.info(String.format("Java 8 Reduced:%n%s%n", document.output()));
         MatcherAssert.assertThat(
             "We expect that the example for Java 8 Reduced grammar will be generated successfully and what is the most important - the grammar combined from two separate files - Java8ReducedLexer.g4 and Java8ReducedParser.g4",

@@ -37,10 +37,24 @@ import org.cactoos.Input;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
+/**
+ * Random script generator.
+ * This class represents a random script generator based on ANTLR grammar.
+ * In other words, it consumes ANTLR grammar and generates random scripts based on it.
+ * @since 0.1
+ */
 public final class RandomScript {
 
+    /**
+     * ANTLR grammars.
+     * They might be as standalone grammars or as separate lexer and parser grammars.
+     */
     private final List<String> grammars;
 
+    /**
+     * Constructor.
+     * @param grammars ANTLR grammars, either standalone or separate lexer and parser grammars.
+     */
     public RandomScript(final Input... grammars) {
         this(
             Arrays.stream(grammars)
@@ -51,38 +65,48 @@ public final class RandomScript {
         );
     }
 
+    /**
+     * Constructor.
+     * @param grammars ANTLR grammars, either standalone or separate lexer and parser grammars.
+     */
     private RandomScript(final List<String> grammars) {
         this.grammars = grammars;
     }
 
-    public String generate(final String rule) {
-        return this.generateText(rule).output();
-    }
-
-    public Text generateText(final String rule) {
+    /**
+     * Generate random script text based on the starting rule.
+     * @param rule Starting rule.
+     * @return Random script text.
+     */
+    public Text generate(final String rule) {
         final ANTLRListener listener = new ANTLRListener();
-        for (final String grammar : this.grammars) {
-            new ParseTreeWalker().walk(listener, RandomScript.parser(grammar).grammarSpec());
-        }
+        this.grammars.stream()
+            .map(RandomScript::parser)
+            .map(ANTLRv4Parser::grammarSpec)
+            .forEach(specification -> new ParseTreeWalker().walk(listener, specification));
         return listener.unparser().generate(rule, new Context());
     }
 
-    String spec() {
-        List<String> res = new ArrayList<>(0);
-        for (final String grammar : this.grammars) {
-            final ANTLRv4Parser parser = RandomScript.parser(grammar);
-            final ANTLRv4Parser.GrammarSpecContext spec = parser.grammarSpec();
-            res.add(spec.toStringTree(parser));
-        }
-        return String.join("\n", res);
+    /**
+     * Simple ANTLR grammar specification in Lisp format.
+     * @return ANTLR grammar specification in Lisp format.
+     */
+    String specification() {
+        return this.grammars.stream()
+            .map(RandomScript::parser)
+            .map(parser -> parser.grammarSpec().toStringTree(parser))
+            .collect(Collectors.joining("\n"));
     }
 
+    /**
+     * Create ANTLR parser.
+     * @param grammar Antlr grammar.
+     * @return ANTLR parser.
+     */
     private static ANTLRv4Parser parser(final String grammar) {
         return new ANTLRv4Parser(
             new CommonTokenStream(
-                new ANTLRv4Lexer(
-                    CharStreams.fromString(grammar)
-                )
+                new ANTLRv4Lexer(CharStreams.fromString(grammar))
             )
         );
     }

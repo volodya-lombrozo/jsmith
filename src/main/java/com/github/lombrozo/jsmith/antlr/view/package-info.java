@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 /**
- * Contains classes that help to represent the grammar in a human-readable form.
+ * Contains classes that help to represent the generated text in a human-readable form.
  * @since 0.1
  */
 package com.github.lombrozo.jsmith.antlr.view;
