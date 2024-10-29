@@ -203,7 +203,7 @@ public final class SyntaxGuard {
      * Get grammar name.
      * @return Grammar name.
      */
-    static String grammarName(final String grammar) {
+    private static String grammarName(final String grammar) {
         final Matcher matcher = Pattern.compile("grammar\\s+(\\w+);").matcher(grammar);
         if (matcher.find()) {
             return matcher.group(1);

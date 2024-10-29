@@ -27,11 +27,11 @@ public final class Attributes {
 
     private final boolean rule;
 
-    public Attributes() {
+    Attributes() {
         this(false);
     }
 
-    public Attributes(final boolean rule) {
+    Attributes(final boolean rule) {
         this.rule = rule;
     }
 

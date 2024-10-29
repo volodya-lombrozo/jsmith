@@ -24,7 +24,6 @@
 package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,10 +37,6 @@ public final class RuleTextNode implements Text {
     private final Rule writer;
     private final List<Text> children;
     private final String delimiter;
-
-    public RuleTextNode(final Rule writer, final Text... children) {
-        this(writer, Arrays.asList(children));
-    }
 
     public RuleTextNode(final Rule writer, final List<Text> children) {
         this(writer, children, RuleTextNode.DELIMITER);

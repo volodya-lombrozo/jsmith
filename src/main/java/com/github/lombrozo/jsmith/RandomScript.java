@@ -23,10 +23,9 @@
  */
 package com.github.lombrozo.jsmith;
 
-import com.github.lombrozo.jsmith.antlr.ANTLRListener;
+import com.github.lombrozo.jsmith.antlr.AntlrListener;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Text;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,7 +78,7 @@ public final class RandomScript {
      * @return Random script text.
      */
     public Text generate(final String rule) {
-        final ANTLRListener listener = new ANTLRListener();
+        final AntlrListener listener = new AntlrListener();
         this.grammars.stream()
             .map(RandomScript::parser)
             .map(ANTLRv4Parser::grammarSpec)
@@ -105,9 +104,7 @@ public final class RandomScript {
      */
     private static ANTLRv4Parser parser(final String grammar) {
         return new ANTLRv4Parser(
-            new CommonTokenStream(
-                new ANTLRv4Lexer(CharStreams.fromString(grammar))
-            )
+            new CommonTokenStream(new ANTLRv4Lexer(CharStreams.fromString(grammar)))
         );
     }
 }

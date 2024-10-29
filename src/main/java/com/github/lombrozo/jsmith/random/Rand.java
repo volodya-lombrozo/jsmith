@@ -49,24 +49,16 @@ public final class Rand {
      * Constructor.
      * @param rand Java random.
      */
-    public Rand(final Random rand) {
+    private Rand(final Random rand) {
         this.random = rand;
     }
 
     /**
-     * Flips a coin.
-     * @return True if heads, false if tails.
-     */
-    public boolean flip() {
-        return this.random.nextBoolean();
-    }
-
-    /**
      * Generates a random integer.
-     * @param bound Bound.
+     * @param bound Upper bound.
      * @return Random integer.
      */
-    public int range(int bound) {
+    public int range(final int bound) {
         return this.random.nextInt(bound);
     }
 
@@ -110,6 +102,14 @@ public final class Rand {
      */
     double floating() {
         return this.random.nextDouble();
+    }
+
+    /**
+     * Flips a coin.
+     * @return True if heads, false if tails.
+     */
+    boolean flip() {
+        return this.random.nextBoolean();
     }
 
 }

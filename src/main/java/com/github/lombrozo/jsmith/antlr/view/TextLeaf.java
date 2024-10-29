@@ -23,19 +23,43 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
+import com.github.lombrozo.jsmith.antlr.rules.Empty;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+/**
+ * This class represents a leaf of the generated text tree.
+ * @since 0.1
+ */
 @ToString
 @EqualsAndHashCode
 public final class TextLeaf implements Text {
+    /**
+     * Who writes the text.
+     */
     private final Rule writer;
 
+    /**
+     * Text output produced by {@link #writer}.
+     */
     private final String output;
 
+    /**
+     * Default constructor.
+     * @param output Text output.
+     */
+    public TextLeaf(final String output) {
+        this(new Empty(), output);
+    }
+
+    /**
+     * Constructor.
+     * @param writer Author of the text.
+     * @param output Text output.
+     */
     public TextLeaf(final Rule writer, final String output) {
         this.writer = writer;
         this.output = output;

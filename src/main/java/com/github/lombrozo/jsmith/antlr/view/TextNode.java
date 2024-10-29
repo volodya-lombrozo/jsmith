@@ -31,6 +31,10 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+/**
+ * This class represents a node of the generated text tree.
+ * @since 0.1
+ */
 @ToString
 @EqualsAndHashCode
 public final class TextNode implements Text {
@@ -39,8 +43,20 @@ public final class TextNode implements Text {
      * Default delimiter.
      */
     private static final String DELIMITER = "";
+
+    /**
+     * Who writes the text.
+     */
     private final Rule writer;
+
+    /**
+     * Children of the node.
+     */
     private final List<Text> children;
+
+    /**
+     * Delimiter between children.
+     */
     private final String delimiter;
 
     public TextNode(final Rule writer, final Text... children) {
@@ -69,9 +85,8 @@ public final class TextNode implements Text {
 
     @Override
     public String output() {
-        return
-            this.children.stream()
-                .map(Text::output)
-                .collect(Collectors.joining(this.delimiter));
+        return this.children.stream()
+            .map(Text::output)
+            .collect(Collectors.joining(this.delimiter));
     }
 }

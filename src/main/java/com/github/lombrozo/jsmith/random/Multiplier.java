@@ -44,7 +44,7 @@ public interface Multiplier {
      * @param element Element to repeat.
      * @return Generated string by the repetition.
      */
-    Rule repeat(final Rule element);
+    Rule repeat(Rule element);
 
     /**
      * Exactly one repetition.

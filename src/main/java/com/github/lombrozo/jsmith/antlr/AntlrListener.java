@@ -85,8 +85,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * ANTLR listener.
  * The listener is used to parse ANTLR grammar and build a tree of rules.
  * @since 0.1
+ * @checkstyle ClassFanOutComplexityCheck (1000 lines)
  */
-public final class ANTLRListener extends ANTLRv4ParserBaseListener {
+public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     /**
      * Unparser with a collection of parser rules.
@@ -106,7 +107,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
     /**
      * Constructor.
      */
-    public ANTLRListener() {
+    public AntlrListener() {
         this(new Unparser(), new Unlexer(), new Root());
     }
 
@@ -116,7 +117,7 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
      * @param unlexer Unlexer.
      * @param root Current rule.
      */
-    private ANTLRListener(
+    private AntlrListener(
         final Unparser unparser,
         final Unlexer unlexer,
         final Rule root
@@ -249,7 +250,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void exitTerminalDef(final ANTLRv4Parser.TerminalDefContext ctx) {
-        // nothing to do yet, since "TerminalDef" is a leaf node that doesn't have children.
         super.exitTerminalDef(ctx);
     }
 
@@ -283,7 +283,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void exitEbnfSuffix(final ANTLRv4Parser.EbnfSuffixContext ctx) {
-        // nothing to do yet, since "EbnfSuffix" is a leaf node that doesn't have children.
         super.exitEbnfSuffix(ctx);
     }
 
@@ -417,7 +416,6 @@ public final class ANTLRListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void exitCharacterRange(final ANTLRv4Parser.CharacterRangeContext ctx) {
-        // nothing to do yet, since "CharacterRange" is a leaf node that doesn't have children.
         super.exitCharacterRange(ctx);
     }
 

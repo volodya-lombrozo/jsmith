@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.guard;
 
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import java.nio.file.Path;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
@@ -53,7 +54,7 @@ final class SyntaxGuardTest {
     void validatesCorrectSynax(@TempDir final Path temp) {
         Assertions.assertDoesNotThrow(
             () -> new SyntaxGuard(temp, SyntaxGuardTest.TOP, SyntaxGuardTest.GRAMMAR)
-                .verify("1 + 1"),
+                .verifySilently(new TextLeaf("1 + 1")),
             "We expect that the code will be verified without errors"
         );
     }
@@ -83,21 +84,6 @@ final class SyntaxGuardTest {
                 "We expect that the empty code will be verified with errors"
             ).getMessage(),
             Matchers.equalTo("missing NUMBER at '<EOF>'")
-        );
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-        "grammar Simple;",
-        "lexer grammar Simple;",
-        "parser grammar Simple;",
-        "grammar Simple; expr: NUMBER;"
-    })
-    void findsGrammarName(final String grammar) {
-        MatcherAssert.assertThat(
-            "We expect that the grammar name will be found",
-            SyntaxGuard.grammarName(grammar),
-            Matchers.equalTo("Simple")
         );
     }
 }
