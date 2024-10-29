@@ -41,6 +41,6 @@ final class TraceTest {
             new Trace(new Literal("1"), new Literal("2"), new Literal("3")).line(),
             Matchers.equalTo("literal(1) -> literal(2) -> literal(3)")
         );
-
     }
+
 }

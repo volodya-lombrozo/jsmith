@@ -89,4 +89,9 @@ public final class TextNode implements Text {
             .map(Text::output)
             .collect(Collectors.joining(this.delimiter));
     }
+
+    @Override
+    public Attributes attributes() {
+        return new Attributes(false);
+    }
 }

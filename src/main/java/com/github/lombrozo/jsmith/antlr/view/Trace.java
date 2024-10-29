@@ -46,16 +46,16 @@ public final class Trace {
      * Constructor.
      * @param visited Nodes that were visited during the generation.
      */
-    public Trace(final Rule... visited) {
-        this(Arrays.asList(visited));
+    public Trace(final List<Rule> visited) {
+        this.visited = visited;
     }
 
     /**
      * Constructor.
      * @param visited Nodes that were visited during the generation.
      */
-    public Trace(final List<Rule> visited) {
-        this.visited = visited;
+    Trace(final Rule... visited) {
+        this(Arrays.asList(visited));
     }
 
     /**

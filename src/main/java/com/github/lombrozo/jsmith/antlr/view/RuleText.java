@@ -23,44 +23,55 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
-import com.github.lombrozo.jsmith.antlr.rules.EbnfSuffix;
-import com.github.lombrozo.jsmith.antlr.rules.Empty;
-import com.github.lombrozo.jsmith.antlr.rules.LexerElement;
-import com.github.lombrozo.jsmith.antlr.rules.LexerElements;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import java.util.List;
 
 /**
- * Test case for {@link RulesChain}.
+ * Text written by a rule.
+ * The same as {@link TextNode}, but with a different attributes.
  * @since 0.1
  */
-final class RulesChainTest {
+public final class RuleText implements Text {
 
-    @Test
-    void printsChain() {
-        MatcherAssert.assertThat(
-            "We expect that the tree will be printed correctly",
-            new RulesChain(
-                new EbnfSuffix(
-                    new LexerElement(
-                        new LexerElements(
-                            new Empty()
-                        )
-                    ),
-                    "+"
-                )
-            ).tree(),
-            Matchers.equalTo(
-                String.join(
-                    "\n",
-                    "empty",
-                    "  └──lexerElements",
-                    "       └──lexerElement",
-                    "            └──ebnfSuffix(+)\n"
-                )
-            )
-        );
+    /**
+     * Original text node.
+     */
+    private final TextNode original;
+
+    /**
+     * Constructor.
+     * @param writer The author of the text.
+     * @param children Children text nodes.
+     */
+    public RuleText(final Rule writer, final List<Text> children) {
+        this(new TextNode(writer, children));
     }
 
+    /**
+     * Constructor.
+     * @param original Original text node.
+     */
+    private RuleText(final TextNode original) {
+        this.original = original;
+    }
+
+    @Override
+    public Rule writer() {
+        return this.original.writer();
+    }
+
+    @Override
+    public List<Text> children() {
+        return this.original.children();
+    }
+
+    @Override
+    public String output() {
+        return this.original.output();
+    }
+
+    @Override
+    public Attributes attributes() {
+        return new Attributes(true);
+    }
 }

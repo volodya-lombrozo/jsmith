@@ -31,19 +31,26 @@ import java.util.List;
  */
 public interface Text {
 
+    /**
+     * Author of the text.
+     * @return Rule that writes the text.
+     */
     Rule writer();
 
+    /**
+     * Children nodes of the text.
+     * @return List of children nodes.
+     */
     List<Text> children();
 
+    /**
+     * Output of the text.
+     * @return Text output.
+     */
     String output();
 
     /**
      * Node attributes.
-     * @return Node attributes.
-     * @todo #1:30min Remove default implementation of attributes method.
-     *  It should be implemented in the classes that implement this interface.
      */
-    default Attributes attributes() {
-        return new Attributes();
-    }
+    Attributes attributes();
 }

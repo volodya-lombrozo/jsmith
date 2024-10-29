@@ -111,6 +111,11 @@ public final class DotTree implements Text {
         return builder.toString();
     }
 
+    @Override
+    public Attributes attributes() {
+        return new Attributes(false);
+    }
+
     /**
      * Traverses the tree.
      * @param parent Parent node.
