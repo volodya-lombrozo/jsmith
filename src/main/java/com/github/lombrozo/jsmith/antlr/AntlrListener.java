@@ -87,6 +87,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * @since 0.1
  * @checkstyle ClassFanOutComplexityCheck (1000 lines)
  */
+@SuppressWarnings({"PMD.UselessOverridingMethod", "PMD.ExcessivePublicCount", "PMD.TooManyMethods"})
 public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     /**
@@ -625,7 +626,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLexerCommandName(final ANTLRv4Parser.LexerCommandNameContext ctx) {
-        this.down((new LexerCommandName(this.current)));
+        this.down(new LexerCommandName(this.current));
         super.enterLexerCommandName(ctx);
     }
 
@@ -738,6 +739,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     /**
      * Go up in the generation tree.
      */
+    @SuppressWarnings("PMD.ShortMethodName")
     private void up() {
         this.current = this.current.parent();
     }

@@ -64,10 +64,11 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
     @Override
     public void syntaxError(
         final Recognizer<?, ?> recognizer,
-        final Object offendingSymbol,
+        final Object symbol,
         final int line,
-        final int charPositionInLine,
-        final String msg, final RecognitionException e
+        final int position,
+        final String msg,
+        final RecognitionException exception
     ) {
         this.errors.add(msg);
     }
@@ -79,7 +80,7 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
         final int start,
         final int stop,
         final boolean exact,
-        final BitSet ambigAlts,
+        final BitSet alternatives,
         final ATNConfigSet configs
     ) {
         // We ignore Ambiguity issues
@@ -89,9 +90,9 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
     public void reportAttemptingFullContext(
         final Parser recognizer,
         final DFA dfa,
-        final int startIndex,
-        final int stopIndex,
-        final BitSet conflictingAlts,
+        final int start,
+        final int stop,
+        final BitSet alternatives,
         final ATNConfigSet configs
     ) {
         // We ignore Full Context issues
@@ -101,8 +102,8 @@ public final class SyntaxErrorListener implements ANTLRErrorListener {
     public void reportContextSensitivity(
         final Parser recognizer,
         final DFA dfa,
-        final int startIndex,
-        final int stopIndex,
+        final int start,
+        final int stop,
         final int prediction,
         final ATNConfigSet configs
     ) {

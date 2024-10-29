@@ -48,7 +48,7 @@ public interface Rule {
      * Append child rule.
      * @param rule Child rule.
      */
-    void append(final Rule rule);
+    void append(Rule rule);
 
     /**
      * Rule name.

@@ -47,6 +47,7 @@ public final class Empty implements Rule {
 
     @Override
     public void append(final Rule rule) {
+        // do nothing
     }
 
     @Override

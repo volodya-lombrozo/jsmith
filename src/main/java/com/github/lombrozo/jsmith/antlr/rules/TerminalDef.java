@@ -90,7 +90,7 @@ public final class TerminalDef implements Rule {
     @Override
     public Text generate(final Context context) {
         final Text result;
-        if (this.text.equals(TerminalDef.END_OF_FILE)) {
+        if (TerminalDef.END_OF_FILE.equals(this.text)) {
             result = new TextLeaf(this, "");
         } else {
             result = this.unlexer.find(this.text)

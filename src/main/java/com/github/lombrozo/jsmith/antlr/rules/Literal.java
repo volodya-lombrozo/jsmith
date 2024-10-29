@@ -46,7 +46,7 @@ public final class Literal implements Rule, Negatable {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule parentr;
 
     /**
      * Text of the literal.
@@ -67,13 +67,13 @@ public final class Literal implements Rule, Negatable {
      * @param text Text of the literal.
      */
     public Literal(final Rule parent, final String text) {
-        this.parent = parent;
+        this.parentr = parent;
         this.text = text;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.parentr;
     }
 
     @Override
@@ -88,7 +88,7 @@ public final class Literal implements Rule, Negatable {
     public Text negate(final Context context) {
         return new TextLeaf(
             this,
-            new Rand().regex(String.format("[^%s]", this.generate(context).output()))
+            Rand.regex(String.format("[^%s]", this.generate(context).output()))
         );
     }
 
@@ -107,10 +107,19 @@ public final class Literal implements Rule, Negatable {
         return this.name();
     }
 
+    /**
+     * Remove apostrophes from the text.
+     * @return Text without apostrophes.
+     */
     private String withoutApostrophes() {
         return Literal.withoutApostrophes(this.text);
     }
 
+    /**
+     * Remove apostrophes from the text.
+     * @param text Text.
+     * @return Text without apostrophes.
+     */
     static String withoutApostrophes(final String text) {
         if (text.startsWith("'") && text.endsWith("'")) {
             return text.substring(1, text.length() - 1);

@@ -46,7 +46,7 @@ public abstract class Unimplemented implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule parentr;
 
     /**
      * Children rules.
@@ -67,7 +67,7 @@ public abstract class Unimplemented implements Rule {
      * @param children Children rules.
      */
     protected Unimplemented(final Rule parent, final List<Rule> children) {
-        this.parent = parent;
+        this.parentr = parent;
         this.children = children;
     }
 
@@ -83,7 +83,7 @@ public abstract class Unimplemented implements Rule {
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.parentr;
     }
 
     @Override

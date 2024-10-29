@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Atom.
@@ -45,7 +46,7 @@ public final class Atom implements Rule {
     /**
      * Atom name.
      */
-    private static final String NAME = "atom";
+    private static final String ATOM = "atom";
 
     /**
      * Parent rule.
@@ -55,7 +56,7 @@ public final class Atom implements Rule {
     /**
      * Atom inner element.
      */
-    private Rule item;
+    private final AtomicReference<Rule> item;
 
     /**
      * Constructor.
@@ -63,6 +64,7 @@ public final class Atom implements Rule {
      */
     public Atom(final Rule rule) {
         this.parent = rule;
+        this.item = new AtomicReference<>();
     }
 
     @Override
@@ -72,17 +74,17 @@ public final class Atom implements Rule {
 
     @Override
     public void append(final Rule rule) {
-        this.item = rule;
+        this.item.set(rule);
     }
 
     @Override
     public String name() {
-        return NAME;
+        return Atom.ATOM;
     }
 
     @Override
     public Text generate(final Context context) {
-        return new TextNode(this, this.item.generate(context));
+        return new TextNode(this, this.item.get().generate(context));
     }
 
     /**
@@ -90,7 +92,7 @@ public final class Atom implements Rule {
      * @param rule Rule.
      * @return True if the rule is an atom.
      */
-    public static boolean is(final Rule rule) {
-        return Atom.NAME.equals(rule.name());
+    public static boolean isAtom(final Rule rule) {
+        return Atom.ATOM.equals(rule.name());
     }
 }

@@ -46,7 +46,7 @@ final class ConvergenceTest {
             Collections.nCopies(100_000, list).stream(),
             Stream.of(desired)
         ).toArray(Rule[]::new);
-        final Convergence<Rule> convergence = new Convergence(0.0000000001, true);
+        final Convergence<Rule> convergence = new Convergence<>(0.000_000_000_1, true);
         convergence.choose(list, args);
         MatcherAssert.assertThat(
             String.format(
@@ -57,5 +57,4 @@ final class ConvergenceTest {
             Matchers.equalTo(desired)
         );
     }
-
 }

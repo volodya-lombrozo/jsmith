@@ -39,7 +39,7 @@ public final class LexerCharSet implements Rule, Negatable {
     /**
      * Unicode pattern.
      */
-    private static Pattern UNICODE = Pattern.compile("\\\\u([0-9A-Fa-f]{4})");
+    private static final Pattern UNICODE = Pattern.compile("\\\\u([0-9A-Fa-f]{4})");
 
     /**
      * Parent rule.
@@ -95,7 +95,7 @@ public final class LexerCharSet implements Rule, Negatable {
     public Text generate(final Context context) {
         return new TextLeaf(
             this,
-            this.rand.regex(Literal.replaceEscapes(this.text))
+            Rand.regex(Literal.replaceEscapes(this.text))
         );
     }
 
@@ -110,7 +110,7 @@ public final class LexerCharSet implements Rule, Negatable {
         }
         return new TextLeaf(
             this,
-            this.rand.regex(LexerCharSet.unescapeUnicodes(negated))
+            Rand.regex(LexerCharSet.unescapeUnicodes(negated))
         );
     }
 

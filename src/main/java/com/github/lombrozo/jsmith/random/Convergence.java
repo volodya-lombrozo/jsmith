@@ -100,6 +100,7 @@ final class Convergence<T> {
      * @param weight Initial weight of the elements.
      * @param rand Random generator.
      * @param verbose Verbose mode.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     private Convergence(
         final double factor,
@@ -110,6 +111,15 @@ final class Convergence<T> {
         this(factor, weight, new HashMap<>(0), rand, verbose);
     }
 
+    /**
+     * Constructor.
+     * @param factor Factor of convergence.
+     * @param weight Initial weight of the elements.
+     * @param weights Weights of the elements.
+     * @param rand Random generator.
+     * @param verbose Verbose mode.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
     private Convergence(
         final double factor,
         final double weight,

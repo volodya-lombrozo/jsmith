@@ -45,7 +45,7 @@ public final class Block implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule parentrule;
 
     /**
      * Elements between parentheses.
@@ -66,13 +66,13 @@ public final class Block implements Rule {
      * @param children Children rules.
      */
     public Block(final Rule rule, final List<Rule> children) {
-        this.parent = rule;
+        this.parentrule = rule;
         this.elements = children;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.parentrule;
     }
 
     @Override

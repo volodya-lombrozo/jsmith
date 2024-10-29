@@ -92,7 +92,7 @@ public final class Rand {
      * @param regex Regex for which to generate a string.
      * @return Random string.
      */
-    public String regex(final String regex) {
+    public static String regex(final String regex) {
         return new Generex(regex).random();
     }
 

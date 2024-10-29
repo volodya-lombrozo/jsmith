@@ -118,7 +118,7 @@ public final class SyntaxGuard {
                     code.output()
                 )
             );
-            throw new IllegalText(
+            throw new IllegalTextException(
                 String.format("Generated code '%s' is wrong", code.output()),
                 code,
                 exception

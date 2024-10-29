@@ -13,7 +13,7 @@ public final class LabeledElement extends Unimplemented {
     /**
      * Labeled element name.
      */
-    private static final String NAME = "labeledElement";
+    private static final String KEY = "labeledElement";
 
     /**
      * Constructor.
@@ -25,7 +25,7 @@ public final class LabeledElement extends Unimplemented {
 
     @Override
     public String name() {
-        return LabeledElement.NAME;
+        return LabeledElement.KEY;
     }
 
     /**
@@ -33,7 +33,7 @@ public final class LabeledElement extends Unimplemented {
      * @param rule Rule.
      * @return True if the rule is labeled element.
      */
-    public static boolean is(final Rule rule) {
-        return LabeledElement.NAME.equals(rule.name());
+    static boolean isLabeledElement(final Rule rule) {
+        return LabeledElement.KEY.equals(rule.name());
     }
 }

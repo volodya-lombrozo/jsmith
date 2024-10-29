@@ -47,12 +47,12 @@ public final class TextNode implements Text {
     /**
      * Who writes the text.
      */
-    private final Rule writer;
+    private final Rule author;
 
     /**
      * Children of the node.
      */
-    private final List<Text> children;
+    private final List<Text> childs;
 
     /**
      * Delimiter between children.
@@ -68,24 +68,24 @@ public final class TextNode implements Text {
     }
 
     public TextNode(final Rule writer, final List<Text> children, final String delimiter) {
-        this.writer = writer;
-        this.children = children;
+        this.author = writer;
+        this.childs = children;
         this.delimiter = delimiter;
     }
 
     @Override
     public Rule writer() {
-        return this.writer;
+        return this.author;
     }
 
     @Override
     public List<Text> children() {
-        return Collections.unmodifiableList(this.children);
+        return Collections.unmodifiableList(this.childs);
     }
 
     @Override
     public String output() {
-        return this.children.stream()
+        return this.childs.stream()
             .map(Text::output)
             .collect(Collectors.joining(this.delimiter));
     }

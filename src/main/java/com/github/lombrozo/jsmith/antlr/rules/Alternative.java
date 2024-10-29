@@ -47,7 +47,7 @@ public final class Alternative implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule parentr;
 
     /**
      * Elements of the alternative.
@@ -71,13 +71,13 @@ public final class Alternative implements Rule {
         final Rule parent,
         final List<Rule> element
     ) {
-        this.parent = parent;
+        this.parentr = parent;
         this.elements = element;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.parentr;
     }
 
     @Override
@@ -99,5 +99,4 @@ public final class Alternative implements Rule {
     public String name() {
         return "alternative";
     }
-
 }

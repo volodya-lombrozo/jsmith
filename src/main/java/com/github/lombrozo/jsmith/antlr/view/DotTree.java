@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -46,21 +47,35 @@ public final class DotTree implements Text {
      */
     private final Text origin;
 
-    private final List<Predicate<Text>> filters;
+    /**
+     * Filters.
+     */
+    private final List<? extends Predicate<Text>> filters;
+
+    /**
+     * Constructor.
+     * @param origin Origin text.
+     * @param filters Filters.
+     */
+    @SafeVarargs
+    public DotTree(final Text origin, final Predicate<Text>... filters) {
+        this(origin, Arrays.asList(filters));
+    }
 
     /**
      * Constructor.
      * @param origin Origin text.
      */
-    public DotTree(final Text origin) {
+    DotTree(final Text origin) {
         this(origin, new ArrayList<>(0));
     }
 
-    public DotTree(final Text origin, Predicate<Text>... filters) {
-        this(origin, Arrays.asList(filters));
-    }
-
-    public DotTree(final Text origin, final List<Predicate<Text>> filters) {
+    /**
+     * Constructor.
+     * @param origin Origin text.
+     * @param filters Filters.
+     */
+    private DotTree(final Text origin, final List<? extends Predicate<Text>> filters) {
         this.origin = origin;
         this.filters = filters;
     }
@@ -77,25 +92,19 @@ public final class DotTree implements Text {
 
     @Override
     public String output() {
-        // STYLING:
-        // You can also play with
-        // ranksep=5.0; // Default is typically around 0.5
-        // nodesep=1.0; // Default is typically around 0.25
-        final StringBuilder builder = new StringBuilder();
-        builder.append("digraph JsmithGenerativeTree{\n");
-        final HashMap<String, String> labels = new HashMap<>();
-        final List<String> leafs = new ArrayList<>();
+        final StringBuilder builder = new StringBuilder("digraph JsmithGenerativeTree{\n");
+        final Map<String, String> labels = new HashMap<>(0);
+        final List<String> leafs = new ArrayList<>(0);
         this.travers(new TextLeaf(new Root(), "root"), this.origin, builder, labels, leafs);
         builder.append("// Node labels\n");
-        labels.entrySet().forEach(e -> builder.append(
-                String.format(
-                    "\"#%s\" [label=\"%s\" tooltip=\"%s\"];\n",
-                    e.getKey(),
-                    e.getValue(),
-                    labels.get(e.getKey())
-                )
+        labels.forEach((key, value) -> builder.append(
+            String.format(
+                "\"#%s\" [label=\"%s\" tooltip=\"%s\"];\n",
+                key,
+                value,
+                labels.get(key)
             )
-        );
+        ));
         builder.append(
             leafs.stream()
                 .map(s -> String.format("  \"#%s\"", s))
@@ -127,7 +136,7 @@ public final class DotTree implements Text {
         final Text parent,
         final Text current,
         final StringBuilder builder,
-        final HashMap<String, String> labels,
+        final Map<String, String> labels,
         final List<String> leafs
     ) {
         if (this.filters.stream().anyMatch(filter -> filter.test(current))) {
@@ -178,7 +187,10 @@ public final class DotTree implements Text {
         }
     }
 
-
+    /**
+     * Filter only rules.
+     * @since 0.1
+     */
     public static class RulesOnly implements Predicate<Text> {
 
         @Override

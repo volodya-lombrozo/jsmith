@@ -39,7 +39,7 @@ final class RandTest {
     @ParameterizedTest
     @ValueSource(strings = {"[0-3]+", "[0-3]"})
     void regexGenerationTest(final String regex) {
-        final String generated = new Rand().regex(regex);
+        final String generated = Rand.regex(regex);
         Logger.getLogger(RandTest.class.getName())
             .info(String.format("Generated value: %s", generated));
         MatcherAssert.assertThat(

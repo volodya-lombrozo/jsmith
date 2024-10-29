@@ -46,12 +46,12 @@ public final class ParserRuleSpec implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule prule;
 
     /**
      * Rule name.
      */
-    private final String name;
+    private final String rname;
 
     /**
      * Children rules.
@@ -64,14 +64,14 @@ public final class ParserRuleSpec implements Rule {
      * @param parent Parent rule.
      */
     public ParserRuleSpec(final String name, final Rule parent) {
-        this.name = name;
-        this.parent = parent;
+        this.rname = name;
+        this.prule = parent;
         this.list = new ArrayList<>(0);
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.prule;
     }
 
     @Override
@@ -89,6 +89,6 @@ public final class ParserRuleSpec implements Rule {
 
     @Override
     public String name() {
-        return String.format("parserRuleSpec(%s)", this.name);
+        return String.format("parserRuleSpec(%s)", this.rname);
     }
 }

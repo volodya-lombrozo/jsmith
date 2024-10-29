@@ -2,7 +2,7 @@ package com.github.lombrozo.jsmith.it;
 
 import com.github.lombrozo.jsmith.RandomScript;
 import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.guard.IllegalText;
+import com.github.lombrozo.jsmith.guard.IllegalTextException;
 import com.github.lombrozo.jsmith.guard.SyntaxGuard;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -67,7 +67,7 @@ final class SyntaxGenerationIT {
                 .limit(50)
                 .peek(SyntaxGenerationIT::logProgram)
                 .forEach(guard::verifySilently);
-        } catch (final IllegalText exception) {
+        } catch (final IllegalTextException exception) {
             exception.saveDot();
             Assertions.fail(
                 "We expect that the randomly generated code will be verified without errors",

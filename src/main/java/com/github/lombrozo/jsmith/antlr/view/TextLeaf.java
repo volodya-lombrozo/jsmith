@@ -40,12 +40,12 @@ public final class TextLeaf implements Text {
     /**
      * Who writes the text.
      */
-    private final Rule writer;
+    private final Rule author;
 
     /**
-     * Text output produced by {@link #writer}.
+     * Text output produced by {@link #author}.
      */
-    private final String output;
+    private final String text;
 
     /**
      * Default constructor.
@@ -61,13 +61,13 @@ public final class TextLeaf implements Text {
      * @param output Text output.
      */
     public TextLeaf(final Rule writer, final String output) {
-        this.writer = writer;
-        this.output = output;
+        this.author = writer;
+        this.text = output;
     }
 
     @Override
     public Rule writer() {
-        return this.writer;
+        return this.author;
     }
 
     @Override
@@ -77,7 +77,7 @@ public final class TextLeaf implements Text {
 
     @Override
     public String output() {
-        return this.output;
+        return this.text;
     }
 
     @Override
