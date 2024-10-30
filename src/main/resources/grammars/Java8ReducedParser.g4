@@ -79,8 +79,8 @@ literal
  */
 
 primitiveType
-    : annotation* numericType
-    | annotation* 'boolean'
+    : numericType
+    | 'boolean'
     ;
 
 numericType
@@ -230,7 +230,7 @@ ambiguousName
  */
 
 compilationUnit
-    : packageDeclaration? importDeclaration* typeDeclaration* EOF
+    : packageDeclaration? importDeclaration* typeDeclaration EOF
     ;
 
 packageDeclaration
@@ -262,8 +262,6 @@ staticImportOnDemandDeclaration
 
 typeDeclaration
     : classDeclaration
-//    | interfaceDeclaration
-    | ';'
     ;
 
 /*
@@ -272,7 +270,6 @@ typeDeclaration
 
 classDeclaration
     : normalClassDeclaration
-//    | enumDeclaration
     ;
 
 normalClassDeclaration
@@ -298,10 +295,6 @@ typeParameterList
     : typeParameter (',' typeParameter)*
     ;
 
-superclass
-    : 'extends' classType
-    ;
-
 superinterfaces
     : 'implements' interfaceTypeList
     ;
@@ -316,35 +309,12 @@ classBody
 
 classBodyDeclaration
     : classMemberDeclaration
-//    | instanceInitializer
-//    | staticInitializer
-//    | constructorDeclaration
     ;
 
 classMemberDeclaration
-    :
-//    fieldDeclaration
-//    | methodDeclaration
-//    | classDeclaration
-//    | interfaceDeclaration
-//    |
-    ';'
+    :  ';'
     ;
 
-fieldDeclaration
-    : fieldModifier* unannType variableDeclaratorList ';'
-    ;
-
-fieldModifier
-    : annotation
-    | 'public'
-    | 'protected'
-    | 'private'
-    | 'static'
-    | 'final'
-    | 'transient'
-    | 'volatile'
-    ;
 
 variableDeclaratorList
     : variableDeclarator (',' variableDeclarator)*
@@ -570,7 +540,6 @@ enumBodyDeclarations
 
 interfaceDeclaration
     : normalInterfaceDeclaration
-    | annotationTypeDeclaration
     ;
 
 normalInterfaceDeclaration
@@ -619,43 +588,13 @@ interfaceMethodDeclaration
     ;
 
 interfaceMethodModifier
-    : annotation
-    | 'public'
+    : 'public'
     | 'abstract'
     | 'default'
     | 'static'
     | 'strictfp'
     ;
 
-annotationTypeDeclaration
-    : interfaceModifier* '@' 'interface' Identifier annotationTypeBody
-    ;
-
-annotationTypeBody
-    : '{' annotationTypeMemberDeclaration* '}'
-    ;
-
-annotationTypeMemberDeclaration
-    : annotationTypeElementDeclaration
-    | constantDeclaration
-    | classDeclaration
-    | interfaceDeclaration
-    | ';'
-    ;
-
-annotationTypeElementDeclaration
-    : annotationTypeElementModifier* unannType Identifier '(' ')' dims? defaultValue? ';'
-    ;
-
-annotationTypeElementModifier
-    : annotation
-    | 'public'
-    | 'abstract'
-    ;
-
-defaultValue
-    : 'default' elementValue
-    ;
 
 annotation
     : normalAnnotation
