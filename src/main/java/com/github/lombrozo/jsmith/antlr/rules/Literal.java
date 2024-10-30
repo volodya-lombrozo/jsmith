@@ -88,7 +88,7 @@ public final class Literal implements Rule, Negatable {
     public Text negate(final Context context) {
         return new TextLeaf(
             this,
-            Rand.regex(String.format("[^%s]", this.generate(context).output()))
+            new Rand().regex(String.format("[^%s]", this.generate(context).output()))
         );
     }
 

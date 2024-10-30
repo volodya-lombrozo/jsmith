@@ -95,7 +95,7 @@ public final class LexerCharSet implements Rule, Negatable {
     public Text generate(final Context context) {
         return new TextLeaf(
             this,
-            Rand.regex(Literal.replaceEscapes(this.text))
+            this.rand.regex(Literal.replaceEscapes(this.text))
         );
     }
 
@@ -110,7 +110,7 @@ public final class LexerCharSet implements Rule, Negatable {
         }
         return new TextLeaf(
             this,
-            Rand.regex(LexerCharSet.unescapeUnicodes(negated))
+            this.rand.regex(LexerCharSet.unescapeUnicodes(negated))
         );
     }
 

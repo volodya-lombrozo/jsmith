@@ -92,8 +92,8 @@ public final class Rand {
      * @param regex Regex for which to generate a string.
      * @return Random string.
      */
-    public static String regex(final String regex) {
-        return new Generex(regex).random();
+    public String regex(final String regex) {
+        return new Generex(regex, this.random).random();
     }
 
     /**
