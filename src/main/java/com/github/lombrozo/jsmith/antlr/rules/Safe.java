@@ -41,7 +41,7 @@ public final class Safe implements Rule, Suffix, Negatable {
     /**
      * Default max recursion depth.
      */
-    private static final int DEFAULT = 600;
+    static final int DEFAULT = 600;
 
     /**
      * Original rule.

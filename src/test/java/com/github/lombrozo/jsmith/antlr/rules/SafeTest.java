@@ -43,7 +43,7 @@ final class SafeTest {
             Assertions.assertThrows(
                 RecursionException.class,
                 () -> new Safe().generate(
-                    new Context(Collections.nCopies(200, new Literal("long chain")))
+                    new Context(Collections.nCopies(Safe.DEFAULT, new Literal("long chain")))
                 ),
                 "We expect recursion will be detected"
             ).getMessage(),
