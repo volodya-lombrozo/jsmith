@@ -92,7 +92,7 @@ public final class Atom implements Rule {
      * @param rule Rule.
      * @return True if the rule is an atom.
      */
-    public static boolean isAtom(final Rule rule) {
+    static boolean isAtom(final Rule rule) {
         return Atom.ATOM.equals(rule.name());
     }
 }

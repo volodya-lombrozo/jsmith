@@ -23,16 +23,31 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-public final class UnicodeChar {
+/**
+ * Unicode character.
+ * @since 0.1
+ */
+final class UnicodeChar {
 
+    /**
+     * Textual representation of the character.
+     */
     private final String text;
 
-    public UnicodeChar(final String text) {
+    /**
+     * Default constructor.
+     * @param text Textual representation of the character
+     */
+    UnicodeChar(final String text) {
         this.text = text;
     }
 
-    public int chararcter() {
-        int result;
+    /**
+     * Character code.
+     * @return Character code
+     */
+    int chararcter() {
+        final int result;
         if (this.text.startsWith("\\u")) {
             result = Integer.parseInt(this.text.substring(2), 16);
         } else {
@@ -41,8 +56,11 @@ public final class UnicodeChar {
         return result;
     }
 
-    public String unescaped() {
+    /**
+     * Unescaped character.
+     * @return Unescaped character
+     */
+    String unescaped() {
         return String.valueOf(Character.toChars(this.chararcter()));
     }
-
 }

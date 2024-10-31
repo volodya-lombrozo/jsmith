@@ -266,8 +266,10 @@ public final class SyntaxGuard {
             try {
                 return (Lexer) this.clexer.getDeclaredConstructor(CharStream.class)
                     .newInstance(CharStreams.fromString(code));
-            } catch (final NoSuchMethodException | IllegalAccessException |
-                           InvocationTargetException | InstantiationException exception) {
+            } catch (final NoSuchMethodException
+                           | IllegalAccessException
+                           | InvocationTargetException
+                           | InstantiationException exception) {
                 throw new IllegalStateException(
                     "Something went wrong during lexer creation",
                     exception
@@ -284,8 +286,10 @@ public final class SyntaxGuard {
             try {
                 return (Parser) this.cparser.getDeclaredConstructor(TokenStream.class)
                     .newInstance(new CommonTokenStream(lexer));
-            } catch (final NoSuchMethodException | IllegalAccessException |
-                           InvocationTargetException | InstantiationException exception) {
+            } catch (final NoSuchMethodException
+                           | IllegalAccessException
+                           | InvocationTargetException
+                           | InstantiationException exception) {
                 throw new IllegalStateException(
                     "Something went wrong during parser creation",
                     exception
@@ -301,8 +305,9 @@ public final class SyntaxGuard {
         void parse(final Parser parser, final String top) {
             try {
                 this.cparser.getMethod(top).invoke(parser);
-            } catch (final NoSuchMethodException | IllegalAccessException |
-                           InvocationTargetException exception) {
+            } catch (final NoSuchMethodException
+                           | IllegalAccessException
+                           | InvocationTargetException exception) {
                 throw new IllegalStateException(
                     "Something went wrong during parsing",
                     exception

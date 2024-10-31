@@ -48,7 +48,7 @@ public final class EbnfSuffix implements Rule, Suffix {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * Operation.
@@ -98,7 +98,7 @@ public final class EbnfSuffix implements Rule, Suffix {
      * @param question Question.
      */
     public EbnfSuffix(final Rule parent, final String operation, final String question) {
-        this.parent = parent;
+        this.top = parent;
         this.operation = operation;
         this.question = question;
         this.rand = new Rand();
@@ -106,7 +106,7 @@ public final class EbnfSuffix implements Rule, Suffix {
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override

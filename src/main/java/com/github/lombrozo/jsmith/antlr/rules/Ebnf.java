@@ -45,13 +45,13 @@ public final class Ebnf implements Rule {
     /**
      * This rule name.
      */
-    private static final String NAME = "ebnf";
+    private static final String ALIAS = "ebnf";
 
 
     /**
      * Parent rule.
      */
-    private final Rule prule;
+    private final Rule top;
 
     /**
      * Block and suffix.
@@ -79,13 +79,13 @@ public final class Ebnf implements Rule {
      * @param children Children rules.
      */
     private Ebnf(final Rule parent, final List<Rule> children) {
-        this.prule = parent;
+        this.top = parent;
         this.children = children;
     }
 
     @Override
     public Rule parent() {
-        return this.prule;
+        return this.top;
     }
 
     @Override
@@ -104,7 +104,7 @@ public final class Ebnf implements Rule {
 
     @Override
     public String name() {
-        return Ebnf.NAME;
+        return Ebnf.ALIAS;
     }
 
     /**
@@ -113,7 +113,7 @@ public final class Ebnf implements Rule {
      * @return True if the rule is Ebnf.
      */
     static boolean isEbnf(final Rule rule) {
-        return Ebnf.NAME.equals(rule.name());
+        return Ebnf.ALIAS.equals(rule.name());
     }
 
     /**

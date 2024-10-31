@@ -31,11 +31,24 @@ import org.cactoos.io.ResourceOf;
  */
 public final class RandomJavaClass {
 
+    /**
+     * ANTLR parser grammar for Java.
+     */
     private final String parser;
+
+    /**
+     * ANTLR lexer grammar for Java.
+     */
     private final String lexer;
 
+    /**
+     * Start rule.
+     */
     private final String rule;
 
+    /**
+     * Default constructor.
+     */
     public RandomJavaClass() {
         this(
             "grammars/Java8ReducedParser.g4",

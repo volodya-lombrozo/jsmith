@@ -45,7 +45,7 @@ public final class LexerElements implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * Children rules.
@@ -66,13 +66,13 @@ public final class LexerElements implements Rule {
      * @param elems Children rules.
      */
     private LexerElements(final Rule parent, final List<Rule> elems) {
-        this.parent = parent;
+        this.top = parent;
         this.elems = elems;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override

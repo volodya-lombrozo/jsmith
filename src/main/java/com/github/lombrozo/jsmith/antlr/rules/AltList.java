@@ -73,7 +73,7 @@ public final class AltList implements Rule {
      * @param parent Parent rule.
      * @param alternatives Alternatives.
      */
-    AltList(final Rule parent, Rule... alternatives) {
+    AltList(final Rule parent, final Rule... alternatives) {
         this(parent, Arrays.asList(alternatives));
     }
 

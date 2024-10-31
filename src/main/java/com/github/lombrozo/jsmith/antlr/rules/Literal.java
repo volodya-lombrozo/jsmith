@@ -46,7 +46,7 @@ public final class Literal implements Rule, Negatable {
     /**
      * Parent rule.
      */
-    private final Rule parentr;
+    private final Rule top;
 
     /**
      * Text of the literal.
@@ -67,20 +67,20 @@ public final class Literal implements Rule, Negatable {
      * @param text Text of the literal.
      */
     public Literal(final Rule parent, final String text) {
-        this.parentr = parent;
+        this.top = parent;
         this.text = text;
     }
 
     @Override
     public Rule parent() {
-        return this.parentr;
+        return this.top;
     }
 
     @Override
     public Text generate(final Context context) {
         return new TextLeaf(
             this,
-            Literal.replaceEscapes(this.withoutApostrophes())
+            Literal.replaceEscapes(Literal.withoutApostrophes(this.text))
         );
     }
 
@@ -105,14 +105,6 @@ public final class Literal implements Rule, Negatable {
     @Override
     public String toString() {
         return this.name();
-    }
-
-    /**
-     * Remove apostrophes from the text.
-     * @return Text without apostrophes.
-     */
-    private String withoutApostrophes() {
-        return Literal.withoutApostrophes(this.text);
     }
 
     /**
@@ -197,6 +189,7 @@ public final class Literal implements Rule, Negatable {
                     break;
                 default:
                     replacement = matcher.group(0);
+                    break;
             }
             matcher.appendReplacement(result, replacement);
         }
