@@ -92,11 +92,12 @@ public final class DotTree implements Text {
 
     @Override
     public String output() {
-        final StringBuilder builder = new StringBuilder("digraph JsmithGenerativeTree{\n");
+        final StringBuilder builder = new StringBuilder(
+            "digraph JsmithGenerativeTree{\n// Node labels\n"
+        );
         final Map<String, String> labels = new HashMap<>(0);
         final List<String> leafs = new ArrayList<>(0);
         this.travers(new TextLeaf(new Root(), "root"), this.origin, builder, labels, leafs);
-        builder.append("// Node labels\n");
         labels.forEach((key, value) -> builder.append(
             String.format(
                 "\"#%s\" [label=\"%s\" tooltip=\"%s\"];\n",

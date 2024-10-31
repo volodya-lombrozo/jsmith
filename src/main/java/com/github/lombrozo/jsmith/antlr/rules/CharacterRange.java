@@ -54,7 +54,7 @@ public final class CharacterRange implements Rule, Negatable {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule parentr;
 
     /**
      * Range text.
@@ -72,7 +72,7 @@ public final class CharacterRange implements Rule, Negatable {
      * @param text Range text.
      */
     public CharacterRange(final Rule parent, final String text) {
-        this.parent = parent;
+        this.parentr = parent;
         this.text = text;
         this.rand = new Rand();
     }
@@ -87,7 +87,7 @@ public final class CharacterRange implements Rule, Negatable {
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.parentr;
     }
 
     @Override

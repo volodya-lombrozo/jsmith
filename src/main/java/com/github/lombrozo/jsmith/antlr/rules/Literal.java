@@ -121,11 +121,13 @@ public final class Literal implements Rule, Negatable {
      * @return Text without apostrophes.
      */
     static String withoutApostrophes(final String text) {
+        final String result;
         if (text.startsWith("'") && text.endsWith("'")) {
-            return text.substring(1, text.length() - 1);
+            result = text.substring(1, text.length() - 1);
         } else {
-            return text;
+            result = text;
         }
+        return result;
     }
 
     /**
@@ -143,10 +145,13 @@ public final class Literal implements Rule, Negatable {
      */
     static String replaceEscapes(final String original) {
         try {
+            final String result;
             if (original.replaceAll("'", "").startsWith("\\u")) {
-                return new UnicodeChar(original.replaceAll("'", "")).unescaped();
+                result = new UnicodeChar(original.replaceAll("'", "")).unescaped();
+            } else {
+                result = Literal.tryToReplaceEscapes(original);
             }
-            return Literal.tryToReplaceEscapes(original);
+            return result;
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Failed to replace escape sequences in '%s'", original),

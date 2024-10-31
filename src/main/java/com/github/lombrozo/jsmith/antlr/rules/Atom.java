@@ -51,7 +51,7 @@ public final class Atom implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * Atom inner element.
@@ -63,13 +63,13 @@ public final class Atom implements Rule {
      * @param rule Parent rule.
      */
     public Atom(final Rule rule) {
-        this.parent = rule;
+        this.top = rule;
         this.item = new AtomicReference<>();
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override

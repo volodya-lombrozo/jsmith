@@ -41,7 +41,7 @@ public final class Context {
     /**
      * Strategy used in the generation.
      */
-    private final ChoosingStrategy strategy;
+    private final ChoosingStrategy strat;
 
     /**
      * Path of the rules that were visited during the generation.
@@ -78,7 +78,7 @@ public final class Context {
      * @param chain The path of the rules that were visited during the generation.
      */
     public Context(final ChoosingStrategy strat, final List<Rule> chain) {
-        this.strategy = strat;
+        this.strat = strat;
         this.visited = chain;
     }
 
@@ -91,7 +91,7 @@ public final class Context {
      */
     public Context next(final Rule rule) {
         return new Context(
-            this.strategy.copy(),
+            this.strat.copy(),
             Stream.concat(
                 this.visited.stream(),
                 Stream.of(rule)
@@ -104,7 +104,7 @@ public final class Context {
      * @return The strategy used in the generation.
      */
     public ChoosingStrategy strategy() {
-        return this.strategy;
+        return this.strat;
     }
 
     /**

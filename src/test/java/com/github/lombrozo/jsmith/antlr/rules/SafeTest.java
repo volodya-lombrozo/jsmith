@@ -33,6 +33,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Safe rule test cases {@link Safe}.
+ * @since 0.1
  */
 final class SafeTest {
 

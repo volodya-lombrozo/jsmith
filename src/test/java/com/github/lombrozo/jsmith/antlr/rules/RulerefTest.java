@@ -54,5 +54,4 @@ final class RulerefTest {
             Matchers.equalTo(expected)
         );
     }
-
 }

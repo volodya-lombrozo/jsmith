@@ -45,7 +45,8 @@ public final class Ebnf implements Rule {
     /**
      * This rule name.
      */
-    private static final String EBNF = "ebnf";
+    private static final String NAME = "ebnf";
+
 
     /**
      * Parent rule.
@@ -103,7 +104,7 @@ public final class Ebnf implements Rule {
 
     @Override
     public String name() {
-        return Ebnf.EBNF;
+        return Ebnf.NAME;
     }
 
     /**
@@ -112,7 +113,7 @@ public final class Ebnf implements Rule {
      * @return True if the rule is Ebnf.
      */
     static boolean isEbnf(final Rule rule) {
-        return Ebnf.EBNF.equals(rule.name());
+        return Ebnf.NAME.equals(rule.name());
     }
 
     /**
@@ -120,12 +121,13 @@ public final class Ebnf implements Rule {
      * @return Multiplier.
      */
     private Multiplier multiplier() {
+        final Multiplier result;
         if (this.children.size() <= 1) {
-            return new Multiplier.One();
+            result = new Multiplier.One();
         } else {
             final Rule first = this.children.get(1);
             if (first instanceof Suffix) {
-                return ((Suffix) first).multiplier();
+                result = ((Suffix) first).multiplier();
             } else {
                 throw new IllegalStateException(
                     String.format(
@@ -136,5 +138,6 @@ public final class Ebnf implements Rule {
                 );
             }
         }
+        return result;
     }
 }

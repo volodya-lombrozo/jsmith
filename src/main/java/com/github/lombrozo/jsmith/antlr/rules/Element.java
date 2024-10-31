@@ -53,32 +53,25 @@ public final class Element implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * Children rules.
      */
-    private List<Rule> children;
-
-    /**
-     * Constructor.
-     */
-    public Element() {
-        this(new Root());
-    }
+    private final List<Rule> children;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public Element(final Rule parent) {
-        this.parent = parent;
+        this.top = parent;
         this.children = new ArrayList<>(1);
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override

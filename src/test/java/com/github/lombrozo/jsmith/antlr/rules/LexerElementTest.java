@@ -29,7 +29,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test cases for {@link LexerElement}
+ * Test cases for {@link LexerElement}.
  * @since 0.1
  */
 final class LexerElementTest {

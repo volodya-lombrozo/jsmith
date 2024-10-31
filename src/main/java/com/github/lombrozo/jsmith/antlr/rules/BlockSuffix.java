@@ -51,19 +51,12 @@ public final class BlockSuffix implements Rule, Suffix {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * Children rules.
      */
     private final List<Rule> children;
-
-    /**
-     * Constructor.
-     */
-    public BlockSuffix() {
-        this(new Root());
-    }
 
     /**
      * Constructor.
@@ -75,17 +68,24 @@ public final class BlockSuffix implements Rule, Suffix {
 
     /**
      * Constructor.
+     */
+    BlockSuffix() {
+        this(new Root());
+    }
+
+    /**
+     * Constructor.
      * @param parent Parent rule.
      * @param children Children rules.
      */
-    public BlockSuffix(final Rule parent, final List<Rule> children) {
-        this.parent = parent;
+    private BlockSuffix(final Rule parent, final List<Rule> children) {
+        this.top = parent;
         this.children = children;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override
@@ -114,18 +114,20 @@ public final class BlockSuffix implements Rule, Suffix {
      */
     @Override
     public Multiplier multiplier() {
+        final Multiplier result;
         if (this.children.isEmpty()) {
-            return new Multiplier.One();
+            result = new Multiplier.One();
         } else {
             final Rule first = this.children.get(0);
             if (first instanceof Suffix) {
-                return ((Suffix) first).multiplier();
+                result = ((Suffix) first).multiplier();
             } else {
                 throw new IllegalStateException(
                     String.format("Unknown block suffix type: %s", first.name())
                 );
             }
         }
+        return result;
     }
 
     /**
@@ -133,7 +135,7 @@ public final class BlockSuffix implements Rule, Suffix {
      * @param rule Rule.
      * @return True if the rule is BlockSuffix.
      */
-    public static boolean is(final Rule rule) {
+    static boolean isBloclSuffix(final Rule rule) {
         return rule.name().equals(BlockSuffix.NAME);
     }
 }

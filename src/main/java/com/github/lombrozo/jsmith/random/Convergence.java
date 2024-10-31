@@ -32,6 +32,7 @@ import java.util.logging.Logger;
  * This class allows randomly choosing one element among others by relative weights.
  * This class is needed to ensure convergence of the program generation algorithm.
  * Should be used in {@link Rand}.
+ * @param <T> Type of the elements.
  * @since 0.1
  */
 final class Convergence<T> {
@@ -136,6 +137,7 @@ final class Convergence<T> {
 
     /**
      * Copy this object.
+     * @return Copy of this object.
      */
     public Convergence<T> copy() {
         return new Convergence<>(

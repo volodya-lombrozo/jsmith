@@ -45,7 +45,7 @@ public final class LexerRuleSpec implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule parentr;
 
     /**
      * Rule name.
@@ -63,7 +63,7 @@ public final class LexerRuleSpec implements Rule {
      * @param name Rule name.
      */
     public LexerRuleSpec(final Rule parent, final String name) {
-        this.parent = parent;
+        this.parentr = parent;
         this.name = name;
         this.list = new ArrayList<>(0);
     }
@@ -78,7 +78,7 @@ public final class LexerRuleSpec implements Rule {
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.parentr;
     }
 
     @Override

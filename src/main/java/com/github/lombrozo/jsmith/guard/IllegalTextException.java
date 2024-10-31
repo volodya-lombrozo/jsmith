@@ -99,7 +99,7 @@ public final class IllegalTextException extends IllegalStateException {
 
     /**
      * Convert '.dot' file to '.svg'.
-     * @param file '.dot' file.
+     * @param file Dot '.dot' file.
      */
     private static void toSvg(final Path file) {
         try {

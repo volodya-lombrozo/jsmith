@@ -49,7 +49,7 @@ public final class TerminalDef implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule parentr;
 
     /**
      * Unlexer.
@@ -68,7 +68,7 @@ public final class TerminalDef implements Rule {
      * @param text Text.
      */
     public TerminalDef(final Rule parent, final Unlexer unlexer, final String text) {
-        this.parent = parent;
+        this.parentr = parent;
         this.unlexer = unlexer;
         this.text = text;
     }
@@ -84,7 +84,7 @@ public final class TerminalDef implements Rule {
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.parentr;
     }
 
     @Override

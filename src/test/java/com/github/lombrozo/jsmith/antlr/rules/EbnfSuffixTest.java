@@ -44,7 +44,7 @@ final class EbnfSuffixTest {
      * Generates all possible combinations of the EBNF suffix.
      * @return Stream of arguments for {@link #generatesSimpleEbnfSuffix(String, String, String)} ()}
      */
-    public static Stream<Arguments> combinations() {
+    static Stream<Arguments> combinations() {
         return Stream.of(
             Arguments.of("?", null, "?"),
             Arguments.of("?", "?", "??"),

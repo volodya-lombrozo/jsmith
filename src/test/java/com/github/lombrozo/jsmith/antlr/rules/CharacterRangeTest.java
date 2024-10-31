@@ -44,7 +44,7 @@ final class CharacterRangeTest {
 
     @ParameterizedTest(name = "Generates symbols for {0}")
     @MethodSource("ranges")
-    void generatesSymbols(final String range, List<String> allowed) {
+    void generatesSymbols(final String range, final List<String> allowed) {
         MatcherAssert.assertThat(
             "The generated symbol should be in the allowed range",
             allowed,

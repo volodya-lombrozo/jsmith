@@ -56,7 +56,7 @@ public final class ParserRuleSpec implements Rule {
     /**
      * Children rules.
      */
-    private List<Rule> list;
+    private final List<Rule> list;
 
     /**
      * Constructor.

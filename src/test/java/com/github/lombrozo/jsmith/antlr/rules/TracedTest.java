@@ -49,5 +49,4 @@ final class TracedTest {
             Matchers.equalTo("root -> altList(size=1)")
         );
     }
-
 }

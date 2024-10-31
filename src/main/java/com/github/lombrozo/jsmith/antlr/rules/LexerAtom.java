@@ -46,7 +46,7 @@ public final class LexerAtom implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule parentr;
 
     /**
      * Children rules.
@@ -74,13 +74,13 @@ public final class LexerAtom implements Rule {
      * @param elems Children rules.
      */
     public LexerAtom(final Rule parent, final List<Rule> elems) {
-        this.parent = parent;
+        this.parentr = parent;
         this.elems = elems;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.parentr;
     }
 
     @Override
