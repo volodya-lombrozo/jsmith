@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.guard;
 
 import com.github.lombrozo.jsmith.antlr.view.DotTree;
+import com.github.lombrozo.jsmith.antlr.view.RulesOnly;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -82,7 +83,7 @@ public final class IllegalTextException extends IllegalStateException {
                 file,
                 new DotTree(
                     this.origin,
-                    new DotTree.RulesOnly()
+                    new RulesOnly()
                 ).output().getBytes(StandardCharsets.UTF_8)
             );
             IllegalTextException.LOG.severe(

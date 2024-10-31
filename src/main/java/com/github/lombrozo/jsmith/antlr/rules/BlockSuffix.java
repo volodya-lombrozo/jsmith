@@ -108,10 +108,6 @@ public final class BlockSuffix implements Rule, Suffix {
         return BlockSuffix.ALIAS;
     }
 
-    /**
-     * Get multiplier.
-     * @return Multiplier.
-     */
     @Override
     public Multiplier multiplier() {
         final Multiplier result;

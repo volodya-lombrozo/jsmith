@@ -7,13 +7,15 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * labeledElement
  *     : {@link Identifier} (ASSIGN | PLUS_ASSIGN) ({@link Atom} | {@link Block})
  *     ;
+ * }
+ * @since 0.1
  */
 public final class LabeledElement extends Unimplemented {
 
     /**
      * Labeled element name.
      */
-    private static final String KEY = "labeledElement";
+    private static final String ALIAS = "labeledElement";
 
     /**
      * Constructor.
@@ -25,7 +27,7 @@ public final class LabeledElement extends Unimplemented {
 
     @Override
     public String name() {
-        return LabeledElement.KEY;
+        return LabeledElement.ALIAS;
     }
 
     /**
@@ -34,6 +36,6 @@ public final class LabeledElement extends Unimplemented {
      * @return True if the rule is labeled element.
      */
     static boolean isLabeledElement(final Rule rule) {
-        return LabeledElement.KEY.equals(rule.name());
+        return LabeledElement.ALIAS.equals(rule.name());
     }
 }

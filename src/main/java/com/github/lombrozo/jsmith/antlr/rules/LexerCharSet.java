@@ -126,11 +126,11 @@ public final class LexerCharSet implements Rule, Negatable {
 
     /**
      * Replace escape sequences in the string.
-     * @param rawString String with escape sequences.
+     * @param raw String with escape sequences.
      * @return String with replaced escape sequences.
      */
-    private static String unescapeUnicodes(final String rawString) {
-        final Matcher matcher = LexerCharSet.UNICODE.matcher(rawString);
+    private static String unescapeUnicodes(final String raw) {
+        final Matcher matcher = LexerCharSet.UNICODE.matcher(raw);
         final StringBuffer res = new StringBuffer(0);
         while (matcher.find()) {
             matcher.appendReplacement(

@@ -28,6 +28,7 @@ import java.util.List;
 
 /**
  * Generation output.
+ * @since 0.1
  */
 public interface Text {
 
@@ -51,6 +52,7 @@ public interface Text {
 
     /**
      * Node attributes.
+     * @return Attributes of the node.
      */
     Attributes attributes();
 }

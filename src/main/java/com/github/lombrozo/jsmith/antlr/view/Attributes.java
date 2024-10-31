@@ -23,21 +23,30 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
+/**
+ * Text output attributes.
+ * @since 0.1
+ */
 public final class Attributes {
 
+    /**
+     * Is the text output produced by a rule.
+     */
     private final boolean rule;
 
-    Attributes() {
-        this(false);
-    }
-
+    /**
+     * Default constructor.
+     * @param rule Is the text output produced by a rule.
+     */
     Attributes(final boolean rule) {
         this.rule = rule;
     }
 
+    /**
+     * Is the text output produced by a rule.
+     * @return True if the text output produced by a rule.
+     */
     boolean isRule() {
         return this.rule;
     }
-
-
 }

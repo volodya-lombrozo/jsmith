@@ -98,15 +98,17 @@ public final class DotTree implements Text {
         final Map<String, String> labels = new HashMap<>(0);
         final List<String> leafs = new ArrayList<>(0);
         this.travers(new TextLeaf(new Root(), "root"), this.origin, builder, labels, leafs);
-        labels.forEach((key, value) -> builder.append(
-            String.format(
-                "\"#%s\" [label=\"%s\" tooltip=\"%s\"];\n",
-                key,
-                value,
-                labels.get(key)
+        labels.forEach(
+            (key, value) -> builder.append(
+                String.format(
+                    "\"#%s\" [label=\"%s\" tooltip=\"%s\"];\n",
+                    key,
+                    value,
+                    labels.get(key)
+                )
             )
-        ));
-        builder.append(
+        );
+        return builder.append(
             leafs.stream()
                 .map(s -> String.format("  \"#%s\"", s))
                 .collect(
@@ -116,9 +118,7 @@ public final class DotTree implements Text {
                         "\n  }\n"
                     )
                 )
-        );
-        builder.append("}");
-        return builder.toString();
+        ).append("}").toString();
     }
 
     @Override
@@ -132,6 +132,8 @@ public final class DotTree implements Text {
      * @param current Current node.
      * @param builder Builder where to append transitions.
      * @param labels All node labels.
+     * @param leafs All leafs.
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     private void travers(
         final Text parent,
@@ -188,15 +190,4 @@ public final class DotTree implements Text {
         }
     }
 
-    /**
-     * Filter only rules.
-     * @since 0.1
-     */
-    public static class RulesOnly implements Predicate<Text> {
-
-        @Override
-        public boolean test(final Text text) {
-            return !text.attributes().isRule();
-        }
-    }
 }

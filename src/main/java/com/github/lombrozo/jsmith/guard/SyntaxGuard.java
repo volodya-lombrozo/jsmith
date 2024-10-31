@@ -190,8 +190,8 @@ public final class SyntaxGuard {
                             .toArray(String[]::new)
                     );
                     final String name = SyntaxGuard.HAS_SUFFIX.matcher(
-                            SyntaxGuard.grammarName(grammars.get(0)))
-                        .replaceAll("");
+                        SyntaxGuard.grammarName(grammars.get(0))
+                    ).replaceAll("");
                     return new Environment(
                         SyntaxGuard.load(String.format("%sLexer", name), temp),
                         SyntaxGuard.load(String.format("%sParser", name), temp)
@@ -210,8 +210,7 @@ public final class SyntaxGuard {
     private static String save(final String grammar, final Path where) {
         try {
             return Files.write(
-                where.resolve(
-                    String.format("%s.g4", SyntaxGuard.grammarName(grammar))),
+                where.resolve(String.format("%s.g4", SyntaxGuard.grammarName(grammar))),
                 grammar.getBytes(StandardCharsets.UTF_8)
             ).toString();
         } catch (final IOException exception) {
@@ -238,6 +237,7 @@ public final class SyntaxGuard {
     /**
      * Load class from the temp directory.
      * @param name Class name.
+     * @param temp Temp directory.
      * @return Loaded class.
      */
     private static Class<?> load(final String name, final Path temp) {
@@ -289,10 +289,12 @@ public final class SyntaxGuard {
             try {
                 return (Lexer) this.clexer.getDeclaredConstructor(CharStream.class)
                     .newInstance(CharStreams.fromString(code));
-            } catch (final NoSuchMethodException
-                           | IllegalAccessException
-                           | InvocationTargetException
-                           | InstantiationException exception) {
+            } catch (
+                final NoSuchMethodException
+                      | IllegalAccessException
+                      | InvocationTargetException
+                      | InstantiationException exception
+            ) {
                 throw new IllegalStateException(
                     "Something went wrong during lexer creation",
                     exception
@@ -309,10 +311,12 @@ public final class SyntaxGuard {
             try {
                 return (Parser) this.cparser.getDeclaredConstructor(TokenStream.class)
                     .newInstance(new CommonTokenStream(lexer));
-            } catch (final NoSuchMethodException
-                           | IllegalAccessException
-                           | InvocationTargetException
-                           | InstantiationException exception) {
+            } catch (
+                final NoSuchMethodException
+                      | IllegalAccessException
+                      | InvocationTargetException
+                      | InstantiationException exception
+            ) {
                 throw new IllegalStateException(
                     "Something went wrong during parser creation",
                     exception
@@ -328,9 +332,11 @@ public final class SyntaxGuard {
         void parse(final Parser parser, final String top) {
             try {
                 this.cparser.getMethod(top).invoke(parser);
-            } catch (final NoSuchMethodException
-                           | IllegalAccessException
-                           | InvocationTargetException exception) {
+            } catch (
+                final NoSuchMethodException
+                      | IllegalAccessException
+                      | InvocationTargetException exception
+            ) {
                 throw new IllegalStateException(
                     "Something went wrong during parsing",
                     exception

@@ -40,6 +40,7 @@ import java.util.List;
  *     | {@link LexerCharSet}
  *     | DOT {@link ElementOptions}?
  *     ;
+ * }
  * @since 0.1
  */
 public final class LexerAtom implements Rule {
@@ -47,7 +48,7 @@ public final class LexerAtom implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parentr;
+    private final Rule top;
 
     /**
      * Children rules.
@@ -75,13 +76,13 @@ public final class LexerAtom implements Rule {
      * @param elems Children rules.
      */
     public LexerAtom(final Rule parent, final List<Rule> elems) {
-        this.parentr = parent;
+        this.top = parent;
         this.elems = elems;
     }
 
     @Override
     public Rule parent() {
-        return this.parentr;
+        return this.top;
     }
 
     @Override

@@ -21,30 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.rules;
+package com.github.lombrozo.jsmith.antlr.view;
+
+import java.util.function.Predicate;
 
 /**
- * LexerCommands rule.
- * The ANTLR grammar definition:
- * {@code
- * lexerCommands
- *     : RARROW {@link LexerCommand} (COMMA {@link LexerCommand})*
- *     ;
- * }
+ * Filter only rules.
  * @since 0.1
  */
-public final class LexerCommands extends Unimplemented {
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     */
-    public LexerCommands(final Rule parent) {
-        super(parent);
-    }
+public final class RulesOnly implements Predicate<Text> {
 
     @Override
-    public String name() {
-        return "lexerCommands";
+    public boolean test(final Text text) {
+        return !text.attributes().isRule();
     }
 }
