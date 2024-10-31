@@ -25,7 +25,6 @@ package com.github.lombrozo.jsmith.guard;
 
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -63,7 +62,10 @@ import org.cactoos.text.UncheckedText;
  *  We should find a way to verify the code without using compiler and any other dirty techniques
  *  as java reflection api. Also it would be nice to simplify the code and make it more readable.
  *  The starting point: <a href="https://stackoverflow.com/questions/5762067/in-antlr-3-how-do-i-generate-a-lexer-and-parser-at-runtime-instead-of-ahead-o">here.</a>
+ * @checkstyle IndentationCheck (500 lines)
+ * @checkstyle IllegalCatchCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidCatchingGenericException")
 public final class SyntaxGuard {
 
     /**
@@ -285,17 +287,13 @@ public final class SyntaxGuard {
          * Create lexer instance.
          * @param code Code to parse.
          * @return Lexer instance.
+         * @checkstyle CascadeIndentationCheck (50 lines)
          */
         Lexer lexer(final String code) {
             try {
                 return (Lexer) this.clexer.getDeclaredConstructor(CharStream.class)
                     .newInstance(CharStreams.fromString(code));
-            } catch (
-                final NoSuchMethodException
-                      | IllegalAccessException
-                      | InvocationTargetException
-                      | InstantiationException exception
-            ) {
+            } catch (final Exception exception) {
                 throw new IllegalStateException(
                     "Something went wrong during lexer creation",
                     exception
@@ -312,12 +310,7 @@ public final class SyntaxGuard {
             try {
                 return (Parser) this.cparser.getDeclaredConstructor(TokenStream.class)
                     .newInstance(new CommonTokenStream(lexer));
-            } catch (
-                final NoSuchMethodException
-                      | IllegalAccessException
-                      | InvocationTargetException
-                      | InstantiationException exception
-            ) {
+            } catch (final Exception exception) {
                 throw new IllegalStateException(
                     "Something went wrong during parser creation",
                     exception
@@ -333,11 +326,7 @@ public final class SyntaxGuard {
         void parse(final Parser parser, final String top) {
             try {
                 this.cparser.getMethod(top).invoke(parser);
-            } catch (
-                final NoSuchMethodException
-                      | IllegalAccessException
-                      | InvocationTargetException exception
-            ) {
+            } catch (final Exception exception) {
                 throw new IllegalStateException(
                     "Something went wrong during parsing",
                     exception
