@@ -118,7 +118,7 @@ public final class DotTree implements Text {
                         "\n  }\n"
                     )
                 )
-        ).append("}").toString();
+        ).append('}').toString();
     }
 
     @Override

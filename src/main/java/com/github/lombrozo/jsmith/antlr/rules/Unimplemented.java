@@ -72,7 +72,7 @@ public abstract class Unimplemented implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
+    public final Text generate(final Context context) {
         return new TextNode(
             this,
             this.children.stream()
@@ -82,12 +82,12 @@ public abstract class Unimplemented implements Rule {
     }
 
     @Override
-    public Rule parent() {
+    public final Rule parent() {
         return this.parentr;
     }
 
     @Override
-    public void append(final Rule rule) {
+    public final void append(final Rule rule) {
         this.children.add(rule);
     }
 }

@@ -32,11 +32,14 @@ import java.util.List;
 
 /**
  * Represents a lexer element.
+ * {@code
  * lexerElement
  *     : {@link LexerAtom} {@link EbnfSuffix}?
  *     | {@link LexerBlock} {@link EbnfSuffix}?
  *     | {@link ActionBlock} QUESTION?
  *     ;
+ * }
+ * @since 0.1
  */
 public final class LexerElement implements Rule {
 

@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
  *     | {@link LexerCharSet}
  *     ;
  *  }
+ * @since 0.1
  */
 public final class SetElement implements Rule, Negatable {
 
@@ -67,7 +68,7 @@ public final class SetElement implements Rule, Negatable {
      * @param parent Parent rule.
      * @param children Children rules.
      */
-    public SetElement(final Rule parent, final List<Rule> children) {
+    private SetElement(final Rule parent, final List<Rule> children) {
         this.top = parent;
         this.children = children;
     }

@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
  *     |
  *     ;
  * }
+ * @since 0.1
  */
 public final class LexerElements implements Rule {
 

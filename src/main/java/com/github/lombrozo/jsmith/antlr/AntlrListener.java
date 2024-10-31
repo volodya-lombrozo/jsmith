@@ -395,7 +395,6 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         super.enterLexerAtom(ctx);
     }
 
-
     @Override
     public void exitLexerAtom(final ANTLRv4Parser.LexerAtomContext ctx) {
         this.up();
@@ -743,6 +742,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     /**
      * Go up in the generation tree.
+     * @checkstyle MethodNameCheck (5 lines)
      */
     @SuppressWarnings("PMD.ShortMethodName")
     private void up() {

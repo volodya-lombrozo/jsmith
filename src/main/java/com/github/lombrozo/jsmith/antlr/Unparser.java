@@ -69,6 +69,7 @@ public final class Unparser {
     /**
      * Generate a string representation of the parser rule.
      * @param rule Rule.
+     * @param context Context.
      * @return String representation of the parser rule.
      */
     public Text generate(final String rule, final Context context) {

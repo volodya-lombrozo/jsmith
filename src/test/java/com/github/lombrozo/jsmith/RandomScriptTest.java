@@ -58,7 +58,8 @@ final class RandomScriptTest {
     void generatesArithmeticGrammarSuccessfully() {
         final RandomScript script = new RandomScript(new ResourceOf("grammars/Arithmetic.g4"));
         this.logger.info(
-            String.format("Arithmetic spec (lisp format): %s", script.specification()));
+            String.format("Arithmetic spec (lisp format): %s", script.specification())
+        );
         final String example = script.generate("stat").output();
         this.logger.info(String.format("Generated Arithmetic example:%n%s%n", example));
         MatcherAssert.assertThat(
@@ -91,7 +92,8 @@ final class RandomScriptTest {
             new ResourceOf("grammars/separated/WordsAndNumbersParser.g4")
         );
         this.logger.info(
-            String.format("WordsAndNumbers spec (lisp format): %s", script.specification()));
+            String.format("WordsAndNumbers spec (lisp format): %s", script.specification())
+        );
         final String example = script.generate("words").output();
         this.logger.info(String.format("Generated WordsAndNumbers example:%n%s%n", example));
         MatcherAssert.assertThat(
@@ -146,13 +148,14 @@ final class RandomScriptTest {
     }
 
     @RepeatedTest(10)
-    void generatesJava8ReducedGrammarSuccessfully() {
+    void generatesJavaReducedGrammarSuccessfully() {
         final RandomScript script = new RandomScript(
             new ResourceOf("grammars/Java8ReducedLexer.g4"),
             new ResourceOf("grammars/Java8ReducedParser.g4")
         );
         this.logger.info(
-            String.format("Java 8 Reduced spec (lisp format): %s", script.specification()));
+            String.format("Java 8 Reduced spec (lisp format): %s", script.specification())
+        );
         final Text document = script.generate("compilationUnit");
         this.logger.info(String.format("Java 8 Reduced:%n%s%n", document.output()));
         MatcherAssert.assertThat(

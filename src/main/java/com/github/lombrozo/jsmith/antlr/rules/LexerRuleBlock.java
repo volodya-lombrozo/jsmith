@@ -31,6 +31,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     : {@link LexerAltList}
  *     ;
  * }
+ * @since 0.1
  */
 public final class LexerRuleBlock extends Unimplemented {
 

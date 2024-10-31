@@ -42,7 +42,7 @@ final class EbnfSuffixTest {
 
     /**
      * Generates all possible combinations of the EBNF suffix.
-     * @return Stream of arguments for {@link #generatesSimpleEbnfSuffix(String, String, String)} ()}
+     * @return Stream of args for {@link #generatesSimpleEbnfSuffix(String, String, String)} ()}
      */
     static Stream<Arguments> combinations() {
         return Stream.of(

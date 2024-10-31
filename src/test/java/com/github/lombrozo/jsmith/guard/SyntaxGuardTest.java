@@ -35,6 +35,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests for {@link SyntaxGuard}.
+ * @since 0.1
  */
 final class SyntaxGuardTest {
 

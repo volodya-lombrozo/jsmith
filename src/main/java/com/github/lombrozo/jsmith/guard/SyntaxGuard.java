@@ -223,6 +223,7 @@ public final class SyntaxGuard {
 
     /**
      * Get grammar name.
+     * @param grammar Grammar text.
      * @return Grammar name.
      */
     private static String grammarName(final String grammar) {

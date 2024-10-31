@@ -141,10 +141,6 @@ public final class EbnfSuffix implements Rule, Suffix {
         );
     }
 
-    /**
-     * Multiply rule based on ebfn suffix.
-     * @return Multiplied rule.
-     */
     @Override
     public Multiplier multiplier() {
         final Multiplier result;
