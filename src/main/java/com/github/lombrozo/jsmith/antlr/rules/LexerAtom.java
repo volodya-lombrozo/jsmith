@@ -40,6 +40,7 @@ import java.util.List;
  *     | {@link LexerCharSet}
  *     | DOT {@link ElementOptions}?
  *     ;
+ * @since 0.1
  */
 public final class LexerAtom implements Rule {
 

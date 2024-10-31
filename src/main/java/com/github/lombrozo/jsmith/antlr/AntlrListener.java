@@ -87,7 +87,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * @since 0.1
  * @checkstyle ClassFanOutComplexityCheck (1000 lines)
  */
-@SuppressWarnings({"PMD.UselessOverridingMethod", "PMD.ExcessivePublicCount", "PMD.TooManyMethods"})
+@SuppressWarnings({
+    "PMD.UselessOverridingMethod",
+    "PMD.ExcessivePublicCount",
+    "PMD.TooManyMethods",
+    "PMD.AvoidFieldNameMatchingMethodName"
+})
 public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     /**

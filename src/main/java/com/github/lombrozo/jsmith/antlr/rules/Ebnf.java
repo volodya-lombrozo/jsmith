@@ -47,7 +47,6 @@ public final class Ebnf implements Rule {
      */
     private static final String ALIAS = "ebnf";
 
-
     /**
      * Parent rule.
      */
@@ -92,7 +91,8 @@ public final class Ebnf implements Rule {
     public Text generate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException(
-                "Ebnf should have at least one 'Block', but it's empty");
+                "Ebnf should have at least one 'Block', but it's empty"
+            );
         }
         return new TextNode(this, this.multiplier().repeat(this.children.get(0)).generate(context));
     }

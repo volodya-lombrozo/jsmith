@@ -44,7 +44,7 @@ public final class RuleAltList implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * All alternatives of the current node.
@@ -65,13 +65,13 @@ public final class RuleAltList implements Rule {
      * @param alts All alternatives of the current node.
      */
     public RuleAltList(final Rule parent, final List<Rule> alts) {
-        this.parent = parent;
+        this.top = parent;
         this.alternatives = alts;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override

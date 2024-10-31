@@ -8,6 +8,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     : {@link Alternative} (POUND {@link Identifier})?
  *     ;
  * }
+ * @since 0.1
  */
 public final class LabeledAlt extends Unimplemented {
 
@@ -24,3 +25,4 @@ public final class LabeledAlt extends Unimplemented {
         return String.format("labeledAlt(id=%d)", System.identityHashCode(this));
     }
 }
+

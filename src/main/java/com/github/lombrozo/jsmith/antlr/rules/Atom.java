@@ -46,7 +46,7 @@ public final class Atom implements Rule {
     /**
      * Atom name.
      */
-    private static final String ATOM = "atom";
+    private static final String ALIAS = "atom";
 
     /**
      * Parent rule.
@@ -79,7 +79,7 @@ public final class Atom implements Rule {
 
     @Override
     public String name() {
-        return Atom.ATOM;
+        return Atom.ALIAS;
     }
 
     @Override
@@ -93,6 +93,6 @@ public final class Atom implements Rule {
      * @return True if the rule is an atom.
      */
     static boolean isAtom(final Rule rule) {
-        return Atom.ATOM.equals(rule.name());
+        return Atom.ALIAS.equals(rule.name());
     }
 }

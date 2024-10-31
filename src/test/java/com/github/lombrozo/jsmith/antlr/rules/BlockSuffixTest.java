@@ -37,7 +37,7 @@ final class BlockSuffixTest {
     void checksIfRuleIsBlockSuffix() {
         MatcherAssert.assertThat(
             "We expect that the rule is BlockSuffix",
-            BlockSuffix.isBloclSuffix(new Traced(new BlockSuffix())),
+            BlockSuffix.isBlockSuffix(new Traced(new BlockSuffix())),
             Matchers.is(true)
         );
     }
@@ -46,7 +46,7 @@ final class BlockSuffixTest {
     void checksIfRuleIsNotBlockSuffix() {
         MatcherAssert.assertThat(
             "We expect that the rule is not BlockSuffix",
-            BlockSuffix.isBloclSuffix(new Traced(new Literal("1"))),
+            BlockSuffix.isBlockSuffix(new Traced(new Literal("1"))),
             Matchers.is(false)
         );
     }

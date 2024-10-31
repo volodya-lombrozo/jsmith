@@ -35,7 +35,8 @@ import java.util.stream.Collectors;
  * The rule definition in ANTLR grammar:
  * {@code
  * parserRuleSpec
- *     : ruleModifiers? RULE_REF {@link ArgActionBlock}? ruleReturns? throwsSpec? localsSpec? rulePrequel* COLON {@link RuleBlock} SEMI
+ *     : ruleModifiers? RULE_REF {@link ArgActionBlock}? ruleReturns? \
+ *     throwsSpec? localsSpec? rulePrequel* COLON {@link RuleBlock} SEMI
  *         exceptionGroup
  *     ;
  * }

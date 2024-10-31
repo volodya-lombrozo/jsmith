@@ -46,7 +46,7 @@ public final class BlockSuffix implements Rule, Suffix {
     /**
      * This rule name.
      */
-    private static final String NAME = "blockSuffix";
+    private static final String ALIAS = "blockSuffix";
 
     /**
      * Parent rule.
@@ -105,7 +105,7 @@ public final class BlockSuffix implements Rule, Suffix {
 
     @Override
     public String name() {
-        return BlockSuffix.NAME;
+        return BlockSuffix.ALIAS;
     }
 
     /**
@@ -135,7 +135,7 @@ public final class BlockSuffix implements Rule, Suffix {
      * @param rule Rule.
      * @return True if the rule is BlockSuffix.
      */
-    static boolean isBloclSuffix(final Rule rule) {
-        return rule.name().equals(BlockSuffix.NAME);
+    static boolean isBlockSuffix(final Rule rule) {
+        return BlockSuffix.ALIAS.equals(rule.name());
     }
 }

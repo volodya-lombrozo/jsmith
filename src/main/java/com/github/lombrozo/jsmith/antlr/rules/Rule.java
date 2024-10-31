@@ -40,6 +40,7 @@ public interface Rule {
 
     /**
      * Generate code.
+     * @param context Generation context.
      * @return Generated code.
      */
     Text generate(Context context);

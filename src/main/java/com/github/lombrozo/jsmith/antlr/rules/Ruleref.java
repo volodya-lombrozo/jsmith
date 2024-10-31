@@ -45,7 +45,7 @@ public final class Ruleref implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * Rule reference.
@@ -68,14 +68,14 @@ public final class Ruleref implements Rule {
         final String ref,
         final Unparser unparser
     ) {
-        this.parent = parent;
+        this.top = parent;
         this.ref = ref;
         this.unparser = unparser;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override

@@ -38,6 +38,7 @@ public interface Negatable {
 
     /**
      * Invert the element.
+     * @param context Generation context.
      * @return Inverted element.
      */
     Text negate(Context context);

@@ -44,7 +44,7 @@ public final class LexerAltList implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * Children rules.
@@ -72,13 +72,13 @@ public final class LexerAltList implements Rule {
      * @param children Children rules.
      */
     public LexerAltList(final Rule parent, final List<Rule> children) {
-        this.parent = parent;
+        this.top = parent;
         this.children = children;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override

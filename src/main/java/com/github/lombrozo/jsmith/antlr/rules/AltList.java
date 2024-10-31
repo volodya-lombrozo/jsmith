@@ -46,7 +46,7 @@ public final class AltList implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * Alternatives.
@@ -86,13 +86,13 @@ public final class AltList implements Rule {
         final Rule parent,
         final List<Rule> alternatives
     ) {
-        this.parent = parent;
+        this.top = parent;
         this.alternatives = alternatives;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override

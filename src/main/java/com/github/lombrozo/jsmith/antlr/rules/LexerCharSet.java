@@ -44,7 +44,7 @@ public final class LexerCharSet implements Rule, Negatable {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * Random generator.
@@ -81,14 +81,14 @@ public final class LexerCharSet implements Rule, Negatable {
      * @param text Text.
      */
     public LexerCharSet(final Rule parent, final Rand rand, final String text) {
-        this.parent = parent;
+        this.top = parent;
         this.rand = rand;
         this.text = text;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override
@@ -100,7 +100,7 @@ public final class LexerCharSet implements Rule, Negatable {
     }
 
     @Override
-    public Text negate(Context context) {
+    public Text negate(final Context context) {
         final String negated;
         final String replaced = Literal.replaceEscapes(this.text);
         if (replaced.startsWith("[")) {

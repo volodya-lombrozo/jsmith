@@ -47,7 +47,7 @@ public final class SetElement implements Rule, Negatable {
     /**
      * Parent rule.
      */
-    private final Rule parent;
+    private final Rule top;
 
     /**
      * Children rules.
@@ -68,13 +68,13 @@ public final class SetElement implements Rule, Negatable {
      * @param children Children rules.
      */
     public SetElement(final Rule parent, final List<Rule> children) {
-        this.parent = parent;
+        this.top = parent;
         this.children = children;
     }
 
     @Override
     public Rule parent() {
-        return this.parent;
+        return this.top;
     }
 
     @Override

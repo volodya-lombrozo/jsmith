@@ -48,7 +48,7 @@ public final class Element implements Rule {
     /**
      * Element name.
      */
-    private static final String NAME = "element";
+    private static final String ALIAS = "element";
 
     /**
      * Parent rule.
@@ -98,7 +98,7 @@ public final class Element implements Rule {
 
     @Override
     public String name() {
-        return Element.NAME;
+        return Element.ALIAS;
     }
 
     /**
