@@ -83,18 +83,20 @@ final class SyntaxGenerationIT {
             .toArray(Input[]::new);
         final RandomScript script = new RandomScript(grammars);
         final SyntaxGuard guard = new SyntaxGuard(temp, top, grammars);
+        final String message =
+            "We expect that the randomly generated code will be verified without errors";
         try {
-            Stream.generate(() -> top)
-                .map(script::generate)
-                .limit(50)
-                .peek(SyntaxGenerationIT::logProgram)
-                .forEach(guard::verifySilently);
+            Assertions.assertDoesNotThrow(
+                () -> Stream.generate(() -> top)
+                    .map(script::generate)
+                    .limit(50)
+                    .peek(SyntaxGenerationIT::logProgram)
+                    .forEach(guard::verifySilently),
+                message
+            );
         } catch (final IllegalTextException exception) {
             exception.saveDot();
-            Assertions.fail(
-                "We expect that the randomly generated code will be verified without errors",
-                exception
-            );
+            Assertions.fail(message, exception);
         }
     }
 
