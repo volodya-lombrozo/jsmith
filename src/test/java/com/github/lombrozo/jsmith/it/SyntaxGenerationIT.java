@@ -74,6 +74,7 @@ final class SyntaxGenerationIT {
 
     @ParameterizedTest(name = "Generates programs for {0} grammar with top rule {1}")
     @MethodSource("syntax")
+    @SuppressWarnings("JTCOP.RuleAssertionMessage")
     void generatesSyntaxForGrammar(
         final List<String> definitions,
         final String top,
