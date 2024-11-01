@@ -22,6 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+// ATTENTION! This is the copy of the http.g4 file from the ANTLRv4 grammar distribution.
+// The original file is located in the ANTLRv4 grammar distribution at the following path:
+// Copied from https://github.com/antlr/grammars-v4/blob/master/http/http.g4
+
 // $antlr-format alignTrailingComments true, columnLimit 150, minEmptyLines 1, maxEmptyLinesToKeep 1, reflowComments false, useTab false
 // $antlr-format allowShortRulesOnASingleLine false, allowShortBlocksOnASingleLine true, alignSemicolons hanging, alignColons hanging
 

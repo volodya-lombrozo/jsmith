@@ -32,6 +32,11 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 
+/**
+ * ATTENTION! This is the copy of the LexerAdaptor.java file from the ANTLRv4 grammar distribution.
+ * The original file is located in the ANTLRv4 grammar distribution at the following path:
+ * https://github.com/antlr/grammars-v4/blob/master/antlr/antlr4/Java/LexerAdaptor.java
+ */
 public abstract class LexerAdaptor extends Lexer {
 
     /**

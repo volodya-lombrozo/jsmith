@@ -52,6 +52,10 @@
 Total lexer+parser time 30844ms.
  */
 
+// ATTENTION! This is the copy of the Java8Parser.g4 file from the ANTLRv4 grammar distribution.
+// The original file is located in the ANTLRv4 grammar distribution at the following path:
+// https://github.com/antlr/grammars-v4/blob/master/java/java8/Java8Parser.g4
+
 // $antlr-format alignTrailingComments true, columnLimit 150, minEmptyLines 1, maxEmptyLinesToKeep 1, reflowComments false, useTab false
 // $antlr-format allowShortRulesOnASingleLine false, allowShortBlocksOnASingleLine true, alignSemicolons hanging, alignColons hanging
 

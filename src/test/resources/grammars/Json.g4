@@ -2,9 +2,12 @@
 
 // Derived from https://json.org
 
+// ATTENTION! This is the copy of the JSON.g4 file from the ANTLRv4 grammar distribution.
+// The original file is located in the ANTLRv4 grammar distribution at the following path:
+// Copied from https://github.com/antlr/grammars-v4/blob/master/json/JSON.g4
+
 // $antlr-format alignTrailingComments true, columnLimit 150, minEmptyLines 1, maxEmptyLinesToKeep 1, reflowComments false, useTab false
 // $antlr-format allowShortRulesOnASingleLine false, allowShortBlocksOnASingleLine true, alignSemicolons hanging, alignColons hanging
-// Copied from: https://github.com/antlr/grammars-v4/blob/master/json/JSON.g4
 grammar JSON;
 
 json

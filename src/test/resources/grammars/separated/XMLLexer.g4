@@ -28,11 +28,13 @@
 
 /** XML lexer derived from ANTLR v4 ref guide book example */
 
+// ATTENTION! This is the copy of the XMLLexer.g4 file from the ANTLRv4 grammar distribution.
+// The original file is located in the ANTLRv4 grammar distribution at the following path:
+// Copied from https://github.com/antlr/grammars-v4/blob/master/xml/XMLLexer.g4
+
 // $antlr-format alignTrailingComments true, columnLimit 150, maxEmptyLinesToKeep 1, reflowComments false, useTab false
 // $antlr-format allowShortRulesOnASingleLine true, allowShortBlocksOnASingleLine true, minEmptyLines 0, alignSemicolons ownLine
 // $antlr-format alignColons trailing, singleLineOverrulesHangingColon true, alignLexerCommands true, alignLabels true, alignTrailers true
-
-// Copied from https://github.com/antlr/grammars-v4/blob/master/xml/XMLLexer.g4
 
 lexer grammar XMLLexer;
 

@@ -34,6 +34,10 @@
  *
  */
 
+// ATTENTION! This is the copy of the LexBasic.g4 file from the ANTLRv4 grammar distribution.
+// The original file is located in the ANTLRv4 grammar distribution at the following path:
+// https://github.com/antlr/grammars-v4/blob/master/antlr/antlr4/LexBasic.g4
+
 // $antlr-format alignTrailingComments on, columnLimit 130, minEmptyLines 1, maxEmptyLinesToKeep 1, reflowComments off
 // $antlr-format useTab off, allowShortRulesOnASingleLine off, allowShortBlocksOnASingleLine on, alignSemicolons hanging
 // $antlr-format alignColons hanging
