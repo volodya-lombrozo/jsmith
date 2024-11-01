@@ -29,10 +29,11 @@ import com.github.lombrozo.jsmith.antlr.view.Text;
 /**
  * Negatable element that can be inverted.
  * @since 0.1
- * @todo #1:90min Do we need this interface?
+ * @todo #1:90min Do we need the 'Negatable' interface?
  *  We use many 'instance of' checks to determine if the element is negatable.
  *  Maybe we should use the visitor pattern instead?
- *  Or something else?
+ *  Or something else?  Current implementation produces many 'instance of' checks,
+ *  which is not a good practice.
  */
 public interface Negatable {
 
