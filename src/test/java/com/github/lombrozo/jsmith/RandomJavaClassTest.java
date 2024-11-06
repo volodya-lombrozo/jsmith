@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Volodya Lombrozo
+ * Copyright (c) 2023-2024 Volodya Lombrozo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,32 +31,14 @@ import org.junit.jupiter.api.Test;
  * Test cases for {@link RandomJavaClass}.
  * @since 0.1
  */
-class RandomJavaClassTest {
-
-    @Test
-    void retrievesTheName() {
-        MatcherAssert.assertThat(
-            "Name of the class is not equal to the expected one",
-            new RandomJavaClass().name(),
-            Matchers.equalTo("HelloWorld")
-        );
-    }
+final class RandomJavaClassTest {
 
     @Test
     void retrievesTheSourceCode() {
         MatcherAssert.assertThat(
-            "Source code of the class is not equal to the expected 'hello-world' program",
+            "We expect that random class will generate at least something",
             new RandomJavaClass().src(),
-            Matchers.equalTo(
-                String.join(
-                    "\n",
-                    "public class HelloWorld {",
-                    "    public static void main(String[] args) {",
-                    "        System.out.println(\"Hello, World!\");",
-                    "    }",
-                    "}"
-                )
-            )
+            Matchers.not(Matchers.emptyString())
         );
     }
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Volodya Lombrozo
+ * Copyright (c) 2023-2024 Volodya Lombrozo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith;
 
+import org.cactoos.io.ResourceOf;
+
 /**
  * Random Java class.
  * @since 0.1
@@ -30,38 +32,45 @@ package com.github.lombrozo.jsmith;
 public final class RandomJavaClass {
 
     /**
-     * Name of the class.
+     * ANTLR parser grammar for Java.
      */
-    private final String classname;
+    private final String parser;
 
     /**
-     * Source code of the class.
+     * ANTLR lexer grammar for Java.
      */
-    private final String source;
+    private final String lexer;
 
     /**
-     * Constructor.
+     * Start rule.
+     */
+    private final String rule;
+
+    /**
+     * Default constructor.
      */
     public RandomJavaClass() {
-        this("HelloWorld", RandomJavaClass.helloWorld());
+        this(
+            "grammars/Java8ReducedParser.g4",
+            "grammars/Java8ReducedLexer.g4",
+            "compilationUnit"
+        );
     }
 
     /**
      * Constructor.
-     * @param name Name of the class.
-     * @param source Source code of the class.
+     * @param parser Parser.
+     * @param lexer Lexer.
+     * @param rule Rule.
      */
-    public RandomJavaClass(final String name, final String source) {
-        this.classname = name;
-        this.source = source;
-    }
-
-    /**
-     * Name of the class.
-     * @return Name of the class.
-     */
-    public String name() {
-        return this.classname;
+    public RandomJavaClass(
+        final String parser,
+        final String lexer,
+        final String rule
+    ) {
+        this.parser = parser;
+        this.lexer = lexer;
+        this.rule = rule;
     }
 
     /**
@@ -69,21 +78,9 @@ public final class RandomJavaClass {
      * @return Source code of the class.
      */
     public String src() {
-        return this.source;
-    }
-
-    /**
-     * Hello world source code.
-     * @return Source code of "hello world" java program.
-     */
-    private static String helloWorld() {
-        return String.join(
-            "\n",
-            "public class HelloWorld {",
-            "    public static void main(String[] args) {",
-            "        System.out.println(\"Hello, World!\");",
-            "    }",
-            "}"
-        );
+        return new RandomScript(
+            new ResourceOf(this.parser),
+            new ResourceOf(this.lexer)
+        ).generate(this.rule).output();
     }
 }
