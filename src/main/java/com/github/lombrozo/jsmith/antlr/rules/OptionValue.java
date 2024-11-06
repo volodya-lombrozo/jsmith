@@ -37,8 +37,6 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * @since 0.1
  */
 public final class OptionValue extends Unimplemented {
-    //todo: What is "STRING_LITERAL"? What is "INT"?
-
     /**
      * Constructor.
      * @param parent Parent rule.
