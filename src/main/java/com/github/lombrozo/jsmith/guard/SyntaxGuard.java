@@ -57,7 +57,7 @@ import org.cactoos.text.UncheckedText;
  * It tries to generate default ANTLR lexer and parser and parse the code.
  * If the code is incorrect, it throws an exception.
  * @since 0.1
- * @todo #1:90min Make SyntaxGuard cleaner!
+ * @todo #1:90min Make SyntaxGuard cleaner.
  *  SyntaxGuard is too complex and uses java compiler to check the syntax of the code.
  *  We should find a way to verify the code without using compiler and any other dirty techniques
  *  as java reflection api. Also it would be nice to simplify the code and make it more readable.

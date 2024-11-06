@@ -134,6 +134,9 @@ public final class Literal implements Rule, Negatable {
      * @param original Original string.
      * @return String with replaced escape sequences.
      * @todo #1:90min Make it separate class.
+     *  We use this method in different places.
+     *  It should be a separate class.
+     *  Moreover, it's better to add some tests for it.
      */
     static String replaceEscapes(final String original) {
         try {
