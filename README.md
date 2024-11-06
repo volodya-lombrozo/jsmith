@@ -3,7 +3,6 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.volodya-lombrozo/jsmith/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.volodya-lombrozo/jsmith)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/volodya-lombrozo/jsmith/blob/main/LICENSE.txt)
 [![Hits-of-Code](https://hitsofcode.com/github/volodya-lombrozo/jsmith?branch=main&label=Hits-of-Code)](https://hitsofcode.com/github/volodya-lombrozo/jsmith/view?branch=main&label=Hits-of-Code)
-![Lines of code](https://img.shields.io/tokei/lines/github/volodya-lombrozo/jsmith?branch=main&label=Lines-of-Code)
 [![codecov](https://codecov.io/gh/volodya-lombrozo/jsmith/branch/main/graph/badge.svg)](https://codecov.io/gh/volodya-lombrozo/jsmith)
 
 Jsmith is a random Java program generator. The project is largely inspired by
@@ -52,9 +51,9 @@ jsmith uses
 an [ANTLR grammar]([Java8ReducedParser.g4](src%2Fmain%2Fresources%2Fgrammars%2FJava8ReducedParser.g4))
 to generate random Java programs.
 It scans the grammar and creates a random program generator based on the grammar
-rules. 
+rules.
 Later, this random program generator is used to produce random Java
-programs. 
+programs.
 In fact, jsmith can generate programs in any language, not just Java.
 Below is an example of the `Arithmetic` grammar and an explanation of how to
 generate random programs based on this grammar:
@@ -114,6 +113,88 @@ H=3*674*239*1*87
 d=GAw*IUFjX*Z*INgwx
 0527*0106-482*49100*0-381*0292-866-7*79-40-59-9*30*5729*7-90283*021-49
 ```
+
+## Semantic Aware Generation
+
+### Not Implemented Yet
+
+The library can generate the simple Java programs that syntactically correct.
+However, these programs are not always semantically correct.
+It means that
+if you try to compile them, you most probably will get a compilation error.
+
+#### Semantic Labels
+
+To generate semantically correct programs, we can enhance the grammar with
+labels:
+
+```antlrv4
+grammar Arithmetic;
+
+prog: stat+ ;
+
+stat: expr NEWLINE
+    | ID '=' expr NEWLINE #ID_VariableDeclaration
+    | NEWLINE
+    ;
+
+expr: expr ('*' | '/' ) expr
+    | expr ('+' | '-' ) expr
+    | INT
+    | ID #ID_VariableUsage
+    | '(' expr ')'
+    ;
+
+ID  : [a-zA-Z]+ ;
+INT : [0-9]+ ;
+NEWLINE: '\r'? '\n' ;
+WS  : [ \t]+ -> skip ;
+```
+
+Pay attention to the `#ID_VariableDeclaration` and `#ID_VariableUsage` labels.
+These labels will allow us to generate semantically correct programs.
+For example, we can generate a program that declares a variable and uses it:
+
+```txt
+A = 123
+B = (A+123)
+C = (B*123)
+```
+
+In other words, by using labels, we can guide program generation to produce
+semantically correct programs.
+
+#### Semantic Specifications
+
+Another possible approach is to use semantic specifications.
+Semantic specification is a set of rules that define the semantics of the
+generated program.
+In other words, we can define a syntax generation by using ANTLR grammar
+and semantic generation by using semantic specifications.
+
+For example, we can define the following semantic specification for the
+Arithmetic grammar:
+
+```yaml
+- name: VariableDeclaration
+  match:
+    rule: stat
+    for:
+      - name: ID
+  action: declare_variable
+
+- name: VariableUsage
+  match:
+    rule: expr
+    for:
+      - name: ID
+  action: use_variable
+```
+
+Of course, they are just the first examples of how we can generate semantically
+correct programs.
+We need to define more complex semantic specifications to generate more complex
+programs and try both approaches to see which one is more effective.
 
 ## How to Contribute
 
