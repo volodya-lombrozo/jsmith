@@ -297,9 +297,13 @@ altList
     ;
 
 alternative
-    : elementOptions? element+
+    : elementOptions? commentedElement+
     |
     // explicitly allow empty alts
+    ;
+
+commentedElement
+    : COMMENT? element
     ;
 
 element

@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
@@ -83,6 +84,8 @@ public final class Element implements Rule {
         final Rule first = this.children.get(0);
         if (Atom.isAtom(first) || LabeledElement.isLabeledElement(first) || Ebnf.isEbnf(first)) {
             result = new TextNode(this, this.multiplier().repeat(first).generate(context));
+        } else if (ActionBlock.isActionBlock(first)) {
+            result = new TextLeaf(this, "");
         } else {
             throw new IllegalStateException(
                 String.format("Unknown element type: %s", first.name())

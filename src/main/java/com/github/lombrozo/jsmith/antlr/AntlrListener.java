@@ -731,6 +731,14 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         super.exitSetElement(ctx);
     }
 
+    @Override
+    public void enterCommentedElement(final ANTLRv4Parser.CommentedElementContext ctx) {
+        if (ctx.COMMENT() != null) {
+            System.out.println("I have found the comment '" + ctx.COMMENT().getText() + "'");
+        }
+        super.enterCommentedElement(ctx);
+    }
+
     /**
      * Go down in the generation tree.
      * @param rule Rule to go down.

@@ -3,14 +3,14 @@ grammar Arithmetic;
 prog: stat+ ;
 
 stat: expr NEWLINE
-    | {variableDeclaration} ID '=' expr NEWLINE
+    | /* $jsmith-variableDeclaration */ ID '=' expr NEWLINE
     | NEWLINE
     ;
 
 expr: expr ('*' | '/' ) expr
     | expr ('+' | '-' ) expr
     | INT
-    | {variableUsage} ID
+    | /* $jsmith-variableUsage */ ID
     | '(' expr ')'
     ;
 

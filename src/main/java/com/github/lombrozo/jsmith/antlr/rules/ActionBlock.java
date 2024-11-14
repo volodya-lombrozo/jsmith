@@ -36,6 +36,11 @@ package com.github.lombrozo.jsmith.antlr.rules;
 public final class ActionBlock extends Unimplemented {
 
     /**
+     * Element name.
+     */
+    private static final String ALIAS = "actionBlock";
+
+    /**
      * Constructor.
      */
     public ActionBlock() {
@@ -52,6 +57,10 @@ public final class ActionBlock extends Unimplemented {
 
     @Override
     public String name() {
-        return "actionBlock";
+        return ActionBlock.ALIAS;
+    }
+
+    static boolean isActionBlock(final Rule rule) {
+        return ActionBlock.ALIAS.equals(rule.name());
     }
 }
