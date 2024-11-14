@@ -133,15 +133,15 @@ grammar Arithmetic;
 
 prog: stat+ ;
 
-stat: expr NEWLINE
-    | ID '=' expr NEWLINE #ID_VariableDeclaration
+stat : expr NEWLINE
+    | ID {variableDeclaration} '=' expr NEWLINE #ID_VariableDeclaration
     | NEWLINE
     ;
 
 expr: expr ('*' | '/' ) expr
     | expr ('+' | '-' ) expr
     | INT
-    | ID #ID_VariableUsage
+    | ID {variableUsage}
     | '(' expr ')'
     ;
 

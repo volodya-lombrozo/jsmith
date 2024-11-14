@@ -65,6 +65,7 @@ final class SyntaxGenerationIT {
         return Stream.of(
             Arguments.of(Collections.singletonList("grammars/Simple.g4"), "expr"),
             Arguments.of(Collections.singletonList("grammars/Arithmetic.g4"), "prog"),
+            Arguments.of(Collections.singletonList("grammars/labeled/Arithmetic.g4"), "prog"),
             Arguments.of(Collections.singletonList("grammars/Recursive.g4"), "expr"),
             Arguments.of(Collections.singletonList("grammars/Json.g4"), "json"),
             Arguments.of(Collections.singletonList("grammars/CSV.g4"), "csvFile"),
