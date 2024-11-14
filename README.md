@@ -58,7 +58,7 @@ In fact, jsmith can generate programs in any language, not just Java.
 Below is an example of the `Arithmetic` grammar and an explanation of how to
 generate random programs based on this grammar:
 
-```antlrv4
+```antlr
 grammar Arithmetic;
 
 prog: stat+ ;
@@ -128,7 +128,7 @@ if you try to compile them, you most probably will get a compilation error.
 To generate semantically correct programs, we can enhance the grammar with
 labels:
 
-```antlrv4
+```antlr
 grammar Arithmetic;
 
 prog: stat+ ;
