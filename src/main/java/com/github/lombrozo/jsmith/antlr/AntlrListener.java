@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr;
 
+import com.github.lombrozo.jsmith.ANTLRv4Lexer;
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
 import com.github.lombrozo.jsmith.antlr.rules.Action;
@@ -73,14 +74,17 @@ import com.github.lombrozo.jsmith.antlr.rules.RuleAltList;
 import com.github.lombrozo.jsmith.antlr.rules.RuleBlock;
 import com.github.lombrozo.jsmith.antlr.rules.Ruleref;
 import com.github.lombrozo.jsmith.antlr.rules.Safe;
+import com.github.lombrozo.jsmith.antlr.rules.SemanticRule;
 import com.github.lombrozo.jsmith.antlr.rules.SetElement;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
 import com.github.lombrozo.jsmith.antlr.rules.Traced;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -110,20 +114,12 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     /**
      * Token stream.
      */
-    private final TokenStream tokens;
+    private final BufferedTokenStream tokens;
 
     /**
      * Current rule.
      */
     private Rule current;
-
-    /**
-     * Constructor.
-     * @param tokens Token stream.
-     */
-    public AntlrListener(final BufferedTokenStream tokens) {
-        this(tokens, new Unparser(), new Unlexer(), new Root());
-    }
 
     /**
      * Constructor.
@@ -147,7 +143,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
      * @param root Current rule.
      */
     private AntlrListener(
-        final TokenStream tokens,
+        final BufferedTokenStream tokens,
         final Unparser unparser,
         final Unlexer unlexer,
         final Rule root
@@ -239,7 +235,23 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
-        this.down(new Element(this.current));
+        final Token token = ctx.getStop();
+        final int index = token.getTokenIndex();
+        final List<Token> comments = this.tokens.getHiddenTokensToLeft(index, ANTLRv4Lexer.COMMENT);
+        final List<String> found = new ArrayList<>(0);
+        if (comments != null) {
+            final Token comment = comments.get(0);
+            if (comment != null) {
+                final String text = comment.getText();
+                if (text.contains("$jsmith-variable-usage")) {
+                    found.add("$jsmith-variable-usage");
+                }
+                if (text.contains("$jsmith-variable-declaration")) {
+                    found.add("$jsmith-variable-declaration");
+                }
+            }
+        }
+        this.down(new SemanticRule(new Element(this.current), found));
         super.enterElement(ctx);
     }
 
