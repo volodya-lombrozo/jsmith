@@ -25,6 +25,8 @@ package com.github.lombrozo.jsmith;
 
 import com.github.lombrozo.jsmith.antlr.AntlrListener;
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Unlexer;
+import com.github.lombrozo.jsmith.antlr.Unparser;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +51,16 @@ public final class RandomScript {
      * They might be as standalone grammars or as separate lexer and parser grammars.
      */
     private final List<String> grammars;
+
+    /**
+     * Unlexer instance.
+     */
+    private final Unlexer unlexer = new Unlexer();
+
+    /**
+     * Unparser instance.
+     */
+    private final Unparser unparser = new Unparser();
 
     /**
      * Constructor.
@@ -78,12 +90,8 @@ public final class RandomScript {
      * @return Random script text.
      */
     public Text generate(final String rule) {
-        final AntlrListener listener = new AntlrListener();
-        this.grammars.stream()
-            .map(RandomScript::parser)
-            .map(ANTLRv4Parser::grammarSpec)
-            .forEach(specification -> new ParseTreeWalker().walk(listener, specification));
-        return listener.unparser().generate(rule, new Context());
+        this.grammars.forEach(this::parse);
+        return this.unparser.generate(rule, new Context());
     }
 
     /**
@@ -95,6 +103,20 @@ public final class RandomScript {
             .map(RandomScript::parser)
             .map(parser -> parser.grammarSpec().toStringTree(parser))
             .collect(Collectors.joining("\n"));
+    }
+
+    /**
+     * Parse ANTLR grammar.
+     * @param grammar ANTLR grammar.
+     */
+    private void parse(final String grammar) {
+        final ANTLRv4Lexer lexer = new ANTLRv4Lexer(CharStreams.fromString(grammar));
+        final CommonTokenStream tokens = new CommonTokenStream(lexer);
+        final ANTLRv4Parser parser = new ANTLRv4Parser(tokens);
+        final ANTLRv4Parser.GrammarSpecContext spec = parser.grammarSpec();
+        final ParseTreeWalker walker = new ParseTreeWalker();
+        final AntlrListener listener = new AntlrListener(tokens, this.unparser, this.unlexer);
+        walker.walk(listener, spec);
     }
 
     /**

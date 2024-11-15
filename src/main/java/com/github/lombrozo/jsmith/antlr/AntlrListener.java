@@ -79,6 +79,8 @@ import com.github.lombrozo.jsmith.antlr.rules.Traced;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -106,28 +108,51 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     private final Unlexer unlexer;
 
     /**
+     * Token stream.
+     */
+    private final TokenStream tokens;
+
+    /**
      * Current rule.
      */
     private Rule current;
 
     /**
      * Constructor.
+     * @param tokens Token stream.
      */
-    public AntlrListener() {
-        this(new Unparser(), new Unlexer(), new Root());
+    public AntlrListener(final BufferedTokenStream tokens) {
+        this(tokens, new Unparser(), new Unlexer(), new Root());
     }
 
     /**
      * Constructor.
+     * @param tokens Token stream.
+     * @param unparser Unparser.
+     * @param unlexer Unlexer.
+     */
+    public AntlrListener(
+        final BufferedTokenStream tokens,
+        final Unparser unparser,
+        final Unlexer unlexer
+    ) {
+        this(tokens, unparser, unlexer, new Root());
+    }
+
+    /**
+     * Constructor.
+     * @param tokens Token stream.
      * @param unparser Unparser.
      * @param unlexer Unlexer.
      * @param root Current rule.
      */
     private AntlrListener(
+        final TokenStream tokens,
         final Unparser unparser,
         final Unlexer unlexer,
         final Rule root
     ) {
+        this.tokens = tokens;
         this.unparser = unparser;
         this.unlexer = unlexer;
         this.current = new Traced(root);
