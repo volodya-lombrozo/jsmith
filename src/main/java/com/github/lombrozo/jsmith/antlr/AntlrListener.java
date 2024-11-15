@@ -78,6 +78,7 @@ import com.github.lombrozo.jsmith.antlr.rules.SemanticRule;
 import com.github.lombrozo.jsmith.antlr.rules.SetElement;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
 import com.github.lombrozo.jsmith.antlr.rules.Traced;
+import com.github.lombrozo.jsmith.antlr.semantic.Variables;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -233,6 +234,8 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         super.exitAlternative(ctx);
     }
 
+    Variables variables = new Variables();
+
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
         final Token token = ctx.getStop();
@@ -251,7 +254,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
                 }
             }
         }
-        this.down(new SemanticRule(new Element(this.current), found));
+        this.down(new SemanticRule(new Element(this.current), found, this.variables));
         super.enterElement(ctx);
     }
 

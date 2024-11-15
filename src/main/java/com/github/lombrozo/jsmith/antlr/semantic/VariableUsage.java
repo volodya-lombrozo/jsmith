@@ -49,10 +49,10 @@ public final class VariableUsage implements Semantic {
     @Override
     public Text alter(final Text text) {
         //TODO: WRONG IMPLEMNTATION
-//        return this.variables.retrieve()
-//            .map(var -> new TextLeaf(text.writer(), var))
-//            .orElse(new TextLeaf(text.writer(), text.output()));
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.variables.retrieve()
+            .map(var -> new TextLeaf(text.writer(), var))
+            .orElse(new TextLeaf(text.writer(), text.output()));
+//        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override

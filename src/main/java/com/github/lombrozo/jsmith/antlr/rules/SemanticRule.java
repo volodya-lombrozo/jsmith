@@ -39,10 +39,13 @@ public final class SemanticRule implements Rule {
     private final List<String> semantics;
     private final List<Semantic> allowed;
 
-    public SemanticRule(final Rule origin, final List<String> semantics) {
+    public SemanticRule(
+        final Rule origin,
+        final List<String> semantics,
+        final Variables variables
+    ) {
         this.origin = origin;
         this.semantics = new ArrayList<>(semantics);
-        final Variables variables = new Variables();
         this.allowed = Arrays.asList(
             new VariableDeclaration(variables),
             new VariableUsage(variables)
