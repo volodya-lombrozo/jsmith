@@ -297,13 +297,9 @@ altList
     ;
 
 alternative
-    : elementOptions? commentedElement+
+    : elementOptions? element+
     |
     // explicitly allow empty alts
-    ;
-
-commentedElement
-    : BLOCK_COMMENT? element
     ;
 
 element
