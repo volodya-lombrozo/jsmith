@@ -303,7 +303,7 @@ alternative
     ;
 
 commentedElement
-    : COMMENT? element
+    : BLOCK_COMMENT? element
     ;
 
 element

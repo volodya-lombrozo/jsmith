@@ -733,8 +733,8 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterCommentedElement(final ANTLRv4Parser.CommentedElementContext ctx) {
-        if (ctx.COMMENT() != null) {
-            System.out.println("I have found the comment '" + ctx.COMMENT().getText() + "'");
+        if (ctx.BLOCK_COMMENT() != null) {
+            System.out.println("I have found the comment '" + ctx.BLOCK_COMMENT().getText() + "'");
         }
         super.enterCommentedElement(ctx);
     }
