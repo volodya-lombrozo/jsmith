@@ -141,10 +141,7 @@ public interface Multiplier {
 
         @Override
         public Rule repeat(final Rule element) {
-            return IntStream.range(0, this.rand.range(this.limit) + 1)
-                .mapToObj(i -> element.copy())
-                .collect(Collectors.collectingAndThen(Collectors.toList(), Several::new));
-//            return new Several(Collections.nCopies(this.rand.range(this.limit) + 1, element));
+            return new Several(Collections.nCopies(this.rand.range(this.limit) + 1, element));
         }
     }
 
@@ -191,10 +188,7 @@ public interface Multiplier {
 
         @Override
         public Rule repeat(final Rule element) {
-            return IntStream.range(0, this.rand.range(this.limit))
-                .mapToObj(i -> element.copy())
-                .collect(Collectors.collectingAndThen(Collectors.toList(), Several::new));
-//            return new Several(Collections.nCopies(this.rand.range(this.limit), element));
+            return new Several(Collections.nCopies(this.rand.range(this.limit), element));
         }
     }
 }
