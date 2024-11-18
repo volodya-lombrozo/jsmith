@@ -47,4 +47,9 @@ public final class ArgActionBlock extends Unimplemented {
     public String name() {
         return "argActionBlock";
     }
+
+    @Override
+    public Rule copy() {
+        return new ArgActionBlock(this.parent());
+    }
 }

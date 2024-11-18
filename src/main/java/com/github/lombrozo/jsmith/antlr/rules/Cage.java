@@ -78,6 +78,11 @@ final class Cage implements Rule {
         throw new UnsupportedOperationException("Cage node doesn't have a name");
     }
 
+    @Override
+    public Rule copy() {
+        return new Cage(this.trap);
+    }
+
     /**
      * Get trapped context.
      * @return The context.

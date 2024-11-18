@@ -94,4 +94,9 @@ public final class TextNode implements Text {
     public Attributes attributes() {
         return new Attributes(false);
     }
+
+    @Override
+    public boolean error() {
+        return this.children().stream().anyMatch(Text::error);
+    }
 }

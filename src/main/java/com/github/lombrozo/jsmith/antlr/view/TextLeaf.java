@@ -84,4 +84,9 @@ public final class TextLeaf implements Text {
     public Attributes attributes() {
         return new Attributes(true);
     }
+
+    @Override
+    public boolean error() {
+        return false;
+    }
 }

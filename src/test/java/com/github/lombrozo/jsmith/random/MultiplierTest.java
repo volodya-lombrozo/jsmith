@@ -25,8 +25,11 @@ package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
+import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
+import com.github.lombrozo.jsmith.antlr.rules.Root;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 /**

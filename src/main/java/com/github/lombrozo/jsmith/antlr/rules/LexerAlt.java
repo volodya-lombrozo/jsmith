@@ -49,4 +49,9 @@ public final class LexerAlt extends Unimplemented {
     public String name() {
         return "lexerAlt";
     }
+
+    @Override
+    public Rule copy() {
+        return new LexerAlt(this.parent());
+    }
 }

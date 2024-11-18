@@ -21,35 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.rules;
+package com.github.lombrozo.jsmith.antlr.view;
 
-/**
- * BlockSet rule.
- * The ANTLR grammar definition:
- * {@code
- * blockSet
- *     : LPAREN {@link SetElement} (OR {@link SetElement})* RPAREN
- *     ;
- * }
- * @since 0.1
- */
-public final class BlockSet extends Unimplemented {
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     */
-    public BlockSet(final Rule parent) {
-        super(parent);
+public final class Error implements Text {
+
+    private final Rule writer;
+
+    public Error(final Rule writer) {
+        this.writer = writer;
     }
 
     @Override
-    public String name() {
-        return "blockSet";
+    public Rule writer() {
+        return this.writer;
     }
 
     @Override
-    public Rule copy() {
-        return new BlockSet(this.parent());
+    public List<Text> children() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public String output() {
+        return "";
+    }
+
+    @Override
+    public Attributes attributes() {
+        return new Attributes(false);
+    }
+
+    @Override
+    public boolean error() {
+        return true;
     }
 }

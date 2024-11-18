@@ -47,4 +47,9 @@ public final class DelegateGrammars extends Unimplemented {
     public String name() {
         return "delegateGrammars";
     }
+
+    @Override
+    public Rule copy() {
+        return new DelegateGrammars(this.parent());
+    }
 }

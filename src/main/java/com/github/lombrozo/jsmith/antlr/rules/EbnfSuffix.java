@@ -142,6 +142,11 @@ public final class EbnfSuffix implements Rule, Suffix {
     }
 
     @Override
+    public Rule copy() {
+        return new EbnfSuffix(this.parent(), this.operation, this.question);
+    }
+
+    @Override
     public Multiplier multiplier() {
         final Multiplier result;
         switch (this.operation) {

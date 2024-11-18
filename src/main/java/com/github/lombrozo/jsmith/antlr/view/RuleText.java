@@ -74,4 +74,9 @@ public final class RuleText implements Text {
     public Attributes attributes() {
         return new Attributes(true);
     }
+
+    @Override
+    public boolean error() {
+        return this.original.error();
+    }
 }

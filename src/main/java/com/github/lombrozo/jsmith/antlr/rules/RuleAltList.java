@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,10 +80,36 @@ public final class RuleAltList implements Rule {
         if (this.alternatives.isEmpty()) {
             throw new IllegalStateException("RuleAltList should have at least one alternative");
         }
-        return new TextNode(
-            this,
-            context.strategy().choose(this, this.alternatives).generate(context)
-        );
+        /**
+         * todo! refactor this see {@link AltList}
+         */
+        final Text result;
+        if (this.alternatives.isEmpty()) {
+            result = new TextLeaf(this, "");
+        } else {
+            Text output = context.strategy()
+                .choose(this, this.alternatives)
+                .generate(context);
+            int attempts = 0;
+            while (output.error()) {
+                output = context.strategy()
+                    .choose(this, this.alternatives)
+                    .generate(context);
+                attempts++;
+                if (attempts > 10) {
+                    throw new IllegalStateException(
+                        String.format("Can't generate output for ruleAltList '%s'", this)
+                    );
+                }
+            }
+            result = new TextNode(this, output);
+        }
+        return result;
+//
+//        return new TextNode(
+//            this,
+//            context.strategy().choose(this, this.alternatives).generate(context)
+//        );
     }
 
     @Override
@@ -96,6 +123,15 @@ public final class RuleAltList implements Rule {
             "ruleAltList(alternatives=%d, id=%s)",
             this.alternatives.size(),
             System.identityHashCode(this)
+        );
+    }
+
+    @Override
+    public Rule copy() {
+        return new RuleAltList(
+            this.top,
+            this.alternatives.stream().map(Rule::copy)
+                .collect(java.util.stream.Collectors.toList())
         );
     }
 }

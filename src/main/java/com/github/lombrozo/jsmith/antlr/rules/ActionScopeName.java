@@ -49,4 +49,9 @@ public final class ActionScopeName extends Unimplemented {
     public String name() {
         return "actionScopeName";
     }
+
+    @Override
+    public Rule copy() {
+        return new ActionScopeName(this.parent());
+    }
 }

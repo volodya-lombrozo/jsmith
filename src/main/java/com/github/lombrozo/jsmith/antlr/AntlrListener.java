@@ -195,6 +195,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     @Override
     public void exitParserRuleSpec(final ANTLRv4Parser.ParserRuleSpecContext ctx) {
         this.up();
+        this.variables.closeStatement();
         super.exitParserRuleSpec(ctx);
     }
 

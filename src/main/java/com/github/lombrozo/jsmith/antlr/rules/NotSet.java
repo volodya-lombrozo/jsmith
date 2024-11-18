@@ -106,4 +106,12 @@ public final class NotSet implements Rule {
     public String name() {
         return "notSet";
     }
+
+    @Override
+    public Rule copy() {
+        return new NotSet(
+            this.top,
+            this.children.stream().map(Rule::copy).collect(java.util.stream.Collectors.toList())
+        );
+    }
 }

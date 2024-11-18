@@ -94,4 +94,11 @@ public final class Block implements Rule {
     public String name() {
         return "block";
     }
+
+    @Override
+    public Rule copy() {
+        return new Block(
+            this.parentrule, this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
+    }
 }

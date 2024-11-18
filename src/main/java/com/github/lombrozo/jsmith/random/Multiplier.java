@@ -26,6 +26,8 @@ package com.github.lombrozo.jsmith.random;
 import com.github.lombrozo.jsmith.antlr.rules.Empty;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Multiplier of rules.
@@ -139,7 +141,10 @@ public interface Multiplier {
 
         @Override
         public Rule repeat(final Rule element) {
-            return new Several(Collections.nCopies(this.rand.range(this.limit) + 1, element));
+            return IntStream.range(0, this.rand.range(this.limit) + 1)
+                .mapToObj(i -> element.copy())
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Several::new));
+//            return new Several(Collections.nCopies(this.rand.range(this.limit) + 1, element));
         }
     }
 
@@ -186,7 +191,10 @@ public interface Multiplier {
 
         @Override
         public Rule repeat(final Rule element) {
-            return new Several(Collections.nCopies(this.rand.range(this.limit), element));
+            return IntStream.range(0, this.rand.range(this.limit))
+                .mapToObj(i -> element.copy())
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Several::new));
+//            return new Several(Collections.nCopies(this.rand.range(this.limit), element));
         }
     }
 }

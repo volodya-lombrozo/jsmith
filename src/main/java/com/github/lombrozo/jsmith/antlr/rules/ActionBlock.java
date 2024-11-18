@@ -60,6 +60,11 @@ public final class ActionBlock extends Unimplemented {
         return ActionBlock.ALIAS;
     }
 
+    @Override
+    public Rule copy() {
+        return new ActionBlock(this.parent());
+    }
+
     static boolean isActionBlock(final Rule rule) {
         return ActionBlock.ALIAS.equals(rule.name());
     }

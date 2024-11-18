@@ -126,6 +126,11 @@ public final class DotTree implements Text {
         return new Attributes(false);
     }
 
+    @Override
+    public boolean error() {
+        return false;
+    }
+
     /**
      * Traverses the tree.
      * @param parent Parent node.

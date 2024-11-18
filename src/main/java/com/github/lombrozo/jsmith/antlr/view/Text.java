@@ -55,4 +55,10 @@ public interface Text {
      * @return Attributes of the node.
      */
     Attributes attributes();
+
+    /**
+     * Check if the text has an error.
+     * @return True if the text has an error.
+     */
+    boolean error();
 }

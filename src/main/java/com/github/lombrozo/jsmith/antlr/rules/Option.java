@@ -47,4 +47,9 @@ public final class Option extends Unimplemented {
     public String name() {
         return "option";
     }
+
+    @Override
+    public Rule copy() {
+        return new Option(this.parent());
+    }
 }

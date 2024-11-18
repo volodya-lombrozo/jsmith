@@ -47,5 +47,10 @@ public final class LabeledAlt extends Unimplemented {
     public String name() {
         return String.format("labeledAlt(id=%d)", System.identityHashCode(this));
     }
+
+    @Override
+    public Rule copy() {
+        return new LabeledAlt(this.parent());
+    }
 }
 

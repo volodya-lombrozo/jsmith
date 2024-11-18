@@ -124,6 +124,11 @@ public final class LexerCharSet implements Rule, Negatable {
         return String.format("lexerCharSet('%s')", this.text);
     }
 
+    @Override
+    public Rule copy() {
+        return new LexerCharSet(this.top, this.rand, this.text);
+    }
+
     /**
      * Replace escape sequences in the string.
      * @param raw String with escape sequences.

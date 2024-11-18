@@ -30,6 +30,7 @@ import java.util.Set;
 public final class Variables {
 
     private final Set<String> names;
+    private final Set<String> cache;
 
     public Variables() {
         this(new HashSet<>(0));
@@ -37,10 +38,16 @@ public final class Variables {
 
     public Variables(Set<String> names) {
         this.names = names;
+        this.cache = new HashSet<>(0);
     }
 
     public void declare(final String name) {
-        this.names.add(name);
+        this.cache.add(name);
+    }
+
+    public void closeStatement() {
+        this.names.addAll(this.cache);
+        this.cache.clear();
     }
 
     public Optional<String> retrieve() {

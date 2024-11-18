@@ -29,6 +29,7 @@ import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Ebnf rule.
@@ -105,6 +106,13 @@ public final class Ebnf implements Rule {
     @Override
     public String name() {
         return Ebnf.ALIAS;
+    }
+
+    @Override
+    public Rule copy() {
+        return new Ebnf(
+            this.top, this.children.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 
     /**

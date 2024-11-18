@@ -44,12 +44,24 @@ public final class SemanticRule implements Rule {
         final List<String> semantics,
         final Variables variables
     ) {
-        this.origin = origin;
-        this.semantics = new ArrayList<>(semantics);
-        this.allowed = Arrays.asList(
-            new VariableDeclaration(variables),
-            new VariableUsage(variables)
+        this(
+            origin,
+            new ArrayList<>(semantics),
+            Arrays.asList(
+                new VariableDeclaration(variables),
+                new VariableUsage(variables)
+            )
         );
+    }
+
+    public SemanticRule(
+        final Rule origin,
+        final List<String> semantics,
+        final List<Semantic> allowed
+    ) {
+        this.origin = origin;
+        this.semantics = semantics;
+        this.allowed = allowed;
     }
 
     @Override
@@ -83,5 +95,10 @@ public final class SemanticRule implements Rule {
     @Override
     public String name() {
         return this.origin.name();
+    }
+
+    @Override
+    public Rule copy() {
+        return new SemanticRule(this.origin.copy(), this.semantics, this.allowed);
     }
 }

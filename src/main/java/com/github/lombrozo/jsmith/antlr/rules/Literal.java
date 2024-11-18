@@ -103,6 +103,11 @@ public final class Literal implements Rule, Negatable {
     }
 
     @Override
+    public Rule copy() {
+        return new Literal(this.top, this.text);
+    }
+
+    @Override
     public String toString() {
         return this.name();
     }

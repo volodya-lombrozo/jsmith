@@ -53,6 +53,11 @@ public final class LabeledElement extends Unimplemented {
         return LabeledElement.ALIAS;
     }
 
+    @Override
+    public Rule copy() {
+        return new LabeledElement(this.parent());
+    }
+
     /**
      * Check if the rule is labeled element.
      * @param rule Rule.

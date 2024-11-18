@@ -24,12 +24,14 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Alternative ANTLR rule.
@@ -97,16 +99,29 @@ public final class AltList implements Rule {
 
     @Override
     public Text generate(final Context context) {
+        /**
+         * todo! refactor this see {@link RuleAltList}
+         */
         final Text result;
         if (this.alternatives.isEmpty()) {
             result = new TextLeaf(this, "");
         } else {
-            result = new TextNode(
-                this,
-                context.strategy()
+            Text output = context.strategy()
+                .choose(this, this.alternatives)
+                .generate(context);
+            int attempts = 0;
+            while (output.error()) {
+                output = context.strategy()
                     .choose(this, this.alternatives)
-                    .generate(context)
-            );
+                    .generate(context);
+                attempts++;
+                if (attempts > 10) {
+                    throw new IllegalStateException(
+                        String.format("Can't generate output for altList '%s'", this)
+                    );
+                }
+            }
+            result = new TextNode(this, output);
         }
         return result;
     }
@@ -119,5 +134,12 @@ public final class AltList implements Rule {
     @Override
     public String name() {
         return String.format("altList(size=%d)", this.alternatives.size());
+    }
+
+    @Override
+    public Rule copy() {
+        return new AltList(
+            this.top, this.alternatives.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }

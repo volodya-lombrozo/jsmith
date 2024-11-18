@@ -43,4 +43,9 @@ public final class Identifier extends Unimplemented {
     public String name() {
         return "identifier";
     }
+
+    @Override
+    public Rule copy() {
+        return new Identifier(this.parent());
+    }
 }

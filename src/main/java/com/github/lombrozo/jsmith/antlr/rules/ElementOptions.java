@@ -42,4 +42,9 @@ public final class ElementOptions extends Unimplemented {
     public String name() {
         return "elementOptions";
     }
+
+    @Override
+    public Rule copy() {
+        return new ElementOptions(this.parent());
+    }
 }

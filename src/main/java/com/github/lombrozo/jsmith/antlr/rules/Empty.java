@@ -54,4 +54,9 @@ public final class Empty implements Rule {
     public String name() {
         return "empty";
     }
+
+    @Override
+    public Rule copy() {
+        return new Empty();
+    }
 }

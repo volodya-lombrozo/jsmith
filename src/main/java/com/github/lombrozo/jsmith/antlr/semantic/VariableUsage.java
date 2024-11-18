@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 
@@ -48,11 +49,9 @@ public final class VariableUsage implements Semantic {
 
     @Override
     public Text alter(final Text text) {
-        //TODO: WRONG IMPLEMNTATION
         return this.variables.retrieve()
-            .map(var -> new TextLeaf(text.writer(), var))
-            .orElse(new TextLeaf(text.writer(), text.output()));
-//        throw new UnsupportedOperationException("Not implemented yet");
+            .map(var -> (Text) new TextLeaf(text.writer(), var))
+            .orElse(new Error(text.writer()));
     }
 
     @Override

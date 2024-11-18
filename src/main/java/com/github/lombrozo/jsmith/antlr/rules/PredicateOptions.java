@@ -48,4 +48,9 @@ public final class PredicateOptions extends Unimplemented {
         return "predicateOptions";
     }
 
+    @Override
+    public Rule copy() {
+        return new PredicateOptions(this.parent());
+    }
+
 }

@@ -57,4 +57,9 @@ public final class LexerBlock extends Unimplemented {
     public String name() {
         return "lexerBlock";
     }
+
+    @Override
+    public Rule copy() {
+        return new LexerBlock(this.parent());
+    }
 }

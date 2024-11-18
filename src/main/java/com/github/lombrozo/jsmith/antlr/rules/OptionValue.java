@@ -49,4 +49,9 @@ public final class OptionValue extends Unimplemented {
     public String name() {
         return "optionValue";
     }
+
+    @Override
+    public Rule copy() {
+        return new OptionValue(this.parent());
+    }
 }

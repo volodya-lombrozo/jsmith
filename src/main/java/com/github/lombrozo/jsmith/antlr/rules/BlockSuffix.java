@@ -109,6 +109,13 @@ public final class BlockSuffix implements Rule, Suffix {
     }
 
     @Override
+    public Rule copy() {
+        return new BlockSuffix(
+            this.top, this.children.stream().map(Rule::copy).collect(Collectors.toList())
+        );
+    }
+
+    @Override
     public Multiplier multiplier() {
         final Multiplier result;
         if (this.children.isEmpty()) {

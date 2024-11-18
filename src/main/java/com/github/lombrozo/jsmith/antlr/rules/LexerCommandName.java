@@ -48,4 +48,9 @@ public final class LexerCommandName extends Unimplemented {
     public String name() {
         return "lexerCommandName";
     }
+
+    @Override
+    public Rule copy() {
+        return new LexerCommandName(this.parent());
+    }
 }

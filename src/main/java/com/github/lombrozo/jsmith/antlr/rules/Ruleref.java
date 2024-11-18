@@ -92,4 +92,13 @@ public final class Ruleref implements Rule {
     public String name() {
         return String.format("ruleref(%s)", this.ref);
     }
+
+    @Override
+    public Rule copy() {
+        return new Ruleref(
+            this.top,
+            this.ref,
+            this.unparser
+        );
+    }
 }

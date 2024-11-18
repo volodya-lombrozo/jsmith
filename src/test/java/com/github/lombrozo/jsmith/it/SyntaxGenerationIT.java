@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.it;
 
 import com.github.lombrozo.jsmith.RandomScript;
+import com.github.lombrozo.jsmith.antlr.view.DotTree;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.guard.IllegalTextException;
 import com.github.lombrozo.jsmith.guard.SyntaxGuard;

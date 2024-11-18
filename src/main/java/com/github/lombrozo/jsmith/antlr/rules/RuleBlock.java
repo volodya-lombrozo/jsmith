@@ -47,4 +47,9 @@ public final class RuleBlock extends Unimplemented {
     public String name() {
         return "ruleBlock";
     }
+
+    @Override
+    public Rule copy() {
+        return new RuleBlock(this.parent());
+    }
 }
