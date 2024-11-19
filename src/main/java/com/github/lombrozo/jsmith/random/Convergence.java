@@ -143,7 +143,7 @@ final class Convergence<T> {
         return new Convergence<>(
             this.factor,
             this.weight,
-            this.wightsCopy(),
+            this.weightsCopy(),
             this.rand,
             this.verbose
         );
@@ -197,25 +197,14 @@ final class Convergence<T> {
         for (int i = 0; i < length; i++) {
             sum += cumulative[i];
             if (sum >= random) {
+                final T element = (T) all[i];
                 this.info(
-                    String.format("Chosen '%s' with weight '%s'", all[i], current.get(all[i]))
+                    String.format("Chosen '%s' with weight '%s'", element, current.get(element))
                 );
-                current.put((T) all[i], current.get(all[i]) * this.factor);
-                return (T) all[i];
+                current.put(element, current.get(element) * this.factor);
+                return element;
             }
         }
-
-//        for (final Map.Entry<T, Double> entry : current.entrySet()) {
-//            sum += entry.getValue();
-//            if (sum >= random) {
-//                this.info(
-//                    String.format("Chosen '%s' with weight '%s'", entry.getKey(), entry.getValue())
-//                );
-//                current.put(entry.getKey(), entry.getValue() * this.factor);
-//                return entry.getKey();
-//            }
-//        }
-
         throw new IllegalStateException("No element was chosen");
     }
 
@@ -234,6 +223,18 @@ final class Convergence<T> {
     }
 
     /**
+     * Copy weights deeply.
+     * @return Copy of the weights deeply.
+     */
+    private Map<T, Map<T, Double>> weightsCopy() {
+        final Map<T, Map<T, Double>> copy = new HashMap<>(0);
+        for (final Map.Entry<T, Map<T, Double>> entry : this.weights.entrySet()) {
+            copy.put(entry.getKey(), new HashMap<>(entry.getValue()));
+        }
+        return copy;
+    }
+
+    /**
      * Log a message if verbose mode is enabled.
      * @param msg Message to print.
      */
@@ -241,17 +242,5 @@ final class Convergence<T> {
         if (this.verbose) {
             Convergence.LOG.info(msg);
         }
-    }
-
-    /**
-     * Copy weights deeply.
-     * @return Copy of the weights deeply.
-     */
-    private Map<T, Map<T, Double>> wightsCopy() {
-        final Map<T, Map<T, Double>> copy = new HashMap<>(0);
-        for (final Map.Entry<T, Map<T, Double>> entry : this.weights.entrySet()) {
-            copy.put(entry.getKey(), new HashMap<>(entry.getValue()));
-        }
-        return copy;
     }
 }

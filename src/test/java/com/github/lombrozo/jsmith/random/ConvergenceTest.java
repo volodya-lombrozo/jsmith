@@ -25,11 +25,15 @@ package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.rules.AltList;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
+import com.github.lombrozo.jsmith.antlr.rules.Root;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -55,6 +59,32 @@ final class ConvergenceTest {
             ),
             convergence.choose(list, args),
             Matchers.equalTo(desired)
+        );
+    }
+
+    @RepeatedTest(10)
+    void correctChoosingDistribution() {
+        final Convergence<Rule> convergence = new Convergence<>(0.5, false);
+        final Rule root = new Root();
+        final Rule a = new Literal("a");
+        final Rule b = new Literal("b");
+        final Rule c = new Literal("c");
+        final Map<Rule, Integer> frequency = new HashMap<>(0);
+        for (int index = 0; index < 1000; ++index) {
+            frequency.compute(
+                convergence.choose(root, a, b, c),
+                (key, value) -> value == null ? 1 : value + 1
+            );
+        }
+        MatcherAssert.assertThat(
+            "We expect that all elements will be chosen.",
+            frequency.size(),
+            Matchers.equalTo(3)
+        );
+        MatcherAssert.assertThat(
+            "We expect that all elements were chosen more-or-less equally.",
+            frequency.values(),
+            Matchers.everyItem(Matchers.greaterThan(300))
         );
     }
 }
