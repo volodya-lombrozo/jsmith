@@ -43,13 +43,12 @@ final class UnparserTest {
             .map(Literal::new)
             .forEach(alternatives::append);
         unparser.with("stat", alternatives);
-        final Set<String> result = IntStream.range(0, 50)
+        final Set<String> chosen = IntStream.range(0, 50)
             .mapToObj(i -> unparser.generate("stat", new Context()).output())
             .collect(Collectors.toCollection(LinkedHashSet::new));
-        System.out.println(result);
         MatcherAssert.assertThat(
             "We expect that the result will contain more than one different element",
-            result.size() > 1
+            chosen.size() == 5
         );
     }
 

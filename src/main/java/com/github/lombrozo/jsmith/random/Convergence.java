@@ -192,11 +192,9 @@ final class Convergence<T> {
             index++;
         }
         final double random = this.rand.floating() * total;
-        double sum = 0;
         final int length = cumulative.length;
         for (int i = 0; i < length; i++) {
-            sum += cumulative[i];
-            if (sum >= random) {
+            if (cumulative[i] >= random) {
                 final T element = (T) all[i];
                 this.info(
                     String.format("Chosen '%s' with weight '%s'", element, current.get(element))

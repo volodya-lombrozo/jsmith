@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.ToString;
 
 /**
  * Alternative ANTLR rule.
@@ -43,6 +44,7 @@ import java.util.stream.Collectors;
  * }
  * @since 0.1
  */
+@ToString
 public final class AltList implements Rule {
 
     /**
