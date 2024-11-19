@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.AntlrListener;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.Unparser;
+import com.github.lombrozo.jsmith.antlr.semantic.Variables;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.Arrays;
 import java.util.List;
@@ -90,7 +91,8 @@ public final class RandomScript {
      * @return Random script text.
      */
     public Text generate(final String rule) {
-        this.grammars.forEach(this::parse);
+        final Variables variables = new Variables();
+        this.grammars.forEach(grammar -> this.parse(grammar, variables));
         return this.unparser.generate(rule, new Context());
     }
 
@@ -108,14 +110,20 @@ public final class RandomScript {
     /**
      * Parse ANTLR grammar.
      * @param grammar ANTLR grammar.
+     * @param variables Variables.
      */
-    private void parse(final String grammar) {
+    private void parse(final String grammar, final Variables variables) {
         final ANTLRv4Lexer lexer = new ANTLRv4Lexer(CharStreams.fromString(grammar));
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         final ANTLRv4Parser parser = new ANTLRv4Parser(tokens);
         final ANTLRv4Parser.GrammarSpecContext spec = parser.grammarSpec();
         final ParseTreeWalker walker = new ParseTreeWalker();
-        final AntlrListener listener = new AntlrListener(tokens, this.unparser, this.unlexer);
+        final AntlrListener listener = new AntlrListener(
+            tokens,
+            this.unparser,
+            this.unlexer,
+            variables
+        );
         walker.walk(listener, spec);
     }
 

@@ -117,6 +117,9 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
      */
     private final BufferedTokenStream tokens;
 
+
+    private final Variables variables;
+
     /**
      * Current rule.
      */
@@ -131,9 +134,10 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     public AntlrListener(
         final BufferedTokenStream tokens,
         final Unparser unparser,
-        final Unlexer unlexer
+        final Unlexer unlexer,
+        final Variables variables
     ) {
-        this(tokens, unparser, unlexer, new Root());
+        this(tokens, unparser, unlexer, variables, new Root());
     }
 
     /**
@@ -147,11 +151,13 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         final BufferedTokenStream tokens,
         final Unparser unparser,
         final Unlexer unlexer,
+        final Variables variables,
         final Rule root
     ) {
         this.tokens = tokens;
         this.unparser = unparser;
         this.unlexer = unlexer;
+        this.variables = variables;
         this.current = new Traced(root);
     }
 
@@ -195,7 +201,6 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     @Override
     public void exitParserRuleSpec(final ANTLRv4Parser.ParserRuleSpecContext ctx) {
         this.up();
-        this.variables.closeStatement();
         super.exitParserRuleSpec(ctx);
     }
 
@@ -234,8 +239,6 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         this.up();
         super.exitAlternative(ctx);
     }
-
-    Variables variables = new Variables();
 
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
@@ -558,6 +561,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     @Override
     public void exitLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
         this.up();
+        this.variables.closeStatement();
         super.exitLabeledAlt(ctx);
     }
 

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.RepeatedTest;
 final class UnparserTest {
 
 
-    @RepeatedTest(10)
+    @RepeatedTest(100)
     void generatesSeveralTimesForTheSameRuleWithDifferentValues() {
         final Unparser unparser = new Unparser();
         final AltList alternatives = new AltList();

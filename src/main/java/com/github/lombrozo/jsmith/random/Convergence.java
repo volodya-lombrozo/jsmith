@@ -181,23 +181,41 @@ final class Convergence<T> {
             from, key -> this.init(elements)
         );
         this.info(String.format("Weights for '%s': '%s'", from, current));
-        final double total = current.values()
-            .stream()
-            .mapToDouble(Double::doubleValue)
-            .max()
-            .orElseThrow(() -> new IllegalStateException("No elements"));
+        double[] cumulative = new double[current.size()];
+        Object[] all = new Object[current.size()];
+        double total = 0d;
+        int index = 0;
+        for (final Map.Entry<T, Double> entry : current.entrySet()) {
+            total = total + entry.getValue();
+            all[index] = entry.getKey();
+            cumulative[index] = total;
+            index++;
+        }
         final double random = this.rand.floating() * total;
         double sum = 0;
-        for (final Map.Entry<T, Double> entry : current.entrySet()) {
-            sum += entry.getValue();
+        final int length = cumulative.length;
+        for (int i = 0; i < length; i++) {
+            sum += cumulative[i];
             if (sum >= random) {
                 this.info(
-                    String.format("Chosen '%s' with weight '%s'", entry.getKey(), entry.getValue())
+                    String.format("Chosen '%s' with weight '%s'", all[i], current.get(all[i]))
                 );
-                current.put(entry.getKey(), entry.getValue() * this.factor);
-                return entry.getKey();
+                current.put((T) all[i], current.get(all[i]) * this.factor);
+                return (T) all[i];
             }
         }
+
+//        for (final Map.Entry<T, Double> entry : current.entrySet()) {
+//            sum += entry.getValue();
+//            if (sum >= random) {
+//                this.info(
+//                    String.format("Chosen '%s' with weight '%s'", entry.getKey(), entry.getValue())
+//                );
+//                current.put(entry.getKey(), entry.getValue() * this.factor);
+//                return entry.getKey();
+//            }
+//        }
+
         throw new IllegalStateException("No element was chosen");
     }
 

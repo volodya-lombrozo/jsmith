@@ -27,6 +27,15 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Variables.
+ * @since 0.1
+ * @todo #92:30min Move Variable to Context.
+ *  Currently we use this class in the context of the generation tree building.
+ *  We should move this class to the Context class, as it is used only during generation.
+ *  After moving the class, we should update all the references to it.
+ *  Moreover, we have strange behavior with cache which is rather confusing.
+ */
 public final class Variables {
 
     private final Set<String> names;
@@ -50,7 +59,7 @@ public final class Variables {
         this.cache.clear();
     }
 
-    public Optional<String> retrieve() {
+    Optional<String> retrieve() {
         return this.names.stream().findAny();
     }
 }
