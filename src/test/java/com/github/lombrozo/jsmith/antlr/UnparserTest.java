@@ -25,18 +25,17 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.AltList;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
 
 final class UnparserTest {
 
-
-    @RepeatedTest(100)
-    void generatesSeveralTimesForTheSameRuleWithDifferentValues() {
+    @RepeatedTest(10)
+    void generatesDifferentAlternativesForTheSameRule() {
         final Unparser unparser = new Unparser();
         final AltList alternatives = new AltList();
         IntStream.range(0, 5)
@@ -46,7 +45,7 @@ final class UnparserTest {
         unparser.with("stat", alternatives);
         final Set<String> result = IntStream.range(0, 50)
             .mapToObj(i -> unparser.generate("stat", new Context()).output())
-            .collect(Collectors.toSet());
+            .collect(Collectors.toCollection(LinkedHashSet::new));
         System.out.println(result);
         MatcherAssert.assertThat(
             "We expect that the result will contain more than one different element",

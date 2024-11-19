@@ -29,7 +29,11 @@ import com.github.lombrozo.jsmith.antlr.rules.Root;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -77,14 +81,27 @@ final class ConvergenceTest {
             );
         }
         MatcherAssert.assertThat(
-            "We expect that all elements will be chosen.",
-            frequency.size(),
-            Matchers.equalTo(3)
-        );
-        MatcherAssert.assertThat(
             "We expect that all elements were chosen more-or-less equally.",
             frequency.values(),
             Matchers.everyItem(Matchers.greaterThan(300))
+        );
+    }
+
+    @RepeatedTest(10)
+    void choosesAllElements() {
+        final Rule root = new AltList();
+        final List<Rule> alternatives = IntStream.range(0, 5)
+            .mapToObj(String::valueOf)
+            .map(Literal::new)
+            .peek(root::append)
+            .collect(Collectors.toList());
+        final Convergence<Rule> convergence = new Convergence<>(0.5, false);
+        MatcherAssert.assertThat(
+            "We expect that all elements were chosen at least once.",
+            IntStream.range(0, 50)
+                .mapToObj(i -> convergence.choose(root, alternatives))
+                .collect(Collectors.toSet()),
+            Matchers.containsInAnyOrder(alternatives.toArray())
         );
     }
 }
