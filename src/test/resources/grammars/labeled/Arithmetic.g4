@@ -4,7 +4,6 @@ prog: stat+ ;
 
 stat: expr NEWLINE
     | /* $jsmith-variable-declaration */ ID '=' expr NEWLINE
-    | NEWLINE
     ;
 
 expr: expr ('*' | '/' ) expr

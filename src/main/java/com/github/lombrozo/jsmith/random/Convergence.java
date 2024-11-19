@@ -181,8 +181,8 @@ final class Convergence<T> {
             from, key -> this.init(elements)
         );
         this.info(String.format("Weights for '%s': '%s'", from, current));
-        double[] cumulative = new double[current.size()];
-        Object[] all = new Object[current.size()];
+        final double[] cumulative = new double[current.size()];
+        final Object[] all = new Object[current.size()];
         double total = 0d;
         int index = 0;
         for (final Map.Entry<T, Double> entry : current.entrySet()) {
