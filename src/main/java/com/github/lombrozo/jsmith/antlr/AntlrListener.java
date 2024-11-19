@@ -242,19 +242,21 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
-        final Token token = ctx.getStop();
+        final Token token = ctx.getStart();
         final int index = token.getTokenIndex();
         final List<Token> comments = this.tokens.getHiddenTokensToLeft(index, ANTLRv4Lexer.COMMENT);
         final List<String> found = new ArrayList<>(0);
         if (comments != null) {
-            final Token comment = comments.get(0);
-            if (comment != null) {
-                final String text = comment.getText();
-                if (text.contains("$jsmith-variable-usage")) {
-                    found.add("$jsmith-variable-usage");
-                }
-                if (text.contains("$jsmith-variable-declaration")) {
-                    found.add("$jsmith-variable-declaration");
+            for (int i = 0; i < comments.size(); i++) {
+                final Token comment = comments.get(i);
+                if (comment != null) {
+                    final String text = comment.getText();
+                    if (text.contains("$jsmith-variable-usage")) {
+                        found.add("$jsmith-variable-usage");
+                    }
+                    if (text.contains("$jsmith-variable-declaration")) {
+                        found.add("$jsmith-variable-declaration");
+                    }
                 }
             }
         }
@@ -554,14 +556,33 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
-        this.down(new LabeledAlt(this.current));
+        final String text1 = ctx.getText();
+        final Token token = ctx.getStart();
+        final int index = token.getTokenIndex();
+        final List<Token> comments = this.tokens.getHiddenTokensToLeft(index, ANTLRv4Lexer.COMMENT);
+        final List<String> found = new ArrayList<>(0);
+        if (comments != null) {
+            final Token comment = comments.get(0);
+            if (comment != null) {
+                final String text = comment.getText();
+                if (text.contains("$jsmith-variable-assignment")) {
+                    found.add("$jsmith-variable-declaration-finished");
+                }
+            }
+        }
+        this.down(
+            new SemanticRule(
+                new LabeledAlt(this.current),
+                found,
+                this.variables
+            )
+        );
         super.enterLabeledAlt(ctx);
     }
 
     @Override
     public void exitLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
         this.up();
-        this.variables.closeStatement();
         super.exitLabeledAlt(ctx);
     }
 

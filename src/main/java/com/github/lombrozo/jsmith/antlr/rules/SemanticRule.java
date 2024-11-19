@@ -26,11 +26,13 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.semantic.Semantic;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclarationFinished;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
 import com.github.lombrozo.jsmith.antlr.semantic.Variables;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public final class SemanticRule implements Rule {
@@ -38,6 +40,10 @@ public final class SemanticRule implements Rule {
     private final Rule origin;
     private final List<String> semantics;
     private final List<Semantic> allowed;
+
+    public SemanticRule(final Rule origin, final String semantics, final Variables variables) {
+        this(origin, Collections.singletonList(semantics), variables);
+    }
 
     public SemanticRule(
         final Rule origin,
@@ -49,7 +55,8 @@ public final class SemanticRule implements Rule {
             new ArrayList<>(semantics),
             Arrays.asList(
                 new VariableDeclaration(variables),
-                new VariableUsage(variables)
+                new VariableUsage(variables),
+                new VariableDeclarationFinished(variables)
             )
         );
     }
