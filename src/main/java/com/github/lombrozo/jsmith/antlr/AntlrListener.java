@@ -132,6 +132,8 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
      * @param tokens Token stream.
      * @param unparser Unparser.
      * @param unlexer Unlexer.
+     * @param variables All declared variables.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public AntlrListener(
         final BufferedTokenStream tokens,
@@ -147,7 +149,9 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
      * @param tokens Token stream.
      * @param unparser Unparser.
      * @param unlexer Unlexer.
+     * @param variables All declared variables.
      * @param root Current rule.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     private AntlrListener(
         final BufferedTokenStream tokens,
@@ -237,12 +241,12 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
         Rule res = new Element(this.current);
-        final JsmithComments cmnts = new JsmithComments(
-            this.tokens.getHiddenTokensToLeft(
-                ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT));
-        if (cmnts.isUsage()) {
+        final JsmithComments comments = new JsmithComments(
+            this.tokens.getHiddenTokensToLeft(ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT)
+        );
+        if (comments.isUsage()) {
             res = new VariableUsage(res, this.variables);
-        } else if (cmnts.isDeclaration()) {
+        } else if (comments.isDeclaration()) {
             res = new VariableDeclaration(res, this.variables);
         }
         this.down(res);

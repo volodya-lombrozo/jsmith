@@ -45,6 +45,7 @@ import org.cactoos.text.UncheckedText;
  * In other words, it consumes ANTLR grammar and generates random scripts based on it.
  * @since 0.1
  */
+@SuppressWarnings("PMD.ConstructorShouldDoInitialization")
 public final class RandomScript {
 
     /**

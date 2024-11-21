@@ -189,13 +189,13 @@ final class Convergence<T> {
             total = total + entry.getValue();
             all[index] = entry.getKey();
             cumulative[index] = total;
-            index++;
+            ++index;
         }
         final double random = this.rand.floating() * total;
         final int length = cumulative.length;
-        for (int i = 0; i < length; i++) {
-            if (cumulative[i] >= random) {
-                final T element = (T) all[i];
+        for (int point = 0; point < length; ++point) {
+            if (cumulative[point] >= random) {
+                final T element = (T) all[point];
                 this.info(
                     String.format("Chosen '%s' with weight '%s'", element, current.get(element))
                 );
