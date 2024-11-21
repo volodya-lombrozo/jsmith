@@ -24,7 +24,6 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
@@ -101,29 +100,18 @@ public final class AltList implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        /**
-         * todo! refactor this see {@link RuleAltList}
-         */
         final Text result;
         if (this.alternatives.isEmpty()) {
             result = new TextLeaf(this, "");
         } else {
-            Text output = context.strategy()
-                .choose(this, this.alternatives)
-                .generate(context);
-            int attempts = 0;
-            while (output.error()) {
-                output = context.strategy()
-                    .choose(this, this.alternatives)
-                    .generate(context);
-                attempts++;
-                if (attempts > 10) {
-                    throw new IllegalStateException(
-                        String.format("Can't generate output for altList '%s'", this)
-                    );
-                }
-            }
-            result = new TextNode(this, output);
+            result = new TextNode(
+                this,
+                new SeveralAttempts(
+                    () -> context.strategy()
+                        .choose(this, this.alternatives)
+                        .generate(context)
+                ).choose()
+            );
         }
         return result;
     }
