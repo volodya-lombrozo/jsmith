@@ -21,43 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.semantic;
+package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.semantic.Semantic;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 
-/**
- * Variable Declaration Semantic.
- * Adds variable declaration to the context.
- * @since 0.1
- */
-public final class VariableDeclaration implements Semantic {
+public final class SimplifiedSemanticRule implements Rule {
 
-    /**
-     * Key for the semantic.
-     */
-    public static final String KEY = "$jsmith-variable-declaration";
+    private final Rule origin;
 
-    /**
-     * All declared variables.
-     */
-    private final Variables variables;
+    private final Semantic semantic;
 
-    /**
-     * Constructor.
-     * @param variables All declared variables.
-     */
-    public VariableDeclaration(final Variables variables) {
-        this.variables = variables;
+    public SimplifiedSemanticRule(final Rule origin, final Semantic semantic) {
+        this.origin = origin;
+        this.semantic = semantic;
     }
 
     @Override
-    public Text alter(final Text text) {
-        this.variables.declare(text.output());
-        return text;
+    public Rule parent() {
+        return this.origin.parent();
+    }
+
+    @Override
+    public Text generate(final Context context) {
+        return this.semantic.alter(this.origin.generate(context));
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.origin.append(rule);
     }
 
     @Override
     public String name() {
-        return VariableDeclaration.KEY;
+        return this.origin.name();
+    }
+
+    @Override
+    public Rule copy() {
+        return new SimplifiedSemanticRule(this.origin.copy(), this.semantic);
     }
 }

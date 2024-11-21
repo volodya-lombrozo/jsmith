@@ -25,22 +25,24 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.view.Text;
 
-public final class VariableDeclarationFinished implements Semantic {
+public final class VariableAssignment implements Semantic {
+
+    public final static String KEY = "$jsmith-variable-assignment";
 
     private final Variables variables;
 
-    public VariableDeclarationFinished(final Variables variables) {
+    public VariableAssignment(final Variables variables) {
         this.variables = variables;
     }
 
     @Override
     public Text alter(final Text text) {
-        this.variables.closeStatement();
+        this.variables.assign();
         return text;
     }
 
     @Override
     public String name() {
-        return "$jsmith-variable-declaration-finished";
+        return VariableAssignment.KEY;
     }
 }

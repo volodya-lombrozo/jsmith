@@ -23,7 +23,10 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+import com.github.lombrozo.jsmith.random.Rand;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,28 +41,69 @@ import java.util.Set;
  */
 public final class Variables {
 
-    private final Set<String> names;
-    private final Set<String> cache;
+    /**
+     * Declared variables.
+     */
+    private final List<String> declared;
 
+    /**
+     * Assigned variables.
+     */
+    private final List<String> assigned;
+
+    /**
+     * Random generator.
+     */
+    private final Rand rand;
+
+    /**
+     * Default constructor.
+     * Initializes empty lists.
+     */
     public Variables() {
-        this(new HashSet<>(0));
+        this(
+            new ArrayList<>(0),
+            new ArrayList<>(0),
+            new Rand()
+        );
     }
 
-    public Variables(Set<String> names) {
-        this.names = names;
-        this.cache = new HashSet<>(0);
+    /**
+     * Constructor.
+     * @param assigned Assigned variables.
+     * @param declared Declared variables.
+     * @param rand Random generator.
+     */
+    public Variables(
+        final List<String> assigned,
+        final List<String> declared,
+        final Rand rand
+    ) {
+        this.assigned = assigned;
+        this.declared = declared;
+        this.rand = rand;
     }
 
-    public void declare(final String name) {
-        this.cache.add(name);
+    void declare(final String name) {
+        this.declared.add(name);
     }
 
-    public void closeStatement() {
-        this.names.addAll(this.cache);
-        this.cache.clear();
+    void assign() {
+        this.assigned.addAll(this.declared);
+        this.declared.clear();
     }
 
+    /**
+     * Retrieve a random variable.
+     * @return Random variable.
+     */
     Optional<String> retrieve() {
-        return this.names.stream().findAny();
+        if (this.assigned.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.ofNullable(
+                this.assigned.get(this.rand.range(this.assigned.size()))
+            );
+        }
     }
 }

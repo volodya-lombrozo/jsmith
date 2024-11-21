@@ -74,18 +74,18 @@ import com.github.lombrozo.jsmith.antlr.rules.RuleAltList;
 import com.github.lombrozo.jsmith.antlr.rules.RuleBlock;
 import com.github.lombrozo.jsmith.antlr.rules.Ruleref;
 import com.github.lombrozo.jsmith.antlr.rules.Safe;
-import com.github.lombrozo.jsmith.antlr.rules.SemanticRule;
 import com.github.lombrozo.jsmith.antlr.rules.SetElement;
+import com.github.lombrozo.jsmith.antlr.rules.SimplifiedSemanticRule;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
 import com.github.lombrozo.jsmith.antlr.rules.Traced;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableAssignment;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
 import com.github.lombrozo.jsmith.antlr.semantic.Variables;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -242,25 +242,17 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
-        final Token token = ctx.getStart();
-        final int index = token.getTokenIndex();
-        final List<Token> comments = this.tokens.getHiddenTokensToLeft(index, ANTLRv4Lexer.COMMENT);
-        final List<String> found = new ArrayList<>(0);
-        if (comments != null) {
-            for (int i = 0; i < comments.size(); i++) {
-                final Token comment = comments.get(i);
-                if (comment != null) {
-                    final String text = comment.getText();
-                    if (text.contains("$jsmith-variable-usage")) {
-                        found.add("$jsmith-variable-usage");
-                    }
-                    if (text.contains("$jsmith-variable-declaration")) {
-                        found.add("$jsmith-variable-declaration");
-                    }
-                }
-            }
+        final Element origin = new Element(this.current);
+        Rule res = origin;
+        final SemanticComments cmnts = new SemanticComments(
+            this.tokens.getHiddenTokensToLeft(
+                ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT));
+        if (cmnts.isUsage()) {
+            res = new SimplifiedSemanticRule(origin, new VariableUsage(this.variables));
+        } else if (cmnts.isDeclaration()) {
+            res = new SimplifiedSemanticRule(origin, new VariableDeclaration(this.variables));
         }
-        this.down(new SemanticRule(new Element(this.current), found, this.variables));
+        this.down(res);
         super.enterElement(ctx);
     }
 
@@ -556,27 +548,21 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
-        final String text1 = ctx.getText();
-        final Token token = ctx.getStart();
-        final int index = token.getTokenIndex();
-        final List<Token> comments = this.tokens.getHiddenTokensToLeft(index, ANTLRv4Lexer.COMMENT);
-        final List<String> found = new ArrayList<>(0);
-        if (comments != null) {
-            final Token comment = comments.get(0);
-            if (comment != null) {
-                final String text = comment.getText();
-                if (text.contains("$jsmith-variable-assignment")) {
-                    found.add("$jsmith-variable-declaration-finished");
-                }
-            }
-        }
-        this.down(
-            new SemanticRule(
-                new LabeledAlt(this.current),
-                found,
-                this.variables
+        final boolean assignment = new SemanticComments(
+            this.tokens.getHiddenTokensToLeft(
+                ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
             )
-        );
+        ).isAssignment();
+        if (assignment) {
+            this.down(
+                new SimplifiedSemanticRule(
+                    new LabeledAlt(this.current),
+                    new VariableAssignment(this.variables)
+                )
+            );
+        } else {
+            this.down(new LabeledAlt(this.current));
+        }
         super.enterLabeledAlt(ctx);
     }
 

@@ -35,6 +35,11 @@ import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 public final class VariableUsage implements Semantic {
 
     /**
+     * Key for the semantic.
+     */
+    public static final String KEY = "$jsmith-variable-usage";
+
+    /**
      * All declared variables.
      */
     private final Variables variables;
@@ -56,6 +61,6 @@ public final class VariableUsage implements Semantic {
 
     @Override
     public String name() {
-        return "$jsmith-variable-usage";
+        return VariableUsage.KEY;
     }
 }
