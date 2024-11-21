@@ -70,8 +70,8 @@ public final class VariableUsage implements Rule {
     public Text generate(final Context context) {
         final Text text = this.origin.generate(context);
         return this.variables.retrieve()
-            .map(var -> (Text) new TextLeaf(text.writer(), var))
-            .orElse(new Error(text.writer()));
+            .map(output -> (Text) new TextLeaf(text.writer(), output))
+            .orElse(new Error(text.writer(), "<variable not found>"));
     }
 
     @Override

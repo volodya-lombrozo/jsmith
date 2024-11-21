@@ -26,8 +26,6 @@ package com.github.lombrozo.jsmith.random;
 import com.github.lombrozo.jsmith.antlr.rules.Empty;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Multiplier of rules.

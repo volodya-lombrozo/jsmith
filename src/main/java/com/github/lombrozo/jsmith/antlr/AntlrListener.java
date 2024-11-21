@@ -236,7 +236,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
         Rule res = new Element(this.current);
-        final SemanticComments cmnts = new SemanticComments(
+        final JsmithComments cmnts = new JsmithComments(
             this.tokens.getHiddenTokensToLeft(
                 ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT));
         if (cmnts.isUsage()) {
@@ -540,7 +540,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
-        final boolean assignment = new SemanticComments(
+        final boolean assignment = new JsmithComments(
             this.tokens.getHiddenTokensToLeft(
                 ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
             )

@@ -21,59 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.view;
-
-import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.Collections;
-import java.util.List;
 
 /**
- * Error output.
+ * This package contains classes for semantic aware generation of the code.
+ * @since 0.1
  */
-public final class Error implements Text {
-
-    /**
-     * Who writes the error.
-     */
-    private final Rule writer;
-
-    /**
-     * Error message.
-     */
-    private final String message;
-
-    /**
-     * Constructor.
-     * @param writer Who writes the error.
-     * @param message Error message.
-     */
-    public Error(final Rule writer, final String message) {
-        this.writer = writer;
-        this.message = message;
-    }
-
-    @Override
-    public Rule writer() {
-        return this.writer;
-    }
-
-    @Override
-    public List<Text> children() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public String output() {
-        return this.message;
-    }
-
-    @Override
-    public Attributes attributes() {
-        return new Attributes(false);
-    }
-
-    @Override
-    public boolean error() {
-        return true;
-    }
-}
+package com.github.lombrozo.jsmith.antlr.semantic;

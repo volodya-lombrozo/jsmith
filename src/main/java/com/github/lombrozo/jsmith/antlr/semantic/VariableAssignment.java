@@ -27,13 +27,33 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 
+/**
+ * Variable Assignment Semantic.
+ * Adds variable assignment to the context.
+ * @since 0.1
+ */
 public final class VariableAssignment implements Rule {
 
-    public final static String KEY = "$jsmith-variable-assignment";
+    /**
+     * Key for this semantic.
+     */
+    public static final String KEY = "$jsmith-variable-assignment";
 
+    /**
+     * Origin rule.
+     */
     private final Rule origin;
+
+    /**
+     * All declared variables.
+     */
     private final Variables variables;
 
+    /**
+     * Constructor.
+     * @param origin Origin rule.
+     * @param variables All declared variables.
+     */
     public VariableAssignment(final Rule origin, final Variables variables) {
         this.origin = origin;
         this.variables = variables;

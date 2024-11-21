@@ -35,7 +35,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.antlr.v4.runtime.Token;
 
-public final class SemanticComments {
+/**
+ * Semantic comments.
+ * @since 0.1
+ */
+final class JsmithComments {
 
     /**
      * Comment tokens.
@@ -46,19 +50,31 @@ public final class SemanticComments {
      * Constructor.
      * @param comments Comment tokens.
      */
-    public SemanticComments(final List<Token> comments) {
+    JsmithComments(final List<Token> comments) {
         this.comments = Optional.ofNullable(comments).orElseGet(ArrayList::new);
     }
 
-    public boolean isAssignment() {
+    /**
+     * Check if a comment is a variable assignment.
+     * @return True if a comment is a variable assignment.
+     */
+    boolean isAssignment() {
         return this.rules().stream().anyMatch(VariableAssignment.KEY::equals);
     }
 
-    public boolean isUsage() {
+    /**
+     * Check if a comment is a variable usage.
+     * @return True if a comment is a variable usage.
+     */
+    boolean isUsage() {
         return this.rules().stream().anyMatch(VariableUsage.KEY::equals);
     }
 
-    public boolean isDeclaration() {
+    /**
+     * Check if a comment is a variable declaration.
+     * @return True if a comment is a variable declaration.
+     */
+    boolean isDeclaration() {
         return this.rules().stream().anyMatch(VariableDeclaration.KEY::equals);
     }
 
@@ -66,12 +82,12 @@ public final class SemanticComments {
      * Get rules from comments.
      * @return List of rules.
      */
-    public List<String> rules() {
+    private List<String> rules() {
         return this.comments.stream()
             .filter(Objects::nonNull)
             .map(Token::getText)
-            .flatMap(SemanticComments::split)
-            .filter(SemanticComments::isJsmit)
+            .flatMap(JsmithComments::split)
+            .filter(JsmithComments::isJsmit)
             .collect(Collectors.toList());
     }
 

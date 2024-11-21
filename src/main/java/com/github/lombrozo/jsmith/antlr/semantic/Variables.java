@@ -84,10 +84,17 @@ public final class Variables {
         this.rand = rand;
     }
 
+    /**
+     * Declare a variable.
+     * @param name Variable name.
+     */
     void declare(final String name) {
         this.declared.add(name);
     }
 
+    /**
+     * Assign all declared variables.
+     */
     void assign() {
         this.assigned.addAll(this.declared);
         this.declared.clear();

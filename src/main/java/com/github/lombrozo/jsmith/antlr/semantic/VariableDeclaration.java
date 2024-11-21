@@ -39,6 +39,9 @@ public final class VariableDeclaration implements Rule {
      */
     public static final String KEY = "$jsmith-variable-declaration";
 
+    /**
+     * Origin rule.
+     */
     private final Rule origin;
 
     /**
