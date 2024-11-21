@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
@@ -32,12 +34,17 @@ import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
  * Adds variable usage to the context.
  * @since 0.1
  */
-public final class VariableUsage implements Semantic {
+public final class VariableUsage implements Rule {
 
     /**
      * Key for the semantic.
      */
     public static final String KEY = "$jsmith-variable-usage";
+
+    /**
+     * Origin rule.
+     */
+    private final Rule origin;
 
     /**
      * All declared variables.
@@ -46,21 +53,39 @@ public final class VariableUsage implements Semantic {
 
     /**
      * Constructor.
+     * @param origin Origin rule.
      * @param variables All declared variables.
      */
-    public VariableUsage(final Variables variables) {
+    public VariableUsage(final Rule origin, final Variables variables) {
+        this.origin = origin;
         this.variables = variables;
     }
 
     @Override
-    public Text alter(final Text text) {
+    public Rule parent() {
+        return this.origin.parent();
+    }
+
+    @Override
+    public Text generate(final Context context) {
+        final Text text = this.origin.generate(context);
         return this.variables.retrieve()
             .map(var -> (Text) new TextLeaf(text.writer(), var))
             .orElse(new Error(text.writer()));
     }
 
     @Override
+    public void append(final Rule rule) {
+        this.origin.append(rule);
+    }
+
+    @Override
     public String name() {
         return VariableUsage.KEY;
+    }
+
+    @Override
+    public Rule copy() {
+        return new VariableUsage(this.origin.copy(), this.variables);
     }
 }

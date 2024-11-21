@@ -23,26 +23,45 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 
-public final class VariableAssignment implements Semantic {
+public final class VariableAssignment implements Rule {
 
     public final static String KEY = "$jsmith-variable-assignment";
 
+    private final Rule origin;
     private final Variables variables;
 
-    public VariableAssignment(final Variables variables) {
+    public VariableAssignment(final Rule origin, final Variables variables) {
+        this.origin = origin;
         this.variables = variables;
     }
 
     @Override
-    public Text alter(final Text text) {
+    public Rule parent() {
+        return this.origin.parent();
+    }
+
+    @Override
+    public Text generate(final Context context) {
         this.variables.assign();
-        return text;
+        return this.origin.generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.origin.append(rule);
     }
 
     @Override
     public String name() {
-        return VariableAssignment.KEY;
+        return this.origin.name();
+    }
+
+    @Override
+    public Rule copy() {
+        return new VariableAssignment(this.origin.copy(), this.variables);
     }
 }

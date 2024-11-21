@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 
 /**
@@ -30,12 +32,14 @@ import com.github.lombrozo.jsmith.antlr.view.Text;
  * Adds variable declaration to the context.
  * @since 0.1
  */
-public final class VariableDeclaration implements Semantic {
+public final class VariableDeclaration implements Rule {
 
     /**
      * Key for the semantic.
      */
     public static final String KEY = "$jsmith-variable-declaration";
+
+    private final Rule origin;
 
     /**
      * All declared variables.
@@ -44,20 +48,39 @@ public final class VariableDeclaration implements Semantic {
 
     /**
      * Constructor.
+     * @param origin Origin rule.
      * @param variables All declared variables.
      */
-    public VariableDeclaration(final Variables variables) {
+    public VariableDeclaration(final Rule origin, final Variables variables) {
+        this.origin = origin;
         this.variables = variables;
     }
 
+
     @Override
-    public Text alter(final Text text) {
+    public Rule parent() {
+        return this.origin.parent();
+    }
+
+    @Override
+    public Text generate(final Context context) {
+        final Text text = this.origin.generate(context);
         this.variables.declare(text.output());
         return text;
     }
 
     @Override
+    public void append(final Rule rule) {
+        this.origin.append(rule);
+    }
+
+    @Override
     public String name() {
         return VariableDeclaration.KEY;
+    }
+
+    @Override
+    public Rule copy() {
+        return new VariableDeclaration(this.origin.copy(), this.variables);
     }
 }

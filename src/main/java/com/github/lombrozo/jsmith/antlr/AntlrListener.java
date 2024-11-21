@@ -75,7 +75,6 @@ import com.github.lombrozo.jsmith.antlr.rules.RuleBlock;
 import com.github.lombrozo.jsmith.antlr.rules.Ruleref;
 import com.github.lombrozo.jsmith.antlr.rules.Safe;
 import com.github.lombrozo.jsmith.antlr.rules.SetElement;
-import com.github.lombrozo.jsmith.antlr.rules.SimplifiedSemanticRule;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
 import com.github.lombrozo.jsmith.antlr.rules.Traced;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableAssignment;
@@ -117,7 +116,9 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
      */
     private final BufferedTokenStream tokens;
 
-
+    /**
+     * All declared variables.
+     */
     private final Variables variables;
 
     /**
@@ -159,14 +160,6 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         this.unlexer = unlexer;
         this.variables = variables;
         this.current = new Traced(root);
-    }
-
-    /**
-     * Get unparser that understands parser rules and can generate code.
-     * @return Unparser.
-     */
-    public Unparser unparser() {
-        return this.unparser;
     }
 
     @Override
@@ -242,15 +235,14 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
-        final Element origin = new Element(this.current);
-        Rule res = origin;
+        Rule res = new Element(this.current);
         final SemanticComments cmnts = new SemanticComments(
             this.tokens.getHiddenTokensToLeft(
                 ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT));
         if (cmnts.isUsage()) {
-            res = new SimplifiedSemanticRule(origin, new VariableUsage(this.variables));
+            res = new VariableUsage(res, this.variables);
         } else if (cmnts.isDeclaration()) {
-            res = new SimplifiedSemanticRule(origin, new VariableDeclaration(this.variables));
+            res = new VariableDeclaration(res, this.variables);
         }
         this.down(res);
         super.enterElement(ctx);
@@ -553,16 +545,14 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
                 ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
             )
         ).isAssignment();
+        final LabeledAlt main = new LabeledAlt(this.current);
+        final Rule res;
         if (assignment) {
-            this.down(
-                new SimplifiedSemanticRule(
-                    new LabeledAlt(this.current),
-                    new VariableAssignment(this.variables)
-                )
-            );
+            res = new VariableAssignment(main, this.variables);
         } else {
-            this.down(new LabeledAlt(this.current));
+            res = main;
         }
+        this.down(res);
         super.enterLabeledAlt(ctx);
     }
 
