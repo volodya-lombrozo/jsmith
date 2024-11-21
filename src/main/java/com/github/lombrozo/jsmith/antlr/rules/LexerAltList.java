@@ -84,7 +84,12 @@ public final class LexerAltList implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        return new TextNode(this, context.strategy().choose(this, this.children).generate(context));
+        return new TextNode(
+            this,
+            new SeveralAttempts(
+                () -> context.strategy().choose(this, this.children).generate(context)
+            ).choose()
+        );
     }
 
     @Override
