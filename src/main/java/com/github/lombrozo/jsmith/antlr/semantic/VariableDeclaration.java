@@ -59,7 +59,6 @@ public final class VariableDeclaration implements Rule {
         this.variables = variables;
     }
 
-
     @Override
     public Rule parent() {
         return this.origin.parent();

@@ -41,7 +41,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * }
  * @since 0.1
  */
-
 public final class Atom implements Rule {
 
     /**

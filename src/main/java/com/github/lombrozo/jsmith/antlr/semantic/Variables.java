@@ -25,10 +25,8 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.random.Rand;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Variables.
@@ -105,12 +103,14 @@ public final class Variables {
      * @return Random variable.
      */
     Optional<String> retrieve() {
+        final Optional<String> result;
         if (this.assigned.isEmpty()) {
-            return Optional.empty();
+            result = Optional.empty();
         } else {
-            return Optional.ofNullable(
+            result = Optional.ofNullable(
                 this.assigned.get(this.rand.range(this.assigned.size()))
             );
         }
+        return result;
     }
 }

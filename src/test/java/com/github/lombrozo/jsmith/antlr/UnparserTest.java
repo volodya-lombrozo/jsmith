@@ -30,8 +30,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
 
+/**
+ * Unparser test.
+ * @since 0.1
+ */
 final class UnparserTest {
 
     @RepeatedTest(10)
@@ -47,9 +52,9 @@ final class UnparserTest {
             .mapToObj(i -> unparser.generate("stat", new Context()).output())
             .collect(Collectors.toCollection(LinkedHashSet::new));
         MatcherAssert.assertThat(
-            "We expect that the result will contain more than one different element",
-            chosen.size() == 5
+            "We expect that the result will contain all different alternatives",
+            chosen.size(),
+            Matchers.is(5)
         );
     }
-
 }

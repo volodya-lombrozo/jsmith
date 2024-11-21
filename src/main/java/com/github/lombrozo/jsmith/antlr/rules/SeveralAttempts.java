@@ -74,7 +74,7 @@ public final class SeveralAttempts {
         int attempt = 0;
         while (text.error()) {
             text = this.generator.get();
-            attempt++;
+            attempt = attempt + 1;
             if (attempt > this.max) {
                 throw new IllegalStateException(
                     String.format(

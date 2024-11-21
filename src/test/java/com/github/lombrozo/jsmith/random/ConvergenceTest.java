@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -69,14 +70,14 @@ final class ConvergenceTest {
     void correctChoosingDistribution() {
         final Convergence<Rule> convergence = new Convergence<>(0.5, false);
         final Rule root = new Root();
-        final Rule a = new Literal("a");
-        final Rule b = new Literal("b");
-        final Rule c = new Literal("c");
+        final Rule first = new Literal("a");
+        final Rule second = new Literal("b");
+        final Rule third = new Literal("c");
         final Map<Rule, Integer> frequency = new HashMap<>(0);
         for (int index = 0; index < 1000; ++index) {
             frequency.compute(
-                convergence.choose(root, a, b, c),
-                (key, value) -> value == null ? 1 : value + 1
+                convergence.choose(root, first, second, third),
+                (key, value) -> Optional.ofNullable(value).map(v -> v + 1).orElse(1)
             );
         }
         MatcherAssert.assertThat(

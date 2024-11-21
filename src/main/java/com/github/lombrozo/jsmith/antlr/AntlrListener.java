@@ -97,7 +97,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
     "PMD.UselessOverridingMethod",
     "PMD.ExcessivePublicCount",
     "PMD.TooManyMethods",
-    "PMD.AvoidFieldNameMatchingMethodName"
+    "PMD.AvoidFieldNameMatchingMethodName",
+    "PMD.GodClass"
 })
 public final class AntlrListener extends ANTLRv4ParserBaseListener {
 

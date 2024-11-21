@@ -24,7 +24,6 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.semantic.Variables;
 import com.github.lombrozo.jsmith.random.ChoosingStrategy;
 import com.github.lombrozo.jsmith.random.ConvergenceStrategy;
 import java.util.ArrayList;
