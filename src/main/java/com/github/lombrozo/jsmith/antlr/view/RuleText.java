@@ -72,7 +72,7 @@ public final class RuleText implements Text {
 
     @Override
     public Attributes attributes() {
-        return new Attributes(true);
+        return this.original.attributes();
     }
 
     @Override

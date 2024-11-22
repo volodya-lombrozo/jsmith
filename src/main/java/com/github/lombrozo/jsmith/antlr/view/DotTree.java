@@ -123,7 +123,7 @@ public final class DotTree implements Text {
 
     @Override
     public Attributes attributes() {
-        return new Attributes(false);
+        return this.origin.attributes();
     }
 
     @Override

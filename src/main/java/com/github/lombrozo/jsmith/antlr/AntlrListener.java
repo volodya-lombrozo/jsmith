@@ -78,6 +78,7 @@ import com.github.lombrozo.jsmith.antlr.rules.SetElement;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
 import com.github.lombrozo.jsmith.antlr.rules.Traced;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableAssignment;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
 import com.github.lombrozo.jsmith.antlr.semantic.Variables;
@@ -248,6 +249,8 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
             res = new VariableUsage(res, this.variables);
         } else if (comments.isDeclaration()) {
             res = new VariableDeclaration(res, this.variables);
+        } else if (comments.isAssignment()) {
+            res = new VariableAssignment(res, this.variables);
         }
         this.down(res);
         super.enterElement(ctx);
@@ -545,15 +548,15 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
-        final boolean assignment = new JsmithComments(
+        final boolean init = new JsmithComments(
             this.tokens.getHiddenTokensToLeft(
                 ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
             )
-        ).isAssignment();
+        ).isInitialization();
         final LabeledAlt main = new LabeledAlt(this.current);
         final Rule res;
-        if (assignment) {
-            res = new VariableAssignment(main, this.variables);
+        if (init) {
+            res = new VariableInitialization(main, this.variables);
         } else {
             res = main;
         }

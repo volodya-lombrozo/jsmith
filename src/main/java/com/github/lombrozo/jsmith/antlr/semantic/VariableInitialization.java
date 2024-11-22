@@ -25,21 +25,20 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import com.jcabi.log.Logger;
 
 /**
- * Variable Usage Semantic.
- * Adds variable usage to the context.
+ * Variable Assignment Semantic.
+ * Adds variable assignment to the context.
  * @since 0.1
  */
-public final class VariableUsage implements Rule {
+public final class VariableInitialization implements Rule {
 
     /**
-     * Key for the semantic.
+     * Key for this semantic.
      */
-    public static final String KEY = "$jsmith-variable-usage";
+    public static final String KEY = "$jsmith-variable-initialization";
 
     /**
      * Origin rule.
@@ -56,7 +55,7 @@ public final class VariableUsage implements Rule {
      * @param origin Origin rule.
      * @param variables All declared variables.
      */
-    public VariableUsage(final Rule origin, final Variables variables) {
+    public VariableInitialization(final Rule origin, final Variables variables) {
         this.origin = origin;
         this.variables = variables;
     }
@@ -68,10 +67,16 @@ public final class VariableUsage implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        final Text text = this.origin.generate(context);
-        return this.variables.initialized()
-            .map(output -> (Text) new TextLeaf(text.writer(), output))
-            .orElse(new Error(text.writer(), "<variable not found>"));
+        final Text output = this.origin.generate(context);
+        if (!output.error()) {
+            final String s = output.attributes().additional().get("initialized-variable");
+            if (s == null) {
+                throw new IllegalStateException("Variable name is not provided");
+            }
+            this.variables.assign(s);
+            Logger.debug(this, "State after: %s", this.variables);
+        }
+        return output;
     }
 
     @Override
@@ -81,11 +86,11 @@ public final class VariableUsage implements Rule {
 
     @Override
     public String name() {
-        return VariableUsage.KEY;
+        return this.origin.name();
     }
 
     @Override
     public Rule copy() {
-        return new VariableUsage(this.origin.copy(), this.variables);
+        return new VariableInitialization(this.origin.copy(), this.variables);
     }
 }

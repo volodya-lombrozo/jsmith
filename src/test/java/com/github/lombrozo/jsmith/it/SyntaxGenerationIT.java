@@ -27,10 +27,10 @@ import com.github.lombrozo.jsmith.RandomScript;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.guard.IllegalTextException;
 import com.github.lombrozo.jsmith.guard.SyntaxGuard;
+import com.jcabi.log.Logger;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
@@ -66,6 +66,7 @@ final class SyntaxGenerationIT {
             Arguments.of(Collections.singletonList("grammars/Simple.g4"), "expr"),
             Arguments.of(Collections.singletonList("grammars/Arithmetic.g4"), "prog"),
             Arguments.of(Collections.singletonList("grammars/labeled/Arithmetic.g4"), "prog"),
+            Arguments.of(Collections.singletonList("grammars/labeled/Assignments.g4"), "prog"),
             Arguments.of(Collections.singletonList("grammars/Recursive.g4"), "expr"),
             Arguments.of(Collections.singletonList("grammars/Json.g4"), "json"),
             Arguments.of(Collections.singletonList("grammars/CSV.g4"), "csvFile"),
@@ -90,24 +91,29 @@ final class SyntaxGenerationIT {
         try {
             Assertions.assertDoesNotThrow(
                 () -> Stream.generate(() -> top)
+                    .peek(this::logStart)
                     .map(script::generate)
                     .limit(50)
-                    .peek(SyntaxGenerationIT::logProgram)
+                    .peek(this::logProgram)
                     .forEach(guard::verifySilently),
                 message
             );
+            Logger.debug(this, "Programs were generated and verified without errors");
         } catch (final IllegalTextException exception) {
             exception.saveDot();
             Assertions.fail(message, exception);
         }
     }
 
+    private void logStart(final String s) {
+        Logger.info(this, String.format("Generating program for '%s' rule", s));
+    }
+
     /**
      * Logs the generated program.
      * @param program The generated program.
      */
-    private static void logProgram(final Text program) {
-        Logger.getLogger(SyntaxGenerationIT.class.getSimpleName())
-            .info(String.format("Generated program: %n%s%n", program.output()));
+    private void logProgram(final Text program) {
+        Logger.info(this, String.format("Generated program: %n```%n%s%n```", program.output()));
     }
 }

@@ -25,8 +25,12 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.random.Rand;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import lombok.ToString;
 
 /**
  * Variables.
@@ -37,21 +41,30 @@ import java.util.Optional;
  *  After moving the class, we should update all the references to it.
  *  Moreover, we have strange behavior with cache which is rather confusing.
  */
+@ToString
 public final class Variables {
 
     /**
      * Declared variables.
      */
-    private final List<String> declared;
+    private final Set<String> declared;
+
+    private final Set<String> assigned;
 
     /**
      * Assigned variables.
      */
-    private final List<String> assigned;
+    private final Set<String> initialized;
+
+    /**
+     * Assignment in progress flag.
+     */
+    private final AtomicBoolean assignmentInProgress = new AtomicBoolean(false);
 
     /**
      * Random generator.
      */
+    @ToString.Exclude
     private final Rand rand;
 
     /**
@@ -60,8 +73,8 @@ public final class Variables {
      */
     public Variables() {
         this(
-            new ArrayList<>(0),
-            new ArrayList<>(0),
+            new LinkedHashSet<>(0),
+            new LinkedHashSet<>(0),
             new Rand()
         );
     }
@@ -73,11 +86,12 @@ public final class Variables {
      * @param rand Random generator.
      */
     public Variables(
-        final List<String> assigned,
-        final List<String> declared,
+        final LinkedHashSet<String> assigned,
+        final LinkedHashSet<String> declared,
         final Rand rand
     ) {
-        this.assigned = assigned;
+        this.initialized = assigned;
+        this.assigned = new HashSet<>(0);
         this.declared = declared;
         this.rand = rand;
     }
@@ -93,23 +107,32 @@ public final class Variables {
     /**
      * Assign all declared variables.
      */
-    void assign() {
-        this.assigned.addAll(this.declared);
-        this.declared.clear();
+    void assign(final String name) {
+        this.initialized.add(name);
     }
 
-    /**
-     * Retrieve a random variable.
-     * @return Random variable.
-     */
-    Optional<String> retrieve() {
+    Optional<String> declared() {
         final Optional<String> result;
-        if (this.assigned.isEmpty()) {
+        if (this.declared.isEmpty()) {
             result = Optional.empty();
         } else {
-            result = Optional.ofNullable(
-                this.assigned.get(this.rand.range(this.assigned.size()))
-            );
+            final int range = this.rand.range(this.declared.size());
+            result = this.declared.stream()
+                .skip(range)
+                .findFirst();
+        }
+        return result;
+    }
+
+    Optional<String> initialized() {
+        final Optional<String> result;
+        if (this.initialized.isEmpty()) {
+            result = Optional.empty();
+        } else {
+            final int range = this.rand.range(this.initialized.size());
+            result = this.initialized.stream()
+                .skip(range)
+                .findFirst();
         }
         return result;
     }

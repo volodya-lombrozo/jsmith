@@ -23,6 +23,9 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Text output attributes.
  * @since 0.1
@@ -34,12 +37,22 @@ public final class Attributes {
      */
     private final boolean rule;
 
+    private final Map<String, String> additional;
+
     /**
      * Default constructor.
      * @param rule Is the text output produced by a rule.
      */
     Attributes(final boolean rule) {
+        this(rule, new HashMap<>(0));
+    }
+
+    Attributes(
+        final boolean rule,
+        final Map<String, String> additional
+    ) {
         this.rule = rule;
+        this.additional = additional;
     }
 
     /**
@@ -48,5 +61,15 @@ public final class Attributes {
      */
     boolean isRule() {
         return this.rule;
+    }
+
+    public Map<String, String> additional() {
+        return this.additional;
+    }
+
+    public Attributes add(final Attributes other) {
+        final Map<String, String> map = new HashMap<>(this.additional);
+        map.putAll(other.additional());
+        return new Attributes(this.rule || other.isRule(), map);
     }
 }

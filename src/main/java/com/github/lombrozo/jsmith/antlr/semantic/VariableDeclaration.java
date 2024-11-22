@@ -67,7 +67,9 @@ public final class VariableDeclaration implements Rule {
     @Override
     public Text generate(final Context context) {
         final Text text = this.origin.generate(context);
-        this.variables.declare(text.output());
+        if (!text.error()) {
+            this.variables.declare(text.output());
+        }
         return text;
     }
 

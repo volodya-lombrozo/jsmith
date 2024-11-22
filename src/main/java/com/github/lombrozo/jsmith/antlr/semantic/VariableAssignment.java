@@ -25,13 +25,12 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import java.util.Collections;
+import java.util.Optional;
 
-/**
- * Variable Assignment Semantic.
- * Adds variable assignment to the context.
- * @since 0.1
- */
 public final class VariableAssignment implements Rule {
 
     /**
@@ -39,21 +38,10 @@ public final class VariableAssignment implements Rule {
      */
     public static final String KEY = "$jsmith-variable-assignment";
 
-    /**
-     * Origin rule.
-     */
     private final Rule origin;
 
-    /**
-     * All declared variables.
-     */
     private final Variables variables;
 
-    /**
-     * Constructor.
-     * @param origin Origin rule.
-     * @param variables All declared variables.
-     */
     public VariableAssignment(final Rule origin, final Variables variables) {
         this.origin = origin;
         this.variables = variables;
@@ -66,8 +54,12 @@ public final class VariableAssignment implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        this.variables.assign();
-        return this.origin.generate(context);
+        return this.variables.declared()
+            .map(
+                output -> (Text) new TextLeaf(this, output,
+                    Collections.singletonMap("initialized-variable", output)
+                )
+            ).orElse(new Error(this, "<variable not found>"));
     }
 
     @Override
