@@ -28,6 +28,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -54,12 +55,20 @@ public final class VariableAssignment implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        return this.variables.declared()
-            .map(
-                output -> (Text) new TextLeaf(this, output,
-                    Collections.singletonMap("initialized-variable", output)
-                )
-            ).orElse(new Error(this, "<variable not found>"));
+        Text text = this.origin.generate(context);
+        if (!text.error()) {
+            final Optional<String> declared = this.variables.declared();
+            if (declared.isPresent()) {
+                text = new TextLeaf(
+                    this,
+                    declared.get(),
+                    Collections.singletonMap("initialized-variable", declared.get())
+                );
+            } else {
+                text = new Error(this, "<variable is not declared yet>");
+            }
+        }
+        return text;
     }
 
     @Override

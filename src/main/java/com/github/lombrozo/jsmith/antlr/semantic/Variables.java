@@ -24,12 +24,12 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.random.Rand;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.ToString;
 
 /**
@@ -57,11 +57,6 @@ public final class Variables {
     private final Set<String> initialized;
 
     /**
-     * Assignment in progress flag.
-     */
-    private final AtomicBoolean assignmentInProgress = new AtomicBoolean(false);
-
-    /**
      * Random generator.
      */
     @ToString.Exclude
@@ -73,8 +68,8 @@ public final class Variables {
      */
     public Variables() {
         this(
-            new LinkedHashSet<>(0),
-            new LinkedHashSet<>(0),
+            new HashSet<>(0),
+            new HashSet<>(0),
             new Rand()
         );
     }
@@ -86,8 +81,8 @@ public final class Variables {
      * @param rand Random generator.
      */
     public Variables(
-        final LinkedHashSet<String> assigned,
-        final LinkedHashSet<String> declared,
+        final Set<String> assigned,
+        final Set<String> declared,
         final Rand rand
     ) {
         this.initialized = assigned;

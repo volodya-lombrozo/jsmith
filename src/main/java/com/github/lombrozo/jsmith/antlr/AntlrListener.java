@@ -247,9 +247,11 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         );
         if (comments.isUsage()) {
             res = new VariableUsage(res, this.variables);
-        } else if (comments.isDeclaration()) {
+        }
+        if (comments.isDeclaration()) {
             res = new VariableDeclaration(res, this.variables);
-        } else if (comments.isAssignment()) {
+        }
+        if (comments.isAssignment()) {
             res = new VariableAssignment(res, this.variables);
         }
         this.down(res);
