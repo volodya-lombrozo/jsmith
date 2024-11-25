@@ -540,12 +540,12 @@ expressionStatement
     ;
 
 vardef
-    : 'long' SPACE Identifier
+    : 'long' SPACE /* $jsmith-variable-declaration */ Identifier
     ;
 
 statementExpression
     : vardef
-//  | assignment
+    | assignment
 
 //    | preIncrementExpression
 //    | preDecrementExpression
@@ -955,7 +955,7 @@ assignmentExpression
     ;
 
 assignment
-    : leftHandSide '=' simplifiedExpression
+    : /* $jsmith-variable-initialization */ /* $jsmith-variable-assignment */ leftHandSide '=' simplifiedExpression
 //    expression
     ;
 
@@ -983,7 +983,7 @@ assignmentOperator
 
 simplifiedExpression
     : simplifiedExpression SPACE '+' SPACE IntegerLiteral
-    | Identifier
+//    | Identifier
     | IntegerLiteral
     ;
 
