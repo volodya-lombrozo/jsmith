@@ -213,7 +213,7 @@ packageOrTypeName
 
 expressionName
     : Identifier
-    | ambiguousName '.' Identifier
+//    | ambiguousName '.' Identifier
     ;
 
 methodName
@@ -312,7 +312,7 @@ interfaceTypeList
     ;
 
 classBody
-    : '{' classBodyDeclaration* '}' NL
+    : '{' classBodyDeclaration+ '}' NL
     ;
 
 classBodyDeclaration
@@ -321,7 +321,13 @@ classBodyDeclaration
 
 classMemberDeclaration
     :  ';'
+    | methodDeclaration
     ;
+
+methodDeclaration
+    : NL 'public' SPACE 'void' SPACE Identifier '(' ')' methodBody NL
+    ;
+
 
 
 variableDeclaratorList
@@ -454,8 +460,8 @@ exceptionType
     ;
 
 methodBody
-    : block
-    | ';'
+    : methodBlock
+//    | ';'
     ;
 
 instanceInitializer
@@ -554,6 +560,10 @@ variableInitializerList
  * Productions from §14 (Blocks and Statements)
  */
 
+methodBlock
+    : '{' expressionStatement+ '}'
+    ;
+
 block
     : '{' blockStatements? '}'
     ;
@@ -621,17 +631,22 @@ labeledStatementNoShortIf
     ;
 
 expressionStatement
-    : statementExpression ';'
+    : NL statementExpression ';' NL
+    ;
+
+vardef
+    : 'long' SPACE /* $jsmith-variable-declaration */ Identifier
     ;
 
 statementExpression
-    : assignment
-    | preIncrementExpression
-    | preDecrementExpression
-    | postIncrementExpression
-    | postDecrementExpression
-    | methodInvocation
-    | classInstanceCreationExpression
+    : /* $jsmith-variable-initialization */ assignment
+    | vardef
+//    | preIncrementExpression
+//    | preDecrementExpression
+//    | postIncrementExpression
+//    | postDecrementExpression
+//    | methodInvocation
+//    | classInstanceCreationExpression
     ;
 
 ifThenStatement
@@ -1003,8 +1018,10 @@ constantExpression
     ;
 
 expression
-    : lambdaExpression
-    | assignmentExpression
+    : unaryExpression
+//    additiveExpression
+//    assignmentExpression
+//  | lambdaExpression
     ;
 
 lambdaExpression
@@ -1032,13 +1049,15 @@ assignmentExpression
     ;
 
 assignment
-    : leftHandSide assignmentOperator expression
+    : /* $jsmith-variable-assignment */ leftHandSide '=' simplifiedExpression
+//    expression
     ;
 
 leftHandSide
     : expressionName
-    | fieldAccess
-    | arrayAccess
+//    | variableDeclarator
+//    | fieldAccess
+//    | arrayAccess
     ;
 
 assignmentOperator
@@ -1054,6 +1073,12 @@ assignmentOperator
     | '&='
     | '^='
     | '|='
+    ;
+
+simplifiedExpression
+    : simplifiedExpression SPACE '+' SPACE IntegerLiteral
+    | /* $jsmith-variable-usage */ Identifier
+    | IntegerLiteral
     ;
 
 conditionalExpression
