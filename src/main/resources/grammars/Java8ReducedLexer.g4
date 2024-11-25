@@ -289,7 +289,7 @@ URSHIFT_ASSIGN : '>>>=';
 Identifier: IdentifierStart IdentifierPart*;
 
 // Dropped SMP support as ANTLR has no native support for it
-fragment IdentifierStart: [a-zA-Z$_];
+fragment IdentifierStart: [a-zA-Z$];
 
 fragment IdentifierPart: IdentifierStart;
 

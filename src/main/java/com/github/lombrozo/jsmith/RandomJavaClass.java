@@ -23,12 +23,10 @@
  */
 package com.github.lombrozo.jsmith;
 
-import com.diffplug.spotless.maven.generic.Format;
-import com.diffplug.spotless.maven.java.GoogleJavaFormat;
-import com.diffplug.spotless.maven.java.Java;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
+import com.google.googlejavaformat.java.JavaFormatterOptions;
 import org.cactoos.io.ResourceOf;
 
 /**
@@ -90,7 +88,8 @@ public final class RandomJavaClass {
         ).generate(this.rule);
         final String output = text.output();
         try {
-            return new Formatter().formatSource(output);
+            return new Formatter(JavaFormatterOptions.builder()
+                .build()).formatSource(output);
         } catch (final FormatterException exception) {
             throw new IllegalStateException(
                 String.format("Failed to format source code %n%s%n", output), exception);

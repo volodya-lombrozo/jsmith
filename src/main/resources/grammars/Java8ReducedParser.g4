@@ -240,7 +240,7 @@ importDeclaration
     ;
 
 singleTypeImportDeclaration
-    : 'import' SPACE typeName ';' NL
+    : 'import' SPACE typeName '.' typeName ';' NL
     ;
 
 typeImportOnDemandDeclaration
