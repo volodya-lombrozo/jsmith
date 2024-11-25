@@ -105,8 +105,12 @@ final class SyntaxGenerationIT {
         }
     }
 
-    private void logStart(final String s) {
-        Logger.info(this, String.format("Generating program for '%s' rule", s));
+    /**
+     * Logs the start of the generation.
+     * @param starting Starting rule.
+     */
+    private void logStart(final String starting) {
+        Logger.info(this, String.format("Generating program for '%s' rule", starting));
     }
 
     /**

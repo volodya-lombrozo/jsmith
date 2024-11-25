@@ -28,10 +28,15 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
-import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.Collections;
 import java.util.Optional;
 
+/**
+ * Variable Assignment Semantic.
+ * Identifies the variable name in the assignment expression and
+ * adds it to the context.
+ * @since 0.1
+ */
 public final class VariableAssignment implements Rule {
 
     /**
@@ -39,10 +44,21 @@ public final class VariableAssignment implements Rule {
      */
     public static final String KEY = "$jsmith-variable-assignment";
 
+    /**
+     * Original rule.
+     */
     private final Rule origin;
 
+    /**
+     * All declared variables.
+     */
     private final Variables variables;
 
+    /**
+     * Constructor.
+     * @param origin Original rule.
+     * @param variables All declared variables.
+     */
     public VariableAssignment(final Rule origin, final Variables variables) {
         this.origin = origin;
         this.variables = variables;
@@ -78,7 +94,7 @@ public final class VariableAssignment implements Rule {
 
     @Override
     public String name() {
-        return this.origin.name();
+        return String.format("%s(%s)", VariableAssignment.KEY, this.origin.name());
     }
 
     @Override

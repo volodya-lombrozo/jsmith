@@ -24,8 +24,8 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.semantic.VariableAssignment;
-import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +55,11 @@ final class JsmithComments {
         this.comments = Optional.ofNullable(comments).orElseGet(ArrayList::new);
     }
 
-    public boolean isInitialization() {
+    /**
+     * Check if a comment is an initialization.
+     * @return True if a comment is an initialization.
+     */
+    boolean isInitialization() {
         return this.rules().stream().anyMatch(VariableInitialization.KEY::equals);
     }
 

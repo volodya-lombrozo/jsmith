@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +38,10 @@ public final class Attributes {
      */
     private final boolean rule;
 
-    private final Map<String, String> additional;
+    /**
+     * Additional custom attributes.
+     */
+    private final Map<String, String> properties;
 
     /**
      * Default constructor.
@@ -47,12 +51,36 @@ public final class Attributes {
         this(rule, new HashMap<>(0));
     }
 
+    /**
+     * Constructor.
+     * @param rule Is the text output produced by a rule.
+     * @param additional Additional attributes.
+     */
     Attributes(
         final boolean rule,
         final Map<String, String> additional
     ) {
         this.rule = rule;
-        this.additional = additional;
+        this.properties = additional;
+    }
+
+    /**
+     * Additional custom attributes.
+     * @return Additional attributes.
+     */
+    public Map<String, String> custom() {
+        return Collections.unmodifiableMap(this.properties);
+    }
+
+    /**
+     * Add an attribute.
+     * @param other Other attributes.
+     * @return New attributes.
+     */
+    public Attributes add(final Attributes other) {
+        final Map<String, String> map = new HashMap<>(this.properties);
+        map.putAll(other.custom());
+        return new Attributes(this.rule || other.isRule(), map);
     }
 
     /**
@@ -61,15 +89,5 @@ public final class Attributes {
      */
     boolean isRule() {
         return this.rule;
-    }
-
-    public Map<String, String> additional() {
-        return this.additional;
-    }
-
-    public Attributes add(final Attributes other) {
-        final Map<String, String> map = new HashMap<>(this.additional);
-        map.putAll(other.additional());
-        return new Attributes(this.rule || other.isRule(), map);
     }
 }

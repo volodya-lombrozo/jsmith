@@ -24,10 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.random.Rand;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import lombok.ToString;
@@ -47,14 +44,12 @@ public final class Variables {
     /**
      * Declared variables.
      */
-    private final Set<String> declared;
-
-    private final Set<String> assigned;
+    private final Set<String> decl;
 
     /**
      * Assigned variables.
      */
-    private final Set<String> initialized;
+    private final Set<String> init;
 
     /**
      * Random generator.
@@ -85,9 +80,8 @@ public final class Variables {
         final Set<String> declared,
         final Rand rand
     ) {
-        this.initialized = assigned;
-        this.assigned = new HashSet<>(0);
-        this.declared = declared;
+        this.init = assigned;
+        this.decl = declared;
         this.rand = rand;
     }
 
@@ -96,38 +90,44 @@ public final class Variables {
      * @param name Variable name.
      */
     void declare(final String name) {
-        this.declared.add(name);
+        this.decl.add(name);
     }
 
     /**
      * Assign all declared variables.
+     * @param name Variable name.
      */
     void assign(final String name) {
-        this.initialized.add(name);
+        this.init.add(name);
     }
 
+    /**
+     * Get a random declared variable.
+     * @return Random declared variable.
+     */
     Optional<String> declared() {
-        final Optional<String> result;
-        if (this.declared.isEmpty()) {
-            result = Optional.empty();
-        } else {
-            final int range = this.rand.range(this.declared.size());
-            result = this.declared.stream()
-                .skip(range)
-                .findFirst();
-        }
-        return result;
+        return this.random(this.decl);
     }
 
+    /**
+     * Get a random initialized variable.
+     * @return Random initialized variable.
+     */
     Optional<String> initialized() {
+        return this.random(this.init);
+    }
+
+    /**
+     * Get a random element from the collection.
+     * @param collection Collection.
+     * @return Random element.
+     */
+    private Optional<String> random(final Set<String> collection) {
         final Optional<String> result;
-        if (this.initialized.isEmpty()) {
+        if (collection.isEmpty()) {
             result = Optional.empty();
         } else {
-            final int range = this.rand.range(this.initialized.size());
-            result = this.initialized.stream()
-                .skip(range)
-                .findFirst();
+            result = collection.stream().skip(this.rand.range(collection.size())).findFirst();
         }
         return result;
     }

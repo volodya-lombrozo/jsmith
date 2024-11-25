@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.jcabi.log.Logger;
+import java.util.Map;
 
 /**
  * Variable Assignment Semantic.
@@ -69,11 +70,12 @@ public final class VariableInitialization implements Rule {
     public Text generate(final Context context) {
         final Text output = this.origin.generate(context);
         if (!output.error()) {
-            final String s = output.attributes().additional().get("initialized-variable");
-            if (s == null) {
+            final Map<String, String> additional = output.attributes().custom();
+            final String key = "initialized-variable";
+            if (!additional.containsKey(key)) {
                 throw new IllegalStateException("Variable name is not provided");
             }
-            this.variables.assign(s);
+            this.variables.assign(additional.get(key));
             Logger.debug(this, "State after: %s", this.variables);
         }
         return output;
