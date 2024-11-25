@@ -21,26 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith;
+package com.github.lombrozo.jsmith.antlr.view;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-
-/**
- * Test cases for {@link RandomJavaClass}.
- * @since 0.1
- */
-final class RandomJavaClassTest {
-
-    @Test
-    void retrievesTheSourceCode() {
-        final String src = new RandomJavaClass().src();
-        System.out.println(src);
-        MatcherAssert.assertThat(
-            "We expect that random class will generate at least something",
-            src,
-            Matchers.not(Matchers.emptyString())
-        );
+final class Try {
+    abstract class Noticed {
     }
 }

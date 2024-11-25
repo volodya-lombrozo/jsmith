@@ -273,17 +273,26 @@ classDeclaration
     ;
 
 normalClassDeclaration
-    : (classModifier SPACE)* 'class' SPACE Identifier classBody
+    : (inheritanceModifier SPACE)? ('strictfp' SPACE)?  'class' SPACE Identifier classBody
     ;
 
-classModifier
+innerClassDeclaration
+    : (inheritanceModifier SPACE)? (staticModifier SPACE)? (accessModifier SPACE)? ('strictfp' SPACE)? 'class' SPACE Identifier classBody
+    ;
+
+inheritanceModifier
+    : 'final'
+    | 'abstract'
+    ;
+
+accessModifier
     : 'public'
     | 'protected'
     | 'private'
-    | 'abstract'
-    | 'static'
-    | 'final'
-    | 'strictfp'
+    ;
+
+staticModifier
+    : 'static'
     ;
 
 typeParameters
