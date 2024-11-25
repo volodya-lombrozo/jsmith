@@ -38,9 +38,6 @@ final class RandomJavaClassTest {
     void retrievesTheSourceCode() {
         final String src = new RandomJavaClass().src();
         System.out.println(src);
-        int a = 10;
-        a++;
-        long v = 0B1 + 3_____0_0__3L + 5__09 + 05_73__3L;
         MatcherAssert.assertThat(
             "We expect that random class will generate at least something",
             src,

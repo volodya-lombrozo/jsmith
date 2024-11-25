@@ -220,11 +220,6 @@ methodName
     : Identifier
     ;
 
-ambiguousName
-    : Identifier
-    | ambiguousName '.' Identifier
-    ;
-
 /*
  * Productions from §7 (Packages)
  */
@@ -276,23 +271,9 @@ normalClassDeclaration
     : (inheritanceModifier SPACE)? ('strictfp' SPACE)?  'class' SPACE Identifier classBody
     ;
 
-innerClassDeclaration
-    : (inheritanceModifier SPACE)? (staticModifier SPACE)? (accessModifier SPACE)? ('strictfp' SPACE)? 'class' SPACE Identifier classBody
-    ;
-
 inheritanceModifier
     : 'final'
     | 'abstract'
-    ;
-
-accessModifier
-    : 'public'
-    | 'protected'
-    | 'private'
-    ;
-
-staticModifier
-    : 'static'
     ;
 
 typeParameters
@@ -301,14 +282,6 @@ typeParameters
 
 typeParameterList
     : typeParameter (',' typeParameter)*
-    ;
-
-superinterfaces
-    : 'implements' interfaceTypeList
-    ;
-
-interfaceTypeList
-    : interfaceType (',' interfaceType)*
     ;
 
 classBody
@@ -327,7 +300,6 @@ classMemberDeclaration
 methodDeclaration
     : NL 'public' SPACE 'void' SPACE Identifier '(' ')' methodBody NL
     ;
-
 
 
 variableDeclaratorList
@@ -464,73 +436,6 @@ methodBody
 //    | ';'
     ;
 
-instanceInitializer
-    : block
-    ;
-
-staticInitializer
-    : 'static' block
-    ;
-
-/*
- * Productions from §9 (Interfaces)
- */
-
-interfaceDeclaration
-    : normalInterfaceDeclaration
-    ;
-
-normalInterfaceDeclaration
-    : interfaceModifier* 'interface' Identifier typeParameters? extendsInterfaces? interfaceBody
-    ;
-
-interfaceModifier
-    : 'public'
-    | 'protected'
-    | 'private'
-    | 'abstract'
-    | 'static'
-    | 'strictfp'
-    ;
-
-extendsInterfaces
-    : 'extends' interfaceTypeList
-    ;
-
-interfaceBody
-    : '{' interfaceMemberDeclaration* '}'
-    ;
-
-interfaceMemberDeclaration
-    : constantDeclaration
-    | interfaceMethodDeclaration
-    | classDeclaration
-    | interfaceDeclaration
-    | ';'
-    ;
-
-constantDeclaration
-    : constantModifier* unannType variableDeclaratorList ';'
-    ;
-
-constantModifier
-    : 'public'
-    | 'static'
-    | 'final'
-    ;
-
-interfaceMethodDeclaration
-    : interfaceMethodModifier* methodHeader methodBody
-    ;
-
-interfaceMethodModifier
-    : 'public'
-    | 'abstract'
-    | 'default'
-    | 'static'
-    | 'strictfp'
-    ;
-
 elementValue
     : conditionalExpression
     | elementValueArrayInitializer
@@ -635,12 +540,13 @@ expressionStatement
     ;
 
 vardef
-    : 'long' SPACE /* $jsmith-variable-declaration */ Identifier
+    : 'long' SPACE Identifier
     ;
 
 statementExpression
-    : /* $jsmith-variable-initialization */ assignment
-    | vardef
+    : vardef
+//  | assignment
+
 //    | preIncrementExpression
 //    | preDecrementExpression
 //    | postIncrementExpression
@@ -1049,7 +955,7 @@ assignmentExpression
     ;
 
 assignment
-    : /* $jsmith-variable-assignment */ leftHandSide '=' simplifiedExpression
+    : leftHandSide '=' simplifiedExpression
 //    expression
     ;
 
@@ -1077,7 +983,7 @@ assignmentOperator
 
 simplifiedExpression
     : simplifiedExpression SPACE '+' SPACE IntegerLiteral
-    | /* $jsmith-variable-usage */ Identifier
+    | Identifier
     | IntegerLiteral
     ;
 

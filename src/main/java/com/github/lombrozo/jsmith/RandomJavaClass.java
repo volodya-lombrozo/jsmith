@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith;
 
+import com.diffplug.spotless.maven.generic.Format;
+import com.diffplug.spotless.maven.java.GoogleJavaFormat;
+import com.diffplug.spotless.maven.java.Java;
+import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
 import org.cactoos.io.ResourceOf;
 
 /**
@@ -78,9 +84,16 @@ public final class RandomJavaClass {
      * @return Source code of the class.
      */
     public String src() {
-        return new RandomScript(
+        final Text text = new RandomScript(
             new ResourceOf(this.parser),
             new ResourceOf(this.lexer)
-        ).generate(this.rule).output();
+        ).generate(this.rule);
+        final String output = text.output();
+        try {
+            return new Formatter().formatSource(output);
+        } catch (final FormatterException exception) {
+            throw new IllegalStateException(
+                String.format("Failed to format source code %n%s%n", output), exception);
+        }
     }
 }
