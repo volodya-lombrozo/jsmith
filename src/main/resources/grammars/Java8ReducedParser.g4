@@ -218,21 +218,72 @@ importDeclaration
     | staticImportOnDemandDeclaration
     ;
 
+//singleTypeImportDeclaration
+//    : 'import' SPACE typeName '.' typeName ';' NL
+//    ;
 singleTypeImportDeclaration
-    : 'import' SPACE typeName '.' typeName ';' NL
+    : 'import' SPACE 'java.util.ArrayList' ';' NL
+    | 'import' SPACE 'java.util.HashMap' ';' NL
+    | 'import' SPACE 'java.util.Scanner' ';' NL
+    | 'import' SPACE 'java.util.Date' ';' NL
+    | 'import' SPACE 'java.util.Locale' ';' NL
+    | 'import' SPACE 'java.util.TimeZone' ';' NL
+    | 'import' SPACE 'java.util.LinkedList' ';' NL
+    | 'import' SPACE 'java.util.Set' ';' NL
+    | 'import' SPACE 'java.util.TreeMap' ';' NL
+    | 'import' SPACE 'java.util.concurrent.ConcurrentHashMap' ';' NL
     ;
 
+//typeImportOnDemandDeclaration
+//    : 'import' SPACE packageOrTypeName '.' '*' ';' NL
+//    ;
 typeImportOnDemandDeclaration
-    : 'import' SPACE packageOrTypeName '.' '*' ';' NL
+    : 'import' SPACE 'java.util.*' ';' NL
+    | 'import' SPACE 'java.io.*' ';' NL
+    | 'import' SPACE 'java.net.*' ';' NL
+    | 'import' SPACE 'java.text.*' ';' NL
+    | 'import' SPACE 'java.nio.*' ';' NL
+    | 'import' SPACE 'java.time.*' ';' NL
+    | 'import' SPACE 'java.lang.*' ';' NL
+    | 'import' SPACE 'java.math.*' ';' NL
+    | 'import' SPACE 'java.sql.*' ';' NL
+    | 'import' SPACE 'java.security.*' ';' NL
     ;
 
+//singleStaticImportDeclaration
+//    : 'import' SPACE 'static' SPACE typeName '.' Identifier ';' NL
+//    ;
 singleStaticImportDeclaration
-    : 'import' SPACE 'static' SPACE typeName '.' Identifier ';' NL
+    : 'import' SPACE 'static' SPACE 'java.lang.Math.PI' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.E' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.abs' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.pow' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.sqrt' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.log' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.ceil' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.floor' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.min' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.max' ';' NL
     ;
 
+
+//staticImportOnDemandDeclaration
+//    : 'import' SPACE 'static' SPACE typeName '.' '*' ';' NL
+//    ;
 staticImportOnDemandDeclaration
-    : 'import' SPACE 'static' SPACE typeName '.' '*' ';' NL
+    : 'import' SPACE 'static' SPACE 'java.lang.Math.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.util.Collections.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.util.stream.Collectors.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.util.concurrent.TimeUnit.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.util.function.Predicate.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.util.regex.Pattern.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Integer.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.nio.file.StandardWatchEventKinds.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.nio.file.Files.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.time.temporal.ChronoUnit.*' ';' NL
     ;
+
+
 
 typeDeclaration
     : classDeclaration

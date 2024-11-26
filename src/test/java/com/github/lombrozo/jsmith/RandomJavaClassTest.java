@@ -37,7 +37,9 @@ final class RandomJavaClassTest {
     @RepeatedTest(10)
     void retrievesTheSourceCode() {
         final String src = new RandomJavaClass().src();
-        System.out.println("<```\n" + src + "\n```>");
+        final String xml = "<```\n" + src + "\n```>";
+        System.out.println(xml);
+
         MatcherAssert.assertThat(
             "We expect that random class will generate at least something",
             src,

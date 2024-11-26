@@ -304,7 +304,8 @@ ELLIPSIS : '...';
 // Whitespace and comments
 //
 
-NL: '\r'? '\n' | '\r';
+// Original: '\r'? '\n' | '\r'
+NL: '\n' ;
 
 SPACE: ' ';
 

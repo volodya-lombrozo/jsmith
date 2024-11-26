@@ -78,7 +78,7 @@ public final class SeveralAttempts {
         final String author,
         final Supplier<? extends Text> original
     ) {
-        this.max = DEFAULT_ATTEMPTS;
+        this.max = attempts;
         this.author = author;
         this.generator = original;
     }
