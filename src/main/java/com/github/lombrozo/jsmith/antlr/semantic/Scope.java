@@ -24,65 +24,50 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.random.Rand;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import lombok.ToString;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Variables.
+ * Scope.
  * @since 0.1
- * @todo #92:30min Move Variable to Context.
- *  Currently we use this class in the context of the generation tree building.
- *  We should move this class to the Context class, as it is used only during generation.
- *  After moving the class, we should update all the references to it.
- *  Moreover, we have strange behavior with cache which is rather confusing.
  */
-@ToString
-public final class Variables {
+public final class Scope {
 
     /**
-     * Declared variables.
+     * All scope variables.
      */
-    private final Set<String> decl;
-
+    private final Variables variables;
     /**
-     * Assigned variables.
+     * Inner scopes.
      */
-    private final Set<String> init;
+    private final List<Scope> inner;
 
     /**
      * Random generator.
      */
-    @ToString.Exclude
     private final Rand rand;
 
     /**
-     * Default constructor.
-     * Initializes empty lists.
+     * Constructor.
+     * @param variables Variables.
+     * @param inner Inner scopes.
      */
-    public Variables() {
-        this(
-            new HashSet<>(0),
-            new HashSet<>(0),
-            new Rand()
-        );
+    public Scope(final Variables variables, final List<Scope> inner) {
+        this(variables, inner, new Rand());
     }
 
     /**
      * Constructor.
-     * @param assigned Assigned variables.
-     * @param declared Declared variables.
+     * @param variables Variables.
+     * @param inner Inner scopes.
      * @param rand Random generator.
      */
-    public Variables(
-        final Set<String> assigned,
-        final Set<String> declared,
-        final Rand rand
-    ) {
-        this.init = assigned;
-        this.decl = declared;
+    public Scope(final Variables variables, final List<Scope> inner, final Rand rand) {
+        this.variables = variables;
+        this.inner = inner;
         this.rand = rand;
     }
 
@@ -91,7 +76,7 @@ public final class Variables {
      * @param name Variable name.
      */
     void declare(final String name) {
-        this.decl.add(name);
+        this.variables.declare(name);
     }
 
     /**
@@ -99,7 +84,7 @@ public final class Variables {
      * @param name Variable name.
      */
     void assign(final String name) {
-        this.init.add(name);
+        this.variables.assign(name);
     }
 
     /**
@@ -107,7 +92,7 @@ public final class Variables {
      * @return Random declared variable.
      */
     Optional<String> declared() {
-        return this.random(this.decl);
+        return this.random(this.allDeclared());
     }
 
     /**
@@ -115,23 +100,29 @@ public final class Variables {
      * @return Random initialized variable.
      */
     Optional<String> initialized() {
-        return this.random(this.init);
+        return this.random(this.allAssigned());
     }
 
     /**
      * Get all declared variables.
      * @return All declared variables.
      */
-    List<String> allDeclared() {
-        return List.copyOf(this.decl);
+    Set<String> allDeclared() {
+        return Stream.concat(
+            this.variables.allDeclared().stream(),
+            this.inner.stream().map(Scope::allDeclared).flatMap(Set::stream)
+        ).collect(Collectors.toSet());
     }
 
     /**
      * Get all assigned variables.
      * @return All assigned variables.
      */
-    List<String> allAssigned() {
-        return List.copyOf(this.init);
+    Set<String> allAssigned() {
+        return Stream.concat(
+            this.variables.allAssigned().stream(),
+            this.inner.stream().map(Scope::allAssigned).flatMap(Set::stream)
+        ).collect(Collectors.toSet());
     }
 
     /**
