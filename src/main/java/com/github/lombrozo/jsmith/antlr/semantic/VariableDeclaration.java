@@ -68,7 +68,8 @@ public final class VariableDeclaration implements Rule {
     public Text generate(final Context context) {
         final Text text = this.origin.generate(context);
         if (!text.error()) {
-            this.variables.declare(text.output());
+//            this.variables.declare(text.output());
+            context.scope().declare(text.output());
         }
         return text;
     }

@@ -25,21 +25,18 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 
 /**
- * Variable Usage Semantic.
- * Adds variable usage to the context.
+ * Scope Rule.
  * @since 0.1
  */
-public final class VariableUsage implements Rule {
+public final class ScopeRule implements Rule {
 
     /**
-     * Key for the semantic.
+     * Key for this semantic.
      */
-    public static final String KEY = "$jsmith-variable-usage";
+    public static final String KEY = "$jsmith-scope";
 
     /**
      * Origin rule.
@@ -47,18 +44,11 @@ public final class VariableUsage implements Rule {
     private final Rule origin;
 
     /**
-     * All declared variables.
-     */
-    private final Variables variables;
-
-    /**
      * Constructor.
      * @param origin Origin rule.
-     * @param variables All declared variables.
      */
-    public VariableUsage(final Rule origin, final Variables variables) {
+    public ScopeRule(final Rule origin) {
         this.origin = origin;
-        this.variables = variables;
     }
 
     @Override
@@ -68,11 +58,7 @@ public final class VariableUsage implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        final Text text = this.origin.generate(context);
-//        return this.variables.initialized()
-        return context.scope().initialized()
-            .map(output -> (Text) new TextLeaf(text.writer(), output))
-            .orElse(new Error(text.writer(), "<variable not found>"));
+        return this.origin.generate(context.withScope(new Scope(context.scope())));
     }
 
     @Override
@@ -82,11 +68,11 @@ public final class VariableUsage implements Rule {
 
     @Override
     public String name() {
-        return VariableUsage.KEY;
+        return String.format("%s(%s)", ScopeRule.KEY, this.origin.name());
     }
 
     @Override
     public Rule copy() {
-        return new VariableUsage(this.origin.copy(), this.variables);
+        return new ScopeRule(this.origin.copy());
     }
 }

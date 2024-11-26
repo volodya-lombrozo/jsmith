@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.AntlrListener;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.Unparser;
+import com.github.lombrozo.jsmith.antlr.semantic.Scope;
 import com.github.lombrozo.jsmith.antlr.semantic.Variables;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.Arrays;
@@ -93,8 +94,9 @@ public final class RandomScript {
      */
     public Text generate(final String rule) {
         final Variables variables = new Variables();
+        final Scope scope = new Scope();
         this.grammars.forEach(grammar -> this.parse(grammar, variables));
-        return this.unparser.generate(rule, new Context());
+        return this.unparser.generate(rule, new Context(scope));
     }
 
     /**

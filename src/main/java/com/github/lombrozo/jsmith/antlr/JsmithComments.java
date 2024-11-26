@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr;
 
+import com.github.lombrozo.jsmith.antlr.semantic.ScopeRule;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableAssignment;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
@@ -87,11 +88,15 @@ final class JsmithComments {
         return this.rules().stream().anyMatch(VariableDeclaration.KEY::equals);
     }
 
+    boolean isScope(){
+        return this.rules().stream().anyMatch(ScopeRule.KEY::equals);
+    }
+
     /**
      * Get rules from comments.
      * @return List of rules.
      */
-    private List<String> rules() {
+    List<String> rules() {
         return this.comments.stream()
             .filter(Objects::nonNull)
             .map(Token::getText)

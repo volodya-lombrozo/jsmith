@@ -24,6 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.random.Rand;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,6 +37,8 @@ import java.util.stream.Stream;
  * @since 0.1
  */
 public final class Scope {
+
+    private final Scope parent;
 
     /**
      * All scope variables.
@@ -52,6 +56,17 @@ public final class Scope {
 
     /**
      * Constructor.
+     */
+    public Scope() {
+        this(new Variables(), new ArrayList<>(0));
+    }
+
+    public Scope(final Scope parent) {
+        this(parent, new Variables(), new ArrayList<>(0), new Rand());
+    }
+
+    /**
+     * Constructor.
      * @param variables Variables.
      * @param inner Inner scopes.
      */
@@ -64,8 +79,19 @@ public final class Scope {
      * @param variables Variables.
      * @param inner Inner scopes.
      * @param rand Random generator.
+     * @todo: remove null
      */
     public Scope(final Variables variables, final List<Scope> inner, final Rand rand) {
+        this(null, variables, inner, rand);
+    }
+
+    public Scope(
+        final Scope parent,
+        final Variables variables,
+        final List<Scope> inner,
+        final Rand rand
+    ) {
+        this.parent = parent;
         this.variables = variables;
         this.inner = inner;
         this.rand = rand;
@@ -85,6 +111,10 @@ public final class Scope {
      */
     void assign(final String name) {
         this.variables.assign(name);
+    }
+
+    void append(final Scope scope) {
+        this.inner.add(scope);
     }
 
     /**
@@ -107,22 +137,30 @@ public final class Scope {
      * Get all declared variables.
      * @return All declared variables.
      */
-    Set<String> allDeclared() {
-        return Stream.concat(
+    private Set<String> allDeclared() {
+        final Set<String> res = Stream.concat(
             this.variables.allDeclared().stream(),
-            this.inner.stream().map(Scope::allDeclared).flatMap(Set::stream)
+            Optional.ofNullable(this.parent)
+                .map(Scope::allDeclared)
+                .stream()
+                .flatMap(Collection::stream)
         ).collect(Collectors.toSet());
+        return res;
     }
 
     /**
      * Get all assigned variables.
      * @return All assigned variables.
      */
-    Set<String> allAssigned() {
-        return Stream.concat(
+    private Set<String> allAssigned() {
+        final Set<String> collect = Stream.concat(
             this.variables.allAssigned().stream(),
-            this.inner.stream().map(Scope::allAssigned).flatMap(Set::stream)
+            Optional.ofNullable(this.parent)
+                .map(Scope::allAssigned)
+                .stream()
+                .flatMap(Collection::stream)
         ).collect(Collectors.toSet());
+        return collect;
     }
 
     /**

@@ -75,7 +75,8 @@ public final class VariableInitialization implements Rule {
             if (!additional.containsKey(key)) {
                 throw new IllegalStateException("Variable name is not provided");
             }
-            this.variables.assign(additional.get(key));
+//            this.variables.assign(additional.get(key));
+            context.scope().assign(additional.get(key));
             Logger.debug(this, "State after: %s", this.variables);
         }
         return output;

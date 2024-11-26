@@ -77,11 +77,13 @@ import com.github.lombrozo.jsmith.antlr.rules.Safe;
 import com.github.lombrozo.jsmith.antlr.rules.SetElement;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
 import com.github.lombrozo.jsmith.antlr.rules.Traced;
+import com.github.lombrozo.jsmith.antlr.semantic.ScopeRule;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableAssignment;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
 import com.github.lombrozo.jsmith.antlr.semantic.Variables;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -191,7 +193,15 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     @Override
     public void enterParserRuleSpec(final ANTLRv4Parser.ParserRuleSpecContext ctx) {
         final String name = ctx.RULE_REF().getText();
-        final Rule rule = new ParserRuleSpec(name, this.current);
+        final JsmithComments comments = new JsmithComments(
+            this.tokens.getHiddenTokensToRight(ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT)
+        );
+        final Rule rule;
+        if (comments.isScope()) {
+            rule = new ScopeRule(new ParserRuleSpec(name, this.current));
+        } else {
+            rule = new ParserRuleSpec(name, this.current);
+        }
         this.unparser.with(name, rule);
         this.down(rule);
         super.enterParserRuleSpec(ctx);

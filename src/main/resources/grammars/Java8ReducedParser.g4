@@ -300,7 +300,7 @@ inheritanceModifier
     | 'abstract'
     ;
 
-classBody
+classBody /* $jsmith-scope */
     : '{' classBodyDeclaration+ '}' NL
     ;
 
@@ -321,7 +321,7 @@ methodBody
     : methodBlock
     ;
 
-methodBlock
+methodBlock /* $jsmith-scope */
     : '{' expressionStatement+ '}'
     ;
 

@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.semantic.Scope;
 import com.github.lombrozo.jsmith.random.ChoosingStrategy;
 import com.github.lombrozo.jsmith.random.ConvergenceStrategy;
 import java.util.ArrayList;
@@ -48,12 +49,22 @@ public final class Context {
      */
     private final List<Rule> visited;
 
+    private final Scope scope;
+
     /**
      * Constructor.
      * Uses the default {@link ConvergenceStrategy}.
      */
     public Context() {
         this(new ConvergenceStrategy());
+    }
+
+    /**
+     * Constructor.
+     * @param scope The scope.
+     */
+    public Context(final Scope scope) {
+        this(new ConvergenceStrategy(), new ArrayList<>(0), scope);
     }
 
     /**
@@ -78,8 +89,17 @@ public final class Context {
      * @param chain The path of the rules that were visited during the generation.
      */
     public Context(final ChoosingStrategy strat, final List<Rule> chain) {
+        this(strat, chain, null);
+    }
+
+    public Context(
+        final ChoosingStrategy strat,
+        final List<Rule> visited,
+        final Scope scope
+    ) {
         this.strat = strat;
-        this.visited = chain;
+        this.visited = visited;
+        this.scope = scope;
     }
 
     /**
@@ -95,8 +115,21 @@ public final class Context {
             Stream.concat(
                 this.visited.stream(),
                 Stream.of(rule)
-            ).collect(Collectors.toList())
+            ).collect(Collectors.toList()),
+            this.scope
         );
+    }
+
+    public Context withScope(final Scope scope) {
+        return new Context(this.strat, this.visited, scope);
+    }
+
+    /**
+     * Returns the current scope.
+     * @return The scope.
+     */
+    public Scope scope() {
+        return this.scope;
     }
 
     /**

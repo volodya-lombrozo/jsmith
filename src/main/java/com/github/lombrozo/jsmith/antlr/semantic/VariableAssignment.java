@@ -73,7 +73,8 @@ public final class VariableAssignment implements Rule {
     public Text generate(final Context context) {
         Text text = this.origin.generate(context);
         if (!text.error()) {
-            final Optional<String> declared = this.variables.declared();
+//            final Optional<String> declared = this.variables.declared();
+            final Optional<String> declared = context.scope().declared();
             if (declared.isPresent()) {
                 text = new TextLeaf(
                     this,
