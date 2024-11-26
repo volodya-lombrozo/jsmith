@@ -23,6 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import java.util.List;
+
 /**
  * LabeledAlt rule.
  * The ANTLR grammar definition:
@@ -36,16 +38,35 @@ package com.github.lombrozo.jsmith.antlr.rules;
 public final class LabeledAlt extends Unimplemented {
 
     /**
+     * Production from grammar.
+     */
+    private final String production;
+
+    /**
      * Constructor.
      * @param parent Parent rule.
      */
     public LabeledAlt(final Rule parent) {
+        this(parent, "");
+    }
+
+    /**
+     * Constructor.
+     * @param parent
+     * @param production
+     */
+    public LabeledAlt(final Rule parent, final String production) {
         super(parent);
+        this.production = production;
     }
 
     @Override
     public String name() {
-        return String.format("labeledAlt(id=%d)", System.identityHashCode(this));
+        return String.format(
+            "labeledAlt(id=%d, production='%s')",
+            System.identityHashCode(this),
+            this.production
+        );
     }
 
     @Override

@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.function.Supplier;
 
@@ -42,6 +43,8 @@ public final class SeveralAttempts {
      */
     private final int max;
 
+    private final String author;
+
     /**
      * Original output generator.
      */
@@ -52,7 +55,7 @@ public final class SeveralAttempts {
      * @param original Original output generator.
      */
     SeveralAttempts(final Supplier<? extends Text> original) {
-        this(SeveralAttempts.DEFAULT_ATTEMPTS, original);
+        this(SeveralAttempts.DEFAULT_ATTEMPTS, "", original);
     }
 
     /**
@@ -60,8 +63,13 @@ public final class SeveralAttempts {
      * @param attempts Maximum attempts to generate output.
      * @param original Original output generator.
      */
-    private SeveralAttempts(final int attempts, final Supplier<? extends Text> original) {
-        this.max = attempts;
+    SeveralAttempts(
+        final int attempts,
+        final String author,
+        final Supplier<? extends Text> original
+    ) {
+        this.max = DEFAULT_ATTEMPTS;
+        this.author = author;
         this.generator = original;
     }
 
@@ -71,18 +79,39 @@ public final class SeveralAttempts {
      */
     public Text choose() {
         Text text = this.generator.get();
-        int attempt = 0;
+        int attempt = 1;
         while (text.error()) {
-            text = this.generator.get();
-            attempt = attempt + 1;
             if (attempt > this.max) {
-                throw new IllegalStateException(
+//                if (this.max <= 1) {
+//                    return new Error(
+//                        text.writer(),
+//                        "We can't choose output because there is only one alternative to choose from and it is incorrect"
+//                    );
+//                }
+
+
+//                throw new IllegalStateException(
+//                    String.format(
+//                        "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
+//                        this.max,
+//                        this.author,
+//                        text.writer().name(),
+//                        text.output()
+//                    )
+//                );
+                return new Error(
+                    text.writer(),
                     String.format(
-                        "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed",
-                        this.max
+                        "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
+                        this.max,
+                        this.author,
+                        text.writer().name(),
+                        text.output()
                     )
                 );
             }
+            text = this.generator.get();
+            attempt = attempt + 1;
         }
         return text;
     }

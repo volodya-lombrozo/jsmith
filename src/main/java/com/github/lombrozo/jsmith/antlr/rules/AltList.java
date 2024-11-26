@@ -107,6 +107,8 @@ public final class AltList implements Rule {
             result = new TextNode(
                 this,
                 new SeveralAttempts(
+                    this.alternatives.size(),
+                    this.name(),
                     () -> context.strategy()
                         .choose(this, this.alternatives)
                         .generate(context)

@@ -555,7 +555,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
                 ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
             )
         ).isInitialization();
-        final LabeledAlt main = new LabeledAlt(this.current);
+        final LabeledAlt main = new LabeledAlt(this.current, ctx.getText());
         final Rule res;
         if (init) {
             res = new VariableInitialization(main, this.variables);
