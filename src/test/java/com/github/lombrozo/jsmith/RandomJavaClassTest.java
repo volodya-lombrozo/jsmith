@@ -23,10 +23,23 @@
  */
 package com.github.lombrozo.jsmith;
 
+import com.jcabi.log.Logger;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Test cases for {@link RandomJavaClass}.
@@ -34,16 +47,57 @@ import org.junit.jupiter.api.Test;
  */
 final class RandomJavaClassTest {
 
-    @RepeatedTest(10)
+    @Test
     void retrievesTheSourceCode() {
-        final String src = new RandomJavaClass().src();
-        final String xml = "<```\n" + src + "\n```>";
-        System.out.println(xml);
-
         MatcherAssert.assertThat(
             "We expect that random class will generate at least something",
-            src,
+            new RandomJavaClass().src(),
             Matchers.not(Matchers.emptyString())
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("programs")
+    void createsCompilableJavaSourceCode(final String src, @TempDir Path temp) {
+        Logger.info(this, "Generated source code: %n%s%n", src);
+        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        final int run = compiler.run(
+            new ByteArrayInputStream(src.getBytes(StandardCharsets.UTF_8)),
+            new BufferedOutputStream(System.out),
+            new BufferedOutputStream(System.err),
+            RandomJavaClassTest.saveJava(src, temp)
+        );
+        MatcherAssert.assertThat(
+            "The generated source code should be compilable",
+            run,
+            Matchers.equalTo(0)
+        );
+    }
+
+    /**
+     * Save Java source code to the file.
+     * @param src Java source code.
+     * @param temp Temporary directory.
+     * @return Path to the saved file.
+     */
+    static String saveJava(final String src, final Path temp) {
+        try {
+            final Path java = temp.resolve("RandomJavaClass.java");
+            Files.write(java, src.getBytes(StandardCharsets.UTF_8));
+            return java.toString();
+        } catch (final IOException ex) {
+            throw new IllegalStateException("Can't save Java source code", ex);
+        }
+    }
+
+    /**
+     * Generate random programs.
+     * @return Stream of random programs.
+     */
+    static Stream<Arguments> programs() {
+        return Stream.generate(RandomJavaClass::new)
+            .map(RandomJavaClass::src)
+            .limit(10)
+            .map(Arguments::of);
     }
 }

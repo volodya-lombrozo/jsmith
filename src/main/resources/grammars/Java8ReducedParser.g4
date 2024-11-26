@@ -283,8 +283,6 @@ staticImportOnDemandDeclaration
     | 'import' SPACE 'static' SPACE 'java.time.temporal.ChronoUnit.*' ';' NL
     ;
 
-
-
 typeDeclaration
     : classDeclaration
     ;
