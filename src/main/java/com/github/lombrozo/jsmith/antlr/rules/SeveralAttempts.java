@@ -30,6 +30,16 @@ import java.util.function.Supplier;
 /**
  * Attempt to generate output.
  * @since 0.1
+ * @todo #92:90min Inefficient implementation of the SeveralAttempts class.
+ *  We might spend a lot of time trying to generate output. We need to
+ *  implement a more efficient way to generate output.
+ *  For example, if the following production is incorrect:
+ *  {@code
+ *  assignment
+ *     : /* $jsmith-variable-assignment / leftHandSide'='simplifiedExpression
+ *  ;
+ *  }
+ *  It will try all the 10 times.
  */
 public final class SeveralAttempts {
 
@@ -82,23 +92,6 @@ public final class SeveralAttempts {
         int attempt = 1;
         while (text.error()) {
             if (attempt > this.max) {
-//                if (this.max <= 1) {
-//                    return new Error(
-//                        text.writer(),
-//                        "We can't choose output because there is only one alternative to choose from and it is incorrect"
-//                    );
-//                }
-
-
-//                throw new IllegalStateException(
-//                    String.format(
-//                        "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
-//                        this.max,
-//                        this.author,
-//                        text.writer().name(),
-//                        text.output()
-//                    )
-//                );
                 return new Error(
                     text.writer(),
                     String.format(
