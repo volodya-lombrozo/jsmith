@@ -40,7 +40,7 @@ import java.util.function.Supplier;
  *     : /* $jsmith-variable-assignment / leftHandSide'='simplifiedExpression
  *  ;
  *  }
- *  It will try all the 10 times.
+ *  It will try all the 10 times. And we need tests for this class!
  */
 public final class SeveralAttempts {
 
@@ -63,6 +63,18 @@ public final class SeveralAttempts {
 
     /**
      * Constructor.
+     * @param author Author of the rule.
+     * @param generator Original output generator.
+     */
+    public SeveralAttempts(
+        final String author,
+        final Supplier<? extends Text> generator
+    ) {
+        this(SeveralAttempts.DEFAULT_ATTEMPTS, author, generator);
+    }
+
+    /**
+     * Constructor.
      * @param attempts Maximum attempts to generate output.
      * @param original Original output generator.
      */
@@ -79,6 +91,10 @@ public final class SeveralAttempts {
     /**
      * Choose output.
      * @return Output.
+     * @todo #92:30min The loop in SeveralAttempts.choose() method is wrong.
+     *  Take a look on the last generation attempt. It might be successful,
+     *  but we don't return it. We need to fix this issue.
+     *  Don't forget to add tests for this case.
      */
     public Text choose() {
         Text text = this.generator.get();

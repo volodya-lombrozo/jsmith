@@ -31,27 +31,33 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.ToString;
 
 /**
  * Scope.
  * @since 0.1
  */
+@ToString
 public final class Scope {
 
+    @ToString.Exclude
     private final Scope parent;
 
     /**
      * All scope variables.
      */
     private final Variables variables;
+
     /**
      * Inner scopes.
      */
+    @ToString.Exclude
     private final List<Scope> inner;
 
     /**
      * Random generator.
      */
+    @ToString.Exclude
     private final Rand rand;
 
     /**
@@ -95,6 +101,11 @@ public final class Scope {
         this.variables = variables;
         this.inner = inner;
         this.rand = rand;
+    }
+
+    @ToString.Include
+    public String identifier() {
+        return String.valueOf(System.identityHashCode(this));
     }
 
     /**

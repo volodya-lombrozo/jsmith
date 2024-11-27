@@ -78,12 +78,16 @@ public final class UniqueRule implements Rule {
     public Text generate(final Context context) {
         final Text text = this.original.generate(context);
         if (this.all.contains(text.output())) {
+            final Text second = this.generate(context);
             Logger.info(
                 this,
-                "Collision happened: identifier '%s' was already generated, regenerate it.",
-                text.output()
+                String.format(
+                    "Collision happened: identifier '%s' was already generated, regenerate it to the '%s'.",
+                    text.output(),
+                    second.output()
+                )
             );
-            return this.generate(context);
+            return second;
         } else {
             this.all.add(text.output());
         }

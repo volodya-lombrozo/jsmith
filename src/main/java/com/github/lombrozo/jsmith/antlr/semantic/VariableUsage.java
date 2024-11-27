@@ -70,7 +70,7 @@ public final class VariableUsage implements Rule {
                     Logger.warn(
                         this,
                         String.format(
-                            "We can find any initialized variable in the scope '%s'",
+                            "We cannot find any initialized variable in the scope '%s'",
                             context.scope()
                         )
                     );

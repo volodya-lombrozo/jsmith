@@ -87,7 +87,6 @@ public final class LexerAltList implements Rule {
         return new TextNode(
             this,
             new SeveralAttempts(
-                this.children.size(),
                 this.name(),
                 () -> context.strategy().choose(this, this.children).generate(context)
             ).choose()

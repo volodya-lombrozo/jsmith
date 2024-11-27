@@ -163,8 +163,8 @@ wildcardBounds
     ;
 
 packageName
-    : Identifier
-    | packageName '.' Identifier
+    : /* $jsmith-unique */ Identifier
+    | packageName '.' /* $jsmith-unique */ Identifier
     ;
 
 expressionName
@@ -260,7 +260,7 @@ classDeclaration
     ;
 
 normalClassDeclaration
-    : (inheritanceModifier SPACE)? ('strictfp' SPACE)?  'class' SPACE Identifier classBody
+    : (inheritanceModifier SPACE)? ('strictfp' SPACE)?  'class' SPACE /* $jsmith-unique */ Identifier classBody
     ;
 
 inheritanceModifier
