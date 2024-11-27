@@ -45,18 +45,11 @@ public final class VariableDeclaration implements Rule {
     private final Rule origin;
 
     /**
-     * All declared variables.
-     */
-    private final Variables variables;
-
-    /**
      * Constructor.
      * @param origin Origin rule.
-     * @param variables All declared variables.
      */
-    public VariableDeclaration(final Rule origin, final Variables variables) {
+    public VariableDeclaration(final Rule origin) {
         this.origin = origin;
-        this.variables = variables;
     }
 
     @Override
@@ -68,7 +61,6 @@ public final class VariableDeclaration implements Rule {
     public Text generate(final Context context) {
         final Text text = this.origin.generate(context);
         if (!text.error()) {
-//            this.variables.declare(text.output());
             context.scope().declare(text.output());
         }
         return text;
@@ -86,6 +78,6 @@ public final class VariableDeclaration implements Rule {
 
     @Override
     public Rule copy() {
-        return new VariableDeclaration(this.origin.copy(), this.variables);
+        return new VariableDeclaration(this.origin.copy());
     }
 }

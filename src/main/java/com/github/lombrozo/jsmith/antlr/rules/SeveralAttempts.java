@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.jcabi.log.Logger;
 import java.util.function.Supplier;
 
 /**
@@ -62,14 +63,6 @@ public final class SeveralAttempts {
 
     /**
      * Constructor.
-     * @param original Original output generator.
-     */
-    SeveralAttempts(final Supplier<? extends Text> original) {
-        this(SeveralAttempts.DEFAULT_ATTEMPTS, "", original);
-    }
-
-    /**
-     * Constructor.
      * @param attempts Maximum attempts to generate output.
      * @param original Original output generator.
      */
@@ -92,16 +85,15 @@ public final class SeveralAttempts {
         int attempt = 1;
         while (text.error()) {
             if (attempt > this.max) {
-                return new Error(
-                    text.writer(),
-                    String.format(
-                        "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
-                        this.max,
-                        this.author,
-                        text.writer().name(),
-                        text.output()
-                    )
+                final String msg = String.format(
+                    "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
+                    this.max,
+                    this.author,
+                    text.writer().name(),
+                    text.output()
                 );
+                Logger.warn(this, msg);
+                return new Error(text.writer(), msg);
             }
             text = this.generator.get();
             attempt = attempt + 1;

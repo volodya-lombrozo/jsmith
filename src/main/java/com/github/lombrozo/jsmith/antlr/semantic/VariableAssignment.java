@@ -28,6 +28,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import com.jcabi.log.Logger;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -50,18 +51,11 @@ public final class VariableAssignment implements Rule {
     private final Rule origin;
 
     /**
-     * All declared variables.
-     */
-    private final Variables variables;
-
-    /**
      * Constructor.
      * @param origin Original rule.
-     * @param variables All declared variables.
      */
-    public VariableAssignment(final Rule origin, final Variables variables) {
+    public VariableAssignment(final Rule origin) {
         this.origin = origin;
-        this.variables = variables;
     }
 
     @Override
@@ -73,8 +67,8 @@ public final class VariableAssignment implements Rule {
     public Text generate(final Context context) {
         Text text = this.origin.generate(context);
         if (!text.error()) {
-//            final Optional<String> declared = this.variables.declared();
-            final Optional<String> declared = context.scope().declared();
+            final Scope scope = context.scope();
+            final Optional<String> declared = scope.declared();
             if (declared.isPresent()) {
                 text = new TextLeaf(
                     this,
@@ -82,6 +76,10 @@ public final class VariableAssignment implements Rule {
                     Collections.singletonMap("initialized-variable", declared.get())
                 );
             } else {
+                Logger.warn(
+                    this,
+                    String.format("We can't find any declared variable in the scope '%s'", scope)
+                );
                 text = new Error(this, "<variable is not declared yet>");
             }
         }
@@ -100,6 +98,6 @@ public final class VariableAssignment implements Rule {
 
     @Override
     public Rule copy() {
-        return new VariableAssignment(this.origin.copy(), this.variables);
+        return new VariableAssignment(this.origin.copy());
     }
 }

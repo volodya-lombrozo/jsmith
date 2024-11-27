@@ -93,9 +93,8 @@ public final class RandomScript {
      * @return Random script text.
      */
     public Text generate(final String rule) {
-        final Variables variables = new Variables();
         final Scope scope = new Scope();
-        this.grammars.forEach(grammar -> this.parse(grammar, variables));
+        this.grammars.forEach(this::parse);
         return this.unparser.generate(rule, new Context(scope));
     }
 
@@ -113,9 +112,8 @@ public final class RandomScript {
     /**
      * Parse ANTLR grammar.
      * @param grammar ANTLR grammar.
-     * @param variables Variables.
      */
-    private void parse(final String grammar, final Variables variables) {
+    private void parse(final String grammar) {
         final ANTLRv4Lexer lexer = new ANTLRv4Lexer(CharStreams.fromString(grammar));
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         final ANTLRv4Parser parser = new ANTLRv4Parser(tokens);
@@ -124,8 +122,7 @@ public final class RandomScript {
         final AntlrListener listener = new AntlrListener(
             tokens,
             this.unparser,
-            this.unlexer,
-            variables
+            this.unlexer
         );
         walker.walk(listener, spec);
     }

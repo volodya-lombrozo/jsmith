@@ -84,7 +84,6 @@ import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
 import com.github.lombrozo.jsmith.antlr.semantic.Variables;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -125,9 +124,9 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     private final BufferedTokenStream tokens;
 
     /**
-     * All declared variables.
+     * All declared identifiers.
      */
-    private final Variables variables;
+    private Set<String> identifiers = new JavaKeywords().toSet();
 
     /**
      * Current rule.
@@ -139,16 +138,14 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
      * @param tokens Token stream.
      * @param unparser Unparser.
      * @param unlexer Unlexer.
-     * @param variables All declared variables.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public AntlrListener(
         final BufferedTokenStream tokens,
         final Unparser unparser,
-        final Unlexer unlexer,
-        final Variables variables
+        final Unlexer unlexer
     ) {
-        this(tokens, unparser, unlexer, variables, new Root());
+        this(tokens, unparser, unlexer, new Root());
     }
 
     /**
@@ -156,7 +153,6 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
      * @param tokens Token stream.
      * @param unparser Unparser.
      * @param unlexer Unlexer.
-     * @param variables All declared variables.
      * @param root Current rule.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
@@ -164,13 +160,11 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         final BufferedTokenStream tokens,
         final Unparser unparser,
         final Unlexer unlexer,
-        final Variables variables,
         final Rule root
     ) {
         this.tokens = tokens;
         this.unparser = unparser;
         this.unlexer = unlexer;
-        this.variables = variables;
         this.current = new Traced(root);
     }
 
@@ -260,13 +254,13 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
             this.tokens.getHiddenTokensToLeft(ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT)
         );
         if (comments.isUsage()) {
-            res = new VariableUsage(res, this.variables);
+            res = new VariableUsage(res);
         }
         if (comments.isDeclaration()) {
-            res = new VariableDeclaration(res, this.variables);
+            res = new VariableDeclaration(res);
         }
         if (comments.isAssignment()) {
-            res = new VariableAssignment(res, this.variables);
+            res = new VariableAssignment(res);
         }
         this.down(res);
         super.enterElement(ctx);
@@ -301,8 +295,6 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         this.up();
         super.exitRuleref(ctx);
     }
-
-    private Set<String> identifiers = new JavaKeywords().toSet();
 
     @Override
     public void enterTerminalDef(final ANTLRv4Parser.TerminalDefContext ctx) {
@@ -581,7 +573,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         final LabeledAlt main = new LabeledAlt(this.current, ctx.getText());
         final Rule res;
         if (init) {
-            res = new VariableInitialization(main, this.variables);
+            res = new VariableInitialization(main);
         } else {
             res = main;
         }

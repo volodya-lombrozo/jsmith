@@ -28,6 +28,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import com.jcabi.log.Logger;
 
 /**
  * Variable Usage Semantic.
@@ -47,18 +48,11 @@ public final class VariableUsage implements Rule {
     private final Rule origin;
 
     /**
-     * All declared variables.
-     */
-    private final Variables variables;
-
-    /**
      * Constructor.
      * @param origin Origin rule.
-     * @param variables All declared variables.
      */
-    public VariableUsage(final Rule origin, final Variables variables) {
+    public VariableUsage(final Rule origin) {
         this.origin = origin;
-        this.variables = variables;
     }
 
     @Override
@@ -69,10 +63,20 @@ public final class VariableUsage implements Rule {
     @Override
     public Text generate(final Context context) {
         final Text text = this.origin.generate(context);
-//        return this.variables.initialized()
         return context.scope().initialized()
             .map(output -> (Text) new TextLeaf(text.writer(), output))
-            .orElse(new Error(text.writer(), "<variable not found>"));
+            .orElseGet(
+                () -> {
+                    Logger.warn(
+                        this,
+                        String.format(
+                            "We can find any initialized variable in the scope '%s'",
+                            context.scope()
+                        )
+                    );
+                    return new Error(text.writer(), "<variable not found>");
+                }
+            );
     }
 
     @Override
@@ -87,6 +91,6 @@ public final class VariableUsage implements Rule {
 
     @Override
     public Rule copy() {
-        return new VariableUsage(this.origin.copy(), this.variables);
+        return new VariableUsage(this.origin.copy());
     }
 }

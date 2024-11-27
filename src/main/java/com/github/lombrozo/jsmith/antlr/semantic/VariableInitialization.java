@@ -26,7 +26,6 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.jcabi.log.Logger;
 import java.util.Map;
 
 /**
@@ -47,18 +46,11 @@ public final class VariableInitialization implements Rule {
     private final Rule origin;
 
     /**
-     * All declared variables.
-     */
-    private final Variables variables;
-
-    /**
      * Constructor.
      * @param origin Origin rule.
-     * @param variables All declared variables.
      */
-    public VariableInitialization(final Rule origin, final Variables variables) {
+    public VariableInitialization(final Rule origin) {
         this.origin = origin;
-        this.variables = variables;
     }
 
     @Override
@@ -75,9 +67,7 @@ public final class VariableInitialization implements Rule {
             if (!additional.containsKey(key)) {
                 throw new IllegalStateException("Variable name is not provided");
             }
-//            this.variables.assign(additional.get(key));
             context.scope().assign(additional.get(key));
-            Logger.debug(this, "State after: %s", this.variables);
         }
         return output;
     }
@@ -94,6 +84,6 @@ public final class VariableInitialization implements Rule {
 
     @Override
     public Rule copy() {
-        return new VariableInitialization(this.origin.copy(), this.variables);
+        return new VariableInitialization(this.origin.copy());
     }
 }
