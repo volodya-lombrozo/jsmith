@@ -88,8 +88,7 @@ public final class RandomJavaClass {
         ).generate(this.rule);
         final String output = text.output();
         try {
-            return new Formatter(JavaFormatterOptions.builder()
-                .build()).formatSource(output);
+            return new Formatter(JavaFormatterOptions.builder().build()).formatSource(output);
         } catch (final FormatterException exception) {
             throw new IllegalStateException(
                 String.format("Failed to format source code %n%s%n", output), exception);

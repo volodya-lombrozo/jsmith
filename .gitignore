@@ -27,3 +27,5 @@ target/
 gen/
 antlr-generated/
 *.tokens
+
+src/main/antlr4/com/github/lombrozo/jsmith/tmp

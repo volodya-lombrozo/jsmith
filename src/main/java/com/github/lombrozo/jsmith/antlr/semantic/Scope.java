@@ -133,6 +133,13 @@ public final class Scope {
         return this.random(this.allAssigned());
     }
 
+    public Set<String> allIdentifiers() {
+        return Stream.concat(
+            this.allAssigned().stream(),
+            this.allDeclared().stream()
+        ).collect(Collectors.toSet());
+    }
+
     /**
      * Get all declared variables.
      * @return All declared variables.

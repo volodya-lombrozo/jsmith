@@ -65,23 +65,6 @@ options {
     tokenVocab = Java8ReducedLexer;
 }
 
-/*
- * Productions from §3 (Lexical Structure)
- */
-
-literal
-    : IntegerLiteral
-    | FloatingPointLiteral
-    | BooleanLiteral
-    | CharacterLiteral
-    | StringLiteral
-    | NullLiteral
-    ;
-
-/*
- * Productions from §4 (Types, Values, and Variables)
- */
-
 primitiveType
     : numericType
     | 'boolean'
@@ -179,28 +162,13 @@ wildcardBounds
     | 'super' referenceType
     ;
 
-/*
- * Productions from §6 (Names)
- */
-
 packageName
     : Identifier
     | packageName '.' Identifier
     ;
 
-typeName
-    : Identifier
-    | packageOrTypeName '.' Identifier
-    ;
-
-packageOrTypeName
-    : Identifier
-    | packageOrTypeName '.' Identifier
-    ;
-
 expressionName
     : Identifier
-//    | ambiguousName '.' Identifier
     ;
 
 compilationUnit
@@ -250,7 +218,7 @@ typeImportOnDemandDeclaration
     | 'import' SPACE 'java.security.*' ';' NL
     ;
 
-//singleStaticImportDeclaration
+//* singleStaticImportDeclaration
 //    : 'import' SPACE 'static' SPACE typeName '.' Identifier ';' NL
 //    ;
 singleStaticImportDeclaration
@@ -314,7 +282,7 @@ classMemberDeclaration
     ;
 
 methodDeclaration
-    : NL 'public' SPACE 'void' SPACE Identifier '(' ')' methodBody NL
+    : NL 'public' SPACE 'void' SPACE /* $jsmith-unique */ Identifier '(' ')' methodBody NL
     ;
 
 methodBody
@@ -330,7 +298,7 @@ expressionStatement
     ;
 
 vardef
-    : 'long' SPACE /* $jsmith-variable-declaration */ Identifier
+    : 'long' SPACE /* $jsmith-variable-declaration */ /* $jsmith-unique */ Identifier
     ;
 
 statementExpression
