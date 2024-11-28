@@ -120,7 +120,7 @@ public final class Scope {
      * Assign all declared variables.
      * @param name Variable name.
      */
-    void assign(final String name) {
+    void init(final String name) {
         this.variables.assign(name);
     }
 

@@ -37,7 +37,7 @@ public final class VariableDeclaration implements Rule {
     /**
      * Comment to activate this rule.
      */
-    public static final String COMMENT = "$jsmith-variable-declaration";
+    public static final String COMMENT = "$jsmith-var-decl";
 
     /**
      * Origin rule.

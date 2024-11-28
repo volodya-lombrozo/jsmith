@@ -3,7 +3,7 @@ grammar Arithmetic;
 prog: stat+ ;
 
 stat: expr NEWLINE
-    | /* $jsmith-variable-initialization */ /* $jsmith-variable-assignment */ /* $jsmith-variable-declaration */ ID '=' expr NEWLINE
+    | /* $jsmith-var-init */ /* $jsmith-variable-assignment */ /* $jsmith-var-decl */ ID '=' expr NEWLINE
     ;
 
 expr: expr ('*' | '/' ) expr

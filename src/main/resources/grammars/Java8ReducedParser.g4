@@ -298,12 +298,12 @@ expressionStatement
     ;
 
 vardef
-    : 'long' SPACE /* $jsmith-variable-declaration */ /* $jsmith-unique */ Identifier
+    : 'long' SPACE /* $jsmith-var-decl */ /* $jsmith-unique */ Identifier
     ;
 
 statementExpression
     : vardef
-    | /* $jsmith-variable-initialization */ assignment
+    | /* $jsmith-var-init */ assignment
     ;
 
 assignment

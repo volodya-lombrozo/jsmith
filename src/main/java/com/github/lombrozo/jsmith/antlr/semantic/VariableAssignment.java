@@ -67,8 +67,7 @@ public final class VariableAssignment implements Rule {
     public Text generate(final Context context) {
         Text text = this.origin.generate(context);
         if (!text.error()) {
-            final Scope scope = context.current();
-            final Optional<String> declared = scope.declared();
+            final Optional<String> declared = context.current().declared();
             if (declared.isPresent()) {
                 text = new TextLeaf(
                     this,
@@ -78,7 +77,10 @@ public final class VariableAssignment implements Rule {
             } else {
                 Logger.warn(
                     this,
-                    String.format("We can't find any declared variable in the scope '%s'", scope)
+                    String.format(
+                        "We can't find any declared variable in the scope '%s'",
+                        context.current()
+                    )
                 );
                 text = new Error(this, "<variable is not declared yet>");
             }

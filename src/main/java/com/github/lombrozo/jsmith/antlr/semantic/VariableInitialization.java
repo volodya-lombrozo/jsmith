@@ -38,7 +38,7 @@ public final class VariableInitialization implements Rule {
     /**
      * Comment key to activate this rule.
      */
-    public static final String COMMENT = "$jsmith-variable-initialization";
+    public static final String COMMENT = "$jsmith-var-init";
 
     /**
      * Origin rule.
@@ -67,7 +67,7 @@ public final class VariableInitialization implements Rule {
             if (!additional.containsKey(key)) {
                 throw new IllegalStateException("Variable name is not provided");
             }
-            context.current().assign(additional.get(key));
+            context.current().init(additional.get(key));
         }
         return output;
     }

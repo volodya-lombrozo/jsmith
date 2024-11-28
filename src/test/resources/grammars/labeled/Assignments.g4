@@ -2,8 +2,8 @@ grammar Assignments;
 
 prog: statement+;
 
-statement: /* $jsmith-variable-declaration */ ID ';' NEWLINE
-         | /* $jsmith-variable-initialization */ /* $jsmith-variable-assignment */ ID ' = ' expr ';' NEWLINE
+statement: /* $jsmith-var-decl */ ID ';' NEWLINE
+         | /* $jsmith-var-init */ /* $jsmith-variable-assignment */ ID ' = ' expr ';' NEWLINE
          ;
 
 expr: expr (' + ' | ' - ') expr
