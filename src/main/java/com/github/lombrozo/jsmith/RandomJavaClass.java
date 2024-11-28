@@ -23,7 +23,6 @@
  */
 package com.github.lombrozo.jsmith;
 
-import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
 import com.google.googlejavaformat.java.JavaFormatterOptions;
@@ -82,16 +81,16 @@ public final class RandomJavaClass {
      * @return Source code of the class.
      */
     public String src() {
-        final Text text = new RandomScript(
+        final String output = new RandomScript(
             new ResourceOf(this.parser),
             new ResourceOf(this.lexer)
-        ).generate(this.rule);
-        final String output = text.output();
+        ).generate(this.rule).output();
         try {
             return new Formatter(JavaFormatterOptions.builder().build()).formatSource(output);
         } catch (final FormatterException exception) {
             throw new IllegalStateException(
-                String.format("Failed to format source code %n%s%n", output), exception);
+                String.format("Failed to format source code %n%s%n", output), exception
+            );
         }
     }
 }

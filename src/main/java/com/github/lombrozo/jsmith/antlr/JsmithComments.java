@@ -24,11 +24,11 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.semantic.ScopeRule;
+import com.github.lombrozo.jsmith.antlr.semantic.UniqueRule;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableAssignment;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
-import com.github.lombrozo.jsmith.antlr.semantic.UniqueRule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -89,10 +89,18 @@ final class JsmithComments {
         return this.rules().stream().anyMatch(VariableDeclaration.KEY::equals);
     }
 
+    /**
+     * Check if a comment is a scope.
+     * @return True if a comment is a scope.
+     */
     boolean isScope() {
         return this.rules().stream().anyMatch(ScopeRule.KEY::equals);
     }
 
+    /**
+     * Check if a comment is unique.
+     * @return True if a comment is unique.
+     */
     boolean isUnique() {
         return this.rules().stream().anyMatch(UniqueRule.KEY::equals);
     }

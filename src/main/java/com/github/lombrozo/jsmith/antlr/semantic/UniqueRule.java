@@ -54,14 +54,6 @@ public final class UniqueRule implements Rule {
     /**
      * Constructor.
      * @param original Origin rule.
-     */
-    public UniqueRule(final Rule original) {
-        this(original, new HashSet<>(0));
-    }
-
-    /**
-     * Constructor.
-     * @param original Origin rule.
      * @param all All identifiers.
      */
     public UniqueRule(final Rule original, final Set<String> all) {
@@ -77,21 +69,23 @@ public final class UniqueRule implements Rule {
     @Override
     public Text generate(final Context context) {
         final Text text = this.original.generate(context);
+        final Text result;
         if (this.all.contains(text.output())) {
-            final Text second = this.generate(context);
+            final Text reattempt = this.generate(context);
             Logger.info(
                 this,
                 String.format(
                     "Collision happened: identifier '%s' was already generated, regenerate it to the '%s'.",
                     text.output(),
-                    second.output()
+                    reattempt.output()
                 )
             );
-            return second;
+            result = reattempt;
         } else {
             this.all.add(text.output());
+            result = text;
         }
-        return text;
+        return result;
     }
 
     @Override
@@ -106,6 +100,6 @@ public final class UniqueRule implements Rule {
 
     @Override
     public Rule copy() {
-        return new UniqueRule(this.original.copy());
+        return new UniqueRule(this.original.copy(), new HashSet<>(0));
     }
 }

@@ -49,6 +49,9 @@ public final class Context {
      */
     private final List<Rule> visited;
 
+    /**
+     * Current scope.
+     */
     private final Scope scope;
 
     /**
@@ -92,6 +95,12 @@ public final class Context {
         this(strat, chain, null);
     }
 
+    /**
+     * Constructor.
+     * @param strat The strategy used in the generation.
+     * @param visited The path of the rules that were visited during the generation.
+     * @param scope The scope.
+     */
     public Context(
         final ChoosingStrategy strat,
         final List<Rule> visited,
@@ -120,15 +129,20 @@ public final class Context {
         );
     }
 
-    public Context withScope(final Scope scope) {
-        return new Context(this.strat, this.visited, scope);
+    /**
+     * Returns the next context with another scope.
+     * @param another The scope.
+     * @return The next context with the scope.
+     */
+    public Context withScope(final Scope another) {
+        return new Context(this.strat, this.visited, another);
     }
 
     /**
      * Returns the current scope.
      * @return The scope.
      */
-    public Scope scope() {
+    public Scope current() {
         return this.scope;
     }
 

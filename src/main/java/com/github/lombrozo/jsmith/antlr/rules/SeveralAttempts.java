@@ -54,6 +54,9 @@ public final class SeveralAttempts {
      */
     private final int max;
 
+    /**
+     * The author that makes attempts.
+     */
     private final String author;
 
     /**
@@ -76,6 +79,7 @@ public final class SeveralAttempts {
     /**
      * Constructor.
      * @param attempts Maximum attempts to generate output.
+     * @param author Author of the rule.
      * @param original Original output generator.
      */
     SeveralAttempts(
@@ -109,7 +113,8 @@ public final class SeveralAttempts {
                     text.output()
                 );
                 Logger.warn(this, msg);
-                return new Error(text.writer(), msg);
+                text = new Error(text.writer(), msg);
+                break;
             }
             text = this.generator.get();
             attempt = attempt + 1;

@@ -23,8 +23,6 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import java.util.List;
-
 /**
  * LabeledAlt rule.
  * The ANTLR grammar definition:
@@ -52,8 +50,8 @@ public final class LabeledAlt extends Unimplemented {
 
     /**
      * Constructor.
-     * @param parent
-     * @param production
+     * @param parent Parent rule.
+     * @param production Production from grammar.
      */
     public LabeledAlt(final Rule parent, final String production) {
         super(parent);

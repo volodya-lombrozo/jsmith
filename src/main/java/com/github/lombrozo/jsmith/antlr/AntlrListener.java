@@ -83,14 +83,11 @@ import com.github.lombrozo.jsmith.antlr.semantic.VariableAssignment;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
-import com.github.lombrozo.jsmith.antlr.semantic.Variables;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -126,7 +123,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     /**
      * All declared identifiers.
      */
-    private Set<String> identifiers = new JavaKeywords().toSet();
+    private final Set<String> identifiers;
 
     /**
      * Current rule.
@@ -166,6 +163,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         this.unparser = unparser;
         this.unlexer = unlexer;
         this.current = new Traced(root);
+        this.identifiers = new JavaKeywords().toSet();
     }
 
     @Override
@@ -298,9 +296,11 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterTerminalDef(final ANTLRv4Parser.TerminalDefContext ctx) {
-        final List<Token> comments = this.tokens.getHiddenTokensToLeft(
-            ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT);
-        final boolean unique = new JsmithComments(comments).isUnique();
+        final boolean unique = new JsmithComments(
+            this.tokens.getHiddenTokensToLeft(
+                ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
+            )
+        ).isUnique();
         Rule rule = new TerminalDef(this.current, this.unlexer, ctx.getText());
         if (unique) {
             rule = new UniqueRule(rule, this.identifiers);

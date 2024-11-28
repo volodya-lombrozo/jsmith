@@ -26,11 +26,21 @@ package com.github.lombrozo.jsmith.antlr;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class JavaKeywords {
+/**
+ * Java Keywords.
+ * @since 0.1
+ */
+final class JavaKeywords {
 
+    /**
+     * All Java keywords.
+     */
     private final Set<String> all;
 
-    public JavaKeywords() {
+    /**
+     * Constructor.
+     */
+    JavaKeywords() {
         this(
             Set.of(
                 "abstract",
@@ -87,12 +97,19 @@ public final class JavaKeywords {
         );
     }
 
+    /**
+     * Constructor.
+     * @param all All Java keywords.
+     */
     private JavaKeywords(final Set<String> all) {
         this.all = all;
     }
 
-    public Set<String> toSet() {
+    /**
+     * Convert to set.
+     * @return Set of Java keywords.
+     */
+    Set<String> toSet() {
         return new HashSet<>(this.all);
     }
-
 }

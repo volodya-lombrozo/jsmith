@@ -58,7 +58,7 @@ public final class ScopeRule implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        return this.origin.generate(context.withScope(new Scope(context.scope())));
+        return this.origin.generate(context.withScope(new Scope(context.current())));
     }
 
     @Override

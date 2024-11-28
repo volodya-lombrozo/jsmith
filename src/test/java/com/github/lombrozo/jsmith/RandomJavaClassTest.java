@@ -58,7 +58,7 @@ final class RandomJavaClassTest {
 
     @ParameterizedTest
     @MethodSource("programs")
-    void createsCompilableJavaSourceCode(final String src, @TempDir Path temp) {
+    void createsCompilableJavaSourceCode(final String src, @TempDir final Path temp) {
         Logger.info(this, "Generated source code: %n%s%n", src);
         final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         final int run = compiler.run(

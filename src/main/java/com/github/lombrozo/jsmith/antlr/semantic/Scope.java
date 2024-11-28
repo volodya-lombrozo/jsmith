@@ -24,9 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.random.Rand;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,6 +38,9 @@ import lombok.ToString;
 @ToString
 public final class Scope {
 
+    /**
+     * Parent scope.
+     */
     @ToString.Exclude
     private final Scope parent;
 
@@ -47,12 +48,6 @@ public final class Scope {
      * All scope variables.
      */
     private final Variables variables;
-
-    /**
-     * Inner scopes.
-     */
-    @ToString.Exclude
-    private final List<Scope> inner;
 
     /**
      * Random generator.
@@ -64,42 +59,48 @@ public final class Scope {
      * Constructor.
      */
     public Scope() {
-        this(new Variables(), new ArrayList<>(0));
-    }
-
-    public Scope(final Scope parent) {
-        this(parent, new Variables(), new ArrayList<>(0), new Rand());
+        this(new Variables());
     }
 
     /**
      * Constructor.
      * @param variables Variables.
-     * @param inner Inner scopes.
      */
-    public Scope(final Variables variables, final List<Scope> inner) {
-        this(variables, inner, new Rand());
+    public Scope(final Variables variables) {
+        this(variables, new Rand());
     }
 
     /**
      * Constructor.
      * @param variables Variables.
-     * @param inner Inner scopes.
      * @param rand Random generator.
      * @todo: remove null
      */
-    public Scope(final Variables variables, final List<Scope> inner, final Rand rand) {
-        this(null, variables, inner, rand);
+    public Scope(final Variables variables, final Rand rand) {
+        this(null, variables, rand);
     }
 
+    /**
+     * Constructor.
+     * @param parent Parent scope.
+     */
+    public Scope(final Scope parent) {
+        this(parent, new Variables(), new Rand());
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent scope.
+     * @param variables Variables in the scope.
+     * @param rand Random generator.
+     */
     public Scope(
         final Scope parent,
         final Variables variables,
-        final List<Scope> inner,
         final Rand rand
     ) {
         this.parent = parent;
         this.variables = variables;
-        this.inner = inner;
         this.rand = rand;
     }
 
@@ -124,10 +125,6 @@ public final class Scope {
         this.variables.assign(name);
     }
 
-    void append(final Scope scope) {
-        this.inner.add(scope);
-    }
-
     /**
      * Get a random declared variable.
      * @return Random declared variable.
@@ -144,26 +141,18 @@ public final class Scope {
         return this.random(this.allAssigned());
     }
 
-    public Set<String> allIdentifiers() {
-        return Stream.concat(
-            this.allAssigned().stream(),
-            this.allDeclared().stream()
-        ).collect(Collectors.toSet());
-    }
-
     /**
      * Get all declared variables.
      * @return All declared variables.
      */
     private Set<String> allDeclared() {
-        final Set<String> res = Stream.concat(
+        return Stream.concat(
             this.variables.allDeclared().stream(),
             Optional.ofNullable(this.parent)
                 .map(Scope::allDeclared)
                 .stream()
                 .flatMap(Collection::stream)
         ).collect(Collectors.toSet());
-        return res;
     }
 
     /**
@@ -171,14 +160,13 @@ public final class Scope {
      * @return All assigned variables.
      */
     private Set<String> allAssigned() {
-        final Set<String> collect = Stream.concat(
+        return Stream.concat(
             this.variables.allAssigned().stream(),
             Optional.ofNullable(this.parent)
                 .map(Scope::allAssigned)
                 .stream()
                 .flatMap(Collection::stream)
         ).collect(Collectors.toSet());
-        return collect;
     }
 
     /**

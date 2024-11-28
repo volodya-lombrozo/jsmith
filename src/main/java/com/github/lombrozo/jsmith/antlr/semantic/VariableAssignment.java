@@ -67,7 +67,7 @@ public final class VariableAssignment implements Rule {
     public Text generate(final Context context) {
         Text text = this.origin.generate(context);
         if (!text.error()) {
-            final Scope scope = context.scope();
+            final Scope scope = context.current();
             final Optional<String> declared = scope.declared();
             if (declared.isPresent()) {
                 text = new TextLeaf(

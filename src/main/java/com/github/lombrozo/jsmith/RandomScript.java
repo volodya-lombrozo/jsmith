@@ -28,7 +28,6 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 import com.github.lombrozo.jsmith.antlr.semantic.Scope;
-import com.github.lombrozo.jsmith.antlr.semantic.Variables;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.Arrays;
 import java.util.List;

@@ -63,7 +63,7 @@ public final class VariableUsage implements Rule {
     @Override
     public Text generate(final Context context) {
         final Text text = this.origin.generate(context);
-        return context.scope().initialized()
+        return context.current().initialized()
             .map(output -> (Text) new TextLeaf(text.writer(), output))
             .orElseGet(
                 () -> {
@@ -71,7 +71,7 @@ public final class VariableUsage implements Rule {
                         this,
                         String.format(
                             "We cannot find any initialized variable in the scope '%s'",
-                            context.scope()
+                            context.current()
                         )
                     );
                     return new Error(text.writer(), "<variable not found>");
