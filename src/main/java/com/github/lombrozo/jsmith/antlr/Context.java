@@ -80,6 +80,15 @@ public final class Context {
 
     /**
      * Constructor.
+     * @param scope The scope.
+     * @param convergence The convergence strategy.
+     */
+    public Context(final Scope scope, final ConvergenceStrategy convergence) {
+        this(convergence, new ArrayList<>(0), scope);
+    }
+
+    /**
+     * Constructor.
      * @param chain The path of the rules that were visited during the generation.
      */
     public Context(final List<Rule> chain) {

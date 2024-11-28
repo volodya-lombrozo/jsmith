@@ -81,18 +81,18 @@ final class Convergence<T> {
     /**
      * Constructor.
      * @param factor Factor of convergence.
-     * @param verbose Do we need to log changes in the weights?
      */
-    Convergence(final double factor, final boolean verbose) {
-        this(factor, 1.0d, new Rand(), verbose);
+    Convergence(final double factor) {
+        this(factor, false);
     }
 
     /**
      * Constructor.
      * @param factor Factor of convergence.
+     * @param verbose Do we need to log changes in the weights?
      */
-    private Convergence(final double factor) {
-        this(factor, false);
+    Convergence(final double factor, final boolean verbose) {
+        this(factor, 1.0d, new Rand(), verbose);
     }
 
     /**

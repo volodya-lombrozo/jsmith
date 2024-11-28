@@ -30,10 +30,16 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.tools.ToolProvider;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -53,6 +59,42 @@ final class RandomJavaClassTest {
             new RandomJavaClass().src(),
             Matchers.not(Matchers.emptyString())
         );
+    }
+
+    /**
+     * Generates many Java classes with different convergence factor value.
+     * This is a performance test, so it is disabled by default.
+     * If you want to run it, remove the {@link Disabled} annotation.
+     * @todo #92:30min Convergence factor doesn't affect the generated source code.
+     *  Actually if we change the convergence factor, the generated source code size
+     *  should be different. We need to find the reason why it doesn't work and fix it.
+     */
+    @Test
+    @Disabled
+    void generatesRandomJavaClassWithChangedConvergence() {
+        final List<String> results = new ArrayList<>(10);
+        for (double factor = 0.1; factor < 1.0; factor += 0.1) {
+            Logger.info(this, "Generating program for factor: %.1f", factor);
+            final long start = System.currentTimeMillis();
+            final double current = factor;
+            final int attempts = 100;
+            final int length = IntStream.range(0, attempts)
+                .mapToObj(i -> new RandomJavaClass(current))
+                .map(RandomJavaClass::src)
+                .mapToInt(String::length)
+                .sum();
+            final long end = System.currentTimeMillis();
+            results.add(
+                String.format(
+                    "Factor: %.1f, total length: %d, attempts: %d time: %d ms",
+                    current,
+                    length,
+                    attempts,
+                    end - start
+                )
+            );
+        }
+        Logger.info(this, "Results: %n%s%n", String.join("\n", results));
     }
 
     @ParameterizedTest

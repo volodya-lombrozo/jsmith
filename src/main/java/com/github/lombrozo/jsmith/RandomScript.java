@@ -29,6 +29,7 @@ import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 import com.github.lombrozo.jsmith.antlr.semantic.Scope;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.random.ConvergenceStrategy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,12 +58,17 @@ public final class RandomScript {
     /**
      * Unlexer instance.
      */
-    private final Unlexer unlexer = new Unlexer();
+    private final Unlexer unlexer;
 
     /**
      * Unparser instance.
      */
-    private final Unparser unparser = new Unparser();
+    private final Unparser unparser;
+
+    /**
+     * Convergence factor.
+     */
+    private final double factor;
 
     /**
      * Constructor.
@@ -83,7 +89,26 @@ public final class RandomScript {
      * @param grammars ANTLR grammars, either standalone or separate lexer and parser grammars.
      */
     private RandomScript(final List<String> grammars) {
+        this(grammars, new Unlexer(), new Unparser(), 0.5);
+    }
+
+    /**
+     * Constructor.
+     * @param grammars ANTLR grammars, either standalone or separate lexer and parser grammars.
+     * @param unlexer Unlexer instance.
+     * @param unparser Unparser instance.
+     * @param factor Convergence factor.
+     */
+    public RandomScript(
+        final List<String> grammars,
+        final Unlexer unlexer,
+        final Unparser unparser,
+        final double factor
+    ) {
         this.grammars = grammars;
+        this.unlexer = unlexer;
+        this.unparser = unparser;
+        this.factor = factor;
     }
 
     /**
@@ -94,7 +119,18 @@ public final class RandomScript {
     public Text generate(final String rule) {
         final Scope scope = new Scope();
         this.grammars.forEach(this::parse);
-        return this.unparser.generate(rule, new Context(scope));
+        return this.unparser.generate(
+            rule, new Context(scope, new ConvergenceStrategy(this.factor))
+        );
+    }
+
+    /**
+     * Change convergence factor.
+     * @param factor Convergence factor.
+     * @return Random script with a new convergence factor.
+     */
+    RandomScript withFactor(final double factor) {
+        return new RandomScript(this.grammars, this.unlexer, this.unparser, factor);
     }
 
     /**
