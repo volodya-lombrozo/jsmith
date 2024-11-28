@@ -39,8 +39,8 @@ public final class VariableDeclaration implements Rule {
      */
     public static final String COMMENT = "$jsmith-var-decl";
 
-    /*
-     * Origin rule.
+    /**
+     * Original rule.
      */
     private final Rule origin;
 
@@ -61,9 +61,7 @@ public final class VariableDeclaration implements Rule {
     public Text generate(final Context context) {
         final Text text = this.origin.generate(context);
         if (!text.error()) {
-            final String output = text.output();
-            context.current().declare(output);
-            text.attributes().with("initialized-variable", output);
+            context.current().declare(text.output());
         }
         return text;
     }

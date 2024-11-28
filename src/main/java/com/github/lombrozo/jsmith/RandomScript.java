@@ -98,6 +98,7 @@ public final class RandomScript {
      * @param unlexer Unlexer instance.
      * @param unparser Unparser instance.
      * @param factor Convergence factor.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public RandomScript(
         final List<String> grammars,
@@ -126,11 +127,11 @@ public final class RandomScript {
 
     /**
      * Change convergence factor.
-     * @param factor Convergence factor.
+     * @param convergence Convergence factor.
      * @return Random script with a new convergence factor.
      */
-    RandomScript withFactor(final double factor) {
-        return new RandomScript(this.grammars, this.unlexer, this.unparser, factor);
+    RandomScript withFactor(final double convergence) {
+        return new RandomScript(this.grammars, this.unlexer, this.unparser, convergence);
     }
 
     /**

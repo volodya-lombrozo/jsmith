@@ -94,6 +94,7 @@ public final class RandomJavaClass {
      * @param lexer Lexer.
      * @param rule Rule.
      * @param factor Factor.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public RandomJavaClass(
         final String parser,
