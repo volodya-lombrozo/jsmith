@@ -69,6 +69,7 @@ final class RandomJavaClassTest {
      */
     @Test
     @Disabled
+    @SuppressWarnings("JTCOP.RuleAssertionMessage")
     void generatesRandomJavaClassWithChangedConvergence() {
         final List<String> results = new ArrayList<>(10);
         for (double factor = 0.1; factor < 1.0; factor += 0.1) {
