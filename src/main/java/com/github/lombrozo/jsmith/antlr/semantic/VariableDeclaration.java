@@ -35,9 +35,9 @@ import com.github.lombrozo.jsmith.antlr.view.Text;
 public final class VariableDeclaration implements Rule {
 
     /**
-     * Key for the semantic.
+     * Comment to activate this rule.
      */
-    public static final String KEY = "$jsmith-variable-declaration";
+    public static final String COMMENT = "$jsmith-variable-declaration";
 
     /**
      * Origin rule.
@@ -73,7 +73,7 @@ public final class VariableDeclaration implements Rule {
 
     @Override
     public String name() {
-        return VariableDeclaration.KEY;
+        return VariableDeclaration.COMMENT;
     }
 
     @Override

@@ -36,9 +36,9 @@ import java.util.Map;
 public final class VariableInitialization implements Rule {
 
     /**
-     * Key for this semantic.
+     * Comment key to activate this rule.
      */
-    public static final String KEY = "$jsmith-variable-initialization";
+    public static final String COMMENT = "$jsmith-variable-initialization";
 
     /**
      * Origin rule.

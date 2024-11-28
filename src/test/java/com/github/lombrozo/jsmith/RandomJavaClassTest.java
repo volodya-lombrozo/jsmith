@@ -31,7 +31,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -60,8 +59,7 @@ final class RandomJavaClassTest {
     @MethodSource("programs")
     void createsCompilableJavaSourceCode(final String src, @TempDir final Path temp) {
         Logger.info(this, "Generated source code: %n%s%n", src);
-        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        final int run = compiler.run(
+        final int run = ToolProvider.getSystemJavaCompiler().run(
             new ByteArrayInputStream(src.getBytes(StandardCharsets.UTF_8)),
             new BufferedOutputStream(System.out),
             new BufferedOutputStream(System.err),

@@ -41,9 +41,9 @@ import java.util.Optional;
 public final class VariableAssignment implements Rule {
 
     /**
-     * Key for this semantic.
+     * Comment to activate this rule.
      */
-    public static final String KEY = "$jsmith-variable-assignment";
+    public static final String COMMENT = "$jsmith-variable-assignment";
 
     /**
      * Original rule.
@@ -93,7 +93,7 @@ public final class VariableAssignment implements Rule {
 
     @Override
     public String name() {
-        return String.format("%s(%s)", VariableAssignment.KEY, this.origin.name());
+        return String.format("%s(%s)", VariableAssignment.COMMENT, this.origin.name());
     }
 
     @Override

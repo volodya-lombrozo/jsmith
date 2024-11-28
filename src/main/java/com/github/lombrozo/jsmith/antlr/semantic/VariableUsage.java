@@ -38,9 +38,9 @@ import com.jcabi.log.Logger;
 public final class VariableUsage implements Rule {
 
     /**
-     * Key for the semantic.
+     * Comment to activate this rule.
      */
-    public static final String KEY = "$jsmith-variable-usage";
+    public static final String COMMENT = "$jsmith-variable-usage";
 
     /**
      * Origin rule.
@@ -86,7 +86,7 @@ public final class VariableUsage implements Rule {
 
     @Override
     public String name() {
-        return VariableUsage.KEY;
+        return VariableUsage.COMMENT;
     }
 
     @Override

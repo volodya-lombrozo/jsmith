@@ -74,7 +74,6 @@ public final class Scope {
      * Constructor.
      * @param variables Variables.
      * @param rand Random generator.
-     * @todo: remove null
      */
     public Scope(final Variables variables, final Rand rand) {
         this(null, variables, rand);

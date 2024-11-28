@@ -34,9 +34,9 @@ import com.github.lombrozo.jsmith.antlr.view.Text;
 public final class ScopeRule implements Rule {
 
     /**
-     * Key for this semantic.
+     * Comment to activate this rule.
      */
-    public static final String KEY = "$jsmith-scope";
+    public static final String COMMENT = "$jsmith-scope";
 
     /**
      * Origin rule.
@@ -68,7 +68,7 @@ public final class ScopeRule implements Rule {
 
     @Override
     public String name() {
-        return String.format("%s(%s)", ScopeRule.KEY, this.origin.name());
+        return String.format("%s(%s)", ScopeRule.COMMENT, this.origin.name());
     }
 
     @Override

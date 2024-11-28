@@ -37,9 +37,9 @@ import java.util.Set;
 public final class UniqueRule implements Rule {
 
     /**
-     * Name for this rule.
+     * Comment to activate this rule.
      */
-    public static final String KEY = "$jsmith-unique";
+    public static final String COMMENT = "$jsmith-unique";
 
     /**
      * Origin rule.
@@ -95,7 +95,7 @@ public final class UniqueRule implements Rule {
 
     @Override
     public String name() {
-        return String.format("%s(%s)", UniqueRule.KEY, this.original.name());
+        return String.format("%s(%s)", UniqueRule.COMMENT, this.original.name());
     }
 
     @Override

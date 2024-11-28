@@ -23,12 +23,6 @@
  */
 package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.antlr.semantic.ScopeRule;
-import com.github.lombrozo.jsmith.antlr.semantic.UniqueRule;
-import com.github.lombrozo.jsmith.antlr.semantic.VariableAssignment;
-import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
-import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
-import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,58 +52,19 @@ final class JsmithComments {
     }
 
     /**
-     * Check if a comment is an initialization.
-     * @return True if a comment is an initialization.
+     * Check if contains a comment.
+     * @param comment Comment.
+     * @return True if contains a comment.
      */
-    boolean isInitialization() {
-        return this.rules().stream().anyMatch(VariableInitialization.KEY::equals);
-    }
-
-    /**
-     * Check if a comment is a variable assignment.
-     * @return True if a comment is a variable assignment.
-     */
-    boolean isAssignment() {
-        return this.rules().stream().anyMatch(VariableAssignment.KEY::equals);
-    }
-
-    /**
-     * Check if a comment is a variable usage.
-     * @return True if a comment is a variable usage.
-     */
-    boolean isUsage() {
-        return this.rules().stream().anyMatch(VariableUsage.KEY::equals);
-    }
-
-    /**
-     * Check if a comment is a variable declaration.
-     * @return True if a comment is a variable declaration.
-     */
-    boolean isDeclaration() {
-        return this.rules().stream().anyMatch(VariableDeclaration.KEY::equals);
-    }
-
-    /**
-     * Check if a comment is a scope.
-     * @return True if a comment is a scope.
-     */
-    boolean isScope() {
-        return this.rules().stream().anyMatch(ScopeRule.KEY::equals);
-    }
-
-    /**
-     * Check if a comment is unique.
-     * @return True if a comment is unique.
-     */
-    boolean isUnique() {
-        return this.rules().stream().anyMatch(UniqueRule.KEY::equals);
+    boolean has(final String comment) {
+        return this.rules().stream().anyMatch(comment::equals);
     }
 
     /**
      * Get rules from comments.
      * @return List of rules.
      */
-    List<String> rules() {
+    private List<String> rules() {
         return this.comments.stream()
             .filter(Objects::nonNull)
             .map(Token::getText)

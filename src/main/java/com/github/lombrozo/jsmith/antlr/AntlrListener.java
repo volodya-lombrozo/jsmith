@@ -193,7 +193,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
             this.tokens.getHiddenTokensToRight(ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT)
         );
         final Rule rule;
-        if (comments.isScope()) {
+        if (comments.has(ScopeRule.COMMENT)) {
             rule = new ScopeRule(new ParserRuleSpec(name, this.current));
         } else {
             rule = new ParserRuleSpec(name, this.current);
@@ -251,13 +251,13 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         final JsmithComments comments = new JsmithComments(
             this.tokens.getHiddenTokensToLeft(ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT)
         );
-        if (comments.isUsage()) {
+        if (comments.has(VariableUsage.COMMENT)) {
             res = new VariableUsage(res);
         }
-        if (comments.isDeclaration()) {
+        if (comments.has(VariableDeclaration.COMMENT)) {
             res = new VariableDeclaration(res);
         }
-        if (comments.isAssignment()) {
+        if (comments.has(VariableAssignment.COMMENT)) {
             res = new VariableAssignment(res);
         }
         this.down(res);
@@ -296,13 +296,13 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterTerminalDef(final ANTLRv4Parser.TerminalDefContext ctx) {
-        final boolean unique = new JsmithComments(
+        final JsmithComments comments = new JsmithComments(
             this.tokens.getHiddenTokensToLeft(
                 ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
             )
-        ).isUnique();
+        );
         Rule rule = new TerminalDef(this.current, this.unlexer, ctx.getText());
-        if (unique) {
+        if (comments.has(UniqueRule.COMMENT)) {
             rule = new UniqueRule(rule, this.identifiers);
         }
         this.current.append(rule);
@@ -565,14 +565,14 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
-        final boolean init = new JsmithComments(
+        final JsmithComments comments = new JsmithComments(
             this.tokens.getHiddenTokensToLeft(
                 ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
             )
-        ).isInitialization();
-        final LabeledAlt main = new LabeledAlt(this.current, ctx.getText());
+        );
         final Rule res;
-        if (init) {
+        final LabeledAlt main = new LabeledAlt(this.current, ctx.getText());
+        if (comments.has(VariableInitialization.COMMENT)) {
             res = new VariableInitialization(main);
         } else {
             res = main;
