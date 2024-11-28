@@ -33,17 +33,17 @@ import java.util.Collections;
 import java.util.Optional;
 
 /**
- * Variable Assignment Semantic.
+ * Variable Target Semantic.
  * Identifies the variable name in the assignment expression and
  * adds it to the context.
  * @since 0.1
  */
-public final class VariableAssignment implements Rule {
+public final class VariableTarget implements Rule {
 
     /**
      * Comment to activate this rule.
      */
-    public static final String COMMENT = "$jsmith-variable-assignment";
+    public static final String COMMENT = "$jsmith-var-target";
 
     /**
      * Original rule.
@@ -54,7 +54,7 @@ public final class VariableAssignment implements Rule {
      * Constructor.
      * @param origin Original rule.
      */
-    public VariableAssignment(final Rule origin) {
+    public VariableTarget(final Rule origin) {
         this.origin = origin;
     }
 
@@ -72,7 +72,7 @@ public final class VariableAssignment implements Rule {
                 text = new TextLeaf(
                     this,
                     declared.get(),
-                    Collections.singletonMap("initialized-variable", declared.get())
+                    Collections.singletonMap(VariableTarget.COMMENT, declared.get())
                 );
             } else {
                 Logger.warn(
@@ -95,11 +95,11 @@ public final class VariableAssignment implements Rule {
 
     @Override
     public String name() {
-        return String.format("%s(%s)", VariableAssignment.COMMENT, this.origin.name());
+        return String.format("%s(%s)", VariableTarget.COMMENT, this.origin.name());
     }
 
     @Override
     public Rule copy() {
-        return new VariableAssignment(this.origin.copy());
+        return new VariableTarget(this.origin.copy());
     }
 }

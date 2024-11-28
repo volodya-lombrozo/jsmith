@@ -37,7 +37,7 @@ import java.util.function.Supplier;
  *  For example, if the following production is incorrect:
  *  {@code
  *  assignment
- *     : /* $jsmith-variable-assignment / leftHandSide'='simplifiedExpression
+ *     : /* $jsmith-var-target / leftHandSide'='simplifiedExpression
  *  ;
  *  }
  *  It will try all the 10 times. And we need tests for this class!

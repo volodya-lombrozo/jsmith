@@ -74,6 +74,23 @@ public final class Attributes {
 
     /**
      * Add an attribute.
+     * @param key Key.
+     * @param value Value.
+     */
+    public void with(final String key, final String value) {
+        this.properties.put(key, value);
+    }
+
+    /**
+     * Remove an attribute.
+     * @param key Key.
+     */
+    public void without(final String key) {
+        this.properties.remove(key);
+    }
+
+    /**
+     * Add an attribute.
      * @param other Other attributes.
      * @return New attributes.
      */

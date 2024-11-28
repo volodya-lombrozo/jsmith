@@ -2,13 +2,13 @@ grammar Assignments;
 
 prog: statement+;
 
-statement: /* $jsmith-var-decl */ ID ';' NEWLINE
-         | /* $jsmith-var-init */ /* $jsmith-variable-assignment */ ID ' = ' expr ';' NEWLINE
+statement: /* $jsmith-variable-declaration */ ID ';' NEWLINE
+         | /* $jsmith-variable-initialization */ /* $jsmith-var-target */ ID ' = ' expr ';' NEWLINE
          ;
 
 expr: expr (' + ' | ' - ') expr
     | INT
-    | /* $jsmith-variable-usage */ ID
+    | /* $jsmith-var-use */ ID
     ;
 
 ID: [a-zA-Z]+;

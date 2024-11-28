@@ -307,7 +307,7 @@ statementExpression
     ;
 
 assignment
-    : /* $jsmith-variable-assignment */ leftHandSide '=' simplifiedExpression
+    : /* $jsmith-var-target */ leftHandSide '=' simplifiedExpression
     ;
 
 leftHandSide
@@ -316,6 +316,6 @@ leftHandSide
 
 simplifiedExpression
     : simplifiedExpression SPACE '+' SPACE IntegerLiteral
-    | /* $jsmith-variable-usage */ Identifier
+    | /* $jsmith-var-use */ Identifier
     | IntegerLiteral
     ;

@@ -63,11 +63,12 @@ public final class VariableInitialization implements Rule {
         final Text output = this.origin.generate(context);
         if (!output.error()) {
             final Map<String, String> additional = output.attributes().custom();
-            final String key = "initialized-variable";
+            final String key = VariableTarget.COMMENT;
             if (!additional.containsKey(key)) {
                 throw new IllegalStateException("Variable name is not provided");
             }
             context.current().init(additional.get(key));
+            output.attributes().without(key);
         }
         return output;
     }

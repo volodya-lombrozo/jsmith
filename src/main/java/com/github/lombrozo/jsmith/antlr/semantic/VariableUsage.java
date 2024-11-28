@@ -40,7 +40,7 @@ public final class VariableUsage implements Rule {
     /**
      * Comment to activate this rule.
      */
-    public static final String COMMENT = "$jsmith-variable-usage";
+    public static final String COMMENT = "$jsmith-var-use";
 
     /**
      * Origin rule.

@@ -79,7 +79,7 @@ import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
 import com.github.lombrozo.jsmith.antlr.rules.Traced;
 import com.github.lombrozo.jsmith.antlr.semantic.ScopeRule;
 import com.github.lombrozo.jsmith.antlr.semantic.UniqueRule;
-import com.github.lombrozo.jsmith.antlr.semantic.VariableAssignment;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableTarget;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
@@ -257,8 +257,8 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         if (comments.has(VariableDeclaration.COMMENT)) {
             res = new VariableDeclaration(res);
         }
-        if (comments.has(VariableAssignment.COMMENT)) {
-            res = new VariableAssignment(res);
+        if (comments.has(VariableTarget.COMMENT)) {
+            res = new VariableTarget(res);
         }
         this.down(res);
         super.enterElement(ctx);
