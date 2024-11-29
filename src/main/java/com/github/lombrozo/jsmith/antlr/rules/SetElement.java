@@ -99,6 +99,14 @@ public final class SetElement implements Rule, Negatable {
     }
 
     @Override
+    public Rule copy() {
+        return new SetElement(
+            this.top,
+            this.children.stream().map(Rule::copy).collect(Collectors.toList())
+        );
+    }
+
+    @Override
     public Text negate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException(

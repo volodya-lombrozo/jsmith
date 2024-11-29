@@ -63,9 +63,13 @@ public final class LexerRuleSpec implements Rule {
      * @param name Rule name.
      */
     public LexerRuleSpec(final Rule parent, final String name) {
-        this.top = parent;
-        this.alias = name;
-        this.list = new ArrayList<>(0);
+        this(parent, name, new ArrayList<>(0));
+    }
+
+    public LexerRuleSpec(final Rule top, final String alias, final List<Rule> list) {
+        this.top = top;
+        this.alias = alias;
+        this.list = list;
     }
 
     /**
@@ -99,5 +103,12 @@ public final class LexerRuleSpec implements Rule {
     @Override
     public String name() {
         return String.format("lexerRuleSpec(%s)", this.alias);
+    }
+
+    @Override
+    public Rule copy() {
+        return new LexerRuleSpec(
+            this.top, this.alias, this.list.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }

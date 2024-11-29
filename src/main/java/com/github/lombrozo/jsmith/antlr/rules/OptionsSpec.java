@@ -47,4 +47,9 @@ public final class OptionsSpec extends Unimplemented {
     public String name() {
         return "optionsSpec";
     }
+
+    @Override
+    public Rule copy() {
+        return new OptionsSpec(this.parent());
+    }
 }

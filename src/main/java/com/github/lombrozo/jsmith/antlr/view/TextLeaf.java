@@ -26,7 +26,9 @@ package com.github.lombrozo.jsmith.antlr.view;
 import com.github.lombrozo.jsmith.antlr.rules.Empty;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -48,6 +50,11 @@ public final class TextLeaf implements Text {
     private final String text;
 
     /**
+     * Additional attributes of the text.
+     */
+    private final Map<String, String> additional;
+
+    /**
      * Default constructor.
      * @param output Text output.
      */
@@ -61,8 +68,17 @@ public final class TextLeaf implements Text {
      * @param output Text output.
      */
     public TextLeaf(final Rule writer, final String output) {
-        this.author = writer;
-        this.text = output;
+        this(writer, output, new HashMap<>(0));
+    }
+
+    public TextLeaf(
+        final Rule author,
+        final String text,
+        final Map<String, String> additional
+    ) {
+        this.author = author;
+        this.text = text;
+        this.additional = additional;
     }
 
     @Override
@@ -82,6 +98,11 @@ public final class TextLeaf implements Text {
 
     @Override
     public Attributes attributes() {
-        return new Attributes(true);
+        return new Attributes(true, this.additional);
+    }
+
+    @Override
+    public boolean error() {
+        return false;
     }
 }

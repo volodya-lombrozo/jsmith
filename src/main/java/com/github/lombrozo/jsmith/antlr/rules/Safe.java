@@ -109,6 +109,11 @@ public final class Safe implements Rule, Suffix, Negatable {
     }
 
     @Override
+    public Rule copy() {
+        return new Safe(this.original.copy(), this.limit);
+    }
+
+    @Override
     public Multiplier multiplier() {
         if (this.original instanceof Suffix) {
             return ((Suffix) this.original).multiplier();

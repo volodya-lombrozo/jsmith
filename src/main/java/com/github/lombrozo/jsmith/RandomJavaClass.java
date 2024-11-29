@@ -23,6 +23,9 @@
  */
 package com.github.lombrozo.jsmith;
 
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
+import com.google.googlejavaformat.java.JavaFormatterOptions;
 import org.cactoos.io.ResourceOf;
 
 /**
@@ -47,13 +50,27 @@ public final class RandomJavaClass {
     private final String rule;
 
     /**
+     * Convergence factor.
+     */
+    private final double factor;
+
+    /**
      * Default constructor.
      */
     public RandomJavaClass() {
+        this(0.5d);
+    }
+
+    /**
+     * Constructor.
+     * @param factor Convergence factor.
+     */
+    public RandomJavaClass(final double factor) {
         this(
             "grammars/Java8ReducedParser.g4",
             "grammars/Java8ReducedLexer.g4",
-            "compilationUnit"
+            "compilationUnit",
+            factor
         );
     }
 
@@ -68,9 +85,27 @@ public final class RandomJavaClass {
         final String lexer,
         final String rule
     ) {
+        this(parser, lexer, rule, 0.5);
+    }
+
+    /**
+     * Constructor.
+     * @param parser Parser.
+     * @param lexer Lexer.
+     * @param rule Rule.
+     * @param factor Factor.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public RandomJavaClass(
+        final String parser,
+        final String lexer,
+        final String rule,
+        final double factor
+    ) {
         this.parser = parser;
         this.lexer = lexer;
         this.rule = rule;
+        this.factor = factor;
     }
 
     /**
@@ -78,9 +113,16 @@ public final class RandomJavaClass {
      * @return Source code of the class.
      */
     public String src() {
-        return new RandomScript(
+        final String output = new RandomScript(
             new ResourceOf(this.parser),
             new ResourceOf(this.lexer)
-        ).generate(this.rule).output();
+        ).withFactor(this.factor).generate(this.rule).output();
+        try {
+            return new Formatter(JavaFormatterOptions.builder().build()).formatSource(output);
+        } catch (final FormatterException exception) {
+            throw new IllegalStateException(
+                String.format("Failed to format source code %n%s%n", output), exception
+            );
+        }
     }
 }

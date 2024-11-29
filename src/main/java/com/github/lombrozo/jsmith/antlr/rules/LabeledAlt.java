@@ -36,16 +36,40 @@ package com.github.lombrozo.jsmith.antlr.rules;
 public final class LabeledAlt extends Unimplemented {
 
     /**
+     * Production from grammar.
+     */
+    private final String production;
+
+    /**
      * Constructor.
      * @param parent Parent rule.
      */
     public LabeledAlt(final Rule parent) {
+        this(parent, "");
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param production Production from grammar.
+     */
+    public LabeledAlt(final Rule parent, final String production) {
         super(parent);
+        this.production = production;
     }
 
     @Override
     public String name() {
-        return String.format("labeledAlt(id=%d)", System.identityHashCode(this));
+        return String.format(
+            "labeledAlt(id=%d, production='%s')",
+            System.identityHashCode(this),
+            this.production
+        );
+    }
+
+    @Override
+    public Rule copy() {
+        return new LabeledAlt(this.parent());
     }
 }
 

@@ -81,18 +81,18 @@ final class Convergence<T> {
     /**
      * Constructor.
      * @param factor Factor of convergence.
-     * @param verbose Do we need to log changes in the weights?
      */
-    Convergence(final double factor, final boolean verbose) {
-        this(factor, 1.0d, new Rand(), verbose);
+    Convergence(final double factor) {
+        this(factor, false);
     }
 
     /**
      * Constructor.
      * @param factor Factor of convergence.
+     * @param verbose Do we need to log changes in the weights?
      */
-    private Convergence(final double factor) {
-        this(factor, false);
+    Convergence(final double factor, final boolean verbose) {
+        this(factor, 1.0d, new Rand(), verbose);
     }
 
     /**
@@ -143,7 +143,7 @@ final class Convergence<T> {
         return new Convergence<>(
             this.factor,
             this.weight,
-            this.wightsCopy(),
+            this.weightsCopy(),
             this.rand,
             this.verbose
         );
@@ -181,21 +181,26 @@ final class Convergence<T> {
             from, key -> this.init(elements)
         );
         this.info(String.format("Weights for '%s': '%s'", from, current));
-        final double total = current.values()
-            .stream()
-            .mapToDouble(Double::doubleValue)
-            .max()
-            .orElseThrow(() -> new IllegalStateException("No elements"));
-        final double random = this.rand.floating() * total;
-        double sum = 0;
+        final double[] cumulative = new double[current.size()];
+        final Object[] all = new Object[current.size()];
+        double total = 0d;
+        int index = 0;
         for (final Map.Entry<T, Double> entry : current.entrySet()) {
-            sum += entry.getValue();
-            if (sum >= random) {
+            total = total + entry.getValue();
+            all[index] = entry.getKey();
+            cumulative[index] = total;
+            ++index;
+        }
+        final double random = this.rand.floating() * total;
+        final int length = cumulative.length;
+        for (int point = 0; point < length; ++point) {
+            if (cumulative[point] >= random) {
+                final T element = (T) all[point];
                 this.info(
-                    String.format("Chosen '%s' with weight '%s'", entry.getKey(), entry.getValue())
+                    String.format("Chosen '%s' with weight '%s'", element, current.get(element))
                 );
-                current.put(entry.getKey(), entry.getValue() * this.factor);
-                return entry.getKey();
+                current.put(element, current.get(element) * this.factor);
+                return element;
             }
         }
         throw new IllegalStateException("No element was chosen");
@@ -216,6 +221,18 @@ final class Convergence<T> {
     }
 
     /**
+     * Copy weights deeply.
+     * @return Copy of the weights deeply.
+     */
+    private Map<T, Map<T, Double>> weightsCopy() {
+        final Map<T, Map<T, Double>> copy = new HashMap<>(0);
+        for (final Map.Entry<T, Map<T, Double>> entry : this.weights.entrySet()) {
+            copy.put(entry.getKey(), new HashMap<>(entry.getValue()));
+        }
+        return copy;
+    }
+
+    /**
      * Log a message if verbose mode is enabled.
      * @param msg Message to print.
      */
@@ -223,17 +240,5 @@ final class Convergence<T> {
         if (this.verbose) {
             Convergence.LOG.info(msg);
         }
-    }
-
-    /**
-     * Copy weights deeply.
-     * @return Copy of the weights deeply.
-     */
-    private Map<T, Map<T, Double>> wightsCopy() {
-        final Map<T, Map<T, Double>> copy = new HashMap<>(0);
-        for (final Map.Entry<T, Map<T, Double>> entry : this.weights.entrySet()) {
-            copy.put(entry.getKey(), new HashMap<>(entry.getValue()));
-        }
-        return copy;
     }
 }

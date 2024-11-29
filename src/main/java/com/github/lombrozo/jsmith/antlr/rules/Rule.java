@@ -56,4 +56,6 @@ public interface Rule {
      * @return Rule name.
      */
     String name();
+
+    Rule copy();
 }

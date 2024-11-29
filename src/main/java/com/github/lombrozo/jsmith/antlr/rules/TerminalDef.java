@@ -109,4 +109,13 @@ public final class TerminalDef implements Rule {
     public String name() {
         return String.format("terminalDef(%s)", this.text);
     }
+
+    @Override
+    public Rule copy() {
+        return new TerminalDef(
+            this.parentr,
+            this.unlexer,
+            this.text
+        );
+    }
 }

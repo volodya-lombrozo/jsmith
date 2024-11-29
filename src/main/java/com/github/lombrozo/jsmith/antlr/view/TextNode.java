@@ -67,7 +67,7 @@ public final class TextNode implements Text {
         this(writer, children, TextNode.DELIMITER);
     }
 
-    public TextNode(final Rule writer, final List<Text> children, final String delimiter) {
+    private TextNode(final Rule writer, final List<Text> children, final String delimiter) {
         this.author = writer;
         this.childs = children;
         this.delimiter = delimiter;
@@ -92,6 +92,13 @@ public final class TextNode implements Text {
 
     @Override
     public Attributes attributes() {
-        return new Attributes(false);
+        return this.childs.stream()
+            .map(Text::attributes)
+            .reduce(new Attributes(true), Attributes::add);
+    }
+
+    @Override
+    public boolean error() {
+        return this.children().stream().anyMatch(Text::error);
     }
 }

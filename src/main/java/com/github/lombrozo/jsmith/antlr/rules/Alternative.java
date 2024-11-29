@@ -99,4 +99,12 @@ public final class Alternative implements Rule {
     public String name() {
         return "alternative";
     }
+
+    @Override
+    public Rule copy() {
+        return new Alternative(
+            this.parentr,
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
+    }
 }

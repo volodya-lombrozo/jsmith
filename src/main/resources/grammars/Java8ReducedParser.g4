@@ -65,23 +65,6 @@ options {
     tokenVocab = Java8ReducedLexer;
 }
 
-/*
- * Productions from §3 (Lexical Structure)
- */
-
-literal
-    : IntegerLiteral
-    | FloatingPointLiteral
-    | BooleanLiteral
-    | CharacterLiteral
-    | StringLiteral
-    | NullLiteral
-    ;
-
-/*
- * Productions from §4 (Types, Values, and Variables)
- */
-
 primitiveType
     : numericType
     | 'boolean'
@@ -157,19 +140,6 @@ dims
     : '[' ']' ('[' ']')*
     ;
 
-typeParameter
-    : Identifier typeBound?
-    ;
-
-typeBound
-    : 'extends' typeVariable
-    | 'extends' classOrInterfaceType additionalBound*
-    ;
-
-additionalBound
-    : '&' interfaceType
-    ;
-
 typeArguments
     : '<' typeArgumentList '>'
     ;
@@ -192,42 +162,14 @@ wildcardBounds
     | 'super' referenceType
     ;
 
-/*
- * Productions from §6 (Names)
- */
-
 packageName
-    : Identifier
-    | packageName '.' Identifier
-    ;
-
-typeName
-    : Identifier
-    | packageOrTypeName '.' Identifier
-    ;
-
-packageOrTypeName
-    : Identifier
-    | packageOrTypeName '.' Identifier
+    : /* $jsmith-unique */ Identifier
+    | packageName '.' /* $jsmith-unique */ Identifier
     ;
 
 expressionName
     : Identifier
-    | ambiguousName '.' Identifier
     ;
-
-methodName
-    : Identifier
-    ;
-
-ambiguousName
-    : Identifier
-    | ambiguousName '.' Identifier
-    ;
-
-/*
- * Productions from §7 (Packages)
- */
 
 compilationUnit
     : packageDeclaration? importDeclaration* typeDeclaration EOF
@@ -244,66 +186,90 @@ importDeclaration
     | staticImportOnDemandDeclaration
     ;
 
+//singleTypeImportDeclaration
+//    : 'import' SPACE typeName '.' typeName ';' NL
+//    ;
 singleTypeImportDeclaration
-    : 'import' SPACE typeName ';' NL
+    : 'import' SPACE 'java.util.ArrayList' ';' NL
+    | 'import' SPACE 'java.util.HashMap' ';' NL
+    | 'import' SPACE 'java.util.Scanner' ';' NL
+    | 'import' SPACE 'java.util.Date' ';' NL
+    | 'import' SPACE 'java.util.Locale' ';' NL
+    | 'import' SPACE 'java.util.TimeZone' ';' NL
+    | 'import' SPACE 'java.util.LinkedList' ';' NL
+    | 'import' SPACE 'java.util.Set' ';' NL
+    | 'import' SPACE 'java.util.TreeMap' ';' NL
+    | 'import' SPACE 'java.util.concurrent.ConcurrentHashMap' ';' NL
     ;
 
+//typeImportOnDemandDeclaration
+//    : 'import' SPACE packageOrTypeName '.' '*' ';' NL
+//    ;
 typeImportOnDemandDeclaration
-    : 'import' SPACE packageOrTypeName '.' '*' ';' NL
+    : 'import' SPACE 'java.util.*' ';' NL
+    | 'import' SPACE 'java.io.*' ';' NL
+    | 'import' SPACE 'java.net.*' ';' NL
+    | 'import' SPACE 'java.text.*' ';' NL
+    | 'import' SPACE 'java.nio.*' ';' NL
+    | 'import' SPACE 'java.time.*' ';' NL
+    | 'import' SPACE 'java.lang.*' ';' NL
+    | 'import' SPACE 'java.math.*' ';' NL
+    | 'import' SPACE 'java.sql.*' ';' NL
+    | 'import' SPACE 'java.security.*' ';' NL
     ;
 
+//* singleStaticImportDeclaration
+//    : 'import' SPACE 'static' SPACE typeName '.' Identifier ';' NL
+//    ;
 singleStaticImportDeclaration
-    : 'import' SPACE 'static' SPACE typeName '.' Identifier ';' NL
+    : 'import' SPACE 'static' SPACE 'java.lang.Math.PI' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.E' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.abs' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.pow' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.sqrt' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.log' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.ceil' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.floor' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.min' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Math.max' ';' NL
     ;
 
+
+//staticImportOnDemandDeclaration
+//    : 'import' SPACE 'static' SPACE typeName '.' '*' ';' NL
+//    ;
 staticImportOnDemandDeclaration
-    : 'import' SPACE 'static' SPACE typeName '.' '*' ';' NL
+    : 'import' SPACE 'static' SPACE 'java.lang.Math.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.util.Collections.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.util.stream.Collectors.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.util.concurrent.TimeUnit.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.util.function.Predicate.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.util.regex.Pattern.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.lang.Integer.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.nio.file.StandardWatchEventKinds.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.nio.file.Files.*' ';' NL
+    | 'import' SPACE 'static' SPACE 'java.time.temporal.ChronoUnit.*' ';' NL
     ;
 
 typeDeclaration
     : classDeclaration
     ;
 
-/*
- * Productions from §8 (Classes)
- */
-
 classDeclaration
     : normalClassDeclaration
     ;
 
 normalClassDeclaration
-    : (classModifier SPACE)* 'class' SPACE Identifier classBody
+    : (inheritanceModifier SPACE)? ('strictfp' SPACE)?  'class' SPACE /* $jsmith-unique */ Identifier classBody
     ;
 
-classModifier
-    : 'public'
-    | 'protected'
-    | 'private'
+inheritanceModifier
+    : 'final'
     | 'abstract'
-    | 'static'
-    | 'final'
-    | 'strictfp'
     ;
 
-typeParameters
-    : '<' typeParameterList '>'
-    ;
-
-typeParameterList
-    : typeParameter (',' typeParameter)*
-    ;
-
-superinterfaces
-    : 'implements' interfaceTypeList
-    ;
-
-interfaceTypeList
-    : interfaceType (',' interfaceType)*
-    ;
-
-classBody
-    : '{' classBodyDeclaration* '}' NL
+classBody /* $jsmith-scope */
+    : '{' classBodyDeclaration+ '}' NL
     ;
 
 classBodyDeclaration
@@ -312,854 +278,44 @@ classBodyDeclaration
 
 classMemberDeclaration
     :  ';'
+    | methodDeclaration
     ;
 
-
-variableDeclaratorList
-    : variableDeclarator (',' variableDeclarator)*
-    ;
-
-variableDeclarator
-    : variableDeclaratorId ('=' variableInitializer)?
-    ;
-
-variableDeclaratorId
-    : Identifier dims?
-    ;
-
-variableInitializer
-    : expression
-    | arrayInitializer
-    ;
-
-unannType
-    : unannPrimitiveType
-    | unannReferenceType
-    ;
-
-unannPrimitiveType
-    : numericType
-    | 'boolean'
-    ;
-
-unannReferenceType
-    : unannClassOrInterfaceType
-    | unannTypeVariable
-    | unannArrayType
-    ;
-
-unannClassOrInterfaceType
-    : (
-        unannClassType_lfno_unannClassOrInterfaceType
-        | unannInterfaceType_lfno_unannClassOrInterfaceType
-    ) (
-        unannClassType_lf_unannClassOrInterfaceType
-        | unannInterfaceType_lf_unannClassOrInterfaceType
-    )*
-    ;
-
-unannClassType
-    : Identifier typeArguments?
-    | unannClassOrInterfaceType '.' Identifier typeArguments?
-    ;
-
-unannClassType_lf_unannClassOrInterfaceType
-    : '.' Identifier typeArguments?
-    ;
-
-unannClassType_lfno_unannClassOrInterfaceType
-    : Identifier typeArguments?
-    ;
-
-unannInterfaceType_lf_unannClassOrInterfaceType
-    : unannClassType_lf_unannClassOrInterfaceType
-    ;
-
-unannInterfaceType_lfno_unannClassOrInterfaceType
-    : unannClassType_lfno_unannClassOrInterfaceType
-    ;
-
-unannTypeVariable
-    : Identifier
-    ;
-
-unannArrayType
-    : unannPrimitiveType dims
-    | unannClassOrInterfaceType dims
-    | unannTypeVariable dims
-    ;
-
-methodHeader
-    : result methodDeclarator throws_?
-    | typeParameters result methodDeclarator throws_?
-    ;
-
-result
-    : unannType
-    | 'void'
-    ;
-
-methodDeclarator
-    : Identifier '(' formalParameterList? ')' dims?
-    ;
-
-formalParameterList
-    : receiverParameter
-    | formalParameters ',' lastFormalParameter
-    | lastFormalParameter
-    ;
-
-formalParameters
-    : formalParameter (',' formalParameter)*
-    | receiverParameter (',' formalParameter)*
-    ;
-
-formalParameter
-    : variableModifier* unannType variableDeclaratorId
-    ;
-
-variableModifier
-    : 'final'
-    ;
-
-lastFormalParameter
-    : variableModifier* unannType '...' variableDeclaratorId
-    | formalParameter
-    ;
-
-receiverParameter
-    : unannType (Identifier '.')? 'this'
-    ;
-
-throws_
-    : 'throws' exceptionTypeList
-    ;
-
-exceptionTypeList
-    : exceptionType (',' exceptionType)*
-    ;
-
-exceptionType
-    : classType
-    | typeVariable
+methodDeclaration
+    : NL 'public' SPACE 'void' SPACE /* $jsmith-unique */ Identifier '(' ')' methodBody NL
     ;
 
 methodBody
-    : block
-    | ';'
+    : methodBlock
     ;
 
-instanceInitializer
-    : block
-    ;
-
-staticInitializer
-    : 'static' block
-    ;
-
-/*
- * Productions from §9 (Interfaces)
- */
-
-interfaceDeclaration
-    : normalInterfaceDeclaration
-    ;
-
-normalInterfaceDeclaration
-    : interfaceModifier* 'interface' Identifier typeParameters? extendsInterfaces? interfaceBody
-    ;
-
-interfaceModifier
-    : 'public'
-    | 'protected'
-    | 'private'
-    | 'abstract'
-    | 'static'
-    | 'strictfp'
-    ;
-
-extendsInterfaces
-    : 'extends' interfaceTypeList
-    ;
-
-interfaceBody
-    : '{' interfaceMemberDeclaration* '}'
-    ;
-
-interfaceMemberDeclaration
-    : constantDeclaration
-    | interfaceMethodDeclaration
-    | classDeclaration
-    | interfaceDeclaration
-    | ';'
-    ;
-
-constantDeclaration
-    : constantModifier* unannType variableDeclaratorList ';'
-    ;
-
-constantModifier
-    : 'public'
-    | 'static'
-    | 'final'
-    ;
-
-interfaceMethodDeclaration
-    : interfaceMethodModifier* methodHeader methodBody
-    ;
-
-interfaceMethodModifier
-    : 'public'
-    | 'abstract'
-    | 'default'
-    | 'static'
-    | 'strictfp'
-    ;
-
-elementValue
-    : conditionalExpression
-    | elementValueArrayInitializer
-    ;
-
-elementValueArrayInitializer
-    : '{' elementValueList? ','? '}'
-    ;
-
-elementValueList
-    : elementValue (',' elementValue)*
-    ;
-
-/*
- * Productions from §10 (Arrays)
- */
-
-arrayInitializer
-    : '{' variableInitializerList? ','? '}'
-    ;
-
-variableInitializerList
-    : variableInitializer (',' variableInitializer)*
-    ;
-
-/*
- * Productions from §14 (Blocks and Statements)
- */
-
-block
-    : '{' blockStatements? '}'
-    ;
-
-blockStatements
-    : blockStatement+
-    ;
-
-blockStatement
-    : localVariableDeclarationStatement
-    | classDeclaration
-    | statement
-    ;
-
-localVariableDeclarationStatement
-    : localVariableDeclaration ';'
-    ;
-
-localVariableDeclaration
-    : variableModifier* unannType variableDeclaratorList
-    ;
-
-statement
-    : statementWithoutTrailingSubstatement
-    | labeledStatement
-    | ifThenStatement
-    | ifThenElseStatement
-    | whileStatement
-    | forStatement
-    ;
-
-statementNoShortIf
-    : statementWithoutTrailingSubstatement
-    | labeledStatementNoShortIf
-    | ifThenElseStatementNoShortIf
-    | whileStatementNoShortIf
-    | forStatementNoShortIf
-    ;
-
-statementWithoutTrailingSubstatement
-    : block
-    | emptyStatement_
-    | expressionStatement
-    | assertStatement
-    | switchStatement
-    | doStatement
-    | breakStatement
-    | continueStatement
-    | returnStatement
-    | synchronizedStatement
-    | throwStatement
-    | tryStatement
-    ;
-
-emptyStatement_
-    : ';'
-    ;
-
-labeledStatement
-    : Identifier ':' statement
-    ;
-
-labeledStatementNoShortIf
-    : Identifier ':' statementNoShortIf
+methodBlock /* $jsmith-scope */
+    : '{' expressionStatement+ '}'
     ;
 
 expressionStatement
-    : statementExpression ';'
+    : NL statementExpression ';' NL
+    ;
+
+vardef
+    : 'long' SPACE /* $jsmith-var-decl */ /* $jsmith-unique */ Identifier
     ;
 
 statementExpression
-    : assignment
-    | preIncrementExpression
-    | preDecrementExpression
-    | postIncrementExpression
-    | postDecrementExpression
-    | methodInvocation
-    | classInstanceCreationExpression
-    ;
-
-ifThenStatement
-    : 'if' '(' expression ')' statement
-    ;
-
-ifThenElseStatement
-    : 'if' '(' expression ')' statementNoShortIf 'else' statement
-    ;
-
-ifThenElseStatementNoShortIf
-    : 'if' '(' expression ')' statementNoShortIf 'else' statementNoShortIf
-    ;
-
-assertStatement
-    : 'assert' expression ';'
-    | 'assert' expression ':' expression ';'
-    ;
-
-switchStatement
-    : 'switch' '(' expression ')' switchBlock
-    ;
-
-switchBlock
-    : '{' switchBlockStatementGroup* switchLabel* '}'
-    ;
-
-switchBlockStatementGroup
-    : switchLabels blockStatements
-    ;
-
-switchLabels
-    : switchLabel switchLabel*
-    ;
-
-switchLabel
-    : 'case' constantExpression ':'
-    | 'case' enumConstantName ':'
-    | 'default' ':'
-    ;
-
-enumConstantName
-    : Identifier
-    ;
-
-whileStatement
-    : 'while' '(' expression ')' statement
-    ;
-
-whileStatementNoShortIf
-    : 'while' '(' expression ')' statementNoShortIf
-    ;
-
-doStatement
-    : 'do' statement 'while' '(' expression ')' ';'
-    ;
-
-forStatement
-    : basicForStatement
-    | enhancedForStatement
-    ;
-
-forStatementNoShortIf
-    : basicForStatementNoShortIf
-    | enhancedForStatementNoShortIf
-    ;
-
-basicForStatement
-    : 'for' '(' forInit? ';' expression? ';' forUpdate? ')' statement
-    ;
-
-basicForStatementNoShortIf
-    : 'for' '(' forInit? ';' expression? ';' forUpdate? ')' statementNoShortIf
-    ;
-
-forInit
-    : statementExpressionList
-    | localVariableDeclaration
-    ;
-
-forUpdate
-    : statementExpressionList
-    ;
-
-statementExpressionList
-    : statementExpression (',' statementExpression)*
-    ;
-
-enhancedForStatement
-    : 'for' '(' variableModifier* unannType variableDeclaratorId ':' expression ')' statement
-    ;
-
-enhancedForStatementNoShortIf
-    : 'for' '(' variableModifier* unannType variableDeclaratorId ':' expression ')' statementNoShortIf
-    ;
-
-breakStatement
-    : 'break' Identifier? ';'
-    ;
-
-continueStatement
-    : 'continue' Identifier? ';'
-    ;
-
-returnStatement
-    : 'return' expression? ';'
-    ;
-
-throwStatement
-    : 'throw' expression ';'
-    ;
-
-synchronizedStatement
-    : 'synchronized' '(' expression ')' block
-    ;
-
-tryStatement
-    : 'try' block catches
-    | 'try' block catches? finally_
-    | tryWithResourcesStatement
-    ;
-
-catches
-    : catchClause catchClause*
-    ;
-
-catchClause
-    : 'catch' '(' catchFormalParameter ')' block
-    ;
-
-catchFormalParameter
-    : variableModifier* catchType variableDeclaratorId
-    ;
-
-catchType
-    : unannClassType ('|' classType)*
-    ;
-
-finally_
-    : 'finally' block
-    ;
-
-tryWithResourcesStatement
-    : 'try' resourceSpecification block catches? finally_?
-    ;
-
-resourceSpecification
-    : '(' resourceList ';'? ')'
-    ;
-
-resourceList
-    : resource (';' resource)*
-    ;
-
-resource
-    : variableModifier* unannType variableDeclaratorId '=' expression
-    ;
-
-/*
- * Productions from §15 (Expressions)
- */
-
-primary
-    : (primaryNoNewArray_lfno_primary | arrayCreationExpression) primaryNoNewArray_lf_primary*
-    ;
-
-primaryNoNewArray
-    : literal
-    | typeName ('[' ']')* '.' 'class'
-    | 'void' '.' 'class'
-    | 'this'
-    | typeName '.' 'this'
-    | '(' expression ')'
-    | classInstanceCreationExpression
-    | fieldAccess
-    | arrayAccess
-    | methodInvocation
-    | methodReference
-    ;
-
-primaryNoNewArray_lf_arrayAccess
-    :
-    ;
-
-primaryNoNewArray_lfno_arrayAccess
-    : literal
-    | typeName ('[' ']')* '.' 'class'
-    | 'void' '.' 'class'
-    | 'this'
-    | typeName '.' 'this'
-    | '(' expression ')'
-    | classInstanceCreationExpression
-    | fieldAccess
-    | methodInvocation
-    | methodReference
-    ;
-
-primaryNoNewArray_lf_primary
-    : classInstanceCreationExpression_lf_primary
-    | fieldAccess_lf_primary
-    | arrayAccess_lf_primary
-    | methodInvocation_lf_primary
-    | methodReference_lf_primary
-    ;
-
-primaryNoNewArray_lf_primary_lf_arrayAccess_lf_primary
-    :
-    ;
-
-primaryNoNewArray_lf_primary_lfno_arrayAccess_lf_primary
-    : classInstanceCreationExpression_lf_primary
-    | fieldAccess_lf_primary
-    | methodInvocation_lf_primary
-    | methodReference_lf_primary
-    ;
-
-primaryNoNewArray_lfno_primary
-    : literal
-    | typeName ('[' ']')* '.' 'class'
-    | unannPrimitiveType ('[' ']')* '.' 'class'
-    | 'void' '.' 'class'
-    | 'this'
-    | typeName '.' 'this'
-    | '(' expression ')'
-    | classInstanceCreationExpression_lfno_primary
-    | fieldAccess_lfno_primary
-    | arrayAccess_lfno_primary
-    | methodInvocation_lfno_primary
-    | methodReference_lfno_primary
-    ;
-
-primaryNoNewArray_lfno_primary_lf_arrayAccess_lfno_primary
-    :
-    ;
-
-primaryNoNewArray_lfno_primary_lfno_arrayAccess_lfno_primary
-    : literal
-    | typeName ('[' ']')* '.' 'class'
-    | unannPrimitiveType ('[' ']')* '.' 'class'
-    | 'void' '.' 'class'
-    | 'this'
-    | typeName '.' 'this'
-    | '(' expression ')'
-    | classInstanceCreationExpression_lfno_primary
-    | fieldAccess_lfno_primary
-    | methodInvocation_lfno_primary
-    | methodReference_lfno_primary
-    ;
-
-classInstanceCreationExpression
-    : 'new' typeArguments? Identifier ('.' Identifier)* typeArgumentsOrDiamond? '(' argumentList? ')' classBody?
-    | expressionName '.' 'new' typeArguments? Identifier typeArgumentsOrDiamond? '(' argumentList? ')' classBody?
-    | primary '.' 'new' typeArguments? Identifier typeArgumentsOrDiamond? '(' argumentList? ')' classBody?
-    ;
-
-classInstanceCreationExpression_lf_primary
-    : '.' 'new' typeArguments?  Identifier typeArgumentsOrDiamond? '(' argumentList? ')' classBody?
-    ;
-
-classInstanceCreationExpression_lfno_primary
-    : 'new' typeArguments?  Identifier ('.'  Identifier)* typeArgumentsOrDiamond? '(' argumentList? ')' classBody?
-    | expressionName '.' 'new' typeArguments?  Identifier typeArgumentsOrDiamond? '(' argumentList? ')' classBody?
-    ;
-
-typeArgumentsOrDiamond
-    : typeArguments
-    | '<' '>'
-    ;
-
-fieldAccess
-    : primary '.' Identifier
-    | 'super' '.' Identifier
-    | typeName '.' 'super' '.' Identifier
-    ;
-
-fieldAccess_lf_primary
-    : '.' Identifier
-    ;
-
-fieldAccess_lfno_primary
-    : 'super' '.' Identifier
-    | typeName '.' 'super' '.' Identifier
-    ;
-
-arrayAccess
-    : (expressionName '[' expression ']' | primaryNoNewArray_lfno_arrayAccess '[' expression ']') (
-        primaryNoNewArray_lf_arrayAccess '[' expression ']'
-    )*
-    ;
-
-arrayAccess_lf_primary
-    : primaryNoNewArray_lf_primary_lfno_arrayAccess_lf_primary '[' expression ']' (
-        primaryNoNewArray_lf_primary_lf_arrayAccess_lf_primary '[' expression ']'
-    )*
-    ;
-
-arrayAccess_lfno_primary
-    : (
-        expressionName '[' expression ']'
-        | primaryNoNewArray_lfno_primary_lfno_arrayAccess_lfno_primary '[' expression ']'
-    ) (primaryNoNewArray_lfno_primary_lf_arrayAccess_lfno_primary '[' expression ']')*
-    ;
-
-methodInvocation
-    : methodName '(' argumentList? ')'
-    | typeName '.' typeArguments? Identifier '(' argumentList? ')'
-    | expressionName '.' typeArguments? Identifier '(' argumentList? ')'
-    | primary '.' typeArguments? Identifier '(' argumentList? ')'
-    | 'super' '.' typeArguments? Identifier '(' argumentList? ')'
-    | typeName '.' 'super' '.' typeArguments? Identifier '(' argumentList? ')'
-    ;
-
-methodInvocation_lf_primary
-    : '.' typeArguments? Identifier '(' argumentList? ')'
-    ;
-
-methodInvocation_lfno_primary
-    : methodName '(' argumentList? ')'
-    | typeName '.' typeArguments? Identifier '(' argumentList? ')'
-    | expressionName '.' typeArguments? Identifier '(' argumentList? ')'
-    | 'super' '.' typeArguments? Identifier '(' argumentList? ')'
-    | typeName '.' 'super' '.' typeArguments? Identifier '(' argumentList? ')'
-    ;
-
-argumentList
-    : expression (',' expression)*
-    ;
-
-methodReference
-    : expressionName '::' typeArguments? Identifier
-    | referenceType '::' typeArguments? Identifier
-    | primary '::' typeArguments? Identifier
-    | 'super' '::' typeArguments? Identifier
-    | typeName '.' 'super' '::' typeArguments? Identifier
-    | classType '::' typeArguments? 'new'
-    | arrayType '::' 'new'
-    ;
-
-methodReference_lf_primary
-    : '::' typeArguments? Identifier
-    ;
-
-methodReference_lfno_primary
-    : expressionName '::' typeArguments? Identifier
-    | referenceType '::' typeArguments? Identifier
-    | 'super' '::' typeArguments? Identifier
-    | typeName '.' 'super' '::' typeArguments? Identifier
-    | classType '::' typeArguments? 'new'
-    | arrayType '::' 'new'
-    ;
-
-arrayCreationExpression
-    : 'new' primitiveType dimExprs dims?
-    | 'new' classOrInterfaceType dimExprs dims?
-    | 'new' primitiveType dims arrayInitializer
-    | 'new' classOrInterfaceType dims arrayInitializer
-    ;
-
-dimExprs
-    : dimExpr dimExpr*
-    ;
-
-dimExpr
-    : '[' expression ']'
-    ;
-
-constantExpression
-    : expression
-    ;
-
-expression
-    : lambdaExpression
-    | assignmentExpression
-    ;
-
-lambdaExpression
-    : lambdaParameters '->' lambdaBody
-    ;
-
-lambdaParameters
-    : Identifier
-    | '(' formalParameterList? ')'
-    | '(' inferredFormalParameterList ')'
-    ;
-
-inferredFormalParameterList
-    : Identifier (',' Identifier)*
-    ;
-
-lambdaBody
-    : expression
-    | block
-    ;
-
-assignmentExpression
-    : conditionalExpression
-    | assignment
+    : vardef
+    | /* $jsmith-var-init */ assignment
     ;
 
 assignment
-    : leftHandSide assignmentOperator expression
+    : /* $jsmith-var-target */ leftHandSide '=' simplifiedExpression
     ;
 
 leftHandSide
     : expressionName
-    | fieldAccess
-    | arrayAccess
     ;
 
-assignmentOperator
-    : '='
-    | '*='
-    | '/='
-    | '%='
-    | '+='
-    | '-='
-    | '<<='
-    | '>>='
-    | '>>>='
-    | '&='
-    | '^='
-    | '|='
-    ;
-
-conditionalExpression
-    : conditionalOrExpression
-    | conditionalOrExpression '?' expression ':' conditionalExpression
-    ;
-
-conditionalOrExpression
-    : conditionalAndExpression
-    | conditionalOrExpression '||' conditionalAndExpression
-    ;
-
-conditionalAndExpression
-    : inclusiveOrExpression
-    | conditionalAndExpression '&&' inclusiveOrExpression
-    ;
-
-inclusiveOrExpression
-    : exclusiveOrExpression
-    | inclusiveOrExpression '|' exclusiveOrExpression
-    ;
-
-exclusiveOrExpression
-    : andExpression
-    | exclusiveOrExpression '^' andExpression
-    ;
-
-andExpression
-    : equalityExpression
-    | andExpression '&' equalityExpression
-    ;
-
-equalityExpression
-    : relationalExpression
-    | equalityExpression '==' relationalExpression
-    | equalityExpression '!=' relationalExpression
-    ;
-
-relationalExpression
-    : shiftExpression
-    | relationalExpression '<' shiftExpression
-    | relationalExpression '>' shiftExpression
-    | relationalExpression '<=' shiftExpression
-    | relationalExpression '>=' shiftExpression
-    | relationalExpression 'instanceof' referenceType
-    ;
-
-shiftExpression
-    : additiveExpression
-    | shiftExpression '<' '<' additiveExpression
-    | shiftExpression '>' '>' additiveExpression
-    | shiftExpression '>' '>' '>' additiveExpression
-    ;
-
-additiveExpression
-    : multiplicativeExpression
-    | additiveExpression '+' multiplicativeExpression
-    | additiveExpression '-' multiplicativeExpression
-    ;
-
-multiplicativeExpression
-    : unaryExpression
-    | multiplicativeExpression '*' unaryExpression
-    | multiplicativeExpression '/' unaryExpression
-    | multiplicativeExpression '%' unaryExpression
-    ;
-
-unaryExpression
-    : preIncrementExpression
-    | preDecrementExpression
-    | '+' unaryExpression
-    | '-' unaryExpression
-    | unaryExpressionNotPlusMinus
-    ;
-
-preIncrementExpression
-    : '++' unaryExpression
-    ;
-
-preDecrementExpression
-    : '--' unaryExpression
-    ;
-
-unaryExpressionNotPlusMinus
-    : postfixExpression
-    | '~' unaryExpression
-    | '!' unaryExpression
-    | castExpression
-    ;
-
-postfixExpression
-    : (primary | expressionName) (
-        postIncrementExpression_lf_postfixExpression
-        | postDecrementExpression_lf_postfixExpression
-    )*
-    ;
-
-postIncrementExpression
-    : postfixExpression '++'
-    ;
-
-postIncrementExpression_lf_postfixExpression
-    : '++'
-    ;
-
-postDecrementExpression
-    : postfixExpression '--'
-    ;
-
-postDecrementExpression_lf_postfixExpression
-    : '--'
-    ;
-
-castExpression
-    : '(' primitiveType ')' unaryExpression
-    | '(' referenceType additionalBound* ')' unaryExpressionNotPlusMinus
-    | '(' referenceType additionalBound* ')' lambdaExpression
+simplifiedExpression
+    : simplifiedExpression SPACE '+' SPACE IntegerLiteral
+    | /* $jsmith-var-use */ Identifier
+    | IntegerLiteral
     ;

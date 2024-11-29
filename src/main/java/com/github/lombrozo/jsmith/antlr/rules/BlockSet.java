@@ -47,4 +47,9 @@ public final class BlockSet extends Unimplemented {
     public String name() {
         return "blockSet";
     }
+
+    @Override
+    public Rule copy() {
+        return new BlockSet(this.parent());
+    }
 }

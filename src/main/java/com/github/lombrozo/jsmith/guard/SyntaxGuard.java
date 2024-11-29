@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.guard;
 
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,7 +34,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -136,8 +136,10 @@ public final class SyntaxGuard {
     public void verifySilently(final Text code) {
         try {
             this.verify(code.output());
+            Logger.debug(this, "Generated code is correct");
         } catch (final InvalidSyntax exception) {
-            Logger.getLogger(SyntaxGuard.class.getSimpleName()).severe(
+            Logger.error(
+                this,
                 String.format(
                     "Generated code tree: '%n%s%n' is wrong",
                     code.output()

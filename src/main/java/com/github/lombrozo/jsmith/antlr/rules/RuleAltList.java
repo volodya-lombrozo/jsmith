@@ -81,7 +81,10 @@ public final class RuleAltList implements Rule {
         }
         return new TextNode(
             this,
-            context.strategy().choose(this, this.alternatives).generate(context)
+            new SeveralAttempts(
+                this.name(),
+                () -> context.strategy().choose(this, this.alternatives).generate(context)
+            ).choose()
         );
     }
 
@@ -96,6 +99,15 @@ public final class RuleAltList implements Rule {
             "ruleAltList(alternatives=%d, id=%s)",
             this.alternatives.size(),
             System.identityHashCode(this)
+        );
+    }
+
+    @Override
+    public Rule copy() {
+        return new RuleAltList(
+            this.top,
+            this.alternatives.stream().map(Rule::copy)
+                .collect(java.util.stream.Collectors.toList())
         );
     }
 }

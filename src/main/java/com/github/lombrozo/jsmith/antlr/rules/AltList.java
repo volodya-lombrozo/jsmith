@@ -30,6 +30,8 @@ import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import lombok.ToString;
 
 /**
  * Alternative ANTLR rule.
@@ -41,6 +43,7 @@ import java.util.List;
  * }
  * @since 0.1
  */
+@ToString
 public final class AltList implements Rule {
 
     /**
@@ -103,9 +106,12 @@ public final class AltList implements Rule {
         } else {
             result = new TextNode(
                 this,
-                context.strategy()
-                    .choose(this, this.alternatives)
-                    .generate(context)
+                new SeveralAttempts(
+                    this.name(),
+                    () -> context.strategy()
+                        .choose(this, this.alternatives)
+                        .generate(context)
+                ).choose()
             );
         }
         return result;
@@ -119,5 +125,12 @@ public final class AltList implements Rule {
     @Override
     public String name() {
         return String.format("altList(size=%d)", this.alternatives.size());
+    }
+
+    @Override
+    public Rule copy() {
+        return new AltList(
+            this.top, this.alternatives.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }

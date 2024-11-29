@@ -29,6 +29,7 @@ import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a lexer element.
@@ -99,6 +100,13 @@ public final class LexerElement implements Rule {
     @Override
     public String name() {
         return "lexerElement";
+    }
+
+    @Override
+    public Rule copy() {
+        return new LexerElement(
+            this.top, this.children.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 
     /**

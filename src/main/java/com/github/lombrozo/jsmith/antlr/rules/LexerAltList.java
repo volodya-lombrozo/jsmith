@@ -28,6 +28,7 @@ import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * LexerAltList rule.
@@ -83,7 +84,13 @@ public final class LexerAltList implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        return new TextNode(this, context.strategy().choose(this, this.children).generate(context));
+        return new TextNode(
+            this,
+            new SeveralAttempts(
+                this.name(),
+                () -> context.strategy().choose(this, this.children).generate(context)
+            ).choose()
+        );
     }
 
     @Override
@@ -94,5 +101,12 @@ public final class LexerAltList implements Rule {
     @Override
     public String name() {
         return "lexerAltList";
+    }
+
+    @Override
+    public Rule copy() {
+        return new LexerAltList(
+            this.top, this.children.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }

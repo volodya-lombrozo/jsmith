@@ -84,6 +84,13 @@ public final class Root implements Rule {
     }
 
     @Override
+    public Rule copy() {
+        return new Root(
+            this.all.stream().map(Rule::copy).collect(Collectors.toList())
+        );
+    }
+
+    @Override
     public String toString() {
         return this.name();
     }

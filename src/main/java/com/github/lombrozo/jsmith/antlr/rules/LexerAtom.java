@@ -28,6 +28,7 @@ import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * LexerAtom rule.
@@ -101,6 +102,13 @@ public final class LexerAtom implements Rule {
     @Override
     public String name() {
         return "lexerAtom";
+    }
+
+    @Override
+    public Rule copy() {
+        return new LexerAtom(
+            this.top, this.elems.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 
     @Override

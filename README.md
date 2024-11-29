@@ -58,7 +58,7 @@ In fact, jsmith can generate programs in any language, not just Java.
 Below is an example of the `Arithmetic` grammar and an explanation of how to
 generate random programs based on this grammar:
 
-```antlrv4
+```antlr
 grammar Arithmetic;
 
 prog: stat+ ;
@@ -116,85 +116,79 @@ d=GAw*IUFjX*Z*INgwx
 
 ## Semantic Aware Generation
 
-### Not Implemented Yet
-
 The library can generate the simple Java programs that syntactically correct.
-However, these programs are not always semantically correct.
-It means that
-if you try to compile them, you most probably will get a compilation error.
+To guide the generation of semantically correct programs, we use special
+annotations in the grammar. They are not a part of the ANTLR grammar, but they
+might be used to generate generation.
 
-#### Semantic Labels
+Here is the example of such annotations:
 
-To generate semantically correct programs, we can enhance the grammar with
-labels:
-
-```antlrv4
+```antlr
 grammar Arithmetic;
 
 prog: stat+ ;
 
 stat: expr NEWLINE
-    | ID '=' expr NEWLINE #ID_VariableDeclaration
-    | NEWLINE
+    | /* $jsmith-var-init */ /* $jsmith-var-target */ /* $jsmith-var-decl */ ID '=' expr NEWLINE
     ;
 
 expr: expr ('*' | '/' ) expr
     | expr ('+' | '-' ) expr
     | INT
-    | ID #ID_VariableUsage
+    | /* $jsmith-var-use */ ID
     | '(' expr ')'
     ;
 
-ID  : [a-zA-Z]+ ;
-INT : [0-9]+ ;
+ID  : [a-zA-Z] ;
+INT : [0-9] ;
 NEWLINE: '\r'? '\n' ;
-WS  : [ \t]+ -> skip ;
+WS  : [ \t] -> skip ;
 ```
 
-Pay attention to the `#ID_VariableDeclaration` and `#ID_VariableUsage` labels.
-These labels will allow us to generate semantically correct programs.
-For example, we can generate a program that declares a variable and uses it:
+Pay attention to the `$jsmith-var-init`, `$jsmith-var-target`
+and `$jsmith-var-use` annotations in comments.
+They help the generator understand the context of the program and generate
+semantically correct programs, such as the following (real generated strings):
 
 ```txt
-A = 123
-B = (A+123)
-C = (B*123)
+O=(8+4)
+O=(O+O)/2*6
+
+4
+((5))/0+8*5
+T=6
+2
+T=0*T-3/(T)
+
+I=0*1-((7))*((0))-((8))
+Q=5-6+6*I
+(I+I)
+I=3
+C=Q/Q
+
+K=8
+K=K
+2/9
 ```
 
-In other words, by using labels, we can guide program generation to produce
-semantically correct programs.
+Now expressions use only the initialized variables, and the variables are
+initialized before they are used.
 
-#### Semantic Specifications
+Here is a full list of supported annotations:
 
-Another possible approach is to use semantic specifications.
-Semantic specification is a set of rules that define the semantics of the
-generated program.
-In other words, we can define a syntax generation by using ANTLR grammar
-and semantic generation by using semantic specifications.
+* `$jsmith-var-decl` - variable declaration, in some language it might be
+required to declare a variable before using it like `int x;`. This
+annotation should be attached to a terminal usage in parser rules.
+* `$jsmith-var-init` - variable initialization, like `x = 5;` this annotation
+is applicable only to the parser option rule that contains `$jsmith-var-target`
+* `$jsmith-var-target` - variable initialization target `(target->)x = 5;`.
+This annotation is attached to the token usage in a parser rule.
+* `$jsmith-var-use` - variable usage, like `x` in `x * 2;`
+* `$jsmith-unique` - unique value, if it generates already used value, it
+should be regenerated.
+* `$jsmith-scope` - scope, like `{}` in `if (x > 5) { x = 5; }`, it helps to
+separate identifiers in different scopes.
 
-For example, we can define the following semantic specification for the
-Arithmetic grammar:
-
-```yaml
-- name: VariableDeclaration
-  match:
-    rule: stat
-    for:
-      - name: ID
-  action: declare_variable
-
-- name: VariableUsage
-  match:
-    rule: expr
-    for:
-      - name: ID
-  action: use_variable
-```
-
-Of course, they are just the first examples of how we can generate semantically
-correct programs.
-We need to define more complex semantic specifications to generate more complex
-programs and try both approaches to see which one is more effective.
 
 ## How to Contribute
 

@@ -25,7 +25,11 @@ package com.github.lombrozo.jsmith;
 
 import com.github.lombrozo.jsmith.antlr.AntlrListener;
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Unlexer;
+import com.github.lombrozo.jsmith.antlr.Unparser;
+import com.github.lombrozo.jsmith.antlr.semantic.Scope;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.random.ConvergenceStrategy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +46,7 @@ import org.cactoos.text.UncheckedText;
  * In other words, it consumes ANTLR grammar and generates random scripts based on it.
  * @since 0.1
  */
+@SuppressWarnings("PMD.ConstructorShouldDoInitialization")
 public final class RandomScript {
 
     /**
@@ -49,6 +54,21 @@ public final class RandomScript {
      * They might be as standalone grammars or as separate lexer and parser grammars.
      */
     private final List<String> grammars;
+
+    /**
+     * Unlexer instance.
+     */
+    private final Unlexer unlexer;
+
+    /**
+     * Unparser instance.
+     */
+    private final Unparser unparser;
+
+    /**
+     * Convergence factor.
+     */
+    private final double factor;
 
     /**
      * Constructor.
@@ -69,7 +89,27 @@ public final class RandomScript {
      * @param grammars ANTLR grammars, either standalone or separate lexer and parser grammars.
      */
     private RandomScript(final List<String> grammars) {
+        this(grammars, new Unlexer(), new Unparser(), 0.5);
+    }
+
+    /**
+     * Constructor.
+     * @param grammars ANTLR grammars, either standalone or separate lexer and parser grammars.
+     * @param unlexer Unlexer instance.
+     * @param unparser Unparser instance.
+     * @param factor Convergence factor.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public RandomScript(
+        final List<String> grammars,
+        final Unlexer unlexer,
+        final Unparser unparser,
+        final double factor
+    ) {
         this.grammars = grammars;
+        this.unlexer = unlexer;
+        this.unparser = unparser;
+        this.factor = factor;
     }
 
     /**
@@ -78,12 +118,20 @@ public final class RandomScript {
      * @return Random script text.
      */
     public Text generate(final String rule) {
-        final AntlrListener listener = new AntlrListener();
-        this.grammars.stream()
-            .map(RandomScript::parser)
-            .map(ANTLRv4Parser::grammarSpec)
-            .forEach(specification -> new ParseTreeWalker().walk(listener, specification));
-        return listener.unparser().generate(rule, new Context());
+        final Scope scope = new Scope();
+        this.grammars.forEach(this::parse);
+        return this.unparser.generate(
+            rule, new Context(scope, new ConvergenceStrategy(this.factor))
+        );
+    }
+
+    /**
+     * Change convergence factor.
+     * @param convergence Convergence factor.
+     * @return Random script with a new convergence factor.
+     */
+    RandomScript withFactor(final double convergence) {
+        return new RandomScript(this.grammars, this.unlexer, this.unparser, convergence);
     }
 
     /**
@@ -95,6 +143,24 @@ public final class RandomScript {
             .map(RandomScript::parser)
             .map(parser -> parser.grammarSpec().toStringTree(parser))
             .collect(Collectors.joining("\n"));
+    }
+
+    /**
+     * Parse ANTLR grammar.
+     * @param grammar ANTLR grammar.
+     */
+    private void parse(final String grammar) {
+        final ANTLRv4Lexer lexer = new ANTLRv4Lexer(CharStreams.fromString(grammar));
+        final CommonTokenStream tokens = new CommonTokenStream(lexer);
+        final ANTLRv4Parser parser = new ANTLRv4Parser(tokens);
+        final ANTLRv4Parser.GrammarSpecContext spec = parser.grammarSpec();
+        final ParseTreeWalker walker = new ParseTreeWalker();
+        final AntlrListener listener = new AntlrListener(
+            tokens,
+            this.unparser,
+            this.unlexer
+        );
+        walker.walk(listener, spec);
     }
 
     /**

@@ -63,8 +63,12 @@ public final class Atom implements Rule {
      * @param rule Parent rule.
      */
     public Atom(final Rule rule) {
-        this.top = rule;
-        this.item = new AtomicReference<>();
+        this(rule, new AtomicReference<>());
+    }
+
+    private Atom(final Rule top, final AtomicReference<Rule> item) {
+        this.top = top;
+        this.item = item;
     }
 
     @Override
@@ -80,6 +84,11 @@ public final class Atom implements Rule {
     @Override
     public String name() {
         return Atom.ALIAS;
+    }
+
+    @Override
+    public Rule copy() {
+        return new Atom(this.top, this.item);
     }
 
     @Override

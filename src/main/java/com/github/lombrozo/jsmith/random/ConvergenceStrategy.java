@@ -55,6 +55,14 @@ public final class ConvergenceStrategy implements ChoosingStrategy {
 
     /**
      * Constructor.
+     * @param factor The convergence factor.
+     */
+    public ConvergenceStrategy(final double factor) {
+        this(new Convergence<>(factor));
+    }
+
+    /**
+     * Constructor.
      * @param convergence The convergence state.
      */
     private ConvergenceStrategy(final Convergence<Rule> convergence) {

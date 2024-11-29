@@ -25,10 +25,12 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Alternative elements.
@@ -65,8 +67,17 @@ public final class Element implements Rule {
      * @param parent Parent rule.
      */
     public Element(final Rule parent) {
-        this.top = parent;
-        this.children = new ArrayList<>(1);
+        this(parent, new ArrayList<>(1));
+    }
+
+    /**
+     * Constructor.
+     * @param top Parent rule.
+     * @param children Children rules.
+     */
+    public Element(final Rule top, final List<Rule> children) {
+        this.top = top;
+        this.children = children;
     }
 
     @Override
@@ -83,6 +94,8 @@ public final class Element implements Rule {
         final Rule first = this.children.get(0);
         if (Atom.isAtom(first) || LabeledElement.isLabeledElement(first) || Ebnf.isEbnf(first)) {
             result = new TextNode(this, this.multiplier().repeat(first).generate(context));
+        } else if (ActionBlock.isActionBlock(first)) {
+            result = new TextLeaf(this, "");
         } else {
             throw new IllegalStateException(
                 String.format("Unknown element type: %s", first.name())
@@ -99,6 +112,13 @@ public final class Element implements Rule {
     @Override
     public String name() {
         return Element.ALIAS;
+    }
+
+    @Override
+    public Rule copy() {
+        return new Element(
+            this.top, this.children.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 
     /**

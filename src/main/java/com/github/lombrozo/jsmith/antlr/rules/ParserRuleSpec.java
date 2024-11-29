@@ -47,7 +47,7 @@ public final class ParserRuleSpec implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule prule;
+    private final Rule top;
 
     /**
      * Rule name.
@@ -65,14 +65,18 @@ public final class ParserRuleSpec implements Rule {
      * @param parent Parent rule.
      */
     public ParserRuleSpec(final String name, final Rule parent) {
+        this(name, parent, new ArrayList<>(0));
+    }
+
+    public ParserRuleSpec(final String name, final Rule parent, final List<Rule> list) {
+        this.top = parent;
         this.rname = name;
-        this.prule = parent;
-        this.list = new ArrayList<>(0);
+        this.list = list;
     }
 
     @Override
     public Rule parent() {
-        return this.prule;
+        return this.top;
     }
 
     @Override
@@ -91,5 +95,14 @@ public final class ParserRuleSpec implements Rule {
     @Override
     public String name() {
         return String.format("parserRuleSpec(%s)", this.rname);
+    }
+
+    @Override
+    public Rule copy() {
+        return new ParserRuleSpec(
+            this.rname,
+            this.top,
+            this.list.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }

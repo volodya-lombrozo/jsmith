@@ -96,4 +96,11 @@ public final class LexerElements implements Rule {
         return "lexerElements";
     }
 
+    @Override
+    public Rule copy() {
+        return new LexerElements(
+            this.top, this.elems.stream().map(Rule::copy).collect(Collectors.toList())
+        );
+    }
+
 }

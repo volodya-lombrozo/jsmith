@@ -25,11 +25,19 @@ package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.rules.AltList;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
+import com.github.lombrozo.jsmith.antlr.rules.Root;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -55,6 +63,45 @@ final class ConvergenceTest {
             ),
             convergence.choose(list, args),
             Matchers.equalTo(desired)
+        );
+    }
+
+    @RepeatedTest(10)
+    void correctChoosingDistribution() {
+        final Convergence<Rule> convergence = new Convergence<>(0.5, false);
+        final Rule root = new Root();
+        final Rule first = new Literal("a");
+        final Rule second = new Literal("b");
+        final Rule third = new Literal("c");
+        final Map<Rule, Integer> frequency = new HashMap<>(0);
+        for (int index = 0; index < 1000; ++index) {
+            frequency.compute(
+                convergence.choose(root, first, second, third),
+                (key, value) -> Optional.ofNullable(value).map(v -> v + 1).orElse(1)
+            );
+        }
+        MatcherAssert.assertThat(
+            "We expect that all elements were chosen more-or-less equally.",
+            frequency.values(),
+            Matchers.everyItem(Matchers.greaterThan(300))
+        );
+    }
+
+    @RepeatedTest(10)
+    void choosesAllElements() {
+        final Rule root = new AltList();
+        final List<Rule> alternatives = IntStream.range(0, 5)
+            .mapToObj(String::valueOf)
+            .map(Literal::new)
+            .peek(root::append)
+            .collect(Collectors.toList());
+        final Convergence<Rule> convergence = new Convergence<>(0.5, false);
+        MatcherAssert.assertThat(
+            "We expect that all elements were chosen at least once.",
+            IntStream.range(0, 50)
+                .mapToObj(i -> convergence.choose(root, alternatives))
+                .collect(Collectors.toSet()),
+            Matchers.containsInAnyOrder(alternatives.toArray())
         );
     }
 }

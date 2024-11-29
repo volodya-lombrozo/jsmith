@@ -47,4 +47,9 @@ public final class Action extends Unimplemented {
     public String name() {
         return "action_";
     }
+
+    @Override
+    public Rule copy() {
+        return new Action(this.parent());
+    }
 }

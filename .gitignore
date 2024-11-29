@@ -24,3 +24,8 @@ hs_err_pid*
 replay_pid*
 target/
 .idea/
+gen/
+antlr-generated/
+*.tokens
+
+src/main/antlr4/com/github/lombrozo/jsmith/tmp

@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr;
 
+import com.github.lombrozo.jsmith.ANTLRv4Lexer;
 import com.github.lombrozo.jsmith.ANTLRv4Parser;
 import com.github.lombrozo.jsmith.ANTLRv4ParserBaseListener;
 import com.github.lombrozo.jsmith.antlr.rules.Action;
@@ -76,9 +77,17 @@ import com.github.lombrozo.jsmith.antlr.rules.Safe;
 import com.github.lombrozo.jsmith.antlr.rules.SetElement;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
 import com.github.lombrozo.jsmith.antlr.rules.Traced;
+import com.github.lombrozo.jsmith.antlr.semantic.ScopeRule;
+import com.github.lombrozo.jsmith.antlr.semantic.UniqueRule;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableTarget;
+import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -91,7 +100,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
     "PMD.UselessOverridingMethod",
     "PMD.ExcessivePublicCount",
     "PMD.TooManyMethods",
-    "PMD.AvoidFieldNameMatchingMethodName"
+    "PMD.AvoidFieldNameMatchingMethodName",
+    "PMD.GodClass"
 })
 public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
@@ -106,39 +116,54 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     private final Unlexer unlexer;
 
     /**
+     * Token stream.
+     */
+    private final BufferedTokenStream tokens;
+
+    /**
+     * All declared identifiers.
+     */
+    private final Set<String> identifiers;
+
+    /**
      * Current rule.
      */
     private Rule current;
 
     /**
      * Constructor.
+     * @param tokens Token stream.
+     * @param unparser Unparser.
+     * @param unlexer Unlexer.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
-    public AntlrListener() {
-        this(new Unparser(), new Unlexer(), new Root());
+    public AntlrListener(
+        final BufferedTokenStream tokens,
+        final Unparser unparser,
+        final Unlexer unlexer
+    ) {
+        this(tokens, unparser, unlexer, new Root());
     }
 
     /**
      * Constructor.
+     * @param tokens Token stream.
      * @param unparser Unparser.
      * @param unlexer Unlexer.
      * @param root Current rule.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     private AntlrListener(
+        final BufferedTokenStream tokens,
         final Unparser unparser,
         final Unlexer unlexer,
         final Rule root
     ) {
+        this.tokens = tokens;
         this.unparser = unparser;
         this.unlexer = unlexer;
         this.current = new Traced(root);
-    }
-
-    /**
-     * Get unparser that understands parser rules and can generate code.
-     * @return Unparser.
-     */
-    public Unparser unparser() {
-        return this.unparser;
+        this.identifiers = new JavaKeywords().toSet();
     }
 
     @Override
@@ -164,7 +189,15 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     @Override
     public void enterParserRuleSpec(final ANTLRv4Parser.ParserRuleSpecContext ctx) {
         final String name = ctx.RULE_REF().getText();
-        final Rule rule = new ParserRuleSpec(name, this.current);
+        final JsmithComments comments = new JsmithComments(
+            this.tokens.getHiddenTokensToRight(ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT)
+        );
+        final Rule rule;
+        if (comments.has(ScopeRule.COMMENT)) {
+            rule = new ScopeRule(new ParserRuleSpec(name, this.current));
+        } else {
+            rule = new ParserRuleSpec(name, this.current);
+        }
         this.unparser.with(name, rule);
         this.down(rule);
         super.enterParserRuleSpec(ctx);
@@ -214,7 +247,20 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterElement(final ANTLRv4Parser.ElementContext ctx) {
-        this.down(new Element(this.current));
+        Rule res = new Element(this.current);
+        final JsmithComments comments = new JsmithComments(
+            this.tokens.getHiddenTokensToLeft(ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT)
+        );
+        if (comments.has(VariableUsage.COMMENT)) {
+            res = new VariableUsage(res);
+        }
+        if (comments.has(VariableDeclaration.COMMENT)) {
+            res = new VariableDeclaration(res);
+        }
+        if (comments.has(VariableTarget.COMMENT)) {
+            res = new VariableTarget(res);
+        }
+        this.down(res);
         super.enterElement(ctx);
     }
 
@@ -250,7 +296,16 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterTerminalDef(final ANTLRv4Parser.TerminalDefContext ctx) {
-        this.current.append(new TerminalDef(this.current, this.unlexer, ctx.getText()));
+        final JsmithComments comments = new JsmithComments(
+            this.tokens.getHiddenTokensToLeft(
+                ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
+            )
+        );
+        Rule rule = new TerminalDef(this.current, this.unlexer, ctx.getText());
+        if (comments.has(UniqueRule.COMMENT)) {
+            rule = new UniqueRule(rule, this.identifiers);
+        }
+        this.current.append(rule);
         super.enterTerminalDef(ctx);
     }
 
@@ -510,7 +565,19 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterLabeledAlt(final ANTLRv4Parser.LabeledAltContext ctx) {
-        this.down(new LabeledAlt(this.current));
+        final JsmithComments comments = new JsmithComments(
+            this.tokens.getHiddenTokensToLeft(
+                ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
+            )
+        );
+        final Rule res;
+        final LabeledAlt main = new LabeledAlt(this.current, ctx.getText());
+        if (comments.has(VariableInitialization.COMMENT)) {
+            res = new VariableInitialization(main);
+        } else {
+            res = main;
+        }
+        this.down(res);
         super.enterLabeledAlt(ctx);
     }
 

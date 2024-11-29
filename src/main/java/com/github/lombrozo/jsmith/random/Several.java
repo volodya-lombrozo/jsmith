@@ -81,4 +81,10 @@ final class Several implements Rule {
     public String name() {
         return "several(not-a-rule)";
     }
+
+    @Override
+    public Rule copy() {
+        return this.all.stream().map(Rule::copy)
+            .collect(Collectors.collectingAndThen(Collectors.toList(), Several::new));
+    }
 }
