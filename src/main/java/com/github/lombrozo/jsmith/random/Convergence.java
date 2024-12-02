@@ -23,8 +23,10 @@
  */
 package com.github.lombrozo.jsmith.random;
 
+import com.github.lombrozo.jsmith.Params;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -75,15 +77,15 @@ final class Convergence<T> {
      * Default constructor.
      */
     Convergence() {
-        this(0.5d);
+        this(0.5d, false);
     }
 
     /**
      * Constructor.
-     * @param factor Factor of convergence.
+     * @param params Generation params.
      */
-    Convergence(final double factor) {
-        this(factor, false);
+    Convergence(final Params params) {
+        this(params.factor(), 1.0d, new Rand(params.seed()), false);
     }
 
     /**
@@ -212,7 +214,7 @@ final class Convergence<T> {
      * @return Initial map with weights.
      */
     private Map<T, Double> init(final T... elements) {
-        final Map<T, Double> res = new HashMap<>(0);
+        final Map<T, Double> res = new LinkedHashMap<>(0);
         for (final T element : elements) {
             res.putIfAbsent(element, 0d);
             res.computeIfPresent(element, (key, value) -> value + this.weight);
@@ -225,9 +227,9 @@ final class Convergence<T> {
      * @return Copy of the weights deeply.
      */
     private Map<T, Map<T, Double>> weightsCopy() {
-        final Map<T, Map<T, Double>> copy = new HashMap<>(0);
+        final Map<T, Map<T, Double>> copy = new LinkedHashMap<>(0);
         for (final Map.Entry<T, Map<T, Double>> entry : this.weights.entrySet()) {
-            copy.put(entry.getKey(), new HashMap<>(entry.getValue()));
+            copy.put(entry.getKey(), new LinkedHashMap<>(entry.getValue()));
         }
         return copy;
     }

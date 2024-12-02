@@ -55,8 +55,12 @@ public final class Scope {
     @ToString.Exclude
     private final Rand rand;
 
-    public Scope(final Rand random) {
-        this(null, new Variables(), random);
+    /**
+     * Constructor.
+     * @param rand Random generator.
+     */
+    public Scope(final Rand rand) {
+        this(null, new Variables(), rand);
     }
 
     /**

@@ -438,7 +438,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         this.down(element);
         super.enterLexerElement(ctx);
         if (Objects.nonNull(ctx.QUESTION())) {
-            element.append(new EbnfSuffix("?"));
+            element.append(new EbnfSuffix("?", this.random));
         }
     }
 

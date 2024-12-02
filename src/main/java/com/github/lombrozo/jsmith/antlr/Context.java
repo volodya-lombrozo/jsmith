@@ -65,22 +65,6 @@ public final class Context {
     /**
      * Constructor.
      * @param scope The scope.
-     */
-    public Context(final Scope scope) {
-        this(new ConvergenceStrategy(), new ArrayList<>(0), scope);
-    }
-
-    /**
-     * Constructor.
-     * @param strategy The strategy used in the generation.
-     */
-    public Context(final ChoosingStrategy strategy) {
-        this(strategy, new ArrayList<>(0));
-    }
-
-    /**
-     * Constructor.
-     * @param scope The scope.
      * @param convergence The convergence strategy.
      */
     public Context(final Scope scope, final ConvergenceStrategy convergence) {
@@ -98,15 +82,6 @@ public final class Context {
     /**
      * Constructor.
      * @param strat The strategy used in the generation.
-     * @param chain The path of the rules that were visited during the generation.
-     */
-    public Context(final ChoosingStrategy strat, final List<Rule> chain) {
-        this(strat, chain, null);
-    }
-
-    /**
-     * Constructor.
-     * @param strat The strategy used in the generation.
      * @param visited The path of the rules that were visited during the generation.
      * @param scope The scope.
      */
@@ -118,6 +93,23 @@ public final class Context {
         this.strat = strat;
         this.visited = visited;
         this.scope = scope;
+    }
+
+    /**
+     * Constructor.
+     * @param strat The strategy used in the generation.
+     * @param chain The path of the rules that were visited during the generation.
+     */
+    private Context(final ChoosingStrategy strat, final List<Rule> chain) {
+        this(strat, chain, null);
+    }
+
+    /**
+     * Constructor.
+     * @param strategy The strategy used in the generation.
+     */
+    private Context(final ChoosingStrategy strategy) {
+        this(strategy, new ArrayList<>(0));
     }
 
     /**

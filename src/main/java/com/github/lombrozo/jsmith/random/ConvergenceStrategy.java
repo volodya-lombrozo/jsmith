@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.random;
 
+import com.github.lombrozo.jsmith.Params;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.List;
 
@@ -55,10 +56,10 @@ public final class ConvergenceStrategy implements ChoosingStrategy {
 
     /**
      * Constructor.
-     * @param factor The convergence factor.
+     * @param params The convergence params.
      */
-    public ConvergenceStrategy(final double factor) {
-        this(new Convergence<>(factor));
+    public ConvergenceStrategy(final Params params) {
+        this(new Convergence<>(params));
     }
 
     /**

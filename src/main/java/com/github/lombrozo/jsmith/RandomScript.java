@@ -132,7 +132,7 @@ public final class RandomScript {
         final Scope scope = new Scope(new Rand(this.params.seed()));
         this.grammars.forEach(this::parse);
         return this.unparser.generate(
-            rule, new Context(scope, new ConvergenceStrategy(this.params.factor()))
+            rule, new Context(scope, new ConvergenceStrategy(this.params))
         );
     }
 

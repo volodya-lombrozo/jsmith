@@ -68,13 +68,10 @@ public final class CharacterRange implements Rule, Negatable {
 
     /**
      * Constructor.
-     * @param parent Parent rule.
+     * @param parentr Parent rule.
      * @param text Range text.
+     * @param rand Random generator.
      */
-    public CharacterRange(final Rule parent, final String text) {
-        this(parent, text, new Rand());
-    }
-
     public CharacterRange(
         final Rule parentr,
         final String text,
@@ -91,6 +88,15 @@ public final class CharacterRange implements Rule, Negatable {
      */
     CharacterRange(final String text) {
         this(new Root(), text);
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param text Range text.
+     */
+    private CharacterRange(final Rule parent, final String text) {
+        this(parent, text, new Rand());
     }
 
     @Override
