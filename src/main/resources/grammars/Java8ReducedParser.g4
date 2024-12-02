@@ -257,10 +257,23 @@ typeDeclaration
 
 classDeclaration
     : normalClassDeclaration
+    | interfaceDeclaration
+    ;
+
+interfaceDeclaration
+    : normalInterfaceDeclaration
+    ;
+
+normalInterfaceDeclaration
+    : (interfaceModifier SPACE)? 'interface' SPACE Identifier interfaceBody
     ;
 
 normalClassDeclaration
     : (inheritanceModifier SPACE)? ('strictfp' SPACE)?  'class' SPACE /* $jsmith-unique */ Identifier classBody
+    ;
+
+interfaceModifier
+    : 'strictfp'
     ;
 
 inheritanceModifier
@@ -270,6 +283,27 @@ inheritanceModifier
 
 classBody /* $jsmith-scope */
     : '{' classBodyDeclaration+ '}' NL
+    ;
+
+interfaceBody
+    : '{' interfaceMemberDeclaration* '}'
+    ;
+
+interfaceMemberDeclaration
+    : interfaceMethodDeclaration
+    ;
+
+interfaceMethodDeclaration
+    : (interfaceMethodModifier SPACE)? 'void' SPACE inderfaceMethodHeader ';'
+    ;
+
+interfaceMethodModifier
+    : 'public'
+    | 'abstract'
+    ;
+
+inderfaceMethodHeader
+    : /* $jsmith-unique */ Identifier '(' ')'
     ;
 
 classBodyDeclaration
