@@ -329,7 +329,7 @@ methodBlock /* $jsmith-scope */
 
 expressionStatement
     : NL statementExpression ';' NL
-    | NL localVariableDeclarationStatement NL
+//    | NL localVariableDeclarationStatement NL
     ;
 
 localVariableDeclarationStatement
