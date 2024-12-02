@@ -24,12 +24,16 @@
 package com.github.lombrozo.jsmith;
 
 import java.security.SecureRandom;
+import lombok.ToString;
 
+@ToString
 public final class Params {
 
+    @ToString.Exclude
     private static final double DEFAULT_FACTOR = 0.5;
-    private static final SecureRandom DEFAULT_SEED = new SecureRandom();
 
+    @ToString.Exclude
+    private static final SecureRandom DEFAULT_SEED = new SecureRandom();
 
     private final double factor;
 

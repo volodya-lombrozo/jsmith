@@ -59,6 +59,16 @@ final class RandomJavaClassTest {
         );
     }
 
+    @Test
+    void generatesJavaCodeWithTheSameSeed() {
+        final long seed = -4887843732314896880L;
+        MatcherAssert.assertThat(
+            "We expect that the generated source code will be the same for the same seed",
+            new RandomJavaClass(new Params(seed)).src(),
+            Matchers.equalTo(new RandomJavaClass(new Params(seed)).src())
+        );
+    }
+
     /**
      * Generates many Java classes with different convergence factor value.
      * This is a performance test, so it is disabled by default.
@@ -98,7 +108,9 @@ final class RandomJavaClassTest {
 
     @ParameterizedTest
     @MethodSource("programs")
-    void createsCompilableJavaSourceCode(final String src, @TempDir final Path temp) {
+    void createsCompilableJavaSourceCode(
+        final Params params, final String src, @TempDir final Path temp
+    ) {
         Logger.info(this, "Generated source code: %n%s%n", src);
         final int run = ToolProvider.getSystemJavaCompiler().run(
             new ByteArrayInputStream(src.getBytes(StandardCharsets.UTF_8)),
@@ -107,7 +119,10 @@ final class RandomJavaClassTest {
             RandomJavaClassTest.saveJava(src, temp)
         );
         MatcherAssert.assertThat(
-            "The generated source code should be compilable",
+            String.format(
+                "The generated source code should be compilable. You can reproduce the test using the following params: %s",
+                params
+            ),
             run,
             Matchers.equalTo(0)
         );
@@ -134,9 +149,8 @@ final class RandomJavaClassTest {
      * @return Stream of random programs.
      */
     static Stream<Arguments> programs() {
-        return Stream.generate(RandomJavaClass::new)
-            .map(RandomJavaClass::src)
+        return Stream.generate(Params::new)
             .limit(10)
-            .map(Arguments::of);
+            .map(params -> Arguments.of(params, new RandomJavaClass(params).src()));
     }
 }
