@@ -52,7 +52,7 @@ public final class Rand {
      * Constructor.
      * @param seed Random seed.
      */
-    public Rand(long seed) {
+    public Rand(final long seed) {
         this(new Random(seed));
     }
 

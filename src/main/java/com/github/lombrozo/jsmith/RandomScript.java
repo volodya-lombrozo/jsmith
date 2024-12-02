@@ -80,11 +80,11 @@ public final class RandomScript {
     }
 
     /**
-     * Constructor
+     * Constructor.
      * @param params Generation params.
      * @param grammars Grammar definitions.
      */
-    public RandomScript(final Params params, Input... grammars) {
+    public RandomScript(final Params params, final Input... grammars) {
         this(
             params,
             Arrays.stream(grammars)
@@ -97,6 +97,7 @@ public final class RandomScript {
 
     /**
      * Constructor.
+     * @param params Generation params.
      * @param grammars ANTLR grammars, either standalone or separate lexer and parser grammars.
      */
     private RandomScript(final Params params, final List<String> grammars) {

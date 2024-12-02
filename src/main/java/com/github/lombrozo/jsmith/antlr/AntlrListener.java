@@ -141,6 +141,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
      * @param tokens Token stream.
      * @param unparser Unparser.
      * @param unlexer Unlexer.
+     * @param rand Random generator.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public AntlrListener(
@@ -157,6 +158,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
      * @param tokens Token stream.
      * @param unparser Unparser.
      * @param unlexer Unlexer.
+     * @param rand Random generator.
      * @param root Current rule.
      * @checkstyle ParameterNumberCheck (5 lines)
      */

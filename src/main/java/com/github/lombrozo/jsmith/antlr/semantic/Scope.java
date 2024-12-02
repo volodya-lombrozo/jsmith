@@ -65,8 +65,10 @@ public final class Scope {
 
     /**
      * Constructor.
+     * @param parent Parent scope.
+     * @param rand Random generator.
      */
-    public Scope(final Scope parent, Rand rand) {
+    public Scope(final Scope parent, final Rand rand) {
         this(parent, new Variables(), rand);
     }
 

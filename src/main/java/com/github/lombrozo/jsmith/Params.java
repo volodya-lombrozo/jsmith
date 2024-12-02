@@ -26,42 +26,82 @@ package com.github.lombrozo.jsmith;
 import java.security.SecureRandom;
 import lombok.ToString;
 
+/**
+ * Parameters for random generation.
+ * @since 0.1
+ */
 @ToString
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public final class Params {
 
+    /**
+     * Default factor.
+     */
     @ToString.Exclude
     private static final double DEFAULT_FACTOR = 0.5;
 
+    /**
+     * Default seed.
+     */
     @ToString.Exclude
     private static final SecureRandom DEFAULT_SEED = new SecureRandom();
 
+    /**
+     * Factor.
+     */
     private final double factor;
 
+    /**
+     * Seed.
+     */
     private final long seed;
 
-    public Params() {
+    /**
+     * Constructor.
+     */
+    Params() {
         this(Params.DEFAULT_FACTOR);
     }
 
-    public Params(final long seed) {
+    /**
+     * Constructor.
+     * @param seed Seed.
+     */
+    Params(final long seed) {
         this(Params.DEFAULT_FACTOR, seed);
     }
 
-    public Params(final double factor) {
+    /**
+     * Constructor.
+     * @param factor Factor.
+     */
+    Params(final double factor) {
         this(factor, Params.DEFAULT_SEED.nextLong());
     }
 
-    public Params(final double factor, final long seed) {
+    /**
+     * Constructor.
+     * @param factor Factor.
+     * @param seed Seed.
+     */
+    private Params(final double factor, final long seed) {
         this.factor = factor;
         this.seed = seed;
     }
 
+    /**
+     * Factor.
+     * @return Factor.
+     */
     public double factor() {
         return this.factor;
     }
 
+    /**
+     * Seed.
+     * @return Seed.
+     */
     public long seed() {
         return this.seed;
     }
-
 }

@@ -80,6 +80,7 @@ public final class EbnfSuffix implements Rule, Suffix {
      * @param operation Operation.
      * @param question Question.
      * @param rand Random generator.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public EbnfSuffix(
         final Rule parent,
