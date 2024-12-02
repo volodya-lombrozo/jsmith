@@ -83,6 +83,7 @@ import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableTarget;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableUsage;
+import com.github.lombrozo.jsmith.random.Rand;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -126,6 +127,11 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     private final Set<String> identifiers;
 
     /**
+     * Random generator.
+     */
+    private final Rand random;
+
+    /**
      * Current rule.
      */
     private Rule current;
@@ -140,9 +146,10 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     public AntlrListener(
         final BufferedTokenStream tokens,
         final Unparser unparser,
-        final Unlexer unlexer
+        final Unlexer unlexer,
+        final Rand rand
     ) {
-        this(tokens, unparser, unlexer, new Root());
+        this(tokens, unparser, unlexer, rand, new Root());
     }
 
     /**
@@ -157,12 +164,14 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         final BufferedTokenStream tokens,
         final Unparser unparser,
         final Unlexer unlexer,
+        final Rand rand,
         final Rule root
     ) {
         this.tokens = tokens;
         this.unparser = unparser;
         this.unlexer = unlexer;
         this.current = new Traced(root);
+        this.random = rand;
         this.identifiers = new JavaKeywords().toSet();
     }
 
@@ -194,7 +203,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         );
         final Rule rule;
         if (comments.has(ScopeRule.COMMENT)) {
-            rule = new ScopeRule(new ParserRuleSpec(name, this.current));
+            rule = new ScopeRule(new ParserRuleSpec(name, this.current), this.random);
         } else {
             rule = new ParserRuleSpec(name, this.current);
         }
@@ -336,7 +345,8 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
                     .findFirst()
                     .orElseThrow(() -> new IllegalStateException("Can't find appropriate terminal"))
                     .getText(),
-                Optional.ofNullable(ctx.QUESTION(1)).map(ParseTree::getText).orElse(null)
+                Optional.ofNullable(ctx.QUESTION(1)).map(ParseTree::getText).orElse(null),
+                this.random
             )
         );
         super.enterEbnfSuffix(ctx);
@@ -442,7 +452,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     public void enterLexerAtom(final ANTLRv4Parser.LexerAtomContext ctx) {
         final Rule atom = new LexerAtom(this.current);
         if (ctx.LEXER_CHAR_SET() != null) {
-            atom.append(new LexerCharSet(atom, ctx.LEXER_CHAR_SET().getText()));
+            atom.append(new LexerCharSet(atom, ctx.LEXER_CHAR_SET().getText(), this.random));
         } else if (ctx.DOT() != null) {
             atom.append(new Literal(ctx.DOT().getText()));
         }
@@ -470,7 +480,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
 
     @Override
     public void enterCharacterRange(final ANTLRv4Parser.CharacterRangeContext ctx) {
-        this.current.append(new CharacterRange(this.current, ctx.getText()));
+        this.current.append(new CharacterRange(this.current, ctx.getText(), this.random));
         super.enterCharacterRange(ctx);
     }
 
@@ -783,7 +793,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
     public void enterSetElement(final ANTLRv4Parser.SetElementContext ctx) {
         final SetElement set = new SetElement(this.current);
         if (ctx.LEXER_CHAR_SET() != null) {
-            set.append(new LexerCharSet(set, ctx.LEXER_CHAR_SET().getText()));
+            set.append(new LexerCharSet(set, ctx.LEXER_CHAR_SET().getText(), this.random));
         }
         if (ctx.STRING_LITERAL() != null) {
             set.append(new Literal(ctx.STRING_LITERAL().getText()));

@@ -29,6 +29,7 @@ import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link RandomScript}.
@@ -51,6 +52,19 @@ final class RandomScriptTest {
             "We expect that the example for Simple grammar will be generated successfully",
             example,
             Matchers.not(Matchers.emptyString())
+        );
+    }
+
+    @RepeatedTest(10)
+    void repeatsTheSameOutputForTheSameSeed() {
+        final RandomScript script = new RandomScript(
+            new Params(42L),
+            new ResourceOf("grammars/Simple.g4")
+        );
+        MatcherAssert.assertThat(
+            "We expect that generated output will be the same for the same seed",
+            script.generate("expr").output(),
+            Matchers.equalTo(script.generate("expr").output())
         );
     }
 

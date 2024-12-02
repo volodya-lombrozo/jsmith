@@ -55,36 +55,15 @@ public final class Scope {
     @ToString.Exclude
     private final Rand rand;
 
-    /**
-     * Constructor.
-     */
-    public Scope() {
-        this(new Variables());
+    public Scope(final Rand random) {
+        this(null, new Variables(), random);
     }
 
     /**
      * Constructor.
-     * @param variables Variables.
      */
-    public Scope(final Variables variables) {
-        this(variables, new Rand());
-    }
-
-    /**
-     * Constructor.
-     * @param variables Variables.
-     * @param rand Random generator.
-     */
-    public Scope(final Variables variables, final Rand rand) {
-        this(null, variables, rand);
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent scope.
-     */
-    public Scope(final Scope parent) {
-        this(parent, new Variables(), new Rand());
+    public Scope(final Scope parent, Rand rand) {
+        this(parent, new Variables(), rand);
     }
 
     /**
@@ -93,7 +72,7 @@ public final class Scope {
      * @param variables Variables in the scope.
      * @param rand Random generator.
      */
-    public Scope(
+    private Scope(
         final Scope parent,
         final Variables variables,
         final Rand rand

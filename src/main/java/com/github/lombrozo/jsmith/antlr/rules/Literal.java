@@ -54,6 +54,11 @@ public final class Literal implements Rule, Negatable {
     private final String text;
 
     /**
+     * Random generator.
+     */
+    private final Rand random;
+
+    /**
      * Constructor.
      * @param text Text of the literal.
      */
@@ -67,8 +72,19 @@ public final class Literal implements Rule, Negatable {
      * @param text Text of the literal.
      */
     public Literal(final Rule parent, final String text) {
-        this.top = parent;
+        this(parent, text, new Rand());
+    }
+
+    /**
+     * Constructor.
+     * @param top Parent rule.
+     * @param text Text of the literal.
+     * @param random Random generator.
+     */
+    public Literal(final Rule top, final String text, final Rand random) {
+        this.top = top;
         this.text = text;
+        this.random = random;
     }
 
     @Override
@@ -88,7 +104,7 @@ public final class Literal implements Rule, Negatable {
     public Text negate(final Context context) {
         return new TextLeaf(
             this,
-            new Rand().regex(String.format("[^%s]", this.generate(context).output()))
+            this.random.regex(String.format("[^%s]", this.generate(context).output()))
         );
     }
 

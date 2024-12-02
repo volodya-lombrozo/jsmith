@@ -47,15 +47,15 @@ public final class LexerCharSet implements Rule, Negatable {
     private final Rule top;
 
     /**
-     * Random generator.
-     */
-    private final Rand rand;
-
-    /**
      * Char set.
      * Might be a range or a set of characters.
      */
     private final String text;
+
+    /**
+     * Random generator.
+     */
+    private final Rand rand;
 
     /**
      * Constructor.
@@ -71,19 +71,20 @@ public final class LexerCharSet implements Rule, Negatable {
      * @param text Text.
      */
     public LexerCharSet(final Rule parent, final String text) {
-        this(parent, new Rand(), text);
+        this(parent, text, new Rand());
     }
 
     /**
      * Constructor.
+     *
      * @param parent Parent rule.
-     * @param rand Random generator.
      * @param text Text.
+     * @param rand Random generator.
      */
-    public LexerCharSet(final Rule parent, final Rand rand, final String text) {
+    public LexerCharSet(final Rule parent, final String text, final Rand rand) {
         this.top = parent;
-        this.rand = rand;
         this.text = text;
+        this.rand = rand;
     }
 
     @Override
@@ -126,7 +127,7 @@ public final class LexerCharSet implements Rule, Negatable {
 
     @Override
     public Rule copy() {
-        return new LexerCharSet(this.top, this.rand, this.text);
+        return new LexerCharSet(this.top, this.text, this.rand);
     }
 
     /**

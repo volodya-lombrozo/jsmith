@@ -78,7 +78,7 @@ final class RandomJavaClassTest {
             final double current = factor;
             final int attempts = 100;
             final int length = IntStream.range(0, attempts)
-                .mapToObj(i -> new RandomJavaClass(current))
+                .mapToObj(i -> new RandomJavaClass(new Params(current)))
                 .map(RandomJavaClass::src)
                 .mapToInt(String::length)
                 .sum();

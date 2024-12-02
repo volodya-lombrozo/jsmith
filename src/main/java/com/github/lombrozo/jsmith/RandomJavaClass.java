@@ -50,27 +50,27 @@ public final class RandomJavaClass {
     private final String rule;
 
     /**
-     * Convergence factor.
+     * Generation params.
      */
-    private final double factor;
+    private final Params params;
 
     /**
      * Default constructor.
      */
     public RandomJavaClass() {
-        this(0.5d);
+        this(new Params());
     }
 
     /**
      * Constructor.
-     * @param factor Convergence factor.
+     * @param params Generation parameters.
      */
-    public RandomJavaClass(final double factor) {
+    public RandomJavaClass(final Params params) {
         this(
             "grammars/Java8ReducedParser.g4",
             "grammars/Java8ReducedLexer.g4",
             "compilationUnit",
-            factor
+            params
         );
     }
 
@@ -85,7 +85,7 @@ public final class RandomJavaClass {
         final String lexer,
         final String rule
     ) {
-        this(parser, lexer, rule, 0.5);
+        this(parser, lexer, rule, new Params());
     }
 
     /**
@@ -93,19 +93,19 @@ public final class RandomJavaClass {
      * @param parser Parser.
      * @param lexer Lexer.
      * @param rule Rule.
-     * @param factor Factor.
+     * @param params Params.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public RandomJavaClass(
         final String parser,
         final String lexer,
         final String rule,
-        final double factor
+        final Params params
     ) {
         this.parser = parser;
         this.lexer = lexer;
         this.rule = rule;
-        this.factor = factor;
+        this.params = params;
     }
 
     /**
@@ -114,9 +114,10 @@ public final class RandomJavaClass {
      */
     public String src() {
         final String output = new RandomScript(
+            this.params,
             new ResourceOf(this.parser),
             new ResourceOf(this.lexer)
-        ).withFactor(this.factor).generate(this.rule).output();
+        ).generate(this.rule).output();
         try {
             return new Formatter(JavaFormatterOptions.builder().build()).formatSource(output);
         } catch (final FormatterException exception) {

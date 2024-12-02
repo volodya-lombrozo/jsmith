@@ -329,6 +329,48 @@ methodBlock /* $jsmith-scope */
 
 expressionStatement
     : NL statementExpression ';' NL
+    | NL localVariableDeclarationStatement NL
+    ;
+
+localVariableDeclarationStatement
+    : localVariableDeclaration ';'
+    ;
+
+localVariableDeclaration
+    : (variableModifier SPACE)? unannType SPACE variableDeclaratorList
+    ;
+
+variableModifier
+    : 'final'
+    ;
+
+unannType
+    : unannPrimitiveType
+//    | unannReferenceType
+    ;
+
+unannPrimitiveType
+    : numericType
+    | 'boolean'
+    ;
+
+variableDeclaratorList
+    : variableDeclarator (',' SPACE variableDeclarator)*
+    ;
+
+variableDeclarator
+    : /* $jsmith-var-init */ /* $jsmith-var-target */ variableDeclaratorId '=' variableInitializer
+    | variableDeclaratorId
+    ;
+
+variableDeclaratorId
+    : /* $jsmith-var-decl */ /* $jsmith-unique */ Identifier
+    ;
+
+variableInitializer
+    : simplifiedExpression
+//    : expression
+//    | arrayInitializer
     ;
 
 vardef

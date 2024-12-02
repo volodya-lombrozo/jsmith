@@ -35,6 +35,9 @@ public final class Rand {
 
     /**
      * Random.
+     * We use {@link Random} inseatd of {@link SecureRandom} because we don't need a
+     * cryptographically secure random. Additionally, we need to be able to seed the random
+     * to reproduce the same results.
      */
     private final Random random;
 
@@ -42,7 +45,15 @@ public final class Rand {
      * Default constructor.
      */
     public Rand() {
-        this(new SecureRandom());
+        this(new Random());
+    }
+
+    /**
+     * Constructor.
+     * @param seed Random seed.
+     */
+    public Rand(long seed) {
+        this(new Random(seed));
     }
 
     /**

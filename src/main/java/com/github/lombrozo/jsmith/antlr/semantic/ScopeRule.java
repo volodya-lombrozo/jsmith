@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.random.Rand;
 
 /**
  * Scope Rule.
@@ -44,11 +45,13 @@ public final class ScopeRule implements Rule {
     private final Rule origin;
 
     /**
-     * Constructor.
-     * @param origin Origin rule.
+     * Random generator.
      */
-    public ScopeRule(final Rule origin) {
+    private final Rand random;
+
+    public ScopeRule(final Rule origin, final Rand random) {
         this.origin = origin;
+        this.random = random;
     }
 
     @Override
@@ -58,7 +61,7 @@ public final class ScopeRule implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        return this.origin.generate(context.withScope(new Scope(context.current())));
+        return this.origin.generate(context.withScope(new Scope(context.current(), this.random)));
     }
 
     @Override
@@ -73,6 +76,6 @@ public final class ScopeRule implements Rule {
 
     @Override
     public Rule copy() {
-        return new ScopeRule(this.origin.copy());
+        return new ScopeRule(this.origin.copy(), this.random);
     }
 }

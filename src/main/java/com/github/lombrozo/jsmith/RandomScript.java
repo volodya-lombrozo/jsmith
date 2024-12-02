@@ -30,6 +30,7 @@ import com.github.lombrozo.jsmith.antlr.Unparser;
 import com.github.lombrozo.jsmith.antlr.semantic.Scope;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.random.ConvergenceStrategy;
+import com.github.lombrozo.jsmith.random.Rand;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,16 +67,26 @@ public final class RandomScript {
     private final Unparser unparser;
 
     /**
-     * Convergence factor.
+     * Params.
      */
-    private final double factor;
+    private final Params params;
 
     /**
      * Constructor.
      * @param grammars ANTLR grammars, either standalone or separate lexer and parser grammars.
      */
     public RandomScript(final Input... grammars) {
+        this(new Params(), grammars);
+    }
+
+    /**
+     * Constructor
+     * @param params Generation params.
+     * @param grammars Grammar definitions.
+     */
+    public RandomScript(final Params params, Input... grammars) {
         this(
+            params,
             Arrays.stream(grammars)
                 .map(TextOf::new)
                 .map(UncheckedText::new)
@@ -88,8 +99,8 @@ public final class RandomScript {
      * Constructor.
      * @param grammars ANTLR grammars, either standalone or separate lexer and parser grammars.
      */
-    private RandomScript(final List<String> grammars) {
-        this(grammars, new Unlexer(), new Unparser(), 0.5);
+    private RandomScript(final Params params, final List<String> grammars) {
+        this(grammars, new Unlexer(), new Unparser(), params);
     }
 
     /**
@@ -97,19 +108,19 @@ public final class RandomScript {
      * @param grammars ANTLR grammars, either standalone or separate lexer and parser grammars.
      * @param unlexer Unlexer instance.
      * @param unparser Unparser instance.
-     * @param factor Convergence factor.
+     * @param params Generation params.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public RandomScript(
         final List<String> grammars,
         final Unlexer unlexer,
         final Unparser unparser,
-        final double factor
+        final Params params
     ) {
         this.grammars = grammars;
         this.unlexer = unlexer;
         this.unparser = unparser;
-        this.factor = factor;
+        this.params = params;
     }
 
     /**
@@ -118,20 +129,11 @@ public final class RandomScript {
      * @return Random script text.
      */
     public Text generate(final String rule) {
-        final Scope scope = new Scope();
+        final Scope scope = new Scope(new Rand(this.params.seed()));
         this.grammars.forEach(this::parse);
         return this.unparser.generate(
-            rule, new Context(scope, new ConvergenceStrategy(this.factor))
+            rule, new Context(scope, new ConvergenceStrategy(this.params.factor()))
         );
-    }
-
-    /**
-     * Change convergence factor.
-     * @param convergence Convergence factor.
-     * @return Random script with a new convergence factor.
-     */
-    RandomScript withFactor(final double convergence) {
-        return new RandomScript(this.grammars, this.unlexer, this.unparser, convergence);
     }
 
     /**
@@ -158,7 +160,8 @@ public final class RandomScript {
         final AntlrListener listener = new AntlrListener(
             tokens,
             this.unparser,
-            this.unlexer
+            this.unlexer,
+            new Rand(this.params.seed())
         );
         walker.walk(listener, spec);
     }

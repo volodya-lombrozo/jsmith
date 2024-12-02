@@ -23,10 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
-import com.github.lombrozo.jsmith.random.Rand;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import lombok.ToString;
 
@@ -53,20 +51,13 @@ public final class Variables {
     private final Set<String> init;
 
     /**
-     * Random generator.
-     */
-    @ToString.Exclude
-    private final Rand rand;
-
-    /**
      * Default constructor.
      * Initializes empty lists.
      */
     public Variables() {
         this(
             new HashSet<>(0),
-            new HashSet<>(0),
-            new Rand()
+            new HashSet<>(0)
         );
     }
 
@@ -74,16 +65,13 @@ public final class Variables {
      * Constructor.
      * @param assigned Assigned variables.
      * @param declared Declared variables.
-     * @param rand Random generator.
      */
     public Variables(
         final Set<String> assigned,
-        final Set<String> declared,
-        final Rand rand
+        final Set<String> declared
     ) {
         this.init = assigned;
         this.decl = declared;
-        this.rand = rand;
     }
 
     /**
@@ -103,22 +91,6 @@ public final class Variables {
     }
 
     /**
-     * Get a random declared variable.
-     * @return Random declared variable.
-     */
-    Optional<String> declared() {
-        return this.random(this.decl);
-    }
-
-    /**
-     * Get a random initialized variable.
-     * @return Random initialized variable.
-     */
-    Optional<String> initialized() {
-        return this.random(this.init);
-    }
-
-    /**
      * Get all declared variables.
      * @return All declared variables.
      */
@@ -132,20 +104,5 @@ public final class Variables {
      */
     List<String> allAssigned() {
         return List.copyOf(this.init);
-    }
-
-    /**
-     * Get a random element from the collection.
-     * @param collection Collection.
-     * @return Random element.
-     */
-    private Optional<String> random(final Set<String> collection) {
-        final Optional<String> result;
-        if (collection.isEmpty()) {
-            result = Optional.empty();
-        } else {
-            result = collection.stream().skip(this.rand.range(collection.size())).findFirst();
-        }
-        return result;
     }
 }

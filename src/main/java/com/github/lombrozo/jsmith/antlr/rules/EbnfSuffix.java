@@ -98,10 +98,26 @@ public final class EbnfSuffix implements Rule, Suffix {
      * @param question Question.
      */
     public EbnfSuffix(final Rule parent, final String operation, final String question) {
+        this(parent, operation, question, new Rand());
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param operation Operation.
+     * @param question Question.
+     * @param rand Random generator.
+     */
+    public EbnfSuffix(
+        final Rule parent,
+        final String operation,
+        final String question,
+        final Rand rand
+    ) {
         this.top = parent;
         this.operation = operation;
         this.question = question;
-        this.rand = new Rand();
+        this.rand = rand;
     }
 
     @Override

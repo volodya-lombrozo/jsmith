@@ -63,4 +63,14 @@ final class RandTest {
             )
         );
     }
+
+    @Test
+    void generatesSameNumbersIfSeedIsTheSame() {
+        final long seed = 42L;
+        MatcherAssert.assertThat(
+            "We expect that the randomizer will generate the same number if the seed is the same",
+            new Rand(seed).range(5),
+            Matchers.equalTo(new Rand(seed).range(5))
+        );
+    }
 }
