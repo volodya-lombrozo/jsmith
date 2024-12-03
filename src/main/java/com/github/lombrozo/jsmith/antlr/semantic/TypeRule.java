@@ -25,25 +25,18 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
-import com.jcabi.log.Logger;
-import java.util.Collections;
-import java.util.Optional;
 
 /**
- * Variable Target Semantic.
- * Identifies the variable name in the assignment expression and
- * adds it to the context.
+ * Rule that adds type to the context.
  * @since 0.1
  */
-public final class VariableTarget implements Rule {
+public final class TypeRule implements Rule {
 
     /**
      * Comment to activate this rule.
      */
-    public static final String COMMENT = "$jsmith-var-target";
+    public static final String COMMENT = "$jsmith-type";
 
     /**
      * Original rule.
@@ -52,9 +45,9 @@ public final class VariableTarget implements Rule {
 
     /**
      * Constructor.
-     * @param origin Original rule.
+     * @param origin Origin rule.
      */
-    public VariableTarget(final Rule origin) {
+    public TypeRule(final Rule origin) {
         this.origin = origin;
     }
 
@@ -65,29 +58,8 @@ public final class VariableTarget implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        Text text = this.origin.generate(context);
-        if (!text.error()) {
-            //TODO: here is the trap! We can get undeclared variable,
-            // For example,  "final boolean $dB$$, y$$l, $dB$$ = true | false, $vPV;"
-            // See: $db$$
-            final Optional<String> declared = context.current().declared();
-            if (declared.isPresent()) {
-                text = new TextLeaf(
-                    this,
-                    declared.get(),
-                    Collections.singletonMap(VariableTarget.COMMENT, declared.get())
-                );
-            } else {
-                Logger.warn(
-                    this,
-                    String.format(
-                        "We can't find any declared variable in the scope '%s'",
-                        context.current()
-                    )
-                );
-                text = new Error(this, "<variable is not declared yet>");
-            }
-        }
+        final Text text = this.origin.generate(context);
+        context.labels().put(TypeRule.COMMENT, text.output());
         return text;
     }
 
@@ -98,11 +70,11 @@ public final class VariableTarget implements Rule {
 
     @Override
     public String name() {
-        return String.format("%s(%s)", VariableTarget.COMMENT, this.origin.name());
+        return String.format("%s(%s)", TypeRule.COMMENT, this.origin.name());
     }
 
     @Override
     public Rule copy() {
-        return new VariableTarget(this.origin.copy());
+        return new TypeRule(this.origin.copy());
     }
 }

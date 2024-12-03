@@ -27,23 +27,17 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.jcabi.log.Logger;
-import java.util.Collections;
-import java.util.Optional;
 
 /**
- * Variable Target Semantic.
- * Identifies the variable name in the assignment expression and
- * adds it to the context.
- * @since 0.1
+ * Rule that adds type to the context.
  */
-public final class VariableTarget implements Rule {
+public final class PredicateRule implements Rule {
 
     /**
      * Comment to activate this rule.
      */
-    public static final String COMMENT = "$jsmith-var-target";
+    public static final String COMMENT = "$jsmith-predicate";
 
     /**
      * Original rule.
@@ -51,11 +45,13 @@ public final class VariableTarget implements Rule {
     private final Rule origin;
 
     /**
-     * Constructor.
-     * @param origin Original rule.
+     * Type of the predicate.
      */
-    public VariableTarget(final Rule origin) {
+    private final String type;
+
+    public PredicateRule(final Rule origin, final String type) {
         this.origin = origin;
+        this.type = type;
     }
 
     @Override
@@ -65,30 +61,22 @@ public final class VariableTarget implements Rule {
 
     @Override
     public Text generate(final Context context) {
-        Text text = this.origin.generate(context);
-        if (!text.error()) {
-            //TODO: here is the trap! We can get undeclared variable,
-            // For example,  "final boolean $dB$$, y$$l, $dB$$ = true | false, $vPV;"
-            // See: $db$$
-            final Optional<String> declared = context.current().declared();
-            if (declared.isPresent()) {
-                text = new TextLeaf(
-                    this,
-                    declared.get(),
-                    Collections.singletonMap(VariableTarget.COMMENT, declared.get())
-                );
+        if (context.labels().containsKey(TypeRule.COMMENT)) {
+            final String current = context.labels().get(TypeRule.COMMENT);
+            if (current.equals(this.type)) {
+                return this.origin.generate(context);
             } else {
-                Logger.warn(
+                final String msg = String.format(
+                    "Type mismatch, expected: %s, but got: %s", this.type, current);
+                Logger.warn(this, msg);
+                return new Error(
                     this,
-                    String.format(
-                        "We can't find any declared variable in the scope '%s'",
-                        context.current()
-                    )
+                    msg
                 );
-                text = new Error(this, "<variable is not declared yet>");
             }
+        } else {
+            return this.origin.generate(context);
         }
-        return text;
     }
 
     @Override
@@ -98,11 +86,11 @@ public final class VariableTarget implements Rule {
 
     @Override
     public String name() {
-        return String.format("%s(%s)", VariableTarget.COMMENT, this.origin.name());
+        return this.origin.name();
     }
 
     @Override
     public Rule copy() {
-        return new VariableTarget(this.origin.copy());
+        return new PredicateRule(this.origin.copy(), this.type);
     }
 }

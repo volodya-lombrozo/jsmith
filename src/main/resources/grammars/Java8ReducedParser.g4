@@ -72,15 +72,15 @@ primitiveType
 
 numericType
     : integralType
-    | floatingPointType
+//    | floatingPointType
     ;
 
 integralType
-    : 'byte'
-    | 'short'
-    | 'int'
-    | 'long'
-    | 'char'
+     : 'long'
+//    : 'byte'
+//    | 'short'
+//    | 'int'
+//    | 'char'
     ;
 
 floatingPointType
@@ -329,7 +329,7 @@ methodBlock /* $jsmith-scope */
 
 expressionStatement
     : NL statementExpression ';' NL
-//    | NL localVariableDeclarationStatement NL
+    | NL localVariableDeclarationStatement NL
     ;
 
 localVariableDeclarationStatement
@@ -337,7 +337,7 @@ localVariableDeclarationStatement
     ;
 
 localVariableDeclaration
-    : (variableModifier SPACE)? unannType SPACE variableDeclaratorList
+    : (variableModifier SPACE)? /* $jsmith-type */ unannType SPACE variableDeclaratorList
     ;
 
 variableModifier
@@ -359,18 +359,16 @@ variableDeclaratorList
     ;
 
 variableDeclarator
-    : /* $jsmith-var-init */ /* $jsmith-var-target */ variableDeclaratorId '=' variableInitializer
-    | variableDeclaratorId
+    : /* $jsmith-var-init */ /* $jsmith-var-target */ /* $jsmith-var-decl */ variableDeclaratorId '=' variableInitializer
+    | /* $jsmith-var-decl */ variableDeclaratorId
     ;
 
 variableDeclaratorId
-    : /* $jsmith-var-decl */ /* $jsmith-unique */ Identifier
+    : /* $jsmith-unique */ Identifier
     ;
 
 variableInitializer
     : simplifiedExpression
-//    : expression
-//    | arrayInitializer
     ;
 
 vardef
@@ -391,7 +389,15 @@ leftHandSide
     ;
 
 simplifiedExpression
-    : simplifiedExpression SPACE '+' SPACE IntegerLiteral
+    : /* $jsmith-predicate(long) */ simplifiedExpression SPACE '+' SPACE IntegerLiteral
+    | /* $jsmith-predicate(long) */ simplifiedExpression SPACE '-' SPACE IntegerLiteral
+    | /* $jsmith-predicate(long) */ simplifiedExpression SPACE '*' SPACE IntegerLiteral
+    | /* $jsmith-predicate(long) */ simplifiedExpression SPACE '/' SPACE IntegerLiteral
+    | /* $jsmith-predicate(boolean) */ simplifiedExpression SPACE '|' SPACE BooleanLiteral
+    | /* $jsmith-predicate(boolean) */ simplifiedExpression SPACE '&' SPACE BooleanLiteral
+    | /* $jsmith-predicate(boolean) */ simplifiedExpression SPACE '^' SPACE BooleanLiteral
+    | /* $jsmith-predicate(boolean) */ simplifiedExpression SPACE '==' SPACE BooleanLiteral
     | /* $jsmith-var-use */ Identifier
-    | IntegerLiteral
+    | /* $jsmith-predicate(long) */ IntegerLiteral
+    | /* $jsmith-predicate(boolean) */ BooleanLiteral
     ;

@@ -69,6 +69,20 @@ final class RandomJavaClassTest {
         );
     }
 
+    @Test
+    void generatesSpecifixJavaClass(@TempDir final Path dir) {
+        final String src = new RandomJavaClass(
+            new Params(6103387054409092009L)
+        ).src();
+        final int res = compile(src, dir);
+        System.out.println(src);
+        MatcherAssert.assertThat(
+            "The generated source code should be compilable",
+            res,
+            Matchers.equalTo(0)
+        );
+    }
+
     /**
      * Generates many Java classes with different convergence factor value.
      * This is a performance test, so it is disabled by default.
@@ -112,12 +126,7 @@ final class RandomJavaClassTest {
         final Params params, final String src, @TempDir final Path temp
     ) {
         Logger.info(this, "Generated source code: %n%s%n", src);
-        final int run = ToolProvider.getSystemJavaCompiler().run(
-            new ByteArrayInputStream(src.getBytes(StandardCharsets.UTF_8)),
-            new BufferedOutputStream(System.out),
-            new BufferedOutputStream(System.err),
-            RandomJavaClassTest.saveJava(src, temp)
-        );
+        final int run = RandomJavaClassTest.compile(src, temp);
         MatcherAssert.assertThat(
             String.format(
                 "The generated source code should be compilable. You can reproduce the test using the following params: %s",
@@ -125,6 +134,21 @@ final class RandomJavaClassTest {
             ),
             run,
             Matchers.equalTo(0)
+        );
+    }
+
+    /**
+     * Compile Java source code.
+     * @param src Java source code.
+     * @param temp Temporary directory.
+     * @return Compilation result.
+     */
+    private static int compile(final String src, final Path temp) {
+        return ToolProvider.getSystemJavaCompiler().run(
+            new ByteArrayInputStream(src.getBytes(StandardCharsets.UTF_8)),
+            new BufferedOutputStream(System.out),
+            new BufferedOutputStream(System.err),
+            RandomJavaClassTest.saveJava(src, temp)
         );
     }
 

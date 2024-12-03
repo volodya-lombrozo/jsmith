@@ -77,7 +77,9 @@ import com.github.lombrozo.jsmith.antlr.rules.Safe;
 import com.github.lombrozo.jsmith.antlr.rules.SetElement;
 import com.github.lombrozo.jsmith.antlr.rules.TerminalDef;
 import com.github.lombrozo.jsmith.antlr.rules.Traced;
+import com.github.lombrozo.jsmith.antlr.semantic.PredicateRule;
 import com.github.lombrozo.jsmith.antlr.semantic.ScopeRule;
+import com.github.lombrozo.jsmith.antlr.semantic.TypeRule;
 import com.github.lombrozo.jsmith.antlr.semantic.UniqueRule;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableDeclaration;
 import com.github.lombrozo.jsmith.antlr.semantic.VariableInitialization;
@@ -270,6 +272,9 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         }
         if (comments.has(VariableTarget.COMMENT)) {
             res = new VariableTarget(res);
+        }
+        if (comments.has(TypeRule.COMMENT)) {
+            res = new TypeRule(res);
         }
         this.down(res);
         super.enterElement(ctx);
@@ -582,12 +587,15 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
                 ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
             )
         );
-        final Rule res;
+        Rule res;
         final LabeledAlt main = new LabeledAlt(this.current, ctx.getText());
+        res = main;
         if (comments.has(VariableInitialization.COMMENT)) {
             res = new VariableInitialization(main);
-        } else {
-            res = main;
+        }
+        if (comments.has(PredicateRule.COMMENT)) {
+            final String type = comments.params(PredicateRule.COMMENT).get(0);
+            res = new PredicateRule(main, type);
         }
         this.down(res);
         super.enterLabeledAlt(ctx);

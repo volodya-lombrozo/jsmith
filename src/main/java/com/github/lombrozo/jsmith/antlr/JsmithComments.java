@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr;
 
+import java.net.CookieHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +58,7 @@ final class JsmithComments {
      * @return True if contains a comment.
      */
     boolean has(final String comment) {
-        return this.rules().stream().anyMatch(comment::equals);
+        return this.rules().stream().anyMatch(s -> s.contains(comment));
     }
 
     /**
@@ -89,5 +90,11 @@ final class JsmithComments {
      */
     private static boolean isJsmit(final String original) {
         return original.startsWith("$jsmith");
+    }
+
+    public List<String> params(final String comment) {
+        return this.rules().stream().filter(s -> s.contains(comment))
+            .flatMap(s -> Arrays.stream(s.substring(s.indexOf("(") + 1, s.indexOf(")")).split(",")))
+            .collect(Collectors.toList());
     }
 }
