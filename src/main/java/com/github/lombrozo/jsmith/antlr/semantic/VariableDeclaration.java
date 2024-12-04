@@ -26,6 +26,8 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import java.util.Collections;
 
 /**
  * Variable Declaration Semantic.
@@ -61,7 +63,11 @@ public final class VariableDeclaration implements Rule {
     public Text generate(final Context context) {
         final Text text = this.origin.generate(context);
         if (!text.error()) {
-            context.current().declare(text.output());
+            final String output = text.output();
+            context.current().declare(output);
+            return new TextLeaf(
+                this, output, Collections.singletonMap(VariableTarget.COMMENT, output)
+            );
         }
         return text;
     }

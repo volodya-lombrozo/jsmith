@@ -341,7 +341,8 @@ localVariableDeclaration
     ;
 
 variableModifier
-    : 'final'
+    :
+//    : 'final'
     ;
 
 unannType
@@ -359,7 +360,7 @@ variableDeclaratorList
     ;
 
 variableDeclarator
-    : /* $jsmith-var-init */ /* $jsmith-var-target */ /* $jsmith-var-decl */ variableDeclaratorId '=' variableInitializer
+    : /* $jsmith-var-init */ /* $jsmith-var-decl */ variableDeclaratorId '=' variableInitializer
     | /* $jsmith-var-decl */ variableDeclaratorId
     ;
 
