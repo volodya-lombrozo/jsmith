@@ -29,6 +29,7 @@ import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.jcabi.log.Logger;
+import java.util.Optional;
 
 /**
  * Variable Usage Semantic.
@@ -63,7 +64,13 @@ public final class VariableUsage implements Rule {
     @Override
     public Text generate(final Context context) {
         final Text text = this.origin.generate(context);
-        return context.current().initialized()
+        final Optional<String> initialized;
+        if (context.labels().containsKey(TypeRule.COMMENT)) {
+            initialized = context.current().initialized(context.labels().get(TypeRule.COMMENT));
+        } else {
+            initialized = context.current().initialized();
+        }
+        return initialized
             .map(output -> (Text) new TextLeaf(text.writer(), output))
             .orElseGet(
                 () -> {

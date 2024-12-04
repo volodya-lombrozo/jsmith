@@ -25,8 +25,10 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.ToString;
 
 /**
@@ -92,7 +94,7 @@ public final class Variables {
      * @param name Variable name.
      */
     void assign(final String name) {
-        final Variable declared = this.decl.stream().filter(v -> v.name.equals(name)).findFirst()
+        final Variable declared = this.decl.stream().filter(v -> v.name().equals(name)).findFirst()
             .orElseThrow(() -> new IllegalStateException("Variable is not declared"));
         this.init.add(declared);
     }
@@ -114,21 +116,15 @@ public final class Variables {
         return this.init.stream().map(Variable::name).collect(Collectors.toList());
     }
 
-    private final class Variable {
-        private final String name;
-        private final String type;
+    public Set<String> allAssigned(final String type) {
+        return this.init.stream()
+            .filter(v -> v.type().equals(type))
+            .map(Variable::name)
+            .collect(Collectors.toSet());
+    }
 
-        public Variable(final String name) {
-            this(name, "");
-        }
-
-        public Variable(final String name, final String type) {
-            this.name = name;
-            this.type = type;
-        }
-
-        public String name() {
-            return this.name;
-        }
+    public String type(final String name) {
+        return Stream.concat(this.init.stream(), this.decl.stream())
+            .filter(v -> v.name().equals(name)).findFirst().map(Variable::type).orElse("");
     }
 }

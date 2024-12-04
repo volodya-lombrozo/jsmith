@@ -329,11 +329,11 @@ methodBlock /* $jsmith-scope */
 
 expressionStatement
     : NL statementExpression ';' NL
-    | NL localVariableDeclarationStatement NL
+    | NL localVariableDeclarationStatement ';' NL
     ;
 
 localVariableDeclarationStatement
-    : localVariableDeclaration ';'
+    : localVariableDeclaration
     ;
 
 localVariableDeclaration
@@ -373,7 +373,7 @@ variableInitializer
     ;
 
 vardef
-    : 'long' SPACE /* $jsmith-var-decl */ /* $jsmith-unique */ Identifier
+    : /* $jsmith-type */ 'long' SPACE /* $jsmith-var-decl */ /* $jsmith-unique */ Identifier
     ;
 
 statementExpression

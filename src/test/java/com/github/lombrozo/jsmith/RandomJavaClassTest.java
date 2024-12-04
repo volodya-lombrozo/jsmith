@@ -72,7 +72,7 @@ final class RandomJavaClassTest {
     @Test
     void generatesSpecifixJavaClass(@TempDir final Path dir) {
         final String src = new RandomJavaClass(
-            new Params(-4816818375120879268L)
+            new Params(6992052469631176243L)
         ).src();
         final int res = compile(src, dir);
         System.out.println(src);

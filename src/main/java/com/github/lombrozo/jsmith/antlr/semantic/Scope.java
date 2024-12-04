@@ -126,12 +126,20 @@ public final class Scope {
         return this.random(this.allDeclared());
     }
 
+    String type(final String name) {
+        return this.variables.type(name);
+    }
+
     /**
      * Get a random initialized variable.
      * @return Random initialized variable.
      */
     Optional<String> initialized() {
         return this.random(this.allAssigned());
+    }
+
+    Optional<String> initialized(final String type) {
+        return this.random(this.variables.allAssigned(type));
     }
 
     /**

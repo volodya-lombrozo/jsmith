@@ -72,11 +72,14 @@ public final class VariableTarget implements Rule {
             // See: $db$$
             final Optional<String> declared = context.current().declared();
             if (declared.isPresent()) {
+                final String type = context.current().type(declared.get());
+                context.labels().put(TypeRule.COMMENT, type);
                 text = new TextLeaf(
                     this,
                     declared.get(),
                     Collections.singletonMap(VariableTarget.COMMENT, declared.get())
                 );
+
             } else {
                 Logger.warn(
                     this,
