@@ -398,7 +398,8 @@ simplifiedExpression
     | /* $jsmith-predicate(boolean) */ simplifiedExpression SPACE '&' SPACE BooleanLiteral
     | /* $jsmith-predicate(boolean) */ simplifiedExpression SPACE '^' SPACE BooleanLiteral
     | /* $jsmith-predicate(boolean) */ simplifiedExpression SPACE '==' SPACE BooleanLiteral
-    | /* $jsmith-var-use */ Identifier
+    | /* $jsmith-predicate(boolean) */ /* $jsmith-var-use */ Identifier
+    | /* $jsmith-predicate(long) */ /* $jsmith-var-use */ Identifier
     | /* $jsmith-predicate(long) */ IntegerLiteral
     | /* $jsmith-predicate(boolean) */ BooleanLiteral
     ;

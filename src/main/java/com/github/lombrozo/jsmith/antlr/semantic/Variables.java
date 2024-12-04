@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.ToString;
 
 /**
@@ -43,12 +44,12 @@ public final class Variables {
     /**
      * Declared variables.
      */
-    private final Set<String> decl;
+    private final Set<Variable> decl;
 
     /**
      * Assigned variables.
      */
-    private final Set<String> init;
+    private final Set<Variable> init;
 
     /**
      * Default constructor.
@@ -67,8 +68,8 @@ public final class Variables {
      * @param declared Declared variables.
      */
     public Variables(
-        final Set<String> assigned,
-        final Set<String> declared
+        final Set<Variable> assigned,
+        final Set<Variable> declared
     ) {
         this.init = assigned;
         this.decl = declared;
@@ -79,7 +80,11 @@ public final class Variables {
      * @param name Variable name.
      */
     void declare(final String name) {
-        this.decl.add(name);
+        this.decl.add(new Variable(name));
+    }
+
+    void declare(final String name, final String type) {
+        this.decl.add(new Variable(name, type));
     }
 
     /**
@@ -87,15 +92,18 @@ public final class Variables {
      * @param name Variable name.
      */
     void assign(final String name) {
-        this.init.add(name);
+        final Variable declared = this.decl.stream().filter(v -> v.name.equals(name)).findFirst()
+            .orElseThrow(() -> new IllegalStateException("Variable is not declared"));
+        this.init.add(declared);
     }
+
 
     /**
      * Get all declared variables.
      * @return All declared variables.
      */
     List<String> allDeclared() {
-        return List.copyOf(this.decl);
+        return this.decl.stream().map(Variable::name).collect(Collectors.toList());
     }
 
     /**
@@ -103,6 +111,24 @@ public final class Variables {
      * @return All assigned variables.
      */
     List<String> allAssigned() {
-        return List.copyOf(this.init);
+        return this.init.stream().map(Variable::name).collect(Collectors.toList());
+    }
+
+    private final class Variable {
+        private final String name;
+        private final String type;
+
+        public Variable(final String name) {
+            this(name, "");
+        }
+
+        public Variable(final String name, final String type) {
+            this.name = name;
+            this.type = type;
+        }
+
+        public String name() {
+            return this.name;
+        }
     }
 }

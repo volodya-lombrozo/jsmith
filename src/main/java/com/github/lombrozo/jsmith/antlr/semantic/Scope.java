@@ -102,6 +102,15 @@ public final class Scope {
     }
 
     /**
+     * Declare a variable.
+     * @param name Variable name.
+     * @param type Variable type.
+     */
+    void declare(final String name, final String type) {
+        this.variables.declare(name, type);
+    }
+
+    /**
      * Assign all declared variables.
      * @param name Variable name.
      */

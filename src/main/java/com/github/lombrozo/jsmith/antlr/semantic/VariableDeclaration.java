@@ -64,7 +64,11 @@ public final class VariableDeclaration implements Rule {
         final Text text = this.origin.generate(context);
         if (!text.error()) {
             final String output = text.output();
-            context.current().declare(output);
+            if (context.labels().containsKey(TypeRule.COMMENT)) {
+                context.current().declare(output, context.labels().get(TypeRule.COMMENT));
+            } else {
+                context.current().declare(output);
+            }
             return new TextLeaf(
                 this, output, Collections.singletonMap(VariableTarget.COMMENT, output)
             );
