@@ -67,9 +67,6 @@ public final class VariableTarget implements Rule {
     public Text generate(final Context context) {
         Text text = this.origin.generate(context);
         if (!text.error()) {
-            //TODO: here is the trap! We can get undeclared variable,
-            // For example,  "final boolean $dB$$, y$$l, $dB$$ = true | false, $vPV;"
-            // See: $db$$
             final Optional<String> declared = context.current().declared();
             if (declared.isPresent()) {
                 final String type = context.current().type(declared.get());
@@ -79,7 +76,6 @@ public final class VariableTarget implements Rule {
                     declared.get(),
                     Collections.singletonMap(VariableTarget.COMMENT, declared.get())
                 );
-
             } else {
                 Logger.warn(
                     this,

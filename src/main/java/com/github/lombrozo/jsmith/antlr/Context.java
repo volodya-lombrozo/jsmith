@@ -39,6 +39,7 @@ import java.util.stream.Stream;
  * Context of the generation.
  * @since 0.1
  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public final class Context {
 
     /**
@@ -106,6 +107,7 @@ public final class Context {
      * @param visited The path of the rules that were visited during the generation.
      * @param scope The scope.
      * @param labels The labels.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public Context(
         final ChoosingStrategy strat,

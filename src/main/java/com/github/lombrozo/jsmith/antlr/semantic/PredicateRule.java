@@ -31,6 +31,7 @@ import com.jcabi.log.Logger;
 
 /**
  * Rule that adds type to the context.
+ * @since 0.1
  */
 public final class PredicateRule implements Rule {
 
@@ -61,22 +62,22 @@ public final class PredicateRule implements Rule {
 
     @Override
     public Text generate(final Context context) {
+        final Text res;
         if (context.labels().containsKey(TypeRule.COMMENT)) {
             final String current = context.labels().get(TypeRule.COMMENT);
             if (current.equals(this.type)) {
-                return this.origin.generate(context);
+                res = this.origin.generate(context);
             } else {
                 final String msg = String.format(
-                    "Type mismatch, expected: %s, but got: %s", this.type, current);
-                Logger.warn(this, msg);
-                return new Error(
-                    this,
-                    msg
+                    "Type mismatch, expected: %s, but got: %s", this.type, current
                 );
+                Logger.warn(this, msg);
+                res = new Error(this, msg);
             }
         } else {
-            return this.origin.generate(context);
+            res = this.origin.generate(context);
         }
+        return res;
     }
 
     @Override

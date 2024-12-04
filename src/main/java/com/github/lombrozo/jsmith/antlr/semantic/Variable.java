@@ -23,24 +23,54 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+/**
+ * Variable abstraction.
+ * @since 0.1
+ */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 final class Variable {
+
+    /**
+     * Variable name.
+     */
     private final String name;
+
+    /**
+     * Variable type.
+     */
     private final String type;
 
-    public Variable(final String name) {
+    /**
+     * Constructor.
+     * @param name Variable name.
+     */
+    Variable(final String name) {
         this(name, "");
     }
 
-    public Variable(final String name, final String type) {
+    /**
+     * Constructor.
+     * @param name Variable name.
+     * @param type Variable type.
+     */
+    Variable(final String name, final String type) {
         this.name = name;
         this.type = type;
     }
 
+    /**
+     * Variable name.
+     * @return Name.
+     */
     public String name() {
         return this.name;
     }
 
-    public String type() {
+    /**
+     * Variable type.
+     * @return Type.
+     */
+    String type() {
         return this.type;
     }
 }

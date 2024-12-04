@@ -62,18 +62,21 @@ public final class VariableDeclaration implements Rule {
     @Override
     public Text generate(final Context context) {
         final Text text = this.origin.generate(context);
-        if (!text.error()) {
+        final Text result;
+        if (text.error()) {
+            result = text;
+        } else {
             final String output = text.output();
             if (context.labels().containsKey(TypeRule.COMMENT)) {
                 context.current().declare(output, context.labels().get(TypeRule.COMMENT));
             } else {
                 context.current().declare(output);
             }
-            return new TextLeaf(
+            result = new TextLeaf(
                 this, output, Collections.singletonMap(VariableTarget.COMMENT, output)
             );
         }
-        return text;
+        return result;
     }
 
     @Override

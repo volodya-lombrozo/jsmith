@@ -25,7 +25,6 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -78,6 +77,16 @@ public final class Variables {
     }
 
     /**
+     * Get a type of the variable.
+     * @param name Variable name.
+     * @return Variable type.
+     */
+    public String type(final String name) {
+        return Stream.concat(this.init.stream(), this.decl.stream())
+            .filter(v -> v.name().equals(name)).findFirst().map(Variable::type).orElse("");
+    }
+
+    /**
      * Declare a variable.
      * @param name Variable name.
      */
@@ -85,6 +94,11 @@ public final class Variables {
         this.decl.add(new Variable(name));
     }
 
+    /**
+     * Declare a variable.
+     * @param name Variable name.
+     * @param type Variable type.
+     */
     void declare(final String name, final String type) {
         this.decl.add(new Variable(name, type));
     }
@@ -98,7 +112,6 @@ public final class Variables {
             .orElseThrow(() -> new IllegalStateException("Variable is not declared"));
         this.init.add(declared);
     }
-
 
     /**
      * Get all declared variables.
@@ -116,15 +129,15 @@ public final class Variables {
         return this.init.stream().map(Variable::name).collect(Collectors.toList());
     }
 
-    public Set<String> allAssigned(final String type) {
+    /**
+     * Get all assigned variables of the given type.
+     * @param type Variable type.
+     * @return All assigned variables.
+     */
+    Set<String> allAssigned(final String type) {
         return this.init.stream()
             .filter(v -> v.type().equals(type))
             .map(Variable::name)
             .collect(Collectors.toSet());
-    }
-
-    public String type(final String name) {
-        return Stream.concat(this.init.stream(), this.decl.stream())
-            .filter(v -> v.name().equals(name)).findFirst().map(Variable::type).orElse("");
     }
 }

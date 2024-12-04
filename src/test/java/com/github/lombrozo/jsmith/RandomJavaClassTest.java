@@ -70,15 +70,15 @@ final class RandomJavaClassTest {
     }
 
     @Test
-    void generatesSpecifixJavaClass(@TempDir final Path dir) {
-        final String src = new RandomJavaClass(
-            new Params(6992052469631176243L)
-        ).src();
-        final int res = compile(src, dir);
-        System.out.println(src);
+    void generatesSpecificJavaClass(@TempDir final Path dir) {
         MatcherAssert.assertThat(
             "The generated source code should be compilable",
-            res,
+            RandomJavaClassTest.compile(
+                new RandomJavaClass(
+                    new Params(6_992_052_469_631_176_243L)
+                ).src(),
+                dir
+            ),
             Matchers.equalTo(0)
         );
     }
@@ -138,21 +138,6 @@ final class RandomJavaClassTest {
     }
 
     /**
-     * Compile Java source code.
-     * @param src Java source code.
-     * @param temp Temporary directory.
-     * @return Compilation result.
-     */
-    private static int compile(final String src, final Path temp) {
-        return ToolProvider.getSystemJavaCompiler().run(
-            new ByteArrayInputStream(src.getBytes(StandardCharsets.UTF_8)),
-            new BufferedOutputStream(System.out),
-            new BufferedOutputStream(System.err),
-            RandomJavaClassTest.saveJava(src, temp)
-        );
-    }
-
-    /**
      * Save Java source code to the file.
      * @param src Java source code.
      * @param temp Temporary directory.
@@ -176,5 +161,20 @@ final class RandomJavaClassTest {
         return Stream.generate(Params::new)
             .limit(10)
             .map(params -> Arguments.of(params, new RandomJavaClass(params).src()));
+    }
+
+    /**
+     * Compile Java source code.
+     * @param src Java source code.
+     * @param temp Temporary directory.
+     * @return Compilation result.
+     */
+    private static int compile(final String src, final Path temp) {
+        return ToolProvider.getSystemJavaCompiler().run(
+            new ByteArrayInputStream(src.getBytes(StandardCharsets.UTF_8)),
+            new BufferedOutputStream(System.out),
+            new BufferedOutputStream(System.err),
+            RandomJavaClassTest.saveJava(src, temp)
+        );
     }
 }

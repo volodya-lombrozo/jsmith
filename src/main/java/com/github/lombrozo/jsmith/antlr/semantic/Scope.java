@@ -36,6 +36,7 @@ import lombok.ToString;
  * @since 0.1
  */
 @ToString
+@SuppressWarnings("PMD.TooManyMethods")
 public final class Scope {
 
     /**
@@ -126,6 +127,11 @@ public final class Scope {
         return this.random(this.allDeclared());
     }
 
+    /**
+     * Get a type of the variable.
+     * @param name Variable name.
+     * @return Variable type.
+     */
     String type(final String name) {
         return this.variables.type(name);
     }
@@ -138,6 +144,11 @@ public final class Scope {
         return this.random(this.allAssigned());
     }
 
+    /**
+     * Get a random initialized variable of the given type.
+     * @param type Variable type.
+     * @return Random initialized variable.
+     */
     Optional<String> initialized(final String type) {
         return this.random(this.variables.allAssigned(type));
     }
