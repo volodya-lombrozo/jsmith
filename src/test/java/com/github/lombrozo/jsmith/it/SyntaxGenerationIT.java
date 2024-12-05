@@ -84,7 +84,6 @@ final class SyntaxGenerationIT {
     ) {
         final Input[] grammars = definitions.stream().map(ResourceOf::new)
             .toArray(Input[]::new);
-        final RandomScript script = new RandomScript(grammars);
         final SyntaxGuard guard = new SyntaxGuard(temp, top, grammars);
         final String message =
             "We expect that the randomly generated code will be verified without errors";
@@ -92,7 +91,7 @@ final class SyntaxGenerationIT {
             Assertions.assertDoesNotThrow(
                 () -> Stream.generate(() -> top)
                     .peek(this::logStart)
-                    .map(script::generate)
+                    .map(rule -> new RandomScript(grammars).generate(rule))
                     .limit(50)
                     .peek(this::logProgram)
                     .forEach(guard::verifySilently),
