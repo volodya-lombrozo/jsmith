@@ -71,12 +71,14 @@ final class RandomJavaClassTest {
 
     @Test
     void generatesSpecificJavaClass(@TempDir final Path dir) {
+        final String src = new RandomJavaClass(
+            new Params(-5_897_739_051_494_535_789L)
+        ).src();
+        Logger.info(this, "Generated source code: %n%s%n", src);
         MatcherAssert.assertThat(
             "The generated source code should be compilable",
             RandomJavaClassTest.compile(
-                new RandomJavaClass(
-                    new Params(6_992_052_469_631_176_243L)
-                ).src(),
+                src,
                 dir
             ),
             Matchers.equalTo(0)
@@ -125,7 +127,7 @@ final class RandomJavaClassTest {
     void createsCompilableJavaSourceCode(
         final Params params, final String src, @TempDir final Path temp
     ) {
-        Logger.info(this, "Generated source code: %n%s%n", src);
+        Logger.info(this, "Params [%s]  Generated source code: %n%s%n", params, src);
         final int run = RandomJavaClassTest.compile(src, temp);
         MatcherAssert.assertThat(
             String.format(

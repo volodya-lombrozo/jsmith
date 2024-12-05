@@ -188,6 +188,8 @@ This annotation is attached to the token usage in a parser rule.
 should be regenerated.
 * `$jsmith-scope` - scope, like `{}` in `if (x > 5) { x = 5; }`, it helps to
 separate identifiers in different scopes.
+* `$jsmith-type`
+* `$jsmith-predicate(long)` or `$jsmith-predicate(boolean)`
 
 
 ## How to Contribute
