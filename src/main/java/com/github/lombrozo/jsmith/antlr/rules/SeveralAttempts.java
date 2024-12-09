@@ -95,10 +95,6 @@ public final class SeveralAttempts {
     /**
      * Choose output.
      * @return Output.
-     * @todo #92:30min The loop in SeveralAttempts.choose() method is wrong.
-     *  Take a look on the last generation attempt. It might be successful,
-     *  but we don't return it. We need to fix this issue.
-     *  Don't forget to add tests for this case.
      */
     public Text choose() {
         Text text;
