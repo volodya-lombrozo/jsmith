@@ -101,23 +101,22 @@ public final class SeveralAttempts {
      *  Don't forget to add tests for this case.
      */
     public Text choose() {
-        Text text = this.generator.get();
-        int attempt = 1;
-        while (text.error()) {
-            if (attempt > this.max) {
-                final String msg = String.format(
-                    "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
-                    this.max,
-                    this.author,
-                    text.writer().name(),
-                    text.output()
-                );
-                Logger.warn(this, msg);
-                text = new Error(text.writer(), msg);
-                break;
-            }
+        Text text;
+        int attempt = 0;
+        do {
             text = this.generator.get();
             attempt = attempt + 1;
+        } while (text.error() && attempt < this.max);
+        if (text.error()) {
+            final String msg = String.format(
+                "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
+                this.max,
+                this.author,
+                text.writer().name(),
+                text.output()
+            );
+            Logger.warn(this, msg);
+            text = new Error(text.writer(), msg);
         }
         return text;
     }

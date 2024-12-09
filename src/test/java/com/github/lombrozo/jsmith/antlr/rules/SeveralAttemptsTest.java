@@ -30,6 +30,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -41,20 +42,32 @@ final class SeveralAttemptsTest {
 
 
     @ParameterizedTest
-    @CsvSource({"1, failure", "2, success", "3, success"})
+    @CsvSource({"1, failure", "2, failure", "3, success", "4, success"})
     void choosesCorrectly(final int attempts, final String expected) {
         MatcherAssert.assertThat(
             String.format("We expect the %d attempt to be %s", attempts, expected),
-            new SeveralAttempts(attempts, "test", new TwoAttempts()).choose().output(),
+            new SeveralAttempts(attempts, "test", new ThreeAttempts()).choose().output(),
             Matchers.containsString(expected)
         );
     }
 
+    @Test
+    void choosesCorrectlyForSingleAttempt() {
+        MatcherAssert.assertThat(
+            new SeveralAttempts(
+                1,
+                "test",
+                () -> new Error(new Root(), "failure")
+            ).choose().output(),
+            Matchers.containsString("failure")
+        );
+    }
+
     /**
-     * Mock text generation that starts to work only from the second attempt.
+     * Mock text generation that starts to work only from the third attempt.
      * @since 0.1
      */
-    private static final class TwoAttempts implements Supplier<Text> {
+    private static final class ThreeAttempts implements Supplier<Text> {
 
         /**
          * Attempts.
