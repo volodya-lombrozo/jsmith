@@ -40,6 +40,10 @@ import org.junit.jupiter.params.provider.CsvSource;
  */
 final class SeveralAttemptsTest {
 
+    /**
+     * Failure message.
+     */
+    private static final String FAILURE = "failure";
 
     @ParameterizedTest
     @CsvSource({"1, failure", "2, failure", "3, success", "4, success"})
@@ -54,12 +58,13 @@ final class SeveralAttemptsTest {
     @Test
     void choosesCorrectlyForSingleAttempt() {
         MatcherAssert.assertThat(
+            "We expect the single attempt to be failure",
             new SeveralAttempts(
                 1,
                 "test",
-                () -> new Error(new Root(), "failure")
+                () -> new Error(new Root(), SeveralAttemptsTest.FAILURE)
             ).choose().output(),
-            Matchers.containsString("failure")
+            Matchers.containsString(SeveralAttemptsTest.FAILURE)
         );
     }
 
@@ -80,11 +85,10 @@ final class SeveralAttemptsTest {
             if (this.attempts.getCount() == 0) {
                 result = new TextLeaf("success");
             } else {
-                result = new Error(new Literal("two-attempts-only"), "failure");
+                result = new Error(new Literal("two-attempts-only"), SeveralAttemptsTest.FAILURE);
             }
             this.attempts.countDown();
             return result;
         }
     }
-
 }
