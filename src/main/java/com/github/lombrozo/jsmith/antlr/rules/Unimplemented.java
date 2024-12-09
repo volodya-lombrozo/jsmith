@@ -24,6 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
@@ -72,8 +74,8 @@ public abstract class Unimplemented implements Rule {
     }
 
     @Override
-    public final Text generate(final Context context) {
-        return new TextNode(
+    public final Snippet generate(final Context context) {
+        return new NodeSnippet(
             this,
             this.children.stream()
                 .map(rule -> rule.generate(context))

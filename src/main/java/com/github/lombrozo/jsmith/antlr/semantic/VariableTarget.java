@@ -24,6 +24,9 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
@@ -64,17 +67,19 @@ public final class VariableTarget implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
-        Text text = this.origin.generate(context);
-        if (!text.error()) {
+    public Snippet generate(final Context context) {
+        Snippet text = this.origin.generate(context);
+        if (!text.isError()) {
             final Optional<String> declared = context.current().declared();
             if (declared.isPresent()) {
                 final String type = context.current().type(declared.get());
                 context.labels().put(TypeRule.COMMENT, type);
-                text = new TextLeaf(
-                    this,
-                    declared.get(),
-                    Collections.singletonMap(VariableTarget.COMMENT, declared.get())
+                text = new LeafSnippet(
+                    new TextLeaf(
+                        this,
+                        declared.get(),
+                        Collections.singletonMap(VariableTarget.COMMENT, declared.get())
+                    )
                 );
             } else {
                 Logger.warn(
@@ -84,7 +89,7 @@ public final class VariableTarget implements Rule {
                         context.current()
                     )
                 );
-                text = new Error(this, "<variable is not declared yet>");
+                text = new ErrorSnippet(this, "<variable is not declared yet>");
             }
         }
         return text;

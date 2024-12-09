@@ -24,6 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import java.util.Objects;
@@ -63,9 +65,9 @@ final class Cage implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
+    public Snippet generate(final Context context) {
         this.trap.set(context);
-        return new TextLeaf(this, "");
+        return new LeafSnippet(this, "");
     }
 
     @Override

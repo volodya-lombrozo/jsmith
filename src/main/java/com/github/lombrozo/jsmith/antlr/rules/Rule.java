@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 
 /**
@@ -43,7 +44,7 @@ public interface Rule {
      * @param context Generation context.
      * @return Generated code.
      */
-    Text generate(Context context);
+    Snippet generate(Context context);
 
     /**
      * Append child rule.

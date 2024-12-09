@@ -72,7 +72,7 @@ public final class Unparser {
      * @param context Context.
      * @return String representation of the parser rule.
      */
-    public Text generate(final String rule, final Context context) {
+    public Snippet generate(final String rule, final Context context) {
         if (!this.rules.containsKey(rule)) {
             throw new IllegalStateException(
                 String.format("Rule not found: %s. All available rules: [%s]", rule, this.rules)

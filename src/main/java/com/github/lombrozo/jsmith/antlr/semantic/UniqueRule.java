@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.jcabi.log.Logger;
@@ -67,23 +68,23 @@ public final class UniqueRule implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
-        final Text text = this.original.generate(context);
-        final Text result;
-        if (this.all.contains(text.output())) {
-            final Text reattempt = this.generate(context);
+    public Snippet generate(final Context context) {
+        final Snippet snippet = this.original.generate(context);
+        final Snippet result;
+        if (this.all.contains(snippet.text().output())) {
+            final Snippet reattempt = this.generate(context);
             Logger.info(
                 this,
                 String.format(
                     "Collision happened: identifier '%s' was already generated, regenerate it to the '%s'.",
-                    text.output(),
-                    reattempt.output()
+                    snippet.text().output(),
+                    reattempt.text().output()
                 )
             );
             result = reattempt;
         } else {
-            this.all.add(text.output());
-            result = text;
+            this.all.add(snippet.text().output());
+            result = snippet;
         }
         return result;
     }

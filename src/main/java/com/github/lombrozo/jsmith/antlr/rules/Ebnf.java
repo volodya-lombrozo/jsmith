@@ -24,6 +24,9 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import com.github.lombrozo.jsmith.random.Multiplier;
@@ -89,13 +92,15 @@ public final class Ebnf implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
+    public Snippet generate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException(
                 "Ebnf should have at least one 'Block', but it's empty"
             );
         }
-        return new TextNode(this, this.multiplier().repeat(this.children.get(0)).generate(context));
+        return new NodeSnippet(
+            this, this.multiplier().repeat(this.children.get(0)).generate(context)
+        );
     }
 
     @Override

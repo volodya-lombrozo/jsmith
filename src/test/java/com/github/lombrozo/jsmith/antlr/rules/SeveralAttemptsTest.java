@@ -23,9 +23,13 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 import org.hamcrest.MatcherAssert;
@@ -50,7 +54,7 @@ final class SeveralAttemptsTest {
     void choosesCorrectly(final int attempts, final String expected) {
         MatcherAssert.assertThat(
             String.format("We expect the %d attempt to be %s", attempts, expected),
-            new SeveralAttempts(attempts, "test", new ThreeAttempts()).choose().output(),
+            new SeveralAttempts(attempts, "test", new ThreeAttempts()).choose().text().output(),
             Matchers.containsString(expected)
         );
     }
@@ -62,8 +66,8 @@ final class SeveralAttemptsTest {
             new SeveralAttempts(
                 1,
                 "test",
-                () -> new Error(new Root(), SeveralAttemptsTest.FAILURE)
-            ).choose().output(),
+                () -> new ErrorSnippet(new Error(new Root(), SeveralAttemptsTest.FAILURE))
+            ).choose().text().output(),
             Matchers.containsString(SeveralAttemptsTest.FAILURE)
         );
     }
@@ -72,7 +76,7 @@ final class SeveralAttemptsTest {
      * Mock text generation that starts to work only from the third attempt.
      * @since 0.1
      */
-    private static final class ThreeAttempts implements Supplier<Text> {
+    private static final class ThreeAttempts implements Supplier<Snippet> {
 
         /**
          * Attempts.
@@ -80,12 +84,14 @@ final class SeveralAttemptsTest {
         private final CountDownLatch attempts = new CountDownLatch(2);
 
         @Override
-        public Text get() {
-            final Text result;
+        public Snippet get() {
+            final Snippet result;
             if (this.attempts.getCount() == 0) {
-                result = new TextLeaf("success");
+                result = new LeafSnippet(new TextLeaf("success"));
             } else {
-                result = new Error(new Literal("two-attempts-only"), SeveralAttemptsTest.FAILURE);
+                result = new ErrorSnippet(
+                    new Error(new Literal("two-attempts-only"), SeveralAttemptsTest.FAILURE)
+                );
             }
             this.attempts.countDown();
             return result;

@@ -45,7 +45,7 @@ final class NotSetTest {
         not.append(element);
         MatcherAssert.assertThat(
             "We expect that the generated string will not match the sequence",
-            not.generate(new Context()).output(),
+            not.generate(new Context()).text().output(),
             Matchers.not(Matchers.matchesRegex(sequence))
         );
     }

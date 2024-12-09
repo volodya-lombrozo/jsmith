@@ -59,14 +59,30 @@ public final class TextNode implements Text {
      */
     private final String delimiter;
 
+    /**
+     * Constructor.
+     * @param writer Rule that writes the text.
+     * @param children Children of the node.
+     */
     public TextNode(final Rule writer, final Text... children) {
         this(writer, Arrays.asList(children));
     }
 
+    /**
+     * Constructor.
+     * @param writer Rule that writes the text.
+     * @param children Children of the node.
+     */
     public TextNode(final Rule writer, final List<Text> children) {
         this(writer, children, TextNode.DELIMITER);
     }
 
+    /**
+     * Constructor.
+     * @param writer Rule that writes the text.
+     * @param children Children of the node.
+     * @param delimiter Delimiter between children.
+     */
     private TextNode(final Rule writer, final List<Text> children, final String delimiter) {
         this.author = writer;
         this.childs = children;

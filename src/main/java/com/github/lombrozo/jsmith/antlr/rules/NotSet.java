@@ -24,6 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
@@ -77,7 +79,7 @@ public final class NotSet implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
+    public Snippet generate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException(
                 "NotSet rule is empty, either SetElement or BlockSet should be added before generation"
@@ -85,7 +87,7 @@ public final class NotSet implements Rule {
         }
         final Rule rule = this.children.get(0);
         if (rule instanceof Negatable) {
-            return new TextNode(this, ((Negatable) rule).negate(context));
+            return new NodeSnippet(this, ((Negatable) rule).negate(context));
         } else {
             throw new IllegalArgumentException(
                 String.format(

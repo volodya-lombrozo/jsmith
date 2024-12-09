@@ -24,6 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
@@ -88,10 +90,10 @@ public final class TerminalDef implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
-        final Text result;
+    public Snippet generate(final Context context) {
+        final Snippet result;
         if (TerminalDef.END_OF_FILE.equals(this.text)) {
-            result = new TextLeaf(this, "");
+            result = new LeafSnippet(this, "");
         } else {
             result = this.unlexer.find(this.text)
                 .orElseGet(() -> new Literal(this.text))

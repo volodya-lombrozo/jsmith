@@ -45,7 +45,7 @@ final class ElementTest {
         element.append(atom);
         MatcherAssert.assertThat(
             "We expect that the element with an atom will be generated correctly",
-            element.generate(new Context()).output(),
+            element.generate(new Context()).text().output(),
             Matchers.equalTo(number)
         );
     }
@@ -60,7 +60,7 @@ final class ElementTest {
         element.append(new EbnfSuffix("*"));
         MatcherAssert.assertThat(
             "We expect that the element with EBNF suffix will be generated correctly",
-            element.generate(new Context()).output(),
+            element.generate(new Context()).text().output(),
             Matchers.anyOf(
                 Matchers.equalTo(""),
                 Matchers.equalTo("1"),

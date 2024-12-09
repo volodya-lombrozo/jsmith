@@ -24,6 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.random.Rand;
@@ -93,8 +95,8 @@ public final class Literal implements Rule, Negatable {
     }
 
     @Override
-    public Text generate(final Context context) {
-        return new TextLeaf(
+    public Snippet generate(final Context context) {
+        return new LeafSnippet(
             this,
             Literal.replaceEscapes(Literal.withoutApostrophes(this.text))
         );
@@ -104,7 +106,7 @@ public final class Literal implements Rule, Negatable {
     public Text negate(final Context context) {
         return new TextLeaf(
             this,
-            this.random.regex(String.format("[^%s]", this.generate(context).output()))
+            this.random.regex(String.format("[^%s]", this.generate(context).text().output()))
         );
     }
 

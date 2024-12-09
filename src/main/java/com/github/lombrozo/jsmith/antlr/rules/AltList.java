@@ -24,9 +24,10 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
-import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,12 +100,12 @@ public final class AltList implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
-        final Text result;
+    public Snippet generate(final Context context) {
+        final Snippet result;
         if (this.alternatives.isEmpty()) {
-            result = new TextLeaf(this, "");
+            result = new LeafSnippet(new TextLeaf(this, ""));
         } else {
-            result = new TextNode(
+            result = new NodeSnippet(
                 this,
                 new SeveralAttempts(
                     this.name(),

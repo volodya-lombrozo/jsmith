@@ -24,6 +24,9 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
@@ -86,16 +89,16 @@ public final class Element implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
+    public Snippet generate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException("Element should have at least one child");
         }
-        final Text result;
+        final Snippet result;
         final Rule first = this.children.get(0);
         if (Atom.isAtom(first) || LabeledElement.isLabeledElement(first) || Ebnf.isEbnf(first)) {
-            result = new TextNode(this, this.multiplier().repeat(first).generate(context));
+            result = new NodeSnippet(this, this.multiplier().repeat(first).generate(context));
         } else if (ActionBlock.isActionBlock(first)) {
-            result = new TextLeaf(this, "");
+            result = new LeafSnippet(this, "");
         } else {
             throw new IllegalStateException(
                 String.format("Unknown element type: %s", first.name())

@@ -41,7 +41,7 @@ final class EbnfTest {
         ebnf.append(new Literal(value));
         MatcherAssert.assertThat(
             "We expect that the rule has a single block",
-            ebnf.generate(new Context()).output(),
+            ebnf.generate(new Context()).text().output(),
             Matchers.equalTo(value)
         );
     }
@@ -56,7 +56,7 @@ final class EbnfTest {
         ebnf.append(block);
         MatcherAssert.assertThat(
             "We expect that the rule might generate one or many blocks",
-            ebnf.generate(new Context()).output(),
+            ebnf.generate(new Context()).text().output(),
             Matchers.anyOf(
                 Matchers.equalTo(value),
                 Matchers.containsString(String.format("%s%s", value, value))

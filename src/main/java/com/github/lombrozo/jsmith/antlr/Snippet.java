@@ -30,8 +30,6 @@ public interface Snippet {
 
     Text text();
 
-    Context context();
-
     boolean isError();
 
 }

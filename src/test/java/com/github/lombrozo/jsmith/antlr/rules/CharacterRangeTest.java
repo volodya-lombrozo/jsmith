@@ -49,7 +49,7 @@ final class CharacterRangeTest {
             "The generated symbol should be in the allowed range",
             allowed,
             Matchers.hasItem(
-                Matchers.equalTo(new CharacterRange(range).generate(new Context()).output())
+                Matchers.equalTo(new CharacterRange(range).generate(new Context()).text().output())
             )
         );
     }

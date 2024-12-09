@@ -49,7 +49,7 @@ final class UnparserTest {
             .forEach(alternatives::append);
         unparser.with("stat", alternatives);
         final Set<String> chosen = IntStream.range(0, 50)
-            .mapToObj(i -> unparser.generate("stat", new Context()).output())
+            .mapToObj(i -> unparser.generate("stat", new Context()).text().output())
             .collect(Collectors.toCollection(LinkedHashSet::new));
         MatcherAssert.assertThat(
             "We expect that the result will contain all different alternatives",

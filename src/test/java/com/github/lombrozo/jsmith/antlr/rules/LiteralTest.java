@@ -42,7 +42,7 @@ final class LiteralTest {
     void generatesSymbols(final String input, final String expected) {
         MatcherAssert.assertThat(
             "We expect that the literal will generate the symbol without special characters",
-            new Literal(input).generate(new Context()).output(),
+            new Literal(input).generate(new Context()).text().output(),
             Matchers.equalTo(expected)
         );
     }

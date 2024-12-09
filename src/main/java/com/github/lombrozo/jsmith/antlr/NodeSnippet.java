@@ -21,61 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.semantic;
+package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextNode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * Rule that adds type to the context.
- * @since 0.1
- */
-public final class TypeRule implements Rule {
+public final class NodeSnippet implements Snippet {
 
-    /**
-     * Comment to activate this rule.
-     */
-    public static final String COMMENT = "$jsmith-type";
+    private final Rule author;
+    private final List<Snippet> snippets;
 
-    /**
-     * Original rule.
-     */
-    private final Rule origin;
 
-    /**
-     * Constructor.
-     * @param origin Origin rule.
-     */
-    public TypeRule(final Rule origin) {
-        this.origin = origin;
+    public NodeSnippet(final Rule author, final Text... texts) {
+        this(author, Arrays.stream(texts).map(LeafSnippet::new).collect(Collectors.toList()));
+    }
+
+    public NodeSnippet(final Rule author, final Snippet... snippets) {
+        this(author, Arrays.asList(snippets));
+    }
+
+    public NodeSnippet(final Rule author, final List<Snippet> snippets) {
+        this.author = author;
+        this.snippets = snippets;
     }
 
     @Override
-    public Rule parent() {
-        return this.origin.parent();
+    public Text text() {
+        return new TextNode(
+            this.author,
+            this.snippets.stream().map(Snippet::text).collect(Collectors.toList())
+        );
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        final Snippet snippet = this.origin.generate(context);
-        context.labels().put(TypeRule.COMMENT, snippet.text().output());
-        return snippet;
-    }
-
-    @Override
-    public void append(final Rule rule) {
-        this.origin.append(rule);
-    }
-
-    @Override
-    public String name() {
-        return String.format("%s(%s)", TypeRule.COMMENT, this.origin.name());
-    }
-
-    @Override
-    public Rule copy() {
-        return new TypeRule(this.origin.copy());
+    public boolean isError() {
+        return this.snippets.stream().anyMatch(Snippet::isError);
     }
 }

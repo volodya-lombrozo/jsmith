@@ -23,8 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.view.Error;
-import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.jcabi.log.Logger;
 import java.util.function.Supplier;
 
@@ -62,7 +62,7 @@ public final class SeveralAttempts {
     /**
      * Original output generator.
      */
-    private final Supplier<? extends Text> generator;
+    private final Supplier<? extends Snippet> generator;
 
     /**
      * Constructor.
@@ -71,7 +71,7 @@ public final class SeveralAttempts {
      */
     public SeveralAttempts(
         final String author,
-        final Supplier<? extends Text> generator
+        final Supplier<? extends Snippet> generator
     ) {
         this(SeveralAttempts.DEFAULT_ATTEMPTS, author, generator);
     }
@@ -85,7 +85,7 @@ public final class SeveralAttempts {
     SeveralAttempts(
         final int attempts,
         final String author,
-        final Supplier<? extends Text> original
+        final Supplier<? extends Snippet> original
     ) {
         this.max = attempts;
         this.author = author;
@@ -96,24 +96,24 @@ public final class SeveralAttempts {
      * Choose output.
      * @return Output.
      */
-    public Text choose() {
-        Text text;
+    public Snippet choose() {
+        Snippet snippet;
         int attempt = 0;
         do {
-            text = this.generator.get();
+            snippet = this.generator.get();
             attempt = attempt + 1;
-        } while (text.error() && attempt < this.max);
-        if (text.error()) {
+        } while (snippet.isError() && attempt < this.max);
+        if (snippet.isError()) {
             final String msg = String.format(
                 "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
                 this.max,
                 this.author,
-                text.writer().name(),
-                text.output()
+                snippet.text().writer().name(),
+                snippet.text().output()
             );
             Logger.warn(this, msg);
-            text = new Error(text.writer(), msg);
+            snippet = new ErrorSnippet(snippet.text());
         }
-        return text;
+        return snippet;
     }
 }

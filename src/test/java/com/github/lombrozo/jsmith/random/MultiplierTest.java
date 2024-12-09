@@ -42,6 +42,7 @@ final class MultiplierTest {
             new Multiplier.ZeroOrMore()
                 .repeat(new Literal("a"))
                 .generate(new Context())
+                .text()
                 .output(),
             Matchers.anyOf(
                 Matchers.emptyString(),
@@ -58,6 +59,7 @@ final class MultiplierTest {
             new Multiplier.OneOrMore()
                 .repeat(new Literal("a"))
                 .generate(new Context())
+                .text()
                 .output(),
             Matchers.anyOf(
                 Matchers.equalTo("a"),
@@ -72,7 +74,7 @@ final class MultiplierTest {
             "We expect that the 'zero or one' multiplier will generate zero or one element",
             new Multiplier.ZeroOrOne()
                 .repeat(new Literal("a"))
-                .generate(new Context()).output(),
+                .generate(new Context()).text().output(),
             Matchers.anyOf(
                 Matchers.emptyString(),
                 Matchers.equalTo("a")
@@ -84,7 +86,7 @@ final class MultiplierTest {
     void generatesExactlyOne() {
         MatcherAssert.assertThat(
             "We expect that the 'exactly one' multiplier will generate exactly one element",
-            new Multiplier.One().repeat(new Literal("a")).generate(new Context()).output(),
+            new Multiplier.One().repeat(new Literal("a")).generate(new Context()).text().output(),
             Matchers.equalTo("a")
         );
     }

@@ -24,6 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
@@ -60,20 +62,22 @@ public final class VariableDeclaration implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
-        final Text text = this.origin.generate(context);
-        final Text result;
-        if (text.error()) {
+    public Snippet generate(final Context context) {
+        final Snippet text = this.origin.generate(context);
+        final Snippet result;
+        if (text.isError()) {
             result = text;
         } else {
-            final String output = text.output();
+            final String output = text.text().output();
             if (context.labels().containsKey(TypeRule.COMMENT)) {
                 context.current().declare(output, context.labels().get(TypeRule.COMMENT));
             } else {
                 context.current().declare(output);
             }
-            result = new TextLeaf(
-                this, output, Collections.singletonMap(VariableTarget.COMMENT, output)
+            result = new LeafSnippet(
+                new TextLeaf(
+                    this, output, Collections.singletonMap(VariableTarget.COMMENT, output)
+                )
             );
         }
         return result;

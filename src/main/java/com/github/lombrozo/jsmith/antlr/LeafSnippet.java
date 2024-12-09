@@ -21,61 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr.semantic;
+package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 
-/**
- * Rule that adds type to the context.
- * @since 0.1
- */
-public final class TypeRule implements Rule {
+public final class LeafSnippet implements Snippet {
 
-    /**
-     * Comment to activate this rule.
-     */
-    public static final String COMMENT = "$jsmith-type";
+    private final Text text;
 
-    /**
-     * Original rule.
-     */
-    private final Rule origin;
+    public LeafSnippet(final Rule author, final String text) {
+        this(new TextLeaf(author, text));
+    }
 
-    /**
-     * Constructor.
-     * @param origin Origin rule.
-     */
-    public TypeRule(final Rule origin) {
-        this.origin = origin;
+    public LeafSnippet(final Text text) {
+        this.text = text;
     }
 
     @Override
-    public Rule parent() {
-        return this.origin.parent();
+    public Text text() {
+        return this.text;
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        final Snippet snippet = this.origin.generate(context);
-        context.labels().put(TypeRule.COMMENT, snippet.text().output());
-        return snippet;
-    }
-
-    @Override
-    public void append(final Rule rule) {
-        this.origin.append(rule);
-    }
-
-    @Override
-    public String name() {
-        return String.format("%s(%s)", TypeRule.COMMENT, this.origin.name());
-    }
-
-    @Override
-    public Rule copy() {
-        return new TypeRule(this.origin.copy());
+    public boolean isError() {
+        return false;
     }
 }

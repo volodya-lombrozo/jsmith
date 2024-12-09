@@ -41,6 +41,7 @@ final class AltListTest {
             "We expect that exactly one option will be chosen from the list of alternatives",
             new AltList(new Empty(), new Literal("1"), new Literal("2"))
                 .generate(new Context())
+                .text()
                 .output(),
             Matchers.either(Matchers.equalTo("1")).or(Matchers.equalTo("2"))
         );
@@ -52,6 +53,7 @@ final class AltListTest {
             "We expect that the only option will be chosen from the list of alternatives",
             new AltList(new Empty(), new Literal("1"))
                 .generate(new Context())
+                .text()
                 .output(),
             Matchers.equalTo("1")
         );
@@ -61,7 +63,7 @@ final class AltListTest {
     void generatesNothing() {
         MatcherAssert.assertThat(
             "We expect that nothing will be generated",
-            new AltList(new Empty()).generate(new Context()).output(),
+            new AltList(new Empty()).generate(new Context()).text().output(),
             Matchers.equalTo("")
         );
     }

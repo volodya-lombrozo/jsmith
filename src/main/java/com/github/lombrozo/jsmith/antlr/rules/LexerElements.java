@@ -24,6 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.ArrayList;
@@ -77,8 +79,8 @@ public final class LexerElements implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
-        return new TextNode(
+    public Snippet generate(final Context context) {
+        return new NodeSnippet(
             this,
             this.elems.stream()
                 .map(rule -> rule.generate(context))

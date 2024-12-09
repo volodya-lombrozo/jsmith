@@ -134,7 +134,7 @@ public final class RandomScript {
         this.grammars.forEach(this::parse);
         return this.unparser.generate(
             rule, new Context(scope, new ConvergenceStrategy(this.params))
-        );
+        ).text();
     }
 
     /**

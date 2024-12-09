@@ -24,6 +24,9 @@
 package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
@@ -57,12 +60,12 @@ final class Several implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
-        final Text result;
+    public Snippet generate(final Context context) {
+        final Snippet result;
         if (this.all.isEmpty()) {
-            result = new TextLeaf(this, "");
+            result = new LeafSnippet(this, "");
         } else {
-            result = new TextNode(
+            result = new NodeSnippet(
                 this,
                 this.all.stream()
                     .map(rule -> rule.generate(context))

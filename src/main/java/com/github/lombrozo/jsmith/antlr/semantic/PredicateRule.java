@@ -24,6 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Error;
 import com.github.lombrozo.jsmith.antlr.view.Text;
@@ -61,8 +63,8 @@ public final class PredicateRule implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
-        final Text res;
+    public Snippet generate(final Context context) {
+        final Snippet res;
         if (context.labels().containsKey(TypeRule.COMMENT)) {
             final String current = context.labels().get(TypeRule.COMMENT);
             if (current.equals(this.type)) {
@@ -72,7 +74,7 @@ public final class PredicateRule implements Rule {
                     "Type mismatch, expected: %s, but got: %s", this.type, current
                 );
                 Logger.warn(this, msg);
-                res = new Error(this, msg);
+                res = new ErrorSnippet(this, msg);
             }
         } else {
             res = this.origin.generate(context);

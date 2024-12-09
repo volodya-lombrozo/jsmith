@@ -24,7 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 
 /**
@@ -41,8 +42,8 @@ public final class Empty implements Rule {
     }
 
     @Override
-    public Text generate(final Context context) {
-        return new TextLeaf(this, "");
+    public Snippet generate(final Context context) {
+        return new LeafSnippet(new TextLeaf(this, ""));
     }
 
     @Override
