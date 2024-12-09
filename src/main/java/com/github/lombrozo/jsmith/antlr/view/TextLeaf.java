@@ -101,8 +101,4 @@ public final class TextLeaf implements Text {
         return new Attributes(true, this.additional);
     }
 
-    @Override
-    public boolean error() {
-        return false;
-    }
 }

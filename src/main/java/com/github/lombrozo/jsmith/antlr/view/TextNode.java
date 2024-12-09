@@ -112,9 +112,4 @@ public final class TextNode implements Text {
             .map(Text::attributes)
             .reduce(new Attributes(true), Attributes::add);
     }
-
-    @Override
-    public boolean error() {
-        return this.children().stream().anyMatch(Text::error);
-    }
 }

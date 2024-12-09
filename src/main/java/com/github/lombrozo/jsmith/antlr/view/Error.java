@@ -72,9 +72,4 @@ public final class Error implements Text {
     public Attributes attributes() {
         return new Attributes(false);
     }
-
-    @Override
-    public boolean error() {
-        return true;
-    }
 }

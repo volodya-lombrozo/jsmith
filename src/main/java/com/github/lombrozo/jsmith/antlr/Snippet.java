@@ -27,9 +27,12 @@ import com.github.lombrozo.jsmith.antlr.view.Text;
 
 public interface Snippet {
 
-
     Text text();
 
+    /**
+     * Check if the output is an error.
+     * @return True if the text has an error.
+     */
     boolean isError();
 
 }

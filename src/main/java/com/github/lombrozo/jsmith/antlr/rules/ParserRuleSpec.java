@@ -26,8 +26,6 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.NodeSnippet;
 import com.github.lombrozo.jsmith.antlr.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.RuleText;
-import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
