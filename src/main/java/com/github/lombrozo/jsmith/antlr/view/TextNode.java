@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -141,8 +142,6 @@ public final class TextNode implements Text {
 
     @Override
     public Labels labels() {
-        return this.childs.stream()
-            .map(Text::labels)
-            .reduce(new Labels(true), Labels::add);
+        return this.labels;
     }
 }

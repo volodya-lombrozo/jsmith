@@ -23,8 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.rules.LexerRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
+import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.Root;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Arrays;
 import java.util.Collections;
 import org.hamcrest.MatcherAssert;
@@ -73,6 +77,46 @@ final class DotTreeTest {
                 Matchers.containsString("literal(c) -> literal(a)"),
                 Matchers.containsString("literal(f) -> literal(d)"),
                 Matchers.containsString("literal(d) -> d")
+            )
+        );
+    }
+
+    @Test
+    void createsSimpleTreeWithRulesOnly() {
+        final Root top = new Root();
+        final Rule first = new ParserRuleSpec("first", top);
+        top.append(first);
+        final Rule second = new ParserRuleSpec("second", first);
+        first.append(second);
+        final Rule third = new ParserRuleSpec("third", second);
+        second.append(third);
+        final Rule lexer = new LexerRuleSpec(third, "lexer");
+        third.append(lexer);
+        lexer.append(new Literal(lexer, "a"));
+        MatcherAssert.assertThat(
+            "We expect that only rules will be converted to DOT format",
+            new DotTree(
+                top.generate(new Context()).text(),
+                new RulesOnly()
+            ).output(),
+            Matchers.equalTo(
+                String.join(
+                    "\n",
+                    "digraph JsmithGenerativeTree{",
+                    "// Node labels",
+                    "\"#1678854096\" -> \"#1849201180\" [tooltip=\"root -> parserRuleSpec(first)\"];",
+                    "\"#1849201180\" -> \"#513700442\" [tooltip=\"parserRuleSpec(first) -> parserRuleSpec(second)\"];",
+                    "\"#513700442\" -> \"#366590980\" [tooltip=\"parserRuleSpec(second) -> parserRuleSpec(third)\"];",
+                    "\"#1678854096\" [label=\"root\" tooltip=\"root\"];",
+                    "\"#366590980\" [label=\"parserRuleSpec(third)\" tooltip=\"parserRuleSpec(third)\"];",
+                    "\"#513700442\" [label=\"parserRuleSpec(second)\" tooltip=\"parserRuleSpec(second)\"];",
+                    "\"#1849201180\" [label=\"parserRuleSpec(first)\" tooltip=\"parserRuleSpec(first)\"];",
+                    " subgraph cluster_leafs {",
+                    "rank=same",
+                    "",
+                    "  }",
+                    "}"
+                )
             )
         );
     }
