@@ -108,7 +108,7 @@ public final class ErrorSnippet implements Snippet {
 
         @Override
         public Labels labels() {
-            return new Labels(false);
+            return new Labels();
         }
     }
 
