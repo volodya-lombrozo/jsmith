@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.Snippet;
@@ -63,8 +64,9 @@ public final class PredicateRule implements Rule {
     @Override
     public Snippet generate(final Context context) {
         final Snippet res;
-        if (context.labels().containsKey(TypeRule.COMMENT)) {
-            final String current = context.labels().get(TypeRule.COMMENT);
+        final Attributes attributes = context.attributes();
+        if (attributes.contains(TypeRule.COMMENT)) {
+            final String current = attributes.get(TypeRule.COMMENT);
             if (current.equals(this.type)) {
                 res = this.origin.generate(context);
             } else {

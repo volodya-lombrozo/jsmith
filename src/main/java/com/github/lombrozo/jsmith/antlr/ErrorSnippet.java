@@ -51,6 +51,11 @@ public final class ErrorSnippet implements Snippet {
     }
 
     @Override
+    public Attributes attributes() {
+        return new Attributes();
+    }
+
+    @Override
     public Text text() {
         return this.text;
     }

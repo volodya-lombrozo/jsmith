@@ -29,9 +29,7 @@ import com.github.lombrozo.jsmith.random.ChoosingStrategy;
 import com.github.lombrozo.jsmith.random.ConvergenceStrategy;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -60,7 +58,7 @@ public final class Context {
     /**
      * Labels.
      */
-    private final Map<String, String> labels;
+    private final Attributes attributes;
 
     /**
      * Constructor.
@@ -98,7 +96,7 @@ public final class Context {
         final List<Rule> visited,
         final Scope scope
     ) {
-        this(strat, visited, scope, new LinkedHashMap<>(0));
+        this(strat, visited, scope, new Attributes());
     }
 
     /**
@@ -106,19 +104,19 @@ public final class Context {
      * @param strat The strategy used in the generation.
      * @param visited The path of the rules that were visited during the generation.
      * @param scope The scope.
-     * @param labels The labels.
+     * @param attributes The labels.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public Context(
         final ChoosingStrategy strat,
         final List<Rule> visited,
         final Scope scope,
-        final Map<String, String> labels
+        final Attributes attributes
     ) {
         this.strat = strat;
         this.visited = visited;
         this.scope = scope;
-        this.labels = labels;
+        this.attributes = attributes;
     }
 
     /**
@@ -153,7 +151,7 @@ public final class Context {
                 Stream.of(rule)
             ).collect(Collectors.toList()),
             this.scope,
-            this.labels
+            this.attributes
         );
     }
 
@@ -163,7 +161,7 @@ public final class Context {
      * @return The next context with the scope.
      */
     public Context withScope(final Scope another) {
-        return new Context(this.strat, this.visited, another, this.labels);
+        return new Context(this.strat, this.visited, another, this.attributes);
     }
 
     /**
@@ -186,8 +184,8 @@ public final class Context {
      * Returns the labels.
      * @return The labels.
      */
-    public Map<String, String> labels() {
-        return this.labels;
+    public Attributes attributes() {
+        return this.attributes;
     }
 
     /**

@@ -31,12 +31,24 @@ public final class LeafSnippet implements Snippet {
 
     private final Text text;
 
+    private final Attributes attributes;
+
     public LeafSnippet(final Rule author, final String text) {
         this(new TextLeaf(author, text));
     }
 
     public LeafSnippet(final Text text) {
+        this(text, new Attributes());
+    }
+
+    public LeafSnippet(final Text text, final Attributes attributes) {
         this.text = text;
+        this.attributes = attributes;
+    }
+
+    @Override
+    public Attributes attributes() {
+        return this.attributes;
     }
 
     @Override

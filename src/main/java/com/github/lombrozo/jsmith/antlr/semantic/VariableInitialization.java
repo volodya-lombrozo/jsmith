@@ -23,10 +23,10 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.Map;
 
 /**
  * Variable Assignment Semantic.
@@ -62,13 +62,13 @@ public final class VariableInitialization implements Rule {
     public Snippet generate(final Context context) {
         final Snippet output = this.origin.generate(context);
         if (!output.isError()) {
-            final Map<String, String> additional = output.text().labels().custom();
+            final Attributes additional = output.attributes();
             final String key = VariableTarget.COMMENT;
-            if (!additional.containsKey(key)) {
+            if (!additional.contains(key)) {
                 throw new IllegalStateException("Variable name is not provided");
             }
             context.current().init(additional.get(key));
-            output.text().labels().without(key);
+            additional.without(key);
         }
         return output;
     }

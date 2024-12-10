@@ -23,13 +23,14 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.LeafSnippet;
 import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import java.util.Collections;
+import org.checkerframework.checker.units.qual.A;
 
 /**
  * Variable Declaration Semantic.
@@ -69,15 +70,18 @@ public final class VariableDeclaration implements Rule {
             result = text;
         } else {
             final String output = text.text().output();
-            if (context.labels().containsKey(TypeRule.COMMENT)) {
-                context.current().declare(output, context.labels().get(TypeRule.COMMENT));
+            final Attributes attributes = context.attributes();
+            if (attributes.contains(TypeRule.COMMENT)) {
+                context.current().declare(output, attributes.get(TypeRule.COMMENT));
             } else {
                 context.current().declare(output);
             }
             result = new LeafSnippet(
                 new TextLeaf(
-                    this, output, Collections.singletonMap(VariableTarget.COMMENT, output)
-                )
+                    this,
+                    output
+                ),
+                new Attributes(Collections.singletonMap(VariableTarget.COMMENT, output))
             );
         }
         return result;

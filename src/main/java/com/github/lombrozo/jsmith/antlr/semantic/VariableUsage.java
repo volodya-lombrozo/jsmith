@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.LeafSnippet;
@@ -65,8 +66,9 @@ public final class VariableUsage implements Rule {
     public Snippet generate(final Context context) {
         final Snippet snippet = this.origin.generate(context);
         final Optional<String> initialized;
-        if (context.labels().containsKey(TypeRule.COMMENT)) {
-            initialized = context.current().initialized(context.labels().get(TypeRule.COMMENT));
+        final Attributes attributes = context.attributes();
+        if (attributes.contains(TypeRule.COMMENT)) {
+            initialized = context.current().initialized(attributes.get(TypeRule.COMMENT));
         } else {
             initialized = context.current().initialized();
         }

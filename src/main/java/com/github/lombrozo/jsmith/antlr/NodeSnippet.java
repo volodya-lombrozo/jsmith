@@ -38,6 +38,8 @@ public final class NodeSnippet implements Snippet {
 
     private final Labels labels;
 
+    private final Attributes attributes;
+
 
     public NodeSnippet(final Rule author, final Text... texts) {
         this(author, Arrays.stream(texts).map(LeafSnippet::new).collect(Collectors.toList()));
@@ -52,16 +54,38 @@ public final class NodeSnippet implements Snippet {
     }
 
     public NodeSnippet(final Rule author, final List<Snippet> snippets, final Labels labels) {
+        this(
+            author, snippets, labels,
+            snippets.stream()
+                .map(Snippet::attributes)
+                .reduce(new Attributes(), Attributes::add)
+        );
+    }
+
+    public NodeSnippet(
+        final Rule author,
+        final List<Snippet> snippets,
+        final Labels labels,
+        final Attributes attributes
+    ) {
         this.author = author;
         this.snippets = snippets;
         this.labels = labels;
+        this.attributes = attributes;
+    }
+
+    @Override
+    public Attributes attributes() {
+        return this.attributes;
     }
 
     @Override
     public Text text() {
         return new TextNode(
             this.author,
-            this.snippets.stream().map(Snippet::text).collect(Collectors.toList()),
+            this.snippets.stream()
+                .map(Snippet::text)
+                .collect(Collectors.toList()),
             this.labels
         );
     }

@@ -60,7 +60,7 @@ public final class TypeRule implements Rule {
     @Override
     public Snippet generate(final Context context) {
         final Snippet snippet = this.origin.generate(context);
-        context.labels().put(TypeRule.COMMENT, snippet.text().output());
+        snippet.attributes().put(TypeRule.COMMENT, snippet.text().output());
         return snippet;
     }
 

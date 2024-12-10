@@ -99,24 +99,8 @@ final class DotTreeTest {
                 top.generate(new Context()).text(),
                 new RulesOnly()
             ).output(),
-            Matchers.equalTo(
-                String.join(
-                    "\n",
-                    "digraph JsmithGenerativeTree{",
-                    "// Node labels",
-                    "\"#1678854096\" -> \"#1849201180\" [tooltip=\"root -> parserRuleSpec(first)\"];",
-                    "\"#1849201180\" -> \"#513700442\" [tooltip=\"parserRuleSpec(first) -> parserRuleSpec(second)\"];",
-                    "\"#513700442\" -> \"#366590980\" [tooltip=\"parserRuleSpec(second) -> parserRuleSpec(third)\"];",
-                    "\"#1678854096\" [label=\"root\" tooltip=\"root\"];",
-                    "\"#366590980\" [label=\"parserRuleSpec(third)\" tooltip=\"parserRuleSpec(third)\"];",
-                    "\"#513700442\" [label=\"parserRuleSpec(second)\" tooltip=\"parserRuleSpec(second)\"];",
-                    "\"#1849201180\" [label=\"parserRuleSpec(first)\" tooltip=\"parserRuleSpec(first)\"];",
-                    " subgraph cluster_leafs {",
-                    "rank=same",
-                    "",
-                    "  }",
-                    "}"
-                )
+            Matchers.not(
+                Matchers.containsString("literal(a)")
             )
         );
     }

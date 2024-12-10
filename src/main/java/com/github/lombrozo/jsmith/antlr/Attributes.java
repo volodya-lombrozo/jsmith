@@ -23,19 +23,50 @@
  */
 package com.github.lombrozo.jsmith.antlr;
 
-import com.github.lombrozo.jsmith.antlr.view.Text;
+import java.util.HashMap;
+import java.util.Map;
 
-public interface Snippet {
+public final class Attributes {
+    private final Map<String, String> attributes;
 
-    Attributes attributes();
+    public Attributes() {
+        this(new HashMap<>(0));
+    }
 
+    public Attributes(final Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
 
-    Text text();
+    public Attributes put(final String key, final String value) {
+        this.attributes.put(key, value);
+        return this;
+    }
+
+    public String get(final String key) {
+        return this.attributes.get(key);
+    }
 
     /**
-     * Check if the output is an error.
-     * @return True if the text has an error.
+     * Add an attribute.
+     * @param other Other attributes.
+     * @return New attributes.
      */
-    boolean isError();
+    public Attributes add(final Attributes other) {
+        final Map<String, String> map = new HashMap<>(this.attributes);
+        map.putAll(other.attributes);
+        return new Attributes(map);
+    }
 
+    public boolean contains(final String key) {
+        return this.attributes.containsKey(key);
+    }
+
+    public Attributes with(final String comment, final String type) {
+        this.attributes.put(comment, type);
+        return this;
+    }
+
+    public void without(final String key) {
+        this.attributes.remove(key);
+    }
 }
