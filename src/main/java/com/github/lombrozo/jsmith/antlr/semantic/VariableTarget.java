@@ -28,8 +28,6 @@ import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.LeafSnippet;
 import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Error;
-import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.jcabi.log.Logger;
 import java.util.Collections;

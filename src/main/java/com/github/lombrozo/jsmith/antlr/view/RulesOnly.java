@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
+import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
 import java.util.function.Predicate;
 
 /**
@@ -33,6 +34,6 @@ public final class RulesOnly implements Predicate<Text> {
 
     @Override
     public boolean test(final Text text) {
-        return !text.attributes().isRule();
+        return !text.labels().contains(ParserRuleSpec.LABEL);
     }
 }

@@ -51,8 +51,8 @@ public interface Text {
     String output();
 
     /**
-     * Node attributes.
+     * Text output labels.
      * @return Attributes of the node.
      */
-    Attributes attributes();
+    Labels labels();
 }

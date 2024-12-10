@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.NodeSnippet;
 import com.github.lombrozo.jsmith.antlr.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.Labels;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +44,11 @@ import java.util.stream.Collectors;
  * @since 0.1
  */
 public final class ParserRuleSpec implements Rule {
+
+    /**
+     * Parser rule label.
+     */
+    public static final String LABEL = "$jsmith-parser-rule-spec";
 
     /**
      * Parent rule.
@@ -68,7 +74,13 @@ public final class ParserRuleSpec implements Rule {
         this(name, parent, new ArrayList<>(0));
     }
 
-    public ParserRuleSpec(final String name, final Rule parent, final List<Rule> list) {
+    /**
+     * Constructor.
+     * @param name Rule name.
+     * @param parent Parent rule.
+     * @param list Children rules.
+     */
+    private ParserRuleSpec(final String name, final Rule parent, final List<Rule> list) {
         this.top = parent;
         this.rname = name;
         this.list = list;
@@ -83,7 +95,10 @@ public final class ParserRuleSpec implements Rule {
     public Snippet generate(final Context context) {
         return new NodeSnippet(
             this,
-            this.list.stream().map(rule -> rule.generate(context)).collect(Collectors.toList())
+            this.list.stream()
+                .map(rule -> rule.generate(context))
+                .collect(Collectors.toList()),
+            new Labels().with(ParserRuleSpec.LABEL, this.rname)
         );
     }
 
@@ -102,7 +117,9 @@ public final class ParserRuleSpec implements Rule {
         return new ParserRuleSpec(
             this.rname,
             this.top,
-            this.list.stream().map(Rule::copy).collect(Collectors.toList())
+            this.list.stream()
+                .map(Rule::copy)
+                .collect(Collectors.toList())
         );
     }
 }

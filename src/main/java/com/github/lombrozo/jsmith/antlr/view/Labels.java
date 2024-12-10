@@ -28,10 +28,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Text output attributes.
+ * Text output labels.
+ * You can label text to format it in a specific way.
  * @since 0.1
  */
-public final class Attributes {
+public final class Labels {
 
     /**
      * Is the text output produced by a rule.
@@ -43,11 +44,15 @@ public final class Attributes {
      */
     private final Map<String, String> properties;
 
+    public Labels() {
+        this(false);
+    }
+
     /**
      * Default constructor.
      * @param rule Is the text output produced by a rule.
      */
-    Attributes(final boolean rule) {
+    public Labels(final boolean rule) {
         this(rule, new HashMap<>(0));
     }
 
@@ -56,7 +61,7 @@ public final class Attributes {
      * @param rule Is the text output produced by a rule.
      * @param additional Additional attributes.
      */
-    Attributes(
+    Labels(
         final boolean rule,
         final Map<String, String> additional
     ) {
@@ -73,12 +78,18 @@ public final class Attributes {
     }
 
     /**
-     * Add an attribute.
-     * @param key Key.
-     * @param value Value.
+     * Check if contains a label.
+     * @param key Label key.
+     * @return True if contains.
      */
-    public void with(final String key, final String value) {
-        this.properties.put(key, value);
+    public boolean contains(final String key) {
+        return this.properties.containsKey(key);
+    }
+
+    public Labels with(final String key, final String value) {
+        final Map<String, String> map = new HashMap<>(this.properties);
+        map.put(key, value);
+        return new Labels(this.rule, map);
     }
 
     /**
@@ -94,10 +105,10 @@ public final class Attributes {
      * @param other Other attributes.
      * @return New attributes.
      */
-    public Attributes add(final Attributes other) {
+    public Labels add(final Labels other) {
         final Map<String, String> map = new HashMap<>(this.properties);
         map.putAll(other.custom());
-        return new Attributes(this.rule || other.isRule(), map);
+        return new Labels(this.rule || other.isRule(), map);
     }
 
     /**

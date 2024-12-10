@@ -97,8 +97,8 @@ public final class TextLeaf implements Text {
     }
 
     @Override
-    public Attributes attributes() {
-        return new Attributes(true, this.additional);
+    public Labels labels() {
+        return new Labels(true, this.additional);
     }
 
 }

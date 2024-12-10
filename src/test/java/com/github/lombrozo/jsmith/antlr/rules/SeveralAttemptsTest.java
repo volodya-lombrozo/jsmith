@@ -26,10 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.LeafSnippet;
 import com.github.lombrozo.jsmith.antlr.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.Error;
-import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
-import com.github.lombrozo.jsmith.antlr.view.TextNode;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 import org.hamcrest.MatcherAssert;
@@ -66,7 +63,7 @@ final class SeveralAttemptsTest {
             new SeveralAttempts(
                 1,
                 "test",
-                () -> new ErrorSnippet(new Error(new Root(), SeveralAttemptsTest.FAILURE))
+                () -> new ErrorSnippet(new Root(), SeveralAttemptsTest.FAILURE)
             ).choose().text().output(),
             Matchers.containsString(SeveralAttemptsTest.FAILURE)
         );
@@ -90,7 +87,7 @@ final class SeveralAttemptsTest {
                 result = new LeafSnippet(new TextLeaf("success"));
             } else {
                 result = new ErrorSnippet(
-                    new Error(new Literal("two-attempts-only"), SeveralAttemptsTest.FAILURE)
+                    new Literal("two-attempts-only"), SeveralAttemptsTest.FAILURE
                 );
             }
             this.attempts.countDown();

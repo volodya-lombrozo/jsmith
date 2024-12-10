@@ -122,8 +122,8 @@ public final class DotTree implements Text {
     }
 
     @Override
-    public Attributes attributes() {
-        return this.origin.attributes();
+    public Labels labels() {
+        return this.origin.labels();
     }
 
     /**

@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -60,6 +61,11 @@ public final class TextNode implements Text {
     private final String delimiter;
 
     /**
+     * Labels of the node.
+     */
+    private final Labels labels;
+
+    /**
      * Constructor.
      * @param writer Rule that writes the text.
      * @param children Children of the node.
@@ -79,14 +85,41 @@ public final class TextNode implements Text {
 
     /**
      * Constructor.
+     * @param author Rule that writes the text.
+     * @param childs Children of the node.
+     * @param labels Labels of the node.
+     */
+    public TextNode(final Rule author, final List<Text> childs, final Labels labels) {
+        this(author, childs, TextNode.DELIMITER, labels);
+    }
+
+    /**
+     * Constructor.
      * @param writer Rule that writes the text.
      * @param children Children of the node.
      * @param delimiter Delimiter between children.
      */
     private TextNode(final Rule writer, final List<Text> children, final String delimiter) {
-        this.author = writer;
-        this.childs = children;
+        this(writer, children, delimiter, new Labels(false));
+    }
+
+    /**
+     * Constructor.
+     * @param author Rule that writes the text.
+     * @param childs Children of the node.
+     * @param delimiter Delimiter between children.
+     * @param labels Labels of the node.
+     */
+    public TextNode(
+        final Rule author,
+        final List<Text> childs,
+        final String delimiter,
+        final Labels labels
+    ) {
+        this.author = author;
+        this.childs = childs;
         this.delimiter = delimiter;
+        this.labels = labels;
     }
 
     @Override
@@ -107,9 +140,9 @@ public final class TextNode implements Text {
     }
 
     @Override
-    public Attributes attributes() {
+    public Labels labels() {
         return this.childs.stream()
-            .map(Text::attributes)
-            .reduce(new Attributes(true), Attributes::add);
+            .map(Text::labels)
+            .reduce(new Labels(true), Labels::add);
     }
 }

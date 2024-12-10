@@ -24,9 +24,9 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.view.Labels;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextNode;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +35,8 @@ public final class NodeSnippet implements Snippet {
 
     private final Rule author;
     private final List<Snippet> snippets;
+
+    private final Labels labels;
 
 
     public NodeSnippet(final Rule author, final Text... texts) {
@@ -46,15 +48,21 @@ public final class NodeSnippet implements Snippet {
     }
 
     public NodeSnippet(final Rule author, final List<Snippet> snippets) {
+        this(author, snippets, new Labels());
+    }
+
+    public NodeSnippet(final Rule author, final List<Snippet> snippets, final Labels labels) {
         this.author = author;
         this.snippets = snippets;
+        this.labels = labels;
     }
 
     @Override
     public Text text() {
         return new TextNode(
             this.author,
-            this.snippets.stream().map(Snippet::text).collect(Collectors.toList())
+            this.snippets.stream().map(Snippet::text).collect(Collectors.toList()),
+            this.labels
         );
     }
 
