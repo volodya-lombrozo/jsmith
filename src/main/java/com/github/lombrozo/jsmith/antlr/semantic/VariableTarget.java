@@ -84,7 +84,10 @@ public final class VariableTarget implements Rule {
                         .with(TypeRule.COMMENT, type)
                         .with(VariableTarget.COMMENT, declared.get())
                 );
-                context.attributes().with(TypeRule.COMMENT, type);
+                context.attributes()
+                    .with(TypeRule.COMMENT, type)
+                    .with(VariableTarget.COMMENT, declared.get())
+                ;
             } else {
                 Logger.warn(
                     this,
