@@ -65,12 +65,13 @@ public final class Root implements Rule {
 
     @Override
     public Snippet generate(final Context context) {
-        return new SignedSnippet(
-            this,
-            this.all.stream()
-                .map(rule -> rule.generate(context))
-                .collect(Collectors.toList())
-        );
+        return new LeftToRight(this, this.all).generate(context);
+//        return new SignedSnippet(
+//            this,
+//            this.all.stream()
+//                .map(rule -> rule.generate(context))
+//                .collect(Collectors.toList())
+//        );
     }
 
     @Override

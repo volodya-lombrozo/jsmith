@@ -24,7 +24,6 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,12 +81,6 @@ public final class Alternative implements Rule {
 
     @Override
     public Snippet generate(final Context context) {
-//        return new SignedSnippet(
-//            this,
-//            this.elements.stream()
-//                .map(rule -> rule.generate(context))
-//                .collect(Collectors.toList())
-//        );
         return new LeftToRight(this, this.elements).generate(context);
     }
 

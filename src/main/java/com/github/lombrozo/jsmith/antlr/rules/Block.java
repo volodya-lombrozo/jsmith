@@ -77,12 +77,13 @@ public final class Block implements Rule {
 
     @Override
     public Snippet generate(final Context context) {
-        return new SignedSnippet(
-            this,
-            this.elements.stream()
-                .map(rule -> rule.generate(context))
-                .collect(Collectors.toList())
-        );
+//        return new SignedSnippet(
+//            this,
+//            this.elements.stream()
+//                .map(rule -> rule.generate(context))
+//                .collect(Collectors.toList())
+//        );
+        return new LeftToRight(this, this.elements).generate(context);
     }
 
     @Override

@@ -78,12 +78,13 @@ public final class LexerElements implements Rule {
 
     @Override
     public Snippet generate(final Context context) {
-        return new SignedSnippet(
-            this,
-            this.elems.stream()
-                .map(rule -> rule.generate(context))
-                .collect(Collectors.toList())
-        );
+//        return new SignedSnippet(
+//            this,
+//            this.elems.stream()
+//                .map(rule -> rule.generate(context))
+//                .collect(Collectors.toList())
+//        );
+        return new LeftToRight(this, this.elems).generate(context);
     }
 
     @Override

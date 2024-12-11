@@ -28,6 +28,7 @@ import com.github.lombrozo.jsmith.antlr.view.Labels;
 import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,10 +89,14 @@ public final class ParserRuleSpec implements Rule {
 
     @Override
     public Snippet generate(final Context context) {
+//        return new SignedSnippet(
+//            this.list.stream()
+//                .map(rule -> rule.generate(context))
+//                .collect(Collectors.toList()),
+//            new Labels(this).withRule(this.rname)
+//        );
         return new SignedSnippet(
-            this.list.stream()
-                .map(rule -> rule.generate(context))
-                .collect(Collectors.toList()),
+            Collections.singletonList(new LeftToRight(this, this.list).generate(context)),
             new Labels(this).withRule(this.rname)
         );
     }

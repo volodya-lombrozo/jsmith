@@ -90,12 +90,13 @@ public final class BlockSuffix implements Rule, Suffix {
 
     @Override
     public Snippet generate(final Context context) {
-        return new SignedSnippet(
-            this,
-            this.children.stream()
-                .map(rule -> rule.generate(context))
-                .collect(Collectors.toList())
-        );
+//        return new SignedSnippet(
+//            this,
+//            this.children.stream()
+//                .map(rule -> rule.generate(context))
+//                .collect(Collectors.toList())
+//        );
+        return new LeftToRight(this, this.children).generate(context);
     }
 
     @Override
