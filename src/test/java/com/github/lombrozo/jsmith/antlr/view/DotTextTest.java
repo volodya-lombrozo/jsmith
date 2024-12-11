@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
  * Test case for {@link DotText}.
  * @since 0.1
  */
-final class DotTreeTest {
+final class DotTextTest {
 
     @Test
     void convertsSimpleTree() {
