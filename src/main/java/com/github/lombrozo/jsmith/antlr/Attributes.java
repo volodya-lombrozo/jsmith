@@ -25,8 +25,16 @@ package com.github.lombrozo.jsmith.antlr;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public final class Attributes {
+
+    /**
+     * Comment to activate this rule.
+     */
+    private static final String TYPE = "$jsmith-type";
+
+
     private final Map<String, String> attributes;
 
     public Attributes() {
@@ -68,5 +76,15 @@ public final class Attributes {
 
     public void without(final String key) {
         this.attributes.remove(key);
+    }
+
+    public Optional<String> currentType() {
+        return Optional.ofNullable(this.attributes.get(Attributes.TYPE));
+    }
+
+    public Attributes withType(final String type) {
+        Map<String, String> copy = new HashMap<>(this.attributes);
+        copy.put(Attributes.TYPE, type);
+        return new Attributes(copy);
     }
 }

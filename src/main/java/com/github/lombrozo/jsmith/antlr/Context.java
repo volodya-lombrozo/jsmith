@@ -164,11 +164,15 @@ public final class Context {
         return new Context(this.strat, this.visited, another, this.attributes);
     }
 
+    public Context withAttributes(final Attributes attributes) {
+        return new Context(this.strat, this.visited, this.scope, this.attributes.add(attributes));
+    }
+
     /**
      * Returns the current scope.
      * @return The scope.
      */
-    public Scope current() {
+    public Scope scope() {
         return this.scope;
     }
 

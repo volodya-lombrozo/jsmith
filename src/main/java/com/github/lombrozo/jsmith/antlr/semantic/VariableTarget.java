@@ -67,9 +67,9 @@ public final class VariableTarget implements Rule {
     public Snippet generate(final Context context) {
         Snippet text = this.origin.generate(context);
         if (!text.isError()) {
-            final Optional<String> declared = context.current().declared();
+            final Optional<String> declared = context.scope().declared();
             if (declared.isPresent()) {
-                final String type = context.current().type(declared.get());
+                final String type = context.scope().type(declared.get());
                 text = new TextSnippet(
                     this.name(),
                     declared.get(),
@@ -85,7 +85,7 @@ public final class VariableTarget implements Rule {
                     this,
                     String.format(
                         "We can't find any declared variable in the scope '%s'",
-                        context.current()
+                        context.scope()
                     )
                 );
                 text = new ErrorSnippet(this, "<variable is not declared yet>");

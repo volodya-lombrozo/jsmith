@@ -67,7 +67,7 @@ public final class VariableInitialization implements Rule {
             if (!additional.contains(key)) {
                 throw new IllegalStateException("Variable name is not provided");
             }
-            context.current().init(additional.get(key));
+            context.scope().init(additional.get(key));
             additional.without(key);
         }
         return output;

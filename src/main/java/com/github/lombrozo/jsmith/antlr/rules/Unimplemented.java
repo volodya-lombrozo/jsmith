@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.SequenceSnippet;
+import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +73,7 @@ public abstract class Unimplemented implements Rule {
 
     @Override
     public final Snippet generate(final Context context) {
-        return new SequenceSnippet(
+        return new SignedSnippet(
             this,
             this.children.stream()
                 .map(rule -> rule.generate(context))

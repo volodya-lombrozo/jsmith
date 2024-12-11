@@ -30,10 +30,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Sequence of snippets.
+ * Snippet with author.
  * @since 0.1
  */
-public final class SequenceSnippet implements Snippet {
+public final class SignedSnippet implements Snippet {
 
     /**
      * Snippets.
@@ -55,7 +55,7 @@ public final class SequenceSnippet implements Snippet {
      * @param author Rule that produces the text.
      * @param snippets Snippets.
      */
-    public SequenceSnippet(final Rule author, final Snippet... snippets) {
+    public SignedSnippet(final Rule author, final Snippet... snippets) {
         this(author, Arrays.asList(snippets));
     }
 
@@ -64,7 +64,7 @@ public final class SequenceSnippet implements Snippet {
      * @param author Rule that produces the text.
      * @param snippets Snippets.
      */
-    public SequenceSnippet(final Rule author, final List<Snippet> snippets) {
+    public SignedSnippet(final Rule author, final List<Snippet> snippets) {
         this(snippets, new Labels(author));
     }
 
@@ -73,7 +73,7 @@ public final class SequenceSnippet implements Snippet {
      * @param snippets Snippets.
      * @param labels Labels.
      */
-    public SequenceSnippet(final List<Snippet> snippets, final Labels labels) {
+    public SignedSnippet(final List<Snippet> snippets, final Labels labels) {
         this(
             snippets,
             labels,
@@ -89,7 +89,7 @@ public final class SequenceSnippet implements Snippet {
      * @param labels Labels.
      * @param attributes Attributes.
      */
-    public SequenceSnippet(
+    public SignedSnippet(
         final List<Snippet> snippets,
         final Labels labels,
         final Attributes attributes

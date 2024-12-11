@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.SequenceSnippet;
+import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +85,7 @@ public final class NotSet implements Rule {
         }
         final Rule rule = this.children.get(0);
         if (rule instanceof Negatable) {
-            return new SequenceSnippet(this, ((Negatable) rule).negate(context));
+            return new SignedSnippet(this, ((Negatable) rule).negate(context));
         } else {
             throw new IllegalArgumentException(
                 String.format(

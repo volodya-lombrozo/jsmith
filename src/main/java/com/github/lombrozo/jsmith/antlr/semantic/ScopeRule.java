@@ -61,7 +61,7 @@ public final class ScopeRule implements Rule {
 
     @Override
     public Snippet generate(final Context context) {
-        return this.origin.generate(context.withScope(new Scope(context.current(), this.random)));
+        return this.origin.generate(context.withScope(new Scope(context.scope(), this.random)));
     }
 
     @Override

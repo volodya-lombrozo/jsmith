@@ -68,10 +68,11 @@ public final class VariableUsage implements Rule {
         final Snippet snippet = this.origin.generate(context);
         final Optional<String> initialized;
         final Attributes attributes = context.attributes();
-        if (attributes.contains(TypeRule.COMMENT)) {
-            initialized = context.current().initialized(attributes.get(TypeRule.COMMENT));
+        final Optional<String> type = attributes.currentType();
+        if (type.isPresent()) {
+            initialized = context.scope().initialized(type.get());
         } else {
-            initialized = context.current().initialized();
+            initialized = context.scope().initialized();
         }
         final Text text = snippet.text();
         final String author = text.labels().author();
@@ -83,7 +84,7 @@ public final class VariableUsage implements Rule {
                         this,
                         String.format(
                             "We cannot find any initialized variable in the scope '%s'",
-                            context.current()
+                            context.scope()
                         )
                     );
                     return new ErrorSnippet(author, "<variable not found>");

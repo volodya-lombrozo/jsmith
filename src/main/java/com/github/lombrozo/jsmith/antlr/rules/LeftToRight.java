@@ -28,85 +28,59 @@ import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * LexerAltList rule.
- * The ANTLR grammar definition:
- * {@code
- * lexerAltList
- *     : {@link LexerAlt} (OR {@link LexerAlt})*
- *     ;
- * }
+ * Left to right rule.
  * @since 0.1
+ * @todo: UNIT TESTS
  */
-public final class LexerAltList implements Rule {
+public final class LeftToRight implements Rule {
 
-    /**
-     * Parent rule.
-     */
-    private final Rule top;
+    private final Rule author;
+    private final List<Rule> all;
 
-    /**
-     * Children rules.
-     */
-    private final List<Rule> children;
-
-    /**
-     * Constructor.
-     */
-    public LexerAltList() {
-        this(new Root());
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     */
-    public LexerAltList(final Rule parent) {
-        this(parent, new ArrayList<>(0));
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param children Children rules.
-     */
-    public LexerAltList(final Rule parent, final List<Rule> children) {
-        this.top = parent;
-        this.children = children;
+    public LeftToRight(final Rule author, final List<Rule> all) {
+        this.author = author;
+        this.all = all;
     }
 
     @Override
     public Rule parent() {
-        return this.top;
-    }
-
-    @Override
-    public Snippet generate(final Context context) {
-        return new SignedSnippet(
-            this,
-            new SeveralAttempts(
-                this.name(),
-                () -> context.strategy().choose(this, this.children).generate(context)
-            ).choose()
+        throw new UnsupportedOperationException(
+            "Operation 'parent' is not supported in LeftToRight"
         );
     }
 
     @Override
+    public Snippet generate(final Context context) {
+        Context current = context;
+        final List<Snippet> res = new ArrayList<>(this.all.size());
+        for (final Rule rule : this.all) {
+            final Snippet snippet = rule.generate(current);
+            res.add(snippet);
+            current = current.withAttributes(snippet.attributes());
+        }
+        return new SignedSnippet(this.author, res);
+    }
+
+    @Override
     public void append(final Rule rule) {
-        this.children.add(rule);
+        throw new UnsupportedOperationException(
+            "Operation 'append' is not supported in LeftToRight"
+        );
     }
 
     @Override
     public String name() {
-        return "lexerAltList";
+        throw new UnsupportedOperationException(
+            "Operation 'name' is not supported in LeftToRight"
+        );
     }
 
     @Override
     public Rule copy() {
-        return new LexerAltList(
-            this.top, this.children.stream().map(Rule::copy).collect(Collectors.toList())
+        throw new UnsupportedOperationException(
+            "Operation 'copy' is not supported in LeftToRight"
         );
     }
 }

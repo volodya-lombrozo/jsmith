@@ -70,9 +70,9 @@ public final class VariableDeclaration implements Rule {
             final String output = text.text().output();
             final Attributes attributes = context.attributes();
             if (attributes.contains(TypeRule.COMMENT)) {
-                context.current().declare(output, attributes.get(TypeRule.COMMENT));
+                context.scope().declare(output, attributes.get(TypeRule.COMMENT));
             } else {
-                context.current().declare(output);
+                context.scope().declare(output);
             }
             result = new TextSnippet(
                 this.name(),

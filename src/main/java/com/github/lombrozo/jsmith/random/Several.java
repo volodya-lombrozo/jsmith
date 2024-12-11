@@ -25,7 +25,7 @@ package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.SequenceSnippet;
+import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import java.util.List;
@@ -62,7 +62,7 @@ final class Several implements Rule {
         if (this.all.isEmpty()) {
             result = new TextSnippet(this, "");
         } else {
-            result = new SequenceSnippet(
+            result = new SignedSnippet(
                 this,
                 this.all.stream()
                     .map(rule -> rule.generate(context))
