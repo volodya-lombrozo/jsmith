@@ -33,12 +33,16 @@ public final class ErrorSnippet implements Snippet {
 
     private final Text text;
 
+    public ErrorSnippet(final Rule rule, final String text) {
+        this(new ErrorText(rule.name(), text));
+    }
+
     /**
      * Constructor.
      * @param author Who writes the error.
      * @param text Error message.
      */
-    public ErrorSnippet(final Rule author, final String text) {
+    public ErrorSnippet(final String author, final String text) {
         this(new ErrorText(author, text));
     }
 
@@ -74,7 +78,7 @@ public final class ErrorSnippet implements Snippet {
         /**
          * Who writes the error.
          */
-        private final Rule author;
+        private final String author;
 
         /**
          * Error message.
@@ -86,14 +90,9 @@ public final class ErrorSnippet implements Snippet {
          * @param writer Who writes the error.
          * @param message Error message.
          */
-        private ErrorText(final Rule writer, final String message) {
+        private ErrorText(final String writer, final String message) {
             this.author = writer;
             this.message = message;
-        }
-
-        @Override
-        public Rule writer() {
-            return this.author;
         }
 
         @Override
@@ -108,7 +107,7 @@ public final class ErrorSnippet implements Snippet {
 
         @Override
         public Labels labels() {
-            return new Labels();
+            return new Labels(this.author);
         }
     }
 

@@ -29,6 +29,7 @@ import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.LeafSnippet;
 import com.github.lombrozo.jsmith.antlr.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.jcabi.log.Logger;
 import java.util.Optional;
 
@@ -72,8 +73,10 @@ public final class VariableUsage implements Rule {
         } else {
             initialized = context.current().initialized();
         }
+        final Text text = snippet.text();
+        final String author = text.labels().author();
         return initialized
-            .map(output -> (Snippet) new LeafSnippet(snippet.text().writer(), output))
+            .map(output -> (Snippet) new LeafSnippet(author, output))
             .orElseGet(
                 () -> {
                     Logger.warn(
@@ -83,7 +86,7 @@ public final class VariableUsage implements Rule {
                             context.current()
                         )
                     );
-                    return new ErrorSnippet(snippet.text().writer(), "<variable not found>");
+                    return new ErrorSnippet(author, "<variable not found>");
                 }
             );
     }

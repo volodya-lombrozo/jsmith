@@ -103,7 +103,7 @@ public final class AltList implements Rule {
     public Snippet generate(final Context context) {
         final Snippet result;
         if (this.alternatives.isEmpty()) {
-            result = new LeafSnippet(new TextLeaf(this, ""));
+            result = new LeafSnippet(new TextLeaf(this.name(), ""));
         } else {
             result = new NodeSnippet(
                 this,

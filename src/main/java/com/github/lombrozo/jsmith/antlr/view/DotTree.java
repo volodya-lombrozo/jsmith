@@ -81,11 +81,6 @@ public final class DotTree implements Text {
     }
 
     @Override
-    public Rule writer() {
-        return this.origin.writer();
-    }
-
-    @Override
     public List<Text> children() {
         return this.origin.children();
     }
@@ -97,7 +92,7 @@ public final class DotTree implements Text {
         );
         final Map<String, String> labels = new HashMap<>(0);
         final List<String> leafs = new ArrayList<>(0);
-        this.travers(new TextLeaf(new Root(), "root"), this.origin, builder, labels, leafs);
+        this.travers(new TextLeaf("root", "root"), this.origin, builder, labels, leafs);
         labels.forEach(
             (key, value) -> builder.append(
                 String.format(
@@ -149,14 +144,14 @@ public final class DotTree implements Text {
         } else {
             final int pnumber = System.identityHashCode(parent);
             final int cnumber = System.identityHashCode(current);
-            labels.put(String.valueOf(cnumber), current.writer().name());
-            labels.put(String.valueOf(pnumber), parent.writer().name());
+            labels.put(String.valueOf(cnumber), current.labels().author());
+            labels.put(String.valueOf(pnumber), parent.labels().author());
             builder.append(
                 String.format(
                     "\"#%d\" -> \"#%d\" [tooltip=\"%s\"];\n",
                     pnumber,
                     cnumber,
-                    String.format("%s -> %s", parent.writer().name(), current.writer().name())
+                    String.format("%s -> %s", parent.labels().author(), current.labels().author())
                 )
             );
             if (current.children().isEmpty()) {
@@ -171,14 +166,14 @@ public final class DotTree implements Text {
                         nleaf,
                         String.format(
                             "%s -> %s -> %s",
-                            parent.writer().name(),
-                            current.writer().name(),
+                            parent.labels().author(),
+                            current.labels().author(),
                             leaf
                         ),
                         String.format(
                             "%s -> %s -> %s",
-                            parent.writer().name(),
-                            current.writer().name(),
+                            parent.labels().author(),
+                            current.labels().author(),
                             leaf
                         )
                     )

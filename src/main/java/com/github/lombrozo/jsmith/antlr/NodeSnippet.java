@@ -50,7 +50,7 @@ public final class NodeSnippet implements Snippet {
     }
 
     public NodeSnippet(final Rule author, final List<Snippet> snippets) {
-        this(author, snippets, new Labels());
+        this(author, snippets, new Labels(author));
     }
 
     public NodeSnippet(final Rule author, final List<Snippet> snippets, final Labels labels) {

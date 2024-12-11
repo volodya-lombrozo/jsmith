@@ -33,12 +33,6 @@ import java.util.List;
 public interface Text {
 
     /**
-     * Author of the text.
-     * @return Rule that writes the text.
-     */
-    Rule writer();
-
-    /**
      * Children nodes of the text.
      * @return List of children nodes.
      */

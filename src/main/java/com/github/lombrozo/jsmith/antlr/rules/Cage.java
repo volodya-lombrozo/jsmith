@@ -77,7 +77,7 @@ final class Cage implements Rule {
 
     @Override
     public String name() {
-        throw new UnsupportedOperationException("Cage node doesn't have a name");
+        return "cage";
     }
 
     @Override

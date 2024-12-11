@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.jcabi.log.Logger;
 import java.util.function.Supplier;
 
@@ -104,15 +105,16 @@ public final class SeveralAttempts {
             attempt = attempt + 1;
         } while (snippet.isError() && attempt < this.max);
         if (snippet.isError()) {
+            final Text text = snippet.text();
             final String msg = String.format(
                 "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
                 this.max,
                 this.author,
-                snippet.text().writer().name(),
-                snippet.text().output()
+                text.labels().author(),
+                text.output()
             );
             Logger.warn(this, msg);
-            snippet = new ErrorSnippet(snippet.text());
+            snippet = new ErrorSnippet(text);
         }
         return snippet;
     }

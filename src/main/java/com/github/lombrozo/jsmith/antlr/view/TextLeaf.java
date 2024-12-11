@@ -26,9 +26,7 @@ package com.github.lombrozo.jsmith.antlr.view;
 import com.github.lombrozo.jsmith.antlr.rules.Empty;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -40,26 +38,21 @@ import lombok.ToString;
 @EqualsAndHashCode
 public final class TextLeaf implements Text {
     /**
-     * Who writes the text.
-     */
-    private final Rule author;
-
-    /**
-     * Text output produced by {@link #author}.
+     * Text output produced by some rule.
      */
     private final String text;
 
     /**
      * Additional attributes of the text.
      */
-    private final Map<String, String> additional;
+    private final Labels labels;
 
     /**
      * Default constructor.
      * @param output Text output.
      */
     public TextLeaf(final String output) {
-        this(new Empty(), output);
+        this(output, new Labels(new Empty()));
     }
 
     /**
@@ -68,22 +61,29 @@ public final class TextLeaf implements Text {
      * @param output Text output.
      */
     public TextLeaf(final Rule writer, final String output) {
-        this(writer, output, new HashMap<>(0));
+        this(output, new Labels(writer));
     }
 
+    /**
+     * Constructor.
+     * @param writer Author of the text.
+     * @param output Text output.
+     */
+    public TextLeaf(final String writer, final String output) {
+        this(output, new Labels(writer));
+    }
+
+    /**
+     * Constructor.
+     * @param text Text output.
+     * @param labels Text labels.
+     */
     public TextLeaf(
-        final Rule author,
         final String text,
-        final Map<String, String> additional
+        final Labels labels
     ) {
-        this.author = author;
         this.text = text;
-        this.additional = additional;
-    }
-
-    @Override
-    public Rule writer() {
-        return this.author;
+        this.labels = labels;
     }
 
     @Override
@@ -98,7 +98,7 @@ public final class TextLeaf implements Text {
 
     @Override
     public Labels labels() {
-        return new Labels(this.additional);
+        return this.labels;
     }
 
 }

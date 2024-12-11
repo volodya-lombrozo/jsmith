@@ -34,7 +34,12 @@ public final class LeafSnippet implements Snippet {
     private final Attributes attributes;
 
     public LeafSnippet(final Rule author, final String text) {
+        this(new TextLeaf(author.name(), text));
+    }
+
+    public LeafSnippet(final String author, final String text) {
         this(new TextLeaf(author, text));
+
     }
 
     public LeafSnippet(final Text text) {

@@ -23,39 +23,67 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Text output labels.
  * You can label text to format it in a specific way.
+ * We don't need to pass labels to child text nodes or parent nodes.
+ * They just attached to a particular text node.
  * @since 0.1
  */
 public final class Labels {
+
+    /**
+     * Rule label.
+     */
+    public static final String RULE = "$jsmith-rule-label";
+
+    /**
+     * Author label.
+     */
+    public static final String AUTHOR = "$jsmith-author-label";
 
     /**
      * Additional custom attributes.
      */
     private final Map<String, String> properties;
 
+
     /**
      * Default constructor.
      */
-    public Labels() {
-        this(new HashMap<>(0));
+    public Labels(final Rule author) {
+        this(author.name());
     }
 
-    public Labels(final String key, final String value) {
-        this(new HashMap<>(Collections.singletonMap(key, value)));
+    public Labels(final String author) {
+        this(Collections.singletonMap(Labels.AUTHOR, author));
     }
 
     /**
      * Constructor.
      * @param additional Additional attributes.
      */
-    Labels(final Map<String, String> additional) {
-        this.properties = additional;
+    private Labels(final Map<String, String> additional) {
+        this.properties = new HashMap<>(additional);
+    }
+
+    public String author() {
+        return this.properties.get(Labels.AUTHOR);
+    }
+
+    public Optional<String> rule() {
+        return Optional.ofNullable(this.properties.get(Labels.RULE));
+    }
+
+    public Labels rule(final String rule) {
+        this.properties.put(Labels.RULE, rule);
+        return new Labels(this.properties);
     }
 
     /**

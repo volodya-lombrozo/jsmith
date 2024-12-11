@@ -101,7 +101,7 @@ public final class TextNode implements Text {
      * @param delimiter Delimiter between children.
      */
     private TextNode(final Rule writer, final List<Text> children, final String delimiter) {
-        this(writer, children, delimiter, new Labels());
+        this(writer, children, delimiter, new Labels(writer));
     }
 
     /**
@@ -121,11 +121,6 @@ public final class TextNode implements Text {
         this.childs = childs;
         this.delimiter = delimiter;
         this.labels = labels;
-    }
-
-    @Override
-    public Rule writer() {
-        return this.author;
     }
 
     @Override

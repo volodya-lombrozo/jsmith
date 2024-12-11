@@ -46,11 +46,6 @@ import java.util.stream.Collectors;
 public final class ParserRuleSpec implements Rule {
 
     /**
-     * Parser rule label.
-     */
-    public static final String LABEL = "$jsmith-parser-rule-spec";
-
-    /**
      * Parent rule.
      */
     private final Rule top;
@@ -98,7 +93,7 @@ public final class ParserRuleSpec implements Rule {
             this.list.stream()
                 .map(rule -> rule.generate(context))
                 .collect(Collectors.toList()),
-            new Labels(ParserRuleSpec.LABEL, this.rname)
+            new Labels(this).rule(this.rname)
         );
     }
 
