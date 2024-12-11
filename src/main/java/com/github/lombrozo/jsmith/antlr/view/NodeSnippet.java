@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 
 public final class NodeSnippet implements Snippet {
 
-    private final Rule author;
     private final List<Snippet> snippets;
 
     private final Labels labels;
@@ -48,12 +47,13 @@ public final class NodeSnippet implements Snippet {
     }
 
     public NodeSnippet(final Rule author, final List<Snippet> snippets) {
-        this(author, snippets, new Labels(author));
+        this(snippets, new Labels(author));
     }
 
-    public NodeSnippet(final Rule author, final List<Snippet> snippets, final Labels labels) {
+    public NodeSnippet(final List<Snippet> snippets, final Labels labels) {
         this(
-            author, snippets, labels,
+            snippets,
+            labels,
             snippets.stream()
                 .map(Snippet::attributes)
                 .reduce(new Attributes(), Attributes::add)
@@ -61,12 +61,10 @@ public final class NodeSnippet implements Snippet {
     }
 
     public NodeSnippet(
-        final Rule author,
         final List<Snippet> snippets,
         final Labels labels,
         final Attributes attributes
     ) {
-        this.author = author;
         this.snippets = snippets;
         this.labels = labels;
         this.attributes = attributes;
@@ -79,8 +77,7 @@ public final class NodeSnippet implements Snippet {
 
     @Override
     public Text text() {
-        return new TextNode(
-            this.author,
+        return new TextSequence(
             this.snippets.stream()
                 .map(Snippet::text)
                 .collect(Collectors.toList()),

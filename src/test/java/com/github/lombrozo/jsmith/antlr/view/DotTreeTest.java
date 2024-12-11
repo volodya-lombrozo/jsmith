@@ -46,12 +46,12 @@ final class DotTreeTest {
         MatcherAssert.assertThat(
             "We expect that the tree will be converted to DOT format",
             new DotTree(
-                new TextNode(
+                new TextSequence(
                     new Root(),
                     Arrays.asList(
                         new TextLeaf(new Literal("a"), "a"),
                         new TextLeaf(new Literal("b"), "b"),
-                        new TextNode(
+                        new TextSequence(
                             new Literal("c"),
                             Arrays.asList(
                                 new TextLeaf(new Literal("d"), "d"),
@@ -59,7 +59,7 @@ final class DotTreeTest {
                                 new TextLeaf(new Literal("a"), "a")
                             )
                         ),
-                        new TextNode(
+                        new TextSequence(
                             new Literal("f"),
                             Collections.singletonList(
                                 new TextLeaf(new Literal("d"), "d")

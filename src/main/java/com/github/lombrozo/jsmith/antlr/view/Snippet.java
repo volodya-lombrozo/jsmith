@@ -24,13 +24,24 @@
 package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.Attributes;
-import com.github.lombrozo.jsmith.antlr.view.Text;
 
+/**
+ * There is a common interface for all outputs of the generation.
+ * The program generates a snippet of the text.
+ * @since 0.1
+ */
 public interface Snippet {
 
+    /**
+     * Attributes that guide the generation.
+     * @return Attributes.
+     */
     Attributes attributes();
 
-
+    /**
+     * Generated text.
+     * @return Generated text.
+     */
     Text text();
 
     /**

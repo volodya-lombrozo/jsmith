@@ -24,12 +24,9 @@
 package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -39,7 +36,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode
-public final class TextNode implements Text {
+public final class TextSequence implements Text {
 
     /**
      * Default delimiter.
@@ -47,19 +44,14 @@ public final class TextNode implements Text {
     private static final String DELIMITER = "";
 
     /**
-     * Who writes the text.
+     * Delimiter between children.
      */
-    private final Rule author;
+    private final String delimiter;
 
     /**
      * Children of the node.
      */
-    private final List<Text> childs;
-
-    /**
-     * Delimiter between children.
-     */
-    private final String delimiter;
+    private final List<Text> children;
 
     /**
      * Labels of the node.
@@ -71,27 +63,17 @@ public final class TextNode implements Text {
      * @param writer Rule that writes the text.
      * @param children Children of the node.
      */
-    public TextNode(final Rule writer, final Text... children) {
-        this(writer, Arrays.asList(children));
+    public TextSequence(final Rule writer, final List<Text> children) {
+        this(writer, children, TextSequence.DELIMITER);
     }
 
     /**
      * Constructor.
-     * @param writer Rule that writes the text.
-     * @param children Children of the node.
-     */
-    public TextNode(final Rule writer, final List<Text> children) {
-        this(writer, children, TextNode.DELIMITER);
-    }
-
-    /**
-     * Constructor.
-     * @param author Rule that writes the text.
      * @param childs Children of the node.
      * @param labels Labels of the node.
      */
-    public TextNode(final Rule author, final List<Text> childs, final Labels labels) {
-        this(author, childs, TextNode.DELIMITER, labels);
+    public TextSequence(final List<Text> childs, final Labels labels) {
+        this(childs, TextSequence.DELIMITER, labels);
     }
 
     /**
@@ -100,37 +82,34 @@ public final class TextNode implements Text {
      * @param children Children of the node.
      * @param delimiter Delimiter between children.
      */
-    private TextNode(final Rule writer, final List<Text> children, final String delimiter) {
-        this(writer, children, delimiter, new Labels(writer));
+    private TextSequence(final Rule writer, final List<Text> children, final String delimiter) {
+        this(children, delimiter, new Labels(writer));
     }
 
     /**
      * Constructor.
-     * @param author Rule that writes the text.
      * @param childs Children of the node.
      * @param delimiter Delimiter between children.
      * @param labels Labels of the node.
      */
-    public TextNode(
-        final Rule author,
+    private TextSequence(
         final List<Text> childs,
         final String delimiter,
         final Labels labels
     ) {
-        this.author = author;
-        this.childs = childs;
+        this.children = childs;
         this.delimiter = delimiter;
         this.labels = labels;
     }
 
     @Override
     public List<Text> children() {
-        return Collections.unmodifiableList(this.childs);
+        return Collections.unmodifiableList(this.children);
     }
 
     @Override
     public String output() {
-        return this.childs.stream()
+        return this.children.stream()
             .map(Text::output)
             .collect(Collectors.joining(this.delimiter));
     }
