@@ -25,11 +25,10 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.jcabi.log.Logger;
 import java.util.Optional;
 
@@ -71,14 +70,9 @@ public final class VariableTarget implements Rule {
             final Optional<String> declared = context.current().declared();
             if (declared.isPresent()) {
                 final String type = context.current().type(declared.get());
-//                context.labels().put(TypeRule.COMMENT, type);
                 text = new LeafSnippet(
-                    new TextLeaf(
-                        this,
-                        declared.get()
-//                        ,
-//                        Collections.singletonMap(VariableTarget.COMMENT, declared.get())
-                    ),
+                    this.name(),
+                    declared.get(),
                     new Attributes()
                         .with(TypeRule.COMMENT, type)
                         .with(VariableTarget.COMMENT, declared.get())

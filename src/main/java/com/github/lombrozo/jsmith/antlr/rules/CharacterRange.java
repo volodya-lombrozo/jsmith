@@ -26,8 +26,6 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.random.Rand;
 import java.util.regex.Pattern;
 
@@ -109,7 +107,7 @@ public final class CharacterRange implements Rule, Negatable {
     @Override
     public Snippet generate(final Context context) {
         try {
-            return new LeafSnippet(this.tryGenerate());
+            return this.tryGenerate();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Can't choose random character from '%s' range", this.text),
@@ -142,7 +140,7 @@ public final class CharacterRange implements Rule, Negatable {
      * Try to generate a random character from the range.
      * @return Random character.
      */
-    private Text tryGenerate() {
+    private Snippet tryGenerate() {
         final String[] pair = CharacterRange.DOTS.split(
             CharacterRange.REDUNDANT.matcher(this.text).replaceAll("")
         );
@@ -155,7 +153,7 @@ public final class CharacterRange implements Rule, Negatable {
             start = CharacterRange.code(pair[0]);
             end = CharacterRange.code(pair[1]);
         }
-        return new TextLeaf(
+        return new LeafSnippet(
             this,
             String.valueOf(Character.toChars(this.rand.range(start, end)))
         );

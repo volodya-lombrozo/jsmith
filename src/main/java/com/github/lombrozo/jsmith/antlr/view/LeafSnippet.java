@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class LeafSnippet implements Snippet {
 
@@ -38,11 +39,14 @@ public final class LeafSnippet implements Snippet {
 
     public LeafSnippet(final String author, final String text) {
         this(new TextLeaf(author, text));
-
     }
 
     public LeafSnippet(final Text text) {
         this(text, new Attributes());
+    }
+
+    public LeafSnippet(final String author, final String text, final Attributes attributes) {
+        this(new TextLeaf(author, text), attributes);
     }
 
     public LeafSnippet(final Text text, final Attributes attributes) {

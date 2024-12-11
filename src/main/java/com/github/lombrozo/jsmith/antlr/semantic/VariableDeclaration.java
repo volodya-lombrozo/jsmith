@@ -25,10 +25,9 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import java.util.Collections;
 
 /**
@@ -76,10 +75,8 @@ public final class VariableDeclaration implements Rule {
                 context.current().declare(output);
             }
             result = new LeafSnippet(
-                new TextLeaf(
-                    this,
-                    output
-                ),
+                this.name(),
+                output,
                 new Attributes(Collections.singletonMap(VariableTarget.COMMENT, output))
             );
         }

@@ -63,7 +63,7 @@ public final class TextSequence implements Text {
      * @param writer Rule that writes the text.
      * @param children Children of the node.
      */
-    public TextSequence(final Rule writer, final List<Text> children) {
+    TextSequence(final Rule writer, final List<Text> children) {
         this(writer, children, TextSequence.DELIMITER);
     }
 
@@ -72,7 +72,7 @@ public final class TextSequence implements Text {
      * @param childs Children of the node.
      * @param labels Labels of the node.
      */
-    public TextSequence(final List<Text> childs, final Labels labels) {
+    TextSequence(final List<Text> childs, final Labels labels) {
         this(childs, TextSequence.DELIMITER, labels);
     }
 

@@ -27,7 +27,6 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
 import com.github.lombrozo.jsmith.antlr.view.NodeSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -103,7 +102,7 @@ public final class AltList implements Rule {
     public Snippet generate(final Context context) {
         final Snippet result;
         if (this.alternatives.isEmpty()) {
-            result = new LeafSnippet(new TextLeaf(this.name(), ""));
+            result = new LeafSnippet(this.name(), "");
         } else {
             result = new NodeSnippet(
                 this,

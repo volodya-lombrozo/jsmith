@@ -49,5 +49,4 @@ public interface Snippet {
      * @return True if the text has an error.
      */
     boolean isError();
-
 }
