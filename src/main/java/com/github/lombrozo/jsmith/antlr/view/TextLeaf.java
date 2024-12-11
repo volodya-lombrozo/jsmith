@@ -61,7 +61,7 @@ public final class TextLeaf implements Text {
      * @param writer Author of the text.
      * @param output Text output.
      */
-    public TextLeaf(final Rule writer, final String output) {
+    TextLeaf(final Rule writer, final String output) {
         this(output, new Labels(writer));
     }
 
@@ -70,7 +70,7 @@ public final class TextLeaf implements Text {
      * @param writer Author of the text.
      * @param output Text output.
      */
-    public TextLeaf(final String writer, final String output) {
+    TextLeaf(final String writer, final String output) {
         this(output, new Labels(writer));
     }
 
@@ -101,5 +101,4 @@ public final class TextLeaf implements Text {
     public Labels labels() {
         return this.labels;
     }
-
 }

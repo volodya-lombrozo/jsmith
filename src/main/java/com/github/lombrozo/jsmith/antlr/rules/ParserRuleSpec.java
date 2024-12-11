@@ -92,7 +92,7 @@ public final class ParserRuleSpec implements Rule {
             this.list.stream()
                 .map(rule -> rule.generate(context))
                 .collect(Collectors.toList()),
-            new Labels(this).rule(this.rname)
+            new Labels(this).withRule(this.rname)
         );
     }
 
