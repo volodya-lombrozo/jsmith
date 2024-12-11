@@ -21,11 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.lombrozo.jsmith.antlr;
+package com.github.lombrozo.jsmith.antlr.view;
 
+import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Labels;
-import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.Collections;
 import java.util.List;
 

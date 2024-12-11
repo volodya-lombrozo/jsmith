@@ -24,8 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.LeafSnippet;
-import com.github.lombrozo.jsmith.antlr.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import com.github.lombrozo.jsmith.random.Rand;

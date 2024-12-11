@@ -24,9 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.jcabi.log.Logger;
 import java.util.HashSet;
 import java.util.Set;

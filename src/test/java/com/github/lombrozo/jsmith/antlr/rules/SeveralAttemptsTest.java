@@ -23,9 +23,9 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.ErrorSnippet;
-import com.github.lombrozo.jsmith.antlr.LeafSnippet;
-import com.github.lombrozo.jsmith.antlr.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
+import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
