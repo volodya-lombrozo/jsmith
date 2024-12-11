@@ -89,12 +89,6 @@ public final class ParserRuleSpec implements Rule {
 
     @Override
     public Snippet generate(final Context context) {
-//        return new SignedSnippet(
-//            this.list.stream()
-//                .map(rule -> rule.generate(context))
-//                .collect(Collectors.toList()),
-//            new Labels(this).withRule(this.rname)
-//        );
         return new SignedSnippet(
             Collections.singletonList(new LeftToRight(this, this.list).generate(context)),
             new Labels(this).withRule(this.rname)

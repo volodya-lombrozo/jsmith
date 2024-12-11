@@ -31,14 +31,31 @@ import java.util.List;
 
 /**
  * Left to right rule.
+ * This rule traverses the rules from left to right and correctly applies the context.
  * @since 0.1
- * @todo: UNIT TESTS
+ * @todo #99:90min Implement Hight Level Machine For Traversing Rules.
+ *  Implement a high-level machine that will traverse the rules and apply correct context to them.
+ *  Currently we are required to add classes like {@link LeftToRight} to traverse the rules.
+ *  This is not a good approach and we need to implement a high-level machine that will do this.
+ *  This should simplify the code and make it more readable.
  */
 public final class LeftToRight implements Rule {
 
+    /**
+     * Original rule.
+     */
     private final Rule author;
+
+    /**
+     * Child rules.
+     */
     private final List<Rule> all;
 
+    /**
+     * Constructor.
+     * @param author Original rule.
+     * @param all Child rules.¬
+     */
     public LeftToRight(final Rule author, final List<Rule> all) {
         this.author = author;
         this.all = all;

@@ -58,7 +58,7 @@ public final class Context {
     /**
      * Labels.
      */
-    private final Attributes attributes;
+    private final Attributes attrs;
 
     /**
      * Constructor.
@@ -116,7 +116,7 @@ public final class Context {
         this.strat = strat;
         this.visited = visited;
         this.scope = scope;
-        this.attributes = attributes;
+        this.attrs = attributes;
     }
 
     /**
@@ -151,7 +151,7 @@ public final class Context {
                 Stream.of(rule)
             ).collect(Collectors.toList()),
             this.scope,
-            this.attributes
+            this.attrs
         );
     }
 
@@ -161,11 +161,11 @@ public final class Context {
      * @return The next context with the scope.
      */
     public Context withScope(final Scope another) {
-        return new Context(this.strat, this.visited, another, this.attributes);
+        return new Context(this.strat, this.visited, another, this.attrs);
     }
 
     public Context withAttributes(final Attributes attributes) {
-        return new Context(this.strat, this.visited, this.scope, this.attributes.add(attributes));
+        return new Context(this.strat, this.visited, this.scope, this.attrs.add(attributes));
     }
 
     /**
@@ -189,7 +189,7 @@ public final class Context {
      * @return The labels.
      */
     public Attributes attributes() {
-        return this.attributes;
+        return this.attrs;
     }
 
     /**

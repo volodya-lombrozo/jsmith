@@ -49,7 +49,7 @@ public final class Attributes {
     /**
      * Attributes.
      */
-    private final Map<String, String> attributes;
+    private final Map<String, String> attrs;
 
     /**
      * Default constructor.
@@ -63,7 +63,7 @@ public final class Attributes {
      * @param attributes Attributes.
      */
     public Attributes(final Map<String, String> attributes) {
-        this.attributes = attributes;
+        this.attrs = attributes;
     }
 
     /**
@@ -72,17 +72,17 @@ public final class Attributes {
      * @return New attributes.
      */
     public Attributes add(final Attributes other) {
-        final Map<String, String> map = new HashMap<>(this.attributes);
-        map.putAll(other.attributes);
+        final Map<String, String> map = new HashMap<>(this.attrs);
+        map.putAll(other.attrs);
         return new Attributes(map);
     }
 
     /**
-     * Variable target name
+     * Variable target name.
      * @return Variable name.
      */
     public Optional<String> variableTarget() {
-        return Optional.ofNullable(this.attributes.get(Attributes.TARGET));
+        return Optional.ofNullable(this.attrs.get(Attributes.TARGET));
     }
 
     /**
@@ -91,7 +91,7 @@ public final class Attributes {
      * @return The same attributes.
      */
     public Attributes withTarget(final String target) {
-        this.attributes.put(Attributes.TARGET, target);
+        this.attrs.put(Attributes.TARGET, target);
         return this;
     }
 
@@ -101,7 +101,7 @@ public final class Attributes {
      * @return The same attributes.
      */
     public Attributes withType(final String type) {
-        this.attributes.put(Attributes.TYPE, type);
+        this.attrs.put(Attributes.TYPE, type);
         return this;
     }
 
@@ -110,6 +110,6 @@ public final class Attributes {
      * @return Type name.
      */
     public Optional<String> currentType() {
-        return Optional.ofNullable(this.attributes.get(Attributes.TYPE));
+        return Optional.ofNullable(this.attrs.get(Attributes.TYPE));
     }
 }
