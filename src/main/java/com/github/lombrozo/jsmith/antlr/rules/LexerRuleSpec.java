@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.view.SequenceSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +87,7 @@ public final class LexerRuleSpec implements Rule {
 
     @Override
     public Snippet generate(final Context context) {
-        return new NodeSnippet(
+        return new SequenceSnippet(
             this,
             this.list.stream()
                 .map(rule -> rule.generate(context))

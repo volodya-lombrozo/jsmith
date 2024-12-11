@@ -23,95 +23,78 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
+import com.github.lombrozo.jsmith.antlr.rules.Empty;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * This class represents a node of the generated text tree.
+ * This class represents a leaf of the generated text tree.
  * @since 0.1
  */
 @ToString
 @EqualsAndHashCode
-public final class TextSequence implements Text {
+public final class PlainText implements Text {
 
     /**
-     * Default delimiter.
+     * Text output produced by some rule.
      */
-    private static final String DELIMITER = "";
+    private final String text;
 
     /**
-     * Delimiter between children.
-     */
-    private final String delimiter;
-
-    /**
-     * Children of the node.
-     */
-    private final List<Text> children;
-
-    /**
-     * Labels of the node.
+     * Additional attributes of the text.
      */
     private final Labels labels;
 
     /**
-     * Constructor.
-     * @param writer Rule that writes the text.
-     * @param children Children of the node.
+     * Default constructor.
+     * @param output Text output.
      */
-    TextSequence(final Rule writer, final List<Text> children) {
-        this(writer, children, TextSequence.DELIMITER);
+    public PlainText(final String output) {
+        this(output, new Labels(new Empty()));
     }
 
     /**
      * Constructor.
-     * @param childs Children of the node.
-     * @param labels Labels of the node.
+     * @param writer Author of the text.
+     * @param output Text output.
      */
-    TextSequence(final List<Text> childs, final Labels labels) {
-        this(childs, TextSequence.DELIMITER, labels);
+    PlainText(final Rule writer, final String output) {
+        this(output, new Labels(writer));
     }
 
     /**
      * Constructor.
-     * @param writer Rule that writes the text.
-     * @param children Children of the node.
-     * @param delimiter Delimiter between children.
+     * @param writer Author of the text.
+     * @param output Text output.
      */
-    private TextSequence(final Rule writer, final List<Text> children, final String delimiter) {
-        this(children, delimiter, new Labels(writer));
+    PlainText(final String writer, final String output) {
+        this(output, new Labels(writer));
     }
 
     /**
      * Constructor.
-     * @param childs Children of the node.
-     * @param delimiter Delimiter between children.
-     * @param labels Labels of the node.
+     * @param text Text output.
+     * @param labels Text labels.
      */
-    private TextSequence(
-        final List<Text> childs,
-        final String delimiter,
+    public PlainText(
+        final String text,
         final Labels labels
     ) {
-        this.children = childs;
-        this.delimiter = delimiter;
+        this.text = text;
         this.labels = labels;
     }
 
     @Override
     public List<Text> children() {
-        return Collections.unmodifiableList(this.children);
+        return Collections.emptyList();
     }
 
     @Override
     public String output() {
-        return this.children.stream()
-            .map(Text::output)
-            .collect(Collectors.joining(this.delimiter));
+        return this.text;
     }
 
     @Override

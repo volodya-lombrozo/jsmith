@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import com.github.lombrozo.jsmith.random.Rand;
@@ -136,7 +136,7 @@ public final class EbnfSuffix implements Rule, Suffix {
                 )
             );
         }
-        return new LeafSnippet(
+        return new TextSnippet(
             this,
             String.format(
                 "%s%s",

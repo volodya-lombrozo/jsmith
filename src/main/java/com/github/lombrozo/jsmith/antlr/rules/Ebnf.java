@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.view.SequenceSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public final class Ebnf implements Rule {
                 "Ebnf should have at least one 'Block', but it's empty"
             );
         }
-        return new NodeSnippet(
+        return new SequenceSnippet(
             this, this.multiplier().repeat(this.children.get(0)).generate(context)
         );
     }

@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.guard;
 
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import com.github.lombrozo.jsmith.antlr.view.PlainText;
 import java.nio.file.Path;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
@@ -53,7 +53,7 @@ final class SyntaxGuardTest {
     void validatesCorrectSynax(@TempDir final Path temp) {
         Assertions.assertDoesNotThrow(
             () -> new SyntaxGuard(temp, SyntaxGuardTest.TOP, SyntaxGuardTest.GRAMMAR)
-                .verifySilently(new TextLeaf("1 + 1")),
+                .verifySilently(new PlainText("1 + 1")),
             "We expect that the code will be verified without errors"
         );
     }

@@ -25,32 +25,43 @@ package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public final class LeafSnippet implements Snippet {
+public final class SequenceSnippet implements Snippet {
 
-    private final Text text;
+    private final List<Snippet> snippets;
+
+    private final Labels labels;
 
     private final Attributes attributes;
 
-    public LeafSnippet(final Rule author, final String text) {
-        this(new TextLeaf(author.name(), text));
+    public SequenceSnippet(final Rule author, final Snippet... snippets) {
+        this(author, Arrays.asList(snippets));
     }
 
-    public LeafSnippet(final String author, final String text) {
-        this(new TextLeaf(author, text));
+    public SequenceSnippet(final Rule author, final List<Snippet> snippets) {
+        this(snippets, new Labels(author));
     }
 
-    public LeafSnippet(final Text text) {
-        this(text, new Attributes());
+    public SequenceSnippet(final List<Snippet> snippets, final Labels labels) {
+        this(
+            snippets,
+            labels,
+            snippets.stream()
+                .map(Snippet::attributes)
+                .reduce(new Attributes(), Attributes::add)
+        );
     }
 
-    public LeafSnippet(final String author, final String text, final Attributes attributes) {
-        this(new TextLeaf(author, text), attributes);
-    }
-
-    public LeafSnippet(final Text text, final Attributes attributes) {
-        this.text = text;
+    public SequenceSnippet(
+        final List<Snippet> snippets,
+        final Labels labels,
+        final Attributes attributes
+    ) {
+        this.snippets = snippets;
+        this.labels = labels;
         this.attributes = attributes;
     }
 
@@ -61,11 +72,16 @@ public final class LeafSnippet implements Snippet {
 
     @Override
     public Text text() {
-        return this.text;
+        return new ComposedText(
+            this.snippets.stream()
+                .map(Snippet::text)
+                .collect(Collectors.toList()),
+            this.labels
+        );
     }
 
     @Override
     public boolean isError() {
-        return false;
+        return this.snippets.stream().anyMatch(Snippet::isError);
     }
 }

@@ -25,48 +25,66 @@ package com.github.lombrozo.jsmith.antlr.view;
 
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public final class NodeSnippet implements Snippet {
+/**
+ * Leaf snippet that does not contain any other snippets.
+ * @since 0.1
+ */
+public final class TextSnippet implements Snippet {
 
-    private final List<Snippet> snippets;
+    /**
+     * Text.
+     */
+    private final Text text;
 
-    private final Labels labels;
-
+    /**
+     * Attributes.
+     */
     private final Attributes attributes;
 
-
-    public NodeSnippet(final Rule author, final Text... texts) {
-        this(author, Arrays.stream(texts).map(LeafSnippet::new).collect(Collectors.toList()));
+    /**
+     * Constructor.
+     * @param author Rule that produces the text.
+     * @param text Text.
+     */
+    public TextSnippet(final Rule author, final String text) {
+        this(new PlainText(author.name(), text));
     }
 
-    public NodeSnippet(final Rule author, final Snippet... snippets) {
-        this(author, Arrays.asList(snippets));
+    /**
+     * Constructor.
+     * @param author Who writes the text.
+     * @param text Text.
+     */
+    public TextSnippet(final String author, final String text) {
+        this(new PlainText(author, text));
     }
 
-    public NodeSnippet(final Rule author, final List<Snippet> snippets) {
-        this(snippets, new Labels(author));
+    /**
+     * Constructor.
+     * @param text Text.
+     */
+    public TextSnippet(final Text text) {
+        this(text, new Attributes());
     }
 
-    public NodeSnippet(final List<Snippet> snippets, final Labels labels) {
-        this(
-            snippets,
-            labels,
-            snippets.stream()
-                .map(Snippet::attributes)
-                .reduce(new Attributes(), Attributes::add)
-        );
+    /**
+     * Constructor.
+     * @param author Who writes the text.
+     * @param text Text.
+     * @param attributes Attributes.
+     */
+    public TextSnippet(final String author, final String text, final Attributes attributes) {
+        this(new PlainText(author, text), attributes);
     }
 
-    public NodeSnippet(
-        final List<Snippet> snippets,
-        final Labels labels,
-        final Attributes attributes
-    ) {
-        this.snippets = snippets;
-        this.labels = labels;
+    /**
+     * Constructor.
+     * @param text Text.
+     * @param attributes Attributes.
+     */
+    public TextSnippet(final Text text, final Attributes attributes) {
+        this.text = text;
         this.attributes = attributes;
     }
 
@@ -77,16 +95,11 @@ public final class NodeSnippet implements Snippet {
 
     @Override
     public Text text() {
-        return new TextSequence(
-            this.snippets.stream()
-                .map(Snippet::text)
-                .collect(Collectors.toList()),
-            this.labels
-        );
+        return this.text;
     }
 
     @Override
     public boolean isError() {
-        return this.snippets.stream().anyMatch(Snippet::isError);
+        return false;
     }
 }

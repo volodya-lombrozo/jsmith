@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.view.SequenceSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Labels;
 import java.util.ArrayList;
@@ -88,7 +88,7 @@ public final class ParserRuleSpec implements Rule {
 
     @Override
     public Snippet generate(final Context context) {
-        return new NodeSnippet(
+        return new SequenceSnippet(
             this.list.stream()
                 .map(rule -> rule.generate(context))
                 .collect(Collectors.toList()),

@@ -24,9 +24,9 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
-import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextLeaf;
+import com.github.lombrozo.jsmith.antlr.view.PlainText;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 import org.hamcrest.MatcherAssert;
@@ -84,7 +84,7 @@ final class SeveralAttemptsTest {
         public Snippet get() {
             final Snippet result;
             if (this.attempts.getCount() == 0) {
-                result = new LeafSnippet(new TextLeaf("success"));
+                result = new TextSnippet(new PlainText("success"));
             } else {
                 result = new ErrorSnippet(
                     new Literal("two-attempts-only"), SeveralAttemptsTest.FAILURE

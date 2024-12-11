@@ -23,78 +23,95 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
-import com.github.lombrozo.jsmith.antlr.rules.Empty;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * This class represents a leaf of the generated text tree.
+ * This class represents a node of the generated text tree.
  * @since 0.1
  */
 @ToString
 @EqualsAndHashCode
-public final class TextLeaf implements Text {
+public final class ComposedText implements Text {
 
     /**
-     * Text output produced by some rule.
+     * Default delimiter.
      */
-    private final String text;
+    private static final String DELIMITER = "";
 
     /**
-     * Additional attributes of the text.
+     * Delimiter between children.
+     */
+    private final String delimiter;
+
+    /**
+     * Children of the node.
+     */
+    private final List<Text> children;
+
+    /**
+     * Labels of the node.
      */
     private final Labels labels;
 
     /**
-     * Default constructor.
-     * @param output Text output.
+     * Constructor.
+     * @param writer Rule that writes the text.
+     * @param children Children of the node.
      */
-    public TextLeaf(final String output) {
-        this(output, new Labels(new Empty()));
+    ComposedText(final Rule writer, final List<Text> children) {
+        this(writer, children, ComposedText.DELIMITER);
     }
 
     /**
      * Constructor.
-     * @param writer Author of the text.
-     * @param output Text output.
+     * @param childs Children of the node.
+     * @param labels Labels of the node.
      */
-    TextLeaf(final Rule writer, final String output) {
-        this(output, new Labels(writer));
+    ComposedText(final List<Text> childs, final Labels labels) {
+        this(childs, ComposedText.DELIMITER, labels);
     }
 
     /**
      * Constructor.
-     * @param writer Author of the text.
-     * @param output Text output.
+     * @param writer Rule that writes the text.
+     * @param children Children of the node.
+     * @param delimiter Delimiter between children.
      */
-    TextLeaf(final String writer, final String output) {
-        this(output, new Labels(writer));
+    private ComposedText(final Rule writer, final List<Text> children, final String delimiter) {
+        this(children, delimiter, new Labels(writer));
     }
 
     /**
      * Constructor.
-     * @param text Text output.
-     * @param labels Text labels.
+     * @param childs Children of the node.
+     * @param delimiter Delimiter between children.
+     * @param labels Labels of the node.
      */
-    public TextLeaf(
-        final String text,
+    private ComposedText(
+        final List<Text> childs,
+        final String delimiter,
         final Labels labels
     ) {
-        this.text = text;
+        this.children = childs;
+        this.delimiter = delimiter;
         this.labels = labels;
     }
 
     @Override
     public List<Text> children() {
-        return Collections.emptyList();
+        return Collections.unmodifiableList(this.children);
     }
 
     @Override
     public String output() {
-        return this.text;
+        return this.children.stream()
+            .map(Text::output)
+            .collect(Collectors.joining(this.delimiter));
     }
 
     @Override

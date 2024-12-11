@@ -27,7 +27,7 @@ import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
-import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.jcabi.log.Logger;
 import java.util.Optional;
@@ -70,7 +70,7 @@ public final class VariableTarget implements Rule {
             final Optional<String> declared = context.current().declared();
             if (declared.isPresent()) {
                 final String type = context.current().type(declared.get());
-                text = new LeafSnippet(
+                text = new TextSnippet(
                     this.name(),
                     declared.get(),
                     new Attributes()

@@ -23,8 +23,6 @@
  */
 package com.github.lombrozo.jsmith.antlr.view;
 
-import com.github.lombrozo.jsmith.antlr.rules.Root;
-import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -92,7 +90,7 @@ public final class DotTree implements Text {
         );
         final Map<String, String> labels = new HashMap<>(0);
         final List<String> leafs = new ArrayList<>(0);
-        this.travers(new TextLeaf("root", "root"), this.origin, builder, labels, leafs);
+        this.travers(new PlainText("root", "root"), this.origin, builder, labels, leafs);
         labels.forEach(
             (key, value) -> builder.append(
                 String.format(

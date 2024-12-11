@@ -24,8 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
-import com.github.lombrozo.jsmith.antlr.view.NodeSnippet;
+import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.SequenceSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
@@ -93,9 +93,9 @@ public final class Element implements Rule {
         final Snippet result;
         final Rule first = this.children.get(0);
         if (Atom.isAtom(first) || LabeledElement.isLabeledElement(first) || Ebnf.isEbnf(first)) {
-            result = new NodeSnippet(this, this.multiplier().repeat(first).generate(context));
+            result = new SequenceSnippet(this, this.multiplier().repeat(first).generate(context));
         } else if (ActionBlock.isActionBlock(first)) {
-            result = new LeafSnippet(this, "");
+            result = new TextSnippet(this, "");
         } else {
             throw new IllegalStateException(
                 String.format("Unknown element type: %s", first.name())

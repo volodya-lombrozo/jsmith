@@ -26,7 +26,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
-import com.github.lombrozo.jsmith.antlr.view.LeafSnippet;
+import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Text;
@@ -76,7 +76,7 @@ public final class VariableUsage implements Rule {
         final Text text = snippet.text();
         final String author = text.labels().author();
         return initialized
-            .map(output -> (Snippet) new LeafSnippet(author, output))
+            .map(output -> (Snippet) new TextSnippet(author, output))
             .orElseGet(
                 () -> {
                     Logger.warn(

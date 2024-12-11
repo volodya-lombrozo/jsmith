@@ -28,6 +28,10 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Dummy snippet that represents an error.
+ * @since 0.1
+ */
 public final class ErrorSnippet implements Snippet {
 
     /**
