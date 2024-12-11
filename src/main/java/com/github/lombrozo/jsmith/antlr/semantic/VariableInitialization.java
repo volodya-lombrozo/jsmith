@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import java.util.Optional;
 
 /**
  * Variable Assignment Semantic.
@@ -63,12 +64,11 @@ public final class VariableInitialization implements Rule {
         final Snippet output = this.origin.generate(context);
         if (!output.isError()) {
             final Attributes additional = output.attributes();
-            final String key = VariableTarget.COMMENT;
-            if (!additional.contains(key)) {
-                throw new IllegalStateException("Variable name is not provided");
+            final Optional<String> target = additional.variableTarget();
+            if (target.isEmpty()) {
+                throw new IllegalStateException("Variable target is not provided");
             }
-            context.scope().init(additional.get(key));
-            additional.without(key);
+            context.scope().init(target.get());
         }
         return output;
     }

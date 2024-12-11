@@ -27,31 +27,43 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Attributes.
+ * @since 0.1
+ * @todo #99:90min Make the Attributes class immutable. All methods should return
+ *  a new instance of the class with the new attribute. The current implementation
+ *  is mutable and it can lead to bugs.
+ */
 public final class Attributes {
 
     /**
      * Comment to activate this rule.
      */
-    public static final String TYPE = "$jsmith-type";
+    private static final String TYPE = "$jsmith-type";
 
+    /**
+     * Comment to activate this rule.
+     */
+    private static final String TARGET = "$jsmith-var-target";
 
+    /**
+     * Attributes.
+     */
     private final Map<String, String> attributes;
 
+    /**
+     * Default constructor.
+     */
     public Attributes() {
         this(new HashMap<>(0));
     }
 
+    /**
+     * Constructor.
+     * @param attributes Attributes.
+     */
     public Attributes(final Map<String, String> attributes) {
         this.attributes = attributes;
-    }
-
-    public Attributes put(final String key, final String value) {
-        this.attributes.put(key, value);
-        return this;
-    }
-
-    public String get(final String key) {
-        return this.attributes.get(key);
     }
 
     /**
@@ -65,25 +77,39 @@ public final class Attributes {
         return new Attributes(map);
     }
 
-    public boolean contains(final String key) {
-        return this.attributes.containsKey(key);
+    /**
+     * Variable target name
+     * @return Variable name.
+     */
+    public Optional<String> variableTarget() {
+        return Optional.ofNullable(this.attributes.get(Attributes.TARGET));
     }
 
-    public Attributes with(final String comment, final String type) {
-        this.attributes.put(comment, type);
+    /**
+     * With target.
+     * @param target Variable name.
+     * @return The same attributes.
+     */
+    public Attributes withTarget(final String target) {
+        this.attributes.put(Attributes.TARGET, target);
         return this;
     }
 
-    public void without(final String key) {
-        this.attributes.remove(key);
-    }
-
-    public Optional<String> currentType() {
-        return Optional.ofNullable(this.attributes.get(Attributes.TYPE));
-    }
-
+    /**
+     * With type.
+     * @param type Type name.
+     * @return The same attributes.
+     */
     public Attributes withType(final String type) {
         this.attributes.put(Attributes.TYPE, type);
         return this;
+    }
+
+    /**
+     * Current type.
+     * @return Type name.
+     */
+    public Optional<String> currentType() {
+        return Optional.ofNullable(this.attributes.get(Attributes.TYPE));
     }
 }

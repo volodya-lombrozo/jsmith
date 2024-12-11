@@ -75,11 +75,11 @@ public final class VariableTarget implements Rule {
                     declared.get(),
                     new Attributes()
                         .withType(type)
-                        .with(VariableTarget.COMMENT, declared.get())
+                        .withTarget(declared.get())
                 );
                 context.attributes()
                     .withType(type)
-                    .with(VariableTarget.COMMENT, declared.get());
+                    .withTarget(declared.get());
             } else {
                 Logger.warn(
                     this,
