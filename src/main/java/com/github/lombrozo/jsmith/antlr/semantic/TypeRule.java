@@ -59,8 +59,7 @@ public final class TypeRule implements Rule {
     @Override
     public Snippet generate(final Context context) {
         final Snippet snippet = this.origin.generate(context);
-//        snippet.attributes().put(TypeRule.COMMENT, snippet.text().output());
-        context.attributes().put(TypeRule.COMMENT, snippet.text().output());
+        snippet.attributes().withType(snippet.text().output());
         return snippet;
     }
 

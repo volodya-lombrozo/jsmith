@@ -83,8 +83,7 @@ public final class Attributes {
     }
 
     public Attributes withType(final String type) {
-        Map<String, String> copy = new HashMap<>(this.attributes);
-        copy.put(Attributes.TYPE, type);
-        return new Attributes(copy);
+        this.attributes.put(Attributes.TYPE, type);
+        return this;
     }
 }
