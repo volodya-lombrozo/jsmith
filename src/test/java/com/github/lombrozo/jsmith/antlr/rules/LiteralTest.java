@@ -52,7 +52,7 @@ final class LiteralTest {
     void negatesSymbols(final String input) {
         MatcherAssert.assertThat(
             "We expect that the literal will generate the negated symbol",
-            new Literal(input).negate(new Context()).output(),
+            new Literal(input).negate(new Context()).text().output(),
             Matchers.not(
                 Matchers.containsString(
                     Literal.replaceEscapes(Literal.withoutApostrophes(input))

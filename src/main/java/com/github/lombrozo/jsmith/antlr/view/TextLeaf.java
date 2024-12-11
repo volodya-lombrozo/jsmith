@@ -37,6 +37,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public final class TextLeaf implements Text {
+
     /**
      * Text output produced by some rule.
      */

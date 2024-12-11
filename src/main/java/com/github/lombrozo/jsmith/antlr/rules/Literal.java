@@ -103,8 +103,8 @@ public final class Literal implements Rule, Negatable {
     }
 
     @Override
-    public Text negate(final Context context) {
-        return new TextLeaf(
+    public Snippet negate(final Context context) {
+        return new LeafSnippet(
             this,
             this.random.regex(String.format("[^%s]", this.generate(context).text().output()))
         );

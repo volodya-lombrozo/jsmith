@@ -30,8 +30,16 @@ import java.util.List;
 
 public final class ErrorSnippet implements Snippet {
 
+    /**
+     * Error message.
+     */
     private final Text text;
 
+    /**
+     * Constructor.
+     * @param rule Rule that produces the error.
+     * @param text Error message.
+     */
     public ErrorSnippet(final Rule rule, final String text) {
         this(new ErrorText(rule.name(), text));
     }

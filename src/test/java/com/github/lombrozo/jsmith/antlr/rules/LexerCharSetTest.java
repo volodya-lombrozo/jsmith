@@ -76,7 +76,7 @@ final class LexerCharSetTest {
         final String sequence = "[\"\\\\\\u0000-\\u001F]";
         MatcherAssert.assertThat(
             "We expect that the generated string will not match the sequence",
-            new LexerCharSet(sequence).negate(new Context()).output(),
+            new LexerCharSet(sequence).negate(new Context()).text().output(),
             Matchers.not(Matchers.matchesRegex(sequence))
         );
     }

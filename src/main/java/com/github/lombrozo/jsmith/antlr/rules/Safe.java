@@ -130,7 +130,7 @@ public final class Safe implements Rule, Suffix, Negatable {
     }
 
     @Override
-    public Text negate(final Context context) {
+    public Snippet negate(final Context context) {
         if (this.original instanceof Negatable) {
             return ((Negatable) this.original).negate(context);
         } else {

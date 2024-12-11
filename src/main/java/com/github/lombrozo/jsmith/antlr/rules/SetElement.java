@@ -109,7 +109,7 @@ public final class SetElement implements Rule, Negatable {
     }
 
     @Override
-    public Text negate(final Context context) {
+    public Snippet negate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException(
                 "SetElement rule is empty, either SetElement or BlockSet should be added before generation"
@@ -126,7 +126,7 @@ public final class SetElement implements Rule, Negatable {
                 )
             );
         }
-        return new TextSequence(
+        return new NodeSnippet(
             this,
             this.children.stream()
                 .map(Negatable.class::cast)

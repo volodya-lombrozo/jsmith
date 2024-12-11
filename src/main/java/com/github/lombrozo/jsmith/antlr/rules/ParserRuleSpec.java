@@ -89,7 +89,6 @@ public final class ParserRuleSpec implements Rule {
     @Override
     public Snippet generate(final Context context) {
         return new NodeSnippet(
-            this,
             this.list.stream()
                 .map(rule -> rule.generate(context))
                 .collect(Collectors.toList()),

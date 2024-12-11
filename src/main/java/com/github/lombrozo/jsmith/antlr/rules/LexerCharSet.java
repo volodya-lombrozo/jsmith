@@ -103,7 +103,7 @@ public final class LexerCharSet implements Rule, Negatable {
     }
 
     @Override
-    public Text negate(final Context context) {
+    public Snippet negate(final Context context) {
         final String negated;
         final String replaced = Literal.replaceEscapes(this.text);
         if (replaced.startsWith("[")) {
@@ -111,7 +111,7 @@ public final class LexerCharSet implements Rule, Negatable {
         } else {
             negated = String.format("[^%s]", replaced);
         }
-        return new TextLeaf(
+        return new LeafSnippet(
             this,
             this.rand.regex(LexerCharSet.unescapeUnicodes(negated))
         );

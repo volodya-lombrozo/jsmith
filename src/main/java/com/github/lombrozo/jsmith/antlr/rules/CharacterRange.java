@@ -119,7 +119,7 @@ public final class CharacterRange implements Rule, Negatable {
     }
 
     @Override
-    public Text negate(final Context context) {
+    public Snippet negate(final Context context) {
         throw new UnsupportedOperationException("CharacterRange cannot be negated yet");
     }
 
