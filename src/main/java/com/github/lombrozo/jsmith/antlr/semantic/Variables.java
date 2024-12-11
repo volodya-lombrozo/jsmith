@@ -33,11 +33,6 @@ import lombok.ToString;
 /**
  * Variables.
  * @since 0.1
- * @todo #92:30min Move Variable to Context.
- *  Currently we use this class in the context of the generation tree building.
- *  We should move this class to the Context class, as it is used only during generation.
- *  After moving the class, we should update all the references to it.
- *  Moreover, we have strange behavior with cache which is rather confusing.
  */
 @ToString
 public final class Variables {
