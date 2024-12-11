@@ -32,7 +32,7 @@ public final class Attributes {
     /**
      * Comment to activate this rule.
      */
-    private static final String TYPE = "$jsmith-type";
+    public static final String TYPE = "$jsmith-type";
 
 
     private final Map<String, String> attributes;

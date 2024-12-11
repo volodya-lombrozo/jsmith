@@ -29,6 +29,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.jcabi.log.Logger;
+import java.util.Optional;
 
 /**
  * Rule that adds type to the context.
@@ -65,8 +66,9 @@ public final class PredicateRule implements Rule {
     public Snippet generate(final Context context) {
         final Snippet res;
         final Attributes attributes = context.attributes();
-        if (attributes.contains(TypeRule.COMMENT)) {
-            final String current = attributes.get(TypeRule.COMMENT);
+        final Optional<String> opttype = attributes.currentType();
+        if (opttype.isPresent()) {
+            final String current = opttype.get();
             if (current.equals(this.type)) {
                 res = this.origin.generate(context);
             } else {

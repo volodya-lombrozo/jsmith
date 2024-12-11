@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
+import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
@@ -32,11 +33,6 @@ import com.github.lombrozo.jsmith.antlr.view.Snippet;
  * @since 0.1
  */
 public final class TypeRule implements Rule {
-
-    /**
-     * Comment to activate this rule.
-     */
-    public static final String COMMENT = "$jsmith-type";
 
     /**
      * Original rule.
@@ -70,7 +66,7 @@ public final class TypeRule implements Rule {
 
     @Override
     public String name() {
-        return String.format("%s(%s)", TypeRule.COMMENT, this.origin.name());
+        return String.format("%s(%s)", Attributes.TYPE, this.origin.name());
     }
 
     @Override

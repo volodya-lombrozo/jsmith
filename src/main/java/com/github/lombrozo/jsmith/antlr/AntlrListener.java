@@ -273,7 +273,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         if (comments.has(VariableTarget.COMMENT)) {
             res = new VariableTarget(res);
         }
-        if (comments.has(TypeRule.COMMENT)) {
+        if (comments.has(Attributes.TYPE)) {
             res = new TypeRule(res);
         }
         this.down(res);

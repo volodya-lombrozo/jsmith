@@ -29,6 +29,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * Variable Declaration Semantic.
@@ -69,8 +70,9 @@ public final class VariableDeclaration implements Rule {
         } else {
             final String output = text.text().output();
             final Attributes attributes = context.attributes();
-            if (attributes.contains(TypeRule.COMMENT)) {
-                context.scope().declare(output, attributes.get(TypeRule.COMMENT));
+            final Optional<String> type = attributes.currentType();
+            if (type.isPresent()) {
+                context.scope().declare(output, type.get());
             } else {
                 context.scope().declare(output);
             }
