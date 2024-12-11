@@ -29,22 +29,50 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Sequence of snippets.
+ * @since 0.1
+ */
 public final class SequenceSnippet implements Snippet {
 
+    /**
+     * Snippets.
+     */
     private final List<Snippet> snippets;
 
+    /**
+     * This text labels.
+     */
     private final Labels labels;
 
-    private final Attributes attributes;
+    /**
+     * This snippet attributes.
+     */
+    private final Attributes attrs;
 
+    /**
+     * Constructor.
+     * @param author Rule that produces the text.
+     * @param snippets Snippets.
+     */
     public SequenceSnippet(final Rule author, final Snippet... snippets) {
         this(author, Arrays.asList(snippets));
     }
 
+    /**
+     * Constructor.
+     * @param author Rule that produces the text.
+     * @param snippets Snippets.
+     */
     public SequenceSnippet(final Rule author, final List<Snippet> snippets) {
         this(snippets, new Labels(author));
     }
 
+    /**
+     * Constructor.
+     * @param snippets Snippets.
+     * @param labels Labels.
+     */
     public SequenceSnippet(final List<Snippet> snippets, final Labels labels) {
         this(
             snippets,
@@ -55,6 +83,12 @@ public final class SequenceSnippet implements Snippet {
         );
     }
 
+    /**
+     * Constructor.
+     * @param snippets Snippets.
+     * @param labels Labels.
+     * @param attributes Attributes.
+     */
     public SequenceSnippet(
         final List<Snippet> snippets,
         final Labels labels,
@@ -62,12 +96,12 @@ public final class SequenceSnippet implements Snippet {
     ) {
         this.snippets = snippets;
         this.labels = labels;
-        this.attributes = attributes;
+        this.attrs = attributes;
     }
 
     @Override
     public Attributes attributes() {
-        return this.attributes;
+        return this.attrs;
     }
 
     @Override

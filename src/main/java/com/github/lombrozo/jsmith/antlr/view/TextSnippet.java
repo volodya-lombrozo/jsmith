@@ -35,12 +35,12 @@ public final class TextSnippet implements Snippet {
     /**
      * Text.
      */
-    private final Text text;
+    private final Text txt;
 
     /**
      * Attributes.
      */
-    private final Attributes attributes;
+    private final Attributes attrs;
 
     /**
      * Constructor.
@@ -84,18 +84,18 @@ public final class TextSnippet implements Snippet {
      * @param attributes Attributes.
      */
     public TextSnippet(final Text text, final Attributes attributes) {
-        this.text = text;
-        this.attributes = attributes;
+        this.txt = text;
+        this.attrs = attributes;
     }
 
     @Override
     public Attributes attributes() {
-        return this.attributes;
+        return this.attrs;
     }
 
     @Override
     public Text text() {
-        return this.text;
+        return this.txt;
     }
 
     @Override

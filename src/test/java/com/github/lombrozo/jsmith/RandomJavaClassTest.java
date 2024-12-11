@@ -72,7 +72,7 @@ final class RandomJavaClassTest {
     @Test
     void generatesSpecificJavaClass(@TempDir final Path dir) {
         final String src = new RandomJavaClass(
-            new Params(7648701033033712484L)
+            new Params(7_648_701_033_033_712_484L)
         ).src();
         Logger.info(this, "Generated source code: %n%s%n", src);
         MatcherAssert.assertThat(

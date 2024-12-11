@@ -24,10 +24,10 @@
 package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.SequenceSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -51,12 +51,12 @@ public final class ComposedText implements Text {
     /**
      * Children of the node.
      */
-    private final List<Text> children;
+    private final List<Text> kids;
 
     /**
      * Labels of the node.
      */
-    private final Labels labels;
+    private final Labels lbls;
 
     /**
      * Constructor.
@@ -97,25 +97,25 @@ public final class ComposedText implements Text {
         final String delimiter,
         final Labels labels
     ) {
-        this.children = childs;
+        this.kids = childs;
         this.delimiter = delimiter;
-        this.labels = labels;
+        this.lbls = labels;
     }
 
     @Override
     public List<Text> children() {
-        return Collections.unmodifiableList(this.children);
+        return Collections.unmodifiableList(this.kids);
     }
 
     @Override
     public String output() {
-        return this.children.stream()
+        return this.kids.stream()
             .map(Text::output)
             .collect(Collectors.joining(this.delimiter));
     }
 
     @Override
     public Labels labels() {
-        return this.labels;
+        return this.lbls;
     }
 }

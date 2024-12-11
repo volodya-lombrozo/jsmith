@@ -25,8 +25,8 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.view.Snippet;
 
 /**
  * Variable Assignment Semantic.

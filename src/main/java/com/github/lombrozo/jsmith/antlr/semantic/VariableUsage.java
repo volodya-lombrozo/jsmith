@@ -25,11 +25,11 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
+import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
+import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.jcabi.log.Logger;
 import java.util.Optional;
 

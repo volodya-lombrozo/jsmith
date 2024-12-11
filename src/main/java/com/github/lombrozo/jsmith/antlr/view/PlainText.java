@@ -41,12 +41,12 @@ public final class PlainText implements Text {
     /**
      * Text output produced by some rule.
      */
-    private final String text;
+    private final String original;
 
     /**
      * Additional attributes of the text.
      */
-    private final Labels labels;
+    private final Labels lbls;
 
     /**
      * Default constructor.
@@ -83,8 +83,8 @@ public final class PlainText implements Text {
         final String text,
         final Labels labels
     ) {
-        this.text = text;
-        this.labels = labels;
+        this.original = text;
+        this.lbls = labels;
     }
 
     @Override
@@ -94,11 +94,11 @@ public final class PlainText implements Text {
 
     @Override
     public String output() {
-        return this.text;
+        return this.original;
     }
 
     @Override
     public Labels labels() {
-        return this.labels;
+        return this.lbls;
     }
 }

@@ -36,6 +36,7 @@ import java.util.Optional;
  * They just attached to a particular text node.
  * @since 0.1
  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public final class Labels {
 
     /**
@@ -55,6 +56,7 @@ public final class Labels {
 
     /**
      * Default constructor.
+     * @param author Author of the text.
      */
     public Labels(final Rule author) {
         this(author.name());

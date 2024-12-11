@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * <a href="https://graphviz.gitlab.io">here</a>
  * @since 0.1
  */
-public final class DotTree implements Text {
+public final class DotText implements Text {
 
     /**
      * Origin text.
@@ -56,7 +56,7 @@ public final class DotTree implements Text {
      * @param filters Filters.
      */
     @SafeVarargs
-    public DotTree(final Text origin, final Predicate<Text>... filters) {
+    public DotText(final Text origin, final Predicate<Text>... filters) {
         this(origin, Arrays.asList(filters));
     }
 
@@ -64,7 +64,7 @@ public final class DotTree implements Text {
      * Constructor.
      * @param origin Origin text.
      */
-    DotTree(final Text origin) {
+    DotText(final Text origin) {
         this(origin, new ArrayList<>(0));
     }
 
@@ -73,7 +73,7 @@ public final class DotTree implements Text {
      * @param origin Origin text.
      * @param filters Filters.
      */
-    private DotTree(final Text origin, final List<? extends Predicate<Text>> filters) {
+    private DotText(final Text origin, final List<? extends Predicate<Text>> filters) {
         this.origin = origin;
         this.filters = filters;
     }

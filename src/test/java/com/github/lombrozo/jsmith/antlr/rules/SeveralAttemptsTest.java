@@ -24,9 +24,9 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.PlainText;
+import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 import org.hamcrest.MatcherAssert;

@@ -36,7 +36,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link DotTree}.
+ * Test case for {@link DotText}.
  * @since 0.1
  */
 final class DotTreeTest {
@@ -45,7 +45,7 @@ final class DotTreeTest {
     void convertsSimpleTree() {
         MatcherAssert.assertThat(
             "We expect that the tree will be converted to DOT format",
-            new DotTree(
+            new DotText(
                 new ComposedText(
                     new Root(),
                     Arrays.asList(
@@ -95,7 +95,7 @@ final class DotTreeTest {
         lexer.append(new Literal(lexer, "a"));
         MatcherAssert.assertThat(
             "We expect that only rules will be converted to DOT format",
-            new DotTree(
+            new DotText(
                 top.generate(new Context()).text(),
                 new RulesOnly()
             ).output(),

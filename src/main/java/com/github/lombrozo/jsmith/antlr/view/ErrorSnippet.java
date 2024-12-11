@@ -37,7 +37,7 @@ public final class ErrorSnippet implements Snippet {
     /**
      * Error message.
      */
-    private final Text text;
+    private final Text message;
 
     /**
      * Constructor.
@@ -62,7 +62,7 @@ public final class ErrorSnippet implements Snippet {
      * @param text Error message.
      */
     public ErrorSnippet(final Text text) {
-        this.text = text;
+        this.message = text;
     }
 
     @Override
@@ -72,7 +72,7 @@ public final class ErrorSnippet implements Snippet {
 
     @Override
     public Text text() {
-        return this.text;
+        return this.message;
     }
 
     @Override

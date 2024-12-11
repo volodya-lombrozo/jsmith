@@ -23,7 +23,7 @@
  */
 package com.github.lombrozo.jsmith.guard;
 
-import com.github.lombrozo.jsmith.antlr.view.DotTree;
+import com.github.lombrozo.jsmith.antlr.view.DotText;
 import com.github.lombrozo.jsmith.antlr.view.RulesOnly;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.io.IOException;
@@ -81,7 +81,7 @@ public final class IllegalTextException extends IllegalStateException {
             final Path file = Files.createTempFile("jsmith-", ".dot");
             Files.write(
                 file,
-                new DotTree(
+                new DotText(
                     this.origin,
                     new RulesOnly()
                 ).output().getBytes(StandardCharsets.UTF_8)

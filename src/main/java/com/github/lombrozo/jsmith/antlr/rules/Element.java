@@ -24,9 +24,9 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.github.lombrozo.jsmith.antlr.view.SequenceSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
