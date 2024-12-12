@@ -119,11 +119,16 @@ public final class AltList implements Rule {
     }
 
     @Override
-    public List<Rule> children(final Context context) {
+    public List<Rule> children(final Context context) throws WrongPathException {
         if (this.alternatives.isEmpty()) {
             return Collections.emptyList();
         } else {
-            return Collections.singletonList(context.strategy().choose(this, this.alternatives));
+            return Collections.singletonList(
+                new SeveralAttemptsRule(
+                    this.name(),
+                    () -> context.strategy().choose(this, this.alternatives)
+                ).choose()
+            );
         }
     }
 

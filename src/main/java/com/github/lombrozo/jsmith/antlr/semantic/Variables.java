@@ -23,7 +23,6 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;

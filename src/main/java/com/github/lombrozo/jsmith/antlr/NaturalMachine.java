@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr;
 import com.github.lombrozo.jsmith.Params;
 import com.github.lombrozo.jsmith.antlr.rules.LeftToRight;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.semantic.Scope;
 import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
@@ -39,7 +40,7 @@ import java.util.List;
  * This machine travers generation tree and generates output.
  * @since 0.1
  */
-final class NaturalMachine {
+public final class NaturalMachine {
 
     /**
      * Parameters.
@@ -50,31 +51,41 @@ final class NaturalMachine {
      */
     private final Rule root;
 
-    NaturalMachine(final Params params, final Rule root) {
+    public NaturalMachine(final Params params, final Rule root) {
         this.params = params;
         this.root = root;
     }
 
-    Text travers() {
-        final List<Snippet> res = new ArrayList<>(0);
-        this.travers(
-            this.root,
-            new Context(
-                new Scope(new Rand(this.params.seed())),
-                new ConvergenceStrategy(this.params)
-            ),
-            res
-        );
-        return new SignedSnippet(this.root, res).text();
+    public Text travers() {
+        try {
+            final List<Snippet> res = new ArrayList<>(0);
+            this.travers(
+                this.root,
+                new Context(
+                    new Scope(new Rand(this.params.seed())),
+                    new ConvergenceStrategy(this.params)
+                ),
+                res
+            );
+            return new SignedSnippet(this.root, res).text();
+        } catch (WrongPathException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
-    private void travers(final Rule rule, final Context context, final List<Snippet> res) {
+    private void travers(
+        final Rule rule,
+        final Context context,
+        final List<Snippet> res
+    ) throws WrongPathException {
         final Context ctx = context.next(rule);
         final List<Rule> children = rule.children(ctx);
         if (children.isEmpty()) {
             res.add(rule.generate(ctx));
         } else {
-            children.forEach(r -> this.travers(r, ctx, res));
+            for (Rule r : children) {
+                this.travers(r, ctx, res);
+            }
         }
     }
 

@@ -95,8 +95,11 @@ public final class LexerAltList implements Rule {
     }
 
     @Override
-    public List<Rule> children(final Context context) {
-        return Collections.singletonList(context.strategy().choose(this, this.children));
+    public List<Rule> children(final Context context) throws WrongPathException {
+        return Collections.singletonList(
+            new SeveralAttemptsRule(
+                this.name(), () -> context.strategy().choose(this, this.children)).choose()
+        );
     }
 
     @Override

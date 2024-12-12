@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith;
 
 import com.github.lombrozo.jsmith.antlr.AntlrListener;
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.NaturalMachine;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
@@ -131,11 +132,13 @@ public final class RandomScript {
      * @return Random script text.
      */
     public Text generate(final String rule) {
-        final Scope scope = new Scope(new Rand(this.params.seed()));
-        this.grammars.forEach(this::parse);
-        return this.unparser.generate(
-            rule, new Context(scope, new ConvergenceStrategy(this.params))
-        ).text();
+//        final Scope scope = new Scope(new Rand(this.params.seed()));
+//        this.grammars.forEach(this::parse);
+//        return this.unparser.generate(
+//            rule, new Context(scope, new ConvergenceStrategy(this.params))
+//        ).text();
+        final NaturalMachine machine = new NaturalMachine(this.params, this.rule(rule));
+        return machine.travers();
     }
 
     /**

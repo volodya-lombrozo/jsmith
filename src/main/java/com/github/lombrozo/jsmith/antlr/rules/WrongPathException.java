@@ -23,46 +23,9 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import java.util.List;
+public final class WrongPathException extends Exception {
 
-/**
- * Rule definition.
- * @since 0.1
- */
-public interface Rule {
-
-    /**
-     * Parent rule.
-     * @return Parent rule.
-     */
-    Rule parent();
-
-    /**
-     * Generate code.
-     * @param context Generation context.
-     * @return Generated code.
-     */
-    Snippet generate(Context context);
-
-    List<Rule> children(Context context) throws WrongPathException;
-
-    /**
-     * Append child rule.
-     * @param rule Child rule.
-     */
-    void append(Rule rule);
-
-    /**
-     * Rule name.
-     * @return Rule name.
-     */
-    String name();
-
-    /**
-     * Deep copy of the rule.
-     * @return Copy of the rule.
-     */
-    Rule copy();
+    public WrongPathException(final String message) {
+        super(message);
+    }
 }

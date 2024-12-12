@@ -90,8 +90,13 @@ public final class RuleAltList implements Rule {
     }
 
     @Override
-    public List<Rule> children(final Context context) {
-        return Collections.singletonList(context.strategy().choose(this, this.alternatives));
+    public List<Rule> children(final Context context) throws WrongPathException {
+        return Collections.singletonList(
+            new SeveralAttemptsRule(
+                this.name(),
+                () -> context.strategy().choose(this, this.alternatives)
+            ).choose()
+        );
     }
 
     @Override
