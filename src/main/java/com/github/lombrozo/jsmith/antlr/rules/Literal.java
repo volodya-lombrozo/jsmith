@@ -27,6 +27,8 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.github.lombrozo.jsmith.random.Rand;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,6 +100,11 @@ public final class Literal implements Rule, Negatable {
             this,
             Literal.replaceEscapes(Literal.withoutApostrophes(this.text))
         );
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.emptyList();
     }
 
     @Override

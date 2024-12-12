@@ -96,6 +96,12 @@ public final class ParserRuleSpec implements Rule {
     }
 
     @Override
+    public List<Rule> children(final Context context) {
+        //TODO: here we loose labels
+        return Collections.unmodifiableList(this.list);
+    }
+
+    @Override
     public void append(final Rule rule) {
         this.list.add(rule);
     }

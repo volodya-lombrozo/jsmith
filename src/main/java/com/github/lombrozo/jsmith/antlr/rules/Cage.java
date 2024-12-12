@@ -26,6 +26,8 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -66,6 +68,12 @@ final class Cage implements Rule {
     public Snippet generate(final Context context) {
         this.trap.set(context);
         return new TextSnippet(this, "");
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        this.trap.set(context);
+        return Collections.singletonList(new Empty());
     }
 
     @Override

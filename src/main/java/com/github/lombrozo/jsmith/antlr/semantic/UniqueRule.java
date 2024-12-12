@@ -27,7 +27,9 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.jcabi.log.Logger;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -86,6 +88,11 @@ public final class UniqueRule implements Rule {
             result = snippet;
         }
         return result;
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.emptyList();
     }
 
     @Override

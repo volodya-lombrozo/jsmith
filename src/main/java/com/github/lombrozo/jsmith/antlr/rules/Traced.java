@@ -26,6 +26,8 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.random.Multiplier;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Traced rule.
@@ -56,6 +58,11 @@ public final class Traced implements Rule, Suffix, Negatable {
     @Override
     public Snippet generate(final Context context) {
         return this.original.generate(context.next(this.original));
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.singletonList(this.original);
     }
 
     @Override

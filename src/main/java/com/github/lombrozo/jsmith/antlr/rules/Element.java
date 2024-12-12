@@ -28,7 +28,9 @@ import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.github.lombrozo.jsmith.random.Multiplier;
+import com.github.lombrozo.jsmith.random.Rand;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,6 +104,25 @@ public final class Element implements Rule {
             );
         }
         return result;
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        if (this.children.isEmpty()) {
+            throw new IllegalStateException("Element should have at least one child");
+        }
+        final Rule result;
+        final Rule first = this.children.get(0);
+        if (Atom.isAtom(first) || LabeledElement.isLabeledElement(first) || Ebnf.isEbnf(first)) {
+            result = this.multiplier().repeat(first);
+        } else if (ActionBlock.isActionBlock(first)) {
+            result = new Empty();
+        } else {
+            throw new IllegalStateException(
+                String.format("Unknown element type: %s", first.name())
+            );
+        }
+        return Collections.singletonList(result);
     }
 
     @Override

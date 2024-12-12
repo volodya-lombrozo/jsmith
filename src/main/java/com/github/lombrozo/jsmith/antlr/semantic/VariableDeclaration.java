@@ -29,6 +29,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -83,6 +84,11 @@ public final class VariableDeclaration implements Rule {
             );
         }
         return result;
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.emptyList();
     }
 
     @Override

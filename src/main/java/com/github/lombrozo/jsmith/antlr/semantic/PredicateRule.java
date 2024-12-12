@@ -29,6 +29,8 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.jcabi.log.Logger;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -82,6 +84,11 @@ public final class PredicateRule implements Rule {
             res = this.origin.generate(context);
         }
         return res;
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.emptyList();
     }
 
     @Override

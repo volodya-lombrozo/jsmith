@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -78,6 +79,11 @@ public final class LeftToRight implements Rule {
             current = current.withAttributes(snippet.attributes());
         }
         return new SignedSnippet(this.author, res);
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.unmodifiableList(this.all);
     }
 
     @Override

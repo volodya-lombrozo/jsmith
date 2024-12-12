@@ -26,6 +26,8 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Empty rule.
@@ -43,6 +45,11 @@ public final class Empty implements Rule {
     @Override
     public Snippet generate(final Context context) {
         return new TextSnippet(this, "");
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.emptyList();
     }
 
     @Override

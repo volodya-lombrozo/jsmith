@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,6 +88,11 @@ public final class Alternative implements Rule {
     @Override
     public void append(final Rule rule) {
         this.elements.add(rule);
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.unmodifiableList(this.elements);
     }
 
     @Override

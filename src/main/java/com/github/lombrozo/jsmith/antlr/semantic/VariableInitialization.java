@@ -27,6 +27,8 @@ import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -71,6 +73,11 @@ public final class VariableInitialization implements Rule {
             context.scope().init(target.get());
         }
         return output;
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.emptyList();
     }
 
     @Override

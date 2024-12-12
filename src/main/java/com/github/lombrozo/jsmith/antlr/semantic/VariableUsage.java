@@ -31,6 +31,8 @@ import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.jcabi.log.Logger;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -90,6 +92,11 @@ public final class VariableUsage implements Rule {
                     return new ErrorSnippet(author, "<variable not found>");
                 }
             );
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.emptyList();
     }
 
     @Override

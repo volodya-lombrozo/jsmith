@@ -29,6 +29,7 @@ import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.ToString;
@@ -115,6 +116,11 @@ public final class AltList implements Rule {
             );
         }
         return result;
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.singletonList(context.strategy().choose(this, this.alternatives));
     }
 
     @Override

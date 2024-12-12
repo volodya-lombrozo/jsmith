@@ -98,6 +98,11 @@ public final class NotSet implements Rule {
     }
 
     @Override
+    public List<Rule> children(final Context context) {
+        return null; ///TODO WHAT TO DO HERE ?????
+    }
+
+    @Override
     public void append(final Rule rule) {
         this.children.add(rule);
     }

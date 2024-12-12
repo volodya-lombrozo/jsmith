@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,6 +93,11 @@ public final class LexerAtom implements Rule {
             this,
             context.strategy().choose(this, this.elems).generate(context)
         );
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.singletonList(context.strategy().choose(this, this.elems));
     }
 
     @Override

@@ -36,7 +36,6 @@ import com.github.lombrozo.jsmith.random.Rand;
  */
 public final class NaturalMachine {
 
-
     private final Params params;
     private final Rule root;
 

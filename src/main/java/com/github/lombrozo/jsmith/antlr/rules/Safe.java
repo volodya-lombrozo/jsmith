@@ -28,6 +28,7 @@ import com.github.lombrozo.jsmith.antlr.RecursionException;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Trace;
 import com.github.lombrozo.jsmith.random.Multiplier;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -96,6 +97,20 @@ public final class Safe implements Rule, Suffix, Negatable {
             );
         }
         return this.original.generate(context);
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        final List<Rule> path = context.path();
+        if (path.size() >= this.limit) {
+            throw new RecursionException(
+                String.format(
+                    "Long generation path! Most probably you have a recursion here: %s",
+                    new Trace(path).line()
+                )
+            );
+        }
+        return Collections.singletonList(this.original);
     }
 
     @Override

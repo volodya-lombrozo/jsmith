@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import java.util.List;
 
 /**
  * Rule definition.
@@ -44,6 +45,8 @@ public interface Rule {
      * @return Generated code.
      */
     Snippet generate(Context context);
+
+    List<Rule> children(Context context);
 
     /**
      * Append child rule.

@@ -28,6 +28,7 @@ import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -98,6 +99,11 @@ public final class Ebnf implements Rule {
         return new SignedSnippet(
             this, this.multiplier().repeat(this.children.get(0)).generate(context)
         );
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.singletonList(this.multiplier().repeat(this.children.get(0)));
     }
 
     @Override

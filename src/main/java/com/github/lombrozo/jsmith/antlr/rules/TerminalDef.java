@@ -28,6 +28,8 @@ import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.github.lombrozo.jsmith.random.Rand;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Terminal definition.
@@ -114,6 +116,11 @@ public final class TerminalDef implements Rule {
                 .generate(context);
         }
         return result;
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.emptyList();
     }
 
     @Override

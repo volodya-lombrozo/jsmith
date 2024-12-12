@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,6 +66,11 @@ public final class Root implements Rule {
     @Override
     public Snippet generate(final Context context) {
         return new LeftToRight(this, this.all).generate(context);
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.unmodifiableList(this.all);
     }
 
     @Override

@@ -30,6 +30,8 @@ import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
 import com.jcabi.log.Logger;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -92,6 +94,11 @@ public final class VariableTarget implements Rule {
             }
         }
         return text;
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.emptyList();
     }
 
     @Override

@@ -26,6 +26,8 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -94,6 +96,11 @@ public final class Atom implements Rule {
     @Override
     public Snippet generate(final Context context) {
         return new SignedSnippet(this, this.item.get().generate(context));
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.singletonList(this.item.get());
     }
 
     /**

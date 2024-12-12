@@ -26,6 +26,8 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Parser rule reference.
@@ -81,6 +83,11 @@ public final class Ruleref implements Rule {
     @Override
     public Snippet generate(final Context context) {
         return this.unparser.generate(this.ref, context);
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.singletonList(this.unparser.rule(this.ref));
     }
 
     @Override

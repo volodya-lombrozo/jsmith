@@ -27,6 +27,8 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.random.Rand;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Scope Rule.
@@ -62,6 +64,11 @@ public final class ScopeRule implements Rule {
     @Override
     public Snippet generate(final Context context) {
         return this.origin.generate(context.withScope(new Scope(context.scope(), this.random)));
+    }
+
+    @Override
+    public List<Rule> children(final Context context) {
+        return Collections.emptyList();
     }
 
     @Override
