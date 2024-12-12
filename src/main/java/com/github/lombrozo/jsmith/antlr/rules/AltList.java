@@ -120,7 +120,11 @@ public final class AltList implements Rule {
 
     @Override
     public List<Rule> children(final Context context) {
-        return Collections.singletonList(context.strategy().choose(this, this.alternatives));
+        if (this.alternatives.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return Collections.singletonList(context.strategy().choose(this, this.alternatives));
+        }
     }
 
     @Override

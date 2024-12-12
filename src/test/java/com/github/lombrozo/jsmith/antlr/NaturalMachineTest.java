@@ -65,8 +65,8 @@ class NaturalMachineTest {
                 "80472-zFEw*(92885-59)-(4)\n")
         );
         MatcherAssert.assertThat(
-            original,
-            Matchers.equalTo(travers.output())
+            travers.output(),
+            Matchers.equalTo(original)
         );
     }
 

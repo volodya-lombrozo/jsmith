@@ -66,13 +66,14 @@ public final class NaturalMachine {
     }
 
     void travers(final Rule rule, final Context context, final List<Snippet> res) {
-        final List<Rule> children = rule.children(context);
-        for (final Rule child : children) {
-            final List<Rule> children1 = child.children(context);
-            if (children1.isEmpty()) {
-                res.add(child.generate(context));
-            } else {
-                this.travers(child, context, res);
+        Context ctx = context.next(rule);
+        final List<Rule> children1 = rule.children(ctx);
+        if (children1.isEmpty()) {
+            final Snippet generate = rule.generate(ctx);
+            res.add(generate);
+        } else {
+            for (final Rule rule1 : children1) {
+                this.travers(rule1, ctx, res);
             }
         }
     }
