@@ -24,11 +24,16 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.Params;
+import com.github.lombrozo.jsmith.antlr.rules.LeftToRight;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.semantic.Scope;
+import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
+import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.random.ConvergenceStrategy;
 import com.github.lombrozo.jsmith.random.Rand;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This machine travers generation tree and generates output.
@@ -36,7 +41,13 @@ import com.github.lombrozo.jsmith.random.Rand;
  */
 public final class NaturalMachine {
 
+    /**
+     * Parameters.
+     */
     private final Params params;
+    /**
+     * Root rule.
+     */
     private final Rule root;
 
     public NaturalMachine(final Params params, final Rule root) {
@@ -45,13 +56,25 @@ public final class NaturalMachine {
     }
 
     public Text travers() {
-        return this.root.generate(
-            new Context(
-                new Scope(new Rand(this.params.seed())),
-                new ConvergenceStrategy(this.params)
-            )
-        ).text();
+        final Context context = new Context(
+            new Scope(new Rand(this.params.seed())),
+            new ConvergenceStrategy(this.params)
+        );
+        final List<Snippet> res = new ArrayList<>(0);
+        this.travers(this.root, context, res);
+        return new SignedSnippet(this.root, res).text();
     }
 
+    void travers(final Rule rule, final Context context, final List<Snippet> res) {
+        final List<Rule> children = rule.children(context);
+        for (final Rule child : children) {
+            final List<Rule> children1 = child.children(context);
+            if (children1.isEmpty()) {
+                res.add(child.generate(context));
+            } else {
+                this.travers(child, context, res);
+            }
+        }
+    }
 
 }
