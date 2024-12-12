@@ -28,4 +28,8 @@ public final class WrongPathException extends Exception {
     public WrongPathException(final String message) {
         super(message);
     }
+
+    public WrongPathException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 }

@@ -93,6 +93,27 @@ public final class SeveralAttemptsError {
         this.generator = original;
     }
 
+//            Rule rule = null;
+//        int attempt = 0;
+//        do {
+//            try {
+//                rule = this.generator.attempt();
+//            } catch (WrongPathException e) {
+//                Logger.warn(this, e.getMessage());
+//            }
+//            attempt = attempt + 1;
+//        } while (rule == null && attempt < this.max);
+//        if (rule == null) {
+//            final String msg = String.format(
+//                "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s'",
+//                this.max,
+//                this.author
+//            );
+//            Logger.warn(this, msg);
+//            throw new WrongPathException(msg);
+//        }
+//        return rule;
+
     /**
      * Choose output.
      * @return Output.
@@ -100,13 +121,15 @@ public final class SeveralAttemptsError {
     public Node choose() throws WrongPathException {
         Node snippet = null;
         int attempt = 0;
+        WrongPathException origin = null;
         do {
             try {
                 snippet = this.generator.make();
             } catch (final WrongPathException exception) {
                 Logger.warn(this, exception.getMessage());
-                attempt = attempt + 1;
+                origin = exception;
             }
+            attempt = attempt + 1;
         } while (snippet == null && attempt < this.max);
         if (snippet == null) {
             throw new WrongPathException(
@@ -114,7 +137,8 @@ public final class SeveralAttemptsError {
                     "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s'",
                     this.max,
                     this.author
-                )
+                ),
+                origin
             );
 //            final Text text = snippet.text();
 //            final String msg = String.format(
