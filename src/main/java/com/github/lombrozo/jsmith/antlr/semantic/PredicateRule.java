@@ -23,7 +23,6 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
-import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
@@ -52,6 +51,11 @@ public final class PredicateRule implements Rule {
      */
     private final String type;
 
+    /**
+     * Constructor.
+     * @param origin Original rule.
+     * @param type Type of the predicate.
+     */
     public PredicateRule(final Rule origin, final String type) {
         this.origin = origin;
         this.type = type;
@@ -65,8 +69,7 @@ public final class PredicateRule implements Rule {
     @Override
     public Node generate(final Context context) {
         final Node res;
-        final Attributes attributes = context.attributes();
-        final Optional<String> opttype = attributes.currentType();
+        final Optional<String> opttype = context.attributes().currentType();
         if (opttype.isPresent()) {
             final String current = opttype.get();
             if (current.equals(this.type)) {

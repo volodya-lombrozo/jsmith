@@ -77,9 +77,6 @@ public final class VariableTarget implements Rule {
                         .withType(type)
                         .withTarget(declared.get())
                 );
-                context.attributes()
-                    .withType(type)
-                    .withTarget(declared.get());
             } else {
                 Logger.warn(
                     this,
