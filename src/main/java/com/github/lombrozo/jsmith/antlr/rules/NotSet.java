@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -99,7 +100,7 @@ public final class NotSet implements Rule {
 
     @Override
     public List<Rule> children(final Context context) {
-        return null; ///TODO WHAT TO DO HERE ?????
+        return Collections.emptyList();
     }
 
     @Override

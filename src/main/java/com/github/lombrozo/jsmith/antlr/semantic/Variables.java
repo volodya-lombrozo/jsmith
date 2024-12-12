@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.semantic;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,8 +54,8 @@ public final class Variables {
      */
     public Variables() {
         this(
-            new HashSet<>(0),
-            new HashSet<>(0)
+            new LinkedHashSet<>(0),
+            new LinkedHashSet<>(0)
         );
     }
 

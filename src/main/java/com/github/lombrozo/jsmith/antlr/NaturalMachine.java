@@ -39,7 +39,7 @@ import java.util.List;
  * This machine travers generation tree and generates output.
  * @since 0.1
  */
-public final class NaturalMachine {
+final class NaturalMachine {
 
     /**
      * Parameters.
@@ -50,31 +50,31 @@ public final class NaturalMachine {
      */
     private final Rule root;
 
-    public NaturalMachine(final Params params, final Rule root) {
+    NaturalMachine(final Params params, final Rule root) {
         this.params = params;
         this.root = root;
     }
 
-    public Text travers() {
-        final Context context = new Context(
-            new Scope(new Rand(this.params.seed())),
-            new ConvergenceStrategy(this.params)
-        );
+    Text travers() {
         final List<Snippet> res = new ArrayList<>(0);
-        this.travers(this.root, context, res);
+        this.travers(
+            this.root,
+            new Context(
+                new Scope(new Rand(this.params.seed())),
+                new ConvergenceStrategy(this.params)
+            ),
+            res
+        );
         return new SignedSnippet(this.root, res).text();
     }
 
-    void travers(final Rule rule, final Context context, final List<Snippet> res) {
-        Context ctx = context.next(rule);
-        final List<Rule> children1 = rule.children(ctx);
-        if (children1.isEmpty()) {
-            final Snippet generate = rule.generate(ctx);
-            res.add(generate);
+    private void travers(final Rule rule, final Context context, final List<Snippet> res) {
+        final Context ctx = context.next(rule);
+        final List<Rule> children = rule.children(ctx);
+        if (children.isEmpty()) {
+            res.add(rule.generate(ctx));
         } else {
-            for (final Rule rule1 : children1) {
-                this.travers(rule1, ctx, res);
-            }
+            children.forEach(r -> this.travers(r, ctx, res));
         }
     }
 

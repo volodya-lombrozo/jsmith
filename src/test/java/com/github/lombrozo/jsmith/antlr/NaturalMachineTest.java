@@ -41,7 +41,7 @@ class NaturalMachineTest {
 
 
     @Test
-    void travers() {
+    void traversSimpleArithmetic() {
         Params params = new Params(-167_712_196_876_944_930L);
         final Scope scope = new Scope(new Rand(params.seed()));
         final Context context = new Context(scope, new ConvergenceStrategy(params));
@@ -50,7 +50,6 @@ class NaturalMachineTest {
             new ResourceOf("grammars/Arithmetic.g4")
         ).rule("prog");
         final String original = prog.generate(context).text().output();
-
         Params another = new Params(-167_712_196_876_944_930L);
         final Rule root = new RandomScript(
             another,
@@ -64,6 +63,62 @@ class NaturalMachineTest {
                 "(KNES)*((skzS))/UZF-gFCQ\n" +
                 "80472-zFEw*(92885-59)-(4)\n")
         );
+        MatcherAssert.assertThat(
+            travers.output(),
+            Matchers.equalTo(original)
+        );
+    }
+
+    @Test
+    void travesJsonWithNegation() {
+        Params params = new Params(7_953_869_973_960_633_076L);
+        final Scope scope = new Scope(new Rand(params.seed()));
+        final Context context = new Context(scope, new ConvergenceStrategy(params));
+        final Rule prog = new RandomScript(
+            params,
+            new ResourceOf("grammars/Json.g4")
+        ).rule("json");
+        final String original = prog.generate(context).text().output();
+        Params another = new Params(7_953_869_973_960_633_076L);
+        final Rule root = new RandomScript(
+            another,
+            new ResourceOf("grammars/Json.g4")
+        ).rule("json");
+        final Text travers = new NaturalMachine(another, root).travers();
+        MatcherAssert.assertThat(
+            travers.output(),
+            Matchers.equalTo(original)
+        );
+    }
+
+    @Test
+    void travelsArithmeticWithSemantics() {
+//        -167_712_196_876_944_930L
+//        final long seed = new Random().nextLong();
+//        System.out.println(seed);
+        Params params = new Params(-167_712_196_876_944_930L);
+        final Scope scope = new Scope(new Rand(params.seed()));
+        final Context context = new Context(scope, new ConvergenceStrategy(params));
+        final Rule prog = new RandomScript(
+            params,
+            new ResourceOf("grammars/labeled/Arithmetic.g4")
+        ).rule("prog");
+        final String original = prog.generate(context).text().output();
+        System.out.println(original);
+
+        Params another = new Params(-167_712_196_876_944_930L);
+        final Rule root = new RandomScript(
+            another,
+            new ResourceOf("grammars/labeled/Arithmetic.g4")
+        ).rule("prog");
+        final Text travers = new NaturalMachine(another, root).travers();
+//        MatcherAssert.assertThat(
+//            "The output should be a valid arithmetic expression",
+//            travers.output(),
+//            Matchers.equalTo("\ngud=2492\r\n" +
+//                "(KNES)*((skzS))/UZF-gFCQ\n" +
+//                "80472-zFEw*(92885-59)-(4)\n")
+//        );
         MatcherAssert.assertThat(
             travers.output(),
             Matchers.equalTo(original)
