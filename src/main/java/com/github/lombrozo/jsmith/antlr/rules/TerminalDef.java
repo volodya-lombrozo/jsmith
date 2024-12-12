@@ -25,8 +25,8 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 
 /**
  * Terminal definition.
@@ -88,10 +88,10 @@ public final class TerminalDef implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        final Snippet result;
+    public Node generate(final Context context) {
+        final Node result;
         if (TerminalDef.END_OF_FILE.equals(this.text)) {
-            result = new TextSnippet(this, "");
+            result = new TerminalNode(this, "");
         } else {
             result = this.unlexer.find(this.text)
                 .orElseGet(() -> new Literal(this.text))

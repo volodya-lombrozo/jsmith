@@ -24,9 +24,9 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,12 +99,12 @@ public final class AltList implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        final Snippet result;
+    public Node generate(final Context context) {
+        final Node result;
         if (this.alternatives.isEmpty()) {
-            result = new TextSnippet(this.name(), "");
+            result = new TerminalNode(this.name(), "");
         } else {
-            result = new SignedSnippet(
+            result = new IntermediateNode(
                 this,
                 new SeveralAttempts(
                     this.name(),

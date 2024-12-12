@@ -33,12 +33,12 @@ import java.util.stream.Collectors;
  * Snippet with author.
  * @since 0.1
  */
-public final class SignedSnippet implements Snippet {
+public final class IntermediateNode implements Node {
 
     /**
      * Snippets.
      */
-    private final List<Snippet> snippets;
+    private final List<Node> snippets;
 
     /**
      * This text labels.
@@ -55,7 +55,7 @@ public final class SignedSnippet implements Snippet {
      * @param author Rule that produces the text.
      * @param snippets Snippets.
      */
-    public SignedSnippet(final Rule author, final Snippet... snippets) {
+    public IntermediateNode(final Rule author, final Node... snippets) {
         this(author, Arrays.asList(snippets));
     }
 
@@ -64,7 +64,7 @@ public final class SignedSnippet implements Snippet {
      * @param author Rule that produces the text.
      * @param snippets Snippets.
      */
-    public SignedSnippet(final Rule author, final List<Snippet> snippets) {
+    public IntermediateNode(final Rule author, final List<Node> snippets) {
         this(snippets, new Labels(author));
     }
 
@@ -73,12 +73,12 @@ public final class SignedSnippet implements Snippet {
      * @param snippets Snippets.
      * @param labels Labels.
      */
-    public SignedSnippet(final List<Snippet> snippets, final Labels labels) {
+    public IntermediateNode(final List<Node> snippets, final Labels labels) {
         this(
             snippets,
             labels,
             snippets.stream()
-                .map(Snippet::attributes)
+                .map(Node::attributes)
                 .reduce(new Attributes(), Attributes::add)
         );
     }
@@ -89,8 +89,8 @@ public final class SignedSnippet implements Snippet {
      * @param labels Labels.
      * @param attributes Attributes.
      */
-    public SignedSnippet(
-        final List<Snippet> snippets,
+    public IntermediateNode(
+        final List<Node> snippets,
         final Labels labels,
         final Attributes attributes
     ) {
@@ -108,7 +108,7 @@ public final class SignedSnippet implements Snippet {
     public Text text() {
         return new ComposedText(
             this.snippets.stream()
-                .map(Snippet::text)
+                .map(Node::text)
                 .collect(Collectors.toList()),
             this.labels
         );
@@ -116,6 +116,6 @@ public final class SignedSnippet implements Snippet {
 
     @Override
     public boolean isError() {
-        return this.snippets.stream().anyMatch(Snippet::isError);
+        return this.snippets.stream().anyMatch(Node::isError);
     }
 }

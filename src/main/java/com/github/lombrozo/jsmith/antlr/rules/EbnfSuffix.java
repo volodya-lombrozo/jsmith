@@ -24,8 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import com.github.lombrozo.jsmith.random.Rand;
 import java.util.Objects;
@@ -127,7 +127,7 @@ public final class EbnfSuffix implements Rule, Suffix {
     }
 
     @Override
-    public Snippet generate(final Context context) {
+    public Node generate(final Context context) {
         if (Objects.isNull(this.operation)) {
             throw new IllegalArgumentException(
                 String.format(
@@ -136,7 +136,7 @@ public final class EbnfSuffix implements Rule, Suffix {
                 )
             );
         }
-        return new TextSnippet(
+        return new TerminalNode(
             this,
             String.format(
                 "%s%s",

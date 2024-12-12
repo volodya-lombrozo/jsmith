@@ -25,7 +25,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.jcabi.log.Logger;
 import java.util.HashSet;
 import java.util.Set;
@@ -67,11 +67,11 @@ public final class UniqueRule implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        final Snippet snippet = this.original.generate(context);
-        final Snippet result;
+    public Node generate(final Context context) {
+        final Node snippet = this.original.generate(context);
+        final Node result;
         if (this.all.contains(snippet.text().output())) {
-            final Snippet reattempt = this.generate(context);
+            final Node reattempt = this.generate(context);
             Logger.info(
                 this,
                 String.format(

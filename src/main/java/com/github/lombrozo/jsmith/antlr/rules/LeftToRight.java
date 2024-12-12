@@ -24,8 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,15 +69,15 @@ public final class LeftToRight implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
+    public Node generate(final Context context) {
         Context current = context;
-        final List<Snippet> res = new ArrayList<>(this.all.size());
+        final List<Node> res = new ArrayList<>(this.all.size());
         for (final Rule rule : this.all) {
-            final Snippet snippet = rule.generate(current);
+            final Node snippet = rule.generate(current);
             res.add(snippet);
             current = current.withAttributes(snippet.attributes());
         }
-        return new SignedSnippet(this.author, res);
+        return new IntermediateNode(this.author, res);
     }
 
     @Override

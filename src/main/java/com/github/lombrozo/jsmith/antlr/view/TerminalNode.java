@@ -30,7 +30,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
  * Leaf snippet that does not contain any other snippets.
  * @since 0.1
  */
-public final class TextSnippet implements Snippet {
+public final class TerminalNode implements Node {
 
     /**
      * Text.
@@ -47,7 +47,7 @@ public final class TextSnippet implements Snippet {
      * @param author Rule that produces the text.
      * @param text Text.
      */
-    public TextSnippet(final Rule author, final String text) {
+    public TerminalNode(final Rule author, final String text) {
         this(new PlainText(author.name(), text));
     }
 
@@ -56,7 +56,7 @@ public final class TextSnippet implements Snippet {
      * @param author Who writes the text.
      * @param text Text.
      */
-    public TextSnippet(final String author, final String text) {
+    public TerminalNode(final String author, final String text) {
         this(new PlainText(author, text));
     }
 
@@ -64,7 +64,7 @@ public final class TextSnippet implements Snippet {
      * Constructor.
      * @param text Text.
      */
-    public TextSnippet(final Text text) {
+    public TerminalNode(final Text text) {
         this(text, new Attributes());
     }
 
@@ -74,7 +74,7 @@ public final class TextSnippet implements Snippet {
      * @param text Text.
      * @param attributes Attributes.
      */
-    public TextSnippet(final String author, final String text, final Attributes attributes) {
+    public TerminalNode(final String author, final String text, final Attributes attributes) {
         this(new PlainText(author, text), attributes);
     }
 
@@ -83,7 +83,7 @@ public final class TextSnippet implements Snippet {
      * @param text Text.
      * @param attributes Attributes.
      */
-    public TextSnippet(final Text text, final Attributes attributes) {
+    public TerminalNode(final Text text, final Attributes attributes) {
         this.txt = text;
         this.attrs = attributes;
     }

@@ -23,10 +23,10 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
+import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
 import com.github.lombrozo.jsmith.antlr.view.PlainText;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 import org.hamcrest.MatcherAssert;
@@ -63,7 +63,7 @@ final class SeveralAttemptsTest {
             new SeveralAttempts(
                 1,
                 "test",
-                () -> new ErrorSnippet(new Root(), SeveralAttemptsTest.FAILURE)
+                () -> new ErrorNode(new Root(), SeveralAttemptsTest.FAILURE)
             ).choose().text().output(),
             Matchers.containsString(SeveralAttemptsTest.FAILURE)
         );
@@ -73,7 +73,7 @@ final class SeveralAttemptsTest {
      * Mock text generation that starts to work only from the third attempt.
      * @since 0.1
      */
-    private static final class ThreeAttempts implements Supplier<Snippet> {
+    private static final class ThreeAttempts implements Supplier<Node> {
 
         /**
          * Attempts.
@@ -81,12 +81,12 @@ final class SeveralAttemptsTest {
         private final CountDownLatch attempts = new CountDownLatch(2);
 
         @Override
-        public Snippet get() {
-            final Snippet result;
+        public Node get() {
+            final Node result;
             if (this.attempts.getCount() == 0) {
-                result = new TextSnippet(new PlainText("success"));
+                result = new TerminalNode(new PlainText("success"));
             } else {
-                result = new ErrorSnippet(
+                result = new ErrorNode(
                     new Literal("two-attempts-only"), SeveralAttemptsTest.FAILURE
                 );
             }

@@ -25,9 +25,9 @@ package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,12 +57,12 @@ final class Several implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        final Snippet result;
+    public Node generate(final Context context) {
+        final Node result;
         if (this.all.isEmpty()) {
-            result = new TextSnippet(this, "");
+            result = new TerminalNode(this, "");
         } else {
-            result = new SignedSnippet(
+            result = new IntermediateNode(
                 this,
                 this.all.stream()
                     .map(rule -> rule.generate(context))

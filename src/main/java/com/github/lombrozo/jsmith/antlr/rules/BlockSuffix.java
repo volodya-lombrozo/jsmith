@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +88,7 @@ public final class BlockSuffix implements Rule, Suffix {
     }
 
     @Override
-    public Snippet generate(final Context context) {
+    public Node generate(final Context context) {
         return new LeftToRight(this, this.children).generate(context);
     }
 

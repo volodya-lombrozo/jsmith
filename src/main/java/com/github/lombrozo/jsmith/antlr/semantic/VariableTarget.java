@@ -26,9 +26,9 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import com.jcabi.log.Logger;
 import java.util.Optional;
 
@@ -64,13 +64,13 @@ public final class VariableTarget implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        Snippet text = this.origin.generate(context);
+    public Node generate(final Context context) {
+        Node text = this.origin.generate(context);
         if (!text.isError()) {
             final Optional<String> declared = context.scope().declared();
             if (declared.isPresent()) {
                 final String type = context.scope().type(declared.get());
-                text = new TextSnippet(
+                text = new TerminalNode(
                     this.name(),
                     declared.get(),
                     new Attributes()
@@ -88,7 +88,7 @@ public final class VariableTarget implements Rule {
                         context.scope()
                     )
                 );
-                text = new ErrorSnippet(this, "<variable is not declared yet>");
+                text = new ErrorNode(this, "<variable is not declared yet>");
             }
         }
         return text;

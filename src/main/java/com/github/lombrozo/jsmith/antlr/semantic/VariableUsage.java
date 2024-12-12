@@ -26,10 +26,10 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.Text;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import com.jcabi.log.Logger;
 import java.util.Optional;
 
@@ -64,8 +64,8 @@ public final class VariableUsage implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        final Snippet snippet = this.origin.generate(context);
+    public Node generate(final Context context) {
+        final Node snippet = this.origin.generate(context);
         final Optional<String> initialized;
         final Attributes attributes = context.attributes();
         final Optional<String> type = attributes.currentType();
@@ -77,7 +77,7 @@ public final class VariableUsage implements Rule {
         final Text text = snippet.text();
         final String author = text.labels().author();
         return initialized
-            .map(output -> (Snippet) new TextSnippet(author, output))
+            .map(output -> (Node) new TerminalNode(author, output))
             .orElseGet(
                 () -> {
                     Logger.warn(
@@ -87,7 +87,7 @@ public final class VariableUsage implements Rule {
                             context.scope()
                         )
                     );
-                    return new ErrorSnippet(author, "<variable not found>");
+                    return new ErrorNode(author, "<variable not found>");
                 }
             );
     }

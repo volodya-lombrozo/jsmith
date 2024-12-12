@@ -30,7 +30,7 @@ import com.github.lombrozo.jsmith.antlr.Attributes;
  * The program generates a snippet of the text.
  * @since 0.1
  */
-public interface Snippet {
+public interface Node {
 
     /**
      * Attributes that guide the generation.

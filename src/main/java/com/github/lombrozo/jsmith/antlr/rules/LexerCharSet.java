@@ -24,8 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import com.github.lombrozo.jsmith.random.Rand;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,15 +93,15 @@ public final class LexerCharSet implements Rule, Negatable {
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        return new TextSnippet(
+    public Node generate(final Context context) {
+        return new TerminalNode(
             this,
             this.rand.regex(Literal.replaceEscapes(this.text))
         );
     }
 
     @Override
-    public Snippet negate(final Context context) {
+    public Node negate(final Context context) {
         final String negated;
         final String replaced = Literal.replaceEscapes(this.text);
         if (replaced.startsWith("[")) {
@@ -109,7 +109,7 @@ public final class LexerCharSet implements Rule, Negatable {
         } else {
             negated = String.format("[^%s]", replaced);
         }
-        return new TextSnippet(
+        return new TerminalNode(
             this,
             this.rand.regex(LexerCharSet.unescapeUnicodes(negated))
         );

@@ -24,8 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import com.github.lombrozo.jsmith.random.Rand;
 import java.util.regex.Pattern;
 
@@ -105,7 +105,7 @@ public final class CharacterRange implements Rule, Negatable {
     }
 
     @Override
-    public Snippet generate(final Context context) {
+    public Node generate(final Context context) {
         try {
             return this.tryGenerate();
         } catch (final IllegalArgumentException exception) {
@@ -117,7 +117,7 @@ public final class CharacterRange implements Rule, Negatable {
     }
 
     @Override
-    public Snippet negate(final Context context) {
+    public Node negate(final Context context) {
         throw new UnsupportedOperationException("CharacterRange cannot be negated yet");
     }
 
@@ -140,7 +140,7 @@ public final class CharacterRange implements Rule, Negatable {
      * Try to generate a random character from the range.
      * @return Random character.
      */
-    private Snippet tryGenerate() {
+    private Node tryGenerate() {
         final String[] pair = CharacterRange.DOTS.split(
             CharacterRange.REDUNDANT.matcher(this.text).replaceAll("")
         );
@@ -153,7 +153,7 @@ public final class CharacterRange implements Rule, Negatable {
             start = CharacterRange.code(pair[0]);
             end = CharacterRange.code(pair[1]);
         }
-        return new TextSnippet(
+        return new TerminalNode(
             this,
             String.valueOf(Character.toChars(this.rand.range(start, end)))
         );

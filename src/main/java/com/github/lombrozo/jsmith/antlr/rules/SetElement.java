@@ -24,8 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,7 +79,7 @@ public final class SetElement implements Rule, Negatable {
     }
 
     @Override
-    public Snippet generate(final Context context) {
+    public Node generate(final Context context) {
         return new LeftToRight(this, this.children).generate(context);
     }
 
@@ -102,7 +102,7 @@ public final class SetElement implements Rule, Negatable {
     }
 
     @Override
-    public Snippet negate(final Context context) {
+    public Node negate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException(
                 "SetElement rule is empty, either SetElement or BlockSet should be added before generation"
@@ -119,7 +119,7 @@ public final class SetElement implements Rule, Negatable {
                 )
             );
         }
-        return new SignedSnippet(
+        return new IntermediateNode(
             this,
             this.children.stream()
                 .map(Negatable.class::cast)

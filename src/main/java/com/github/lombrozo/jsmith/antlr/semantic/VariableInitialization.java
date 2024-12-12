@@ -23,10 +23,9 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
-import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
 import java.util.Optional;
 
 /**
@@ -60,11 +59,10 @@ public final class VariableInitialization implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        final Snippet output = this.origin.generate(context);
+    public Node generate(final Context context) {
+        final Node output = this.origin.generate(context);
         if (!output.isError()) {
-            final Attributes additional = output.attributes();
-            final Optional<String> target = additional.variableTarget();
+            final Optional<String> target = output.attributes().variableTarget();
             if (target.isEmpty()) {
                 throw new IllegalStateException("Variable target is not provided");
             }

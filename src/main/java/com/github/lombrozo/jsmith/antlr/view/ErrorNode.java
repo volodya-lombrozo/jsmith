@@ -32,7 +32,7 @@ import java.util.List;
  * Dummy snippet that represents an error.
  * @since 0.1
  */
-public final class ErrorSnippet implements Snippet {
+public final class ErrorNode implements Node {
 
     /**
      * Error message.
@@ -44,7 +44,7 @@ public final class ErrorSnippet implements Snippet {
      * @param rule Rule that produces the error.
      * @param text Error message.
      */
-    public ErrorSnippet(final Rule rule, final String text) {
+    public ErrorNode(final Rule rule, final String text) {
         this(new ErrorText(rule.name(), text));
     }
 
@@ -53,7 +53,7 @@ public final class ErrorSnippet implements Snippet {
      * @param author Who writes the error.
      * @param text Error message.
      */
-    public ErrorSnippet(final String author, final String text) {
+    public ErrorNode(final String author, final String text) {
         this(new ErrorText(author, text));
     }
 
@@ -61,7 +61,7 @@ public final class ErrorSnippet implements Snippet {
      * Constructor.
      * @param text Error message.
      */
-    public ErrorSnippet(final Text text) {
+    public ErrorNode(final Text text) {
         this.message = text;
     }
 

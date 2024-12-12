@@ -24,8 +24,8 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,11 +75,11 @@ public final class RuleAltList implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
+    public Node generate(final Context context) {
         if (this.alternatives.isEmpty()) {
             throw new IllegalStateException("RuleAltList should have at least one alternative");
         }
-        return new SignedSnippet(
+        return new IntermediateNode(
             this,
             new SeveralAttempts(
                 this.name(),

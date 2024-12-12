@@ -25,7 +25,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
 
 /**
  * Rule that adds type to the context.
@@ -57,8 +57,8 @@ public final class TypeRule implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        final Snippet snippet = this.origin.generate(context);
+    public Node generate(final Context context) {
+        final Node snippet = this.origin.generate(context);
         snippet.attributes().withType(snippet.text().output());
         return snippet;
     }

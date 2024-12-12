@@ -26,8 +26,8 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -62,9 +62,9 @@ public final class VariableDeclaration implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
-        final Snippet text = this.origin.generate(context);
-        final Snippet result;
+    public Node generate(final Context context) {
+        final Node text = this.origin.generate(context);
+        final Node result;
         if (text.isError()) {
             result = text;
         } else {
@@ -76,7 +76,7 @@ public final class VariableDeclaration implements Rule {
             } else {
                 context.scope().declare(output);
             }
-            result = new TextSnippet(
+            result = new TerminalNode(
                 this.name(),
                 output,
                 new Attributes(Collections.singletonMap(VariableTarget.COMMENT, output))

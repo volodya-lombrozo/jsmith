@@ -24,9 +24,9 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.SignedSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
-import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import com.github.lombrozo.jsmith.random.Multiplier;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,16 +86,16 @@ public final class Element implements Rule {
     }
 
     @Override
-    public Snippet generate(final Context context) {
+    public Node generate(final Context context) {
         if (this.children.isEmpty()) {
             throw new IllegalStateException("Element should have at least one child");
         }
-        final Snippet result;
+        final Node result;
         final Rule first = this.children.get(0);
         if (Atom.isAtom(first) || LabeledElement.isLabeledElement(first) || Ebnf.isEbnf(first)) {
-            result = new SignedSnippet(this, this.multiplier().repeat(first).generate(context));
+            result = new IntermediateNode(this, this.multiplier().repeat(first).generate(context));
         } else if (ActionBlock.isActionBlock(first)) {
-            result = new TextSnippet(this, "");
+            result = new TerminalNode(this, "");
         } else {
             throw new IllegalStateException(
                 String.format("Unknown element type: %s", first.name())

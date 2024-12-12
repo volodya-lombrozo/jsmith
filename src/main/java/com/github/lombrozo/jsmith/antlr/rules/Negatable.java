@@ -24,7 +24,7 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.Node;
 
 /**
  * Negatable element that can be inverted.
@@ -42,6 +42,6 @@ public interface Negatable {
      * @param context Generation context.
      * @return Inverted element.
      */
-    Snippet negate(Context context);
+    Node negate(Context context);
 
 }

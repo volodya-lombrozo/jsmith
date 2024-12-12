@@ -23,8 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
-import com.github.lombrozo.jsmith.antlr.view.Snippet;
+import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.jcabi.log.Logger;
 import java.util.function.Supplier;
@@ -63,7 +63,7 @@ public final class SeveralAttempts {
     /**
      * Original output generator.
      */
-    private final Supplier<? extends Snippet> generator;
+    private final Supplier<? extends Node> generator;
 
     /**
      * Constructor.
@@ -72,7 +72,7 @@ public final class SeveralAttempts {
      */
     public SeveralAttempts(
         final String author,
-        final Supplier<? extends Snippet> generator
+        final Supplier<? extends Node> generator
     ) {
         this(SeveralAttempts.DEFAULT_ATTEMPTS, author, generator);
     }
@@ -86,7 +86,7 @@ public final class SeveralAttempts {
     SeveralAttempts(
         final int attempts,
         final String author,
-        final Supplier<? extends Snippet> original
+        final Supplier<? extends Node> original
     ) {
         this.max = attempts;
         this.author = author;
@@ -97,8 +97,8 @@ public final class SeveralAttempts {
      * Choose output.
      * @return Output.
      */
-    public Snippet choose() {
-        Snippet snippet;
+    public Node choose() {
+        Node snippet;
         int attempt = 0;
         do {
             snippet = this.generator.get();
@@ -114,7 +114,7 @@ public final class SeveralAttempts {
                 text.output()
             );
             Logger.warn(this, msg);
-            snippet = new ErrorSnippet(text);
+            snippet = new ErrorNode(text);
         }
         return snippet;
     }
