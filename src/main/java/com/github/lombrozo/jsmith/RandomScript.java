@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.AntlrListener;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.Unparser;
+import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.semantic.Scope;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.random.ConvergenceStrategy;
@@ -135,6 +136,16 @@ public final class RandomScript {
         return this.unparser.generate(
             rule, new Context(scope, new ConvergenceStrategy(this.params))
         ).text();
+    }
+
+    /**
+     * Get a parser rule by name.
+     * @param name Rule name.
+     * @return Parser rule.
+     */
+    public Rule rule(final String name) {
+        this.grammars.forEach(this::parse);
+        return this.unparser.rule(name);
     }
 
     /**

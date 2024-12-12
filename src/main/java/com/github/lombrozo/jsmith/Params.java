@@ -59,7 +59,7 @@ public final class Params {
     /**
      * Constructor.
      */
-    Params() {
+    public Params() {
         this(Params.DEFAULT_FACTOR);
     }
 
@@ -67,7 +67,7 @@ public final class Params {
      * Constructor.
      * @param seed Seed.
      */
-    Params(final long seed) {
+    public Params(final long seed) {
         this(Params.DEFAULT_FACTOR, seed);
     }
 

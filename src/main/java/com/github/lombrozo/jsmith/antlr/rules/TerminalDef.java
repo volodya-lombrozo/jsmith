@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.antlr.view.TextSnippet;
+import com.github.lombrozo.jsmith.random.Rand;
 
 /**
  * Terminal definition.
@@ -62,15 +63,30 @@ public final class TerminalDef implements Rule {
     private final String text;
 
     /**
+     * Random generator.
+     */
+    private final Rand rand;
+
+    /**
      * Constructor.
      * @param parent Parent rule.
      * @param unlexer Unparser.
      * @param text Text.
      */
     public TerminalDef(final Rule parent, final Unlexer unlexer, final String text) {
-        this.parentr = parent;
+        this(parent, unlexer, text, new Rand());
+    }
+
+    public TerminalDef(
+        final Rule parentr,
+        final Unlexer unlexer,
+        final String text,
+        final Rand rand
+    ) {
+        this.parentr = parentr;
         this.unlexer = unlexer;
         this.text = text;
+        this.rand = rand;
     }
 
     /**
@@ -94,7 +110,7 @@ public final class TerminalDef implements Rule {
             result = new TextSnippet(this, "");
         } else {
             result = this.unlexer.find(this.text)
-                .orElseGet(() -> new Literal(this.text))
+                .orElseGet(() -> new Literal(this, this.text, this.rand))
                 .generate(context);
         }
         return result;

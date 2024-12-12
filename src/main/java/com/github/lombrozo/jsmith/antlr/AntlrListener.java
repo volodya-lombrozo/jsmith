@@ -317,7 +317,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
                 ctx.getStart().getTokenIndex(), ANTLRv4Lexer.COMMENT
             )
         );
-        Rule rule = new TerminalDef(this.current, this.unlexer, ctx.getText());
+        Rule rule = new TerminalDef(this.current, this.unlexer, ctx.getText(), this.random);
         if (comments.has(UniqueRule.COMMENT)) {
             rule = new UniqueRule(rule, this.identifiers);
         }
@@ -461,7 +461,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
         if (ctx.LEXER_CHAR_SET() != null) {
             atom.append(new LexerCharSet(atom, ctx.LEXER_CHAR_SET().getText(), this.random));
         } else if (ctx.DOT() != null) {
-            atom.append(new Literal(ctx.DOT().getText()));
+            atom.append(new Literal(atom, ctx.DOT().getText(), this.random));
         }
         this.down(atom);
         super.enterLexerAtom(ctx);
@@ -806,7 +806,7 @@ public final class AntlrListener extends ANTLRv4ParserBaseListener {
             set.append(new LexerCharSet(set, ctx.LEXER_CHAR_SET().getText(), this.random));
         }
         if (ctx.STRING_LITERAL() != null) {
-            set.append(new Literal(ctx.STRING_LITERAL().getText()));
+            set.append(new Literal(set, ctx.STRING_LITERAL().getText(), this.random));
         }
         this.down(set);
         super.enterSetElement(ctx);
