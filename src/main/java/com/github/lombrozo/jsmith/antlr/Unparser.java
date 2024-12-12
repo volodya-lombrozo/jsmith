@@ -24,6 +24,7 @@
 package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,11 +74,15 @@ public final class Unparser {
      * @return String representation of the parser rule.
      */
     public Node generate(final String rule, final Context context) {
-        if (!this.rules.containsKey(rule)) {
-            throw new IllegalStateException(
-                String.format("Rule not found: %s. All available rules: [%s]", rule, this.rules)
-            );
+        try {
+            if (!this.rules.containsKey(rule)) {
+                throw new IllegalStateException(
+                    String.format("Rule not found: %s. All available rules: [%s]", rule, this.rules)
+                );
+            }
+            return this.rules.get(rule).generate(context);
+        } catch (final WrongPathException exception) {
+            throw new IllegalStateException("Cannot generate the output", exception);
         }
-        return this.rules.get(rule).generate(context);
     }
 }

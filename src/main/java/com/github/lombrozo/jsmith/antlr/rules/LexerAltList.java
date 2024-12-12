@@ -83,10 +83,10 @@ public final class LexerAltList implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         return new IntermediateNode(
             this,
-            new SeveralAttempts(
+            new SeveralAttemptsError(
                 this.name(),
                 () -> context.strategy().choose(this, this.children).generate(context)
             ).choose()

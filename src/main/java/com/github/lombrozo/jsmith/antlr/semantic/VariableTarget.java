@@ -26,10 +26,9 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
-import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
-import com.jcabi.log.Logger;
 import java.util.Optional;
 
 /**
@@ -64,31 +63,24 @@ public final class VariableTarget implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
-        Node text = this.origin.generate(context);
-        if (!text.isError()) {
-            final Optional<String> declared = context.scope().declared();
-            if (declared.isPresent()) {
-                final String type = context.scope().type(declared.get());
-                text = new TerminalNode(
-                    this.name(),
-                    declared.get(),
-                    new Attributes()
-                        .withType(type)
-                        .withTarget(declared.get())
-                );
-            } else {
-                Logger.warn(
-                    this,
-                    String.format(
-                        "We can't find any declared variable in the scope '%s'",
-                        context.scope()
-                    )
-                );
-                text = new ErrorNode(this, "<variable is not declared yet>");
-            }
+    public Node generate(final Context context) throws WrongPathException {
+        final Optional<String> declared = context.scope().declared();
+        if (declared.isPresent()) {
+            return new TerminalNode(
+                this.name(),
+                declared.get(),
+                new Attributes()
+                    .withType(context.scope().type(declared.get()))
+                    .withTarget(declared.get())
+            );
+        } else {
+            throw new WrongPathException(
+                String.format(
+                    "We can't find any declared variable in the scope '%s'",
+                    context.scope()
+                )
+            );
         }
-        return text;
     }
 
     @Override

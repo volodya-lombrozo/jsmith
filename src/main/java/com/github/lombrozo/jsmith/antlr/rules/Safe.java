@@ -85,10 +85,10 @@ public final class Safe implements Rule, Suffix, Negatable {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         final List<Rule> path = context.path();
         if (path.size() >= this.limit) {
-            throw new RecursionException(
+            throw new WrongPathException(
                 String.format(
                     "Long generation path! Most probably you have a recursion here: %s",
                     new Trace(path).line()

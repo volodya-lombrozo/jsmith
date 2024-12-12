@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 final class TracedTest {
 
     @Test
-    void tracesRule() {
+    void tracesRule() throws WrongPathException {
         final Cage cage = new Cage();
         final Rule root = new Traced(new Root());
         final Rule alternatives = new Traced(new AltList());

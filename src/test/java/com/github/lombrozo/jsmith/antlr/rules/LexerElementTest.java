@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 final class LexerElementTest {
 
     @Test
-    void generatesLexerAtomWithEbnfSuffix() {
+    void generatesLexerAtomWithEbnfSuffix() throws WrongPathException {
         final Rule element = new LexerElement();
         final Rule atom = new LexerAtom();
         final Rule literal = new Literal("a");
@@ -53,7 +53,7 @@ final class LexerElementTest {
     }
 
     @Test
-    void generatesLexerAtomWithoutEbnfSuffix() {
+    void generatesLexerAtomWithoutEbnfSuffix() throws WrongPathException {
         final LexerElement element = new LexerElement();
         final Rule atom = new LexerAtom(element);
         final Rule literal = new Literal("a");
@@ -67,7 +67,7 @@ final class LexerElementTest {
     }
 
     @Test
-    void generatesLexerBlockWithEbnfSuffix() {
+    void generatesLexerBlockWithEbnfSuffix() throws WrongPathException {
         final Rule element = new LexerElement();
         final Rule block = new LexerBlock();
         final Rule literal = new Literal("b");
@@ -85,7 +85,7 @@ final class LexerElementTest {
     }
 
     @Test
-    void generatesLexerBlockWithoutEbnfSuffix() {
+    void generatesLexerBlockWithoutEbnfSuffix() throws WrongPathException {
         final Rule element = new LexerElement();
         final Rule block = new LexerBlock();
         final Rule literal = new Literal("b");
@@ -99,7 +99,7 @@ final class LexerElementTest {
     }
 
     @Test
-    void generatesActionBlockWithoutQuestion() {
+    void generatesActionBlockWithoutQuestion() throws WrongPathException {
         final Rule element = new LexerElement();
         final Rule action = new ActionBlock();
         final Rule literal = new Literal("c");
@@ -113,7 +113,7 @@ final class LexerElementTest {
     }
 
     @Test
-    void generatesActionBlockWithQuestion() {
+    void generatesActionBlockWithQuestion() throws WrongPathException {
         final Rule element = new LexerElement();
         final Rule action = new ActionBlock();
         final Rule literal = new Literal("c");

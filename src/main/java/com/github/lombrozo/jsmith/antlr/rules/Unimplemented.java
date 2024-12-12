@@ -70,7 +70,7 @@ public abstract class Unimplemented implements Rule {
     }
 
     @Override
-    public final Node generate(final Context context) {
+    public final Node generate(final Context context) throws WrongPathException {
         return new LeftToRight(this, this.children).generate(context);
     }
 

@@ -85,7 +85,7 @@ public final class LexerElement implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         return new IntermediateNode(
             this,
             this.multiplier().repeat(this.children.get(0)).generate(context)

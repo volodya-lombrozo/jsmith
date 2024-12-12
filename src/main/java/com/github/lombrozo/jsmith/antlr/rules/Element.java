@@ -86,7 +86,7 @@ public final class Element implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         if (this.children.isEmpty()) {
             throw new IllegalStateException("Element should have at least one child");
         }

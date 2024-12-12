@@ -69,7 +69,7 @@ public final class LeftToRight implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         Context current = context;
         final List<Node> res = new ArrayList<>(this.all.size());
         for (final Rule rule : this.all) {

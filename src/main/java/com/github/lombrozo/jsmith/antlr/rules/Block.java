@@ -75,7 +75,7 @@ public final class Block implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         return new LeftToRight(this, this.elements).generate(context);
     }
 

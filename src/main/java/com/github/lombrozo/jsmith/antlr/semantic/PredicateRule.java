@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.jcabi.log.Logger;
@@ -67,7 +68,7 @@ public final class PredicateRule implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         final Node res;
         final Optional<String> opttype = context.attributes().currentType();
         if (opttype.isPresent()) {
@@ -75,11 +76,14 @@ public final class PredicateRule implements Rule {
             if (current.equals(this.type)) {
                 res = this.origin.generate(context);
             } else {
-                final String msg = String.format(
-                    "Type mismatch, expected: %s, but got: %s", this.type, current
+                throw new WrongPathException(
+                    String.format("Type mismatch, expected: %s, but got: %s", this.type, current)
                 );
-                Logger.warn(this, msg);
-                res = new ErrorNode(this, msg);
+//                final String msg = String.format(
+//                    "Type mismatch, expected: %s, but got: %s", this.type, current
+//                );
+//                Logger.warn(this, msg);
+//                res = new ErrorNode(this, msg);
             }
         } else {
             res = this.origin.generate(context);

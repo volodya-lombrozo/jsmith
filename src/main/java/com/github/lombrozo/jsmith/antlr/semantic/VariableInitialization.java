@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import java.util.Optional;
 
@@ -59,15 +60,13 @@ public final class VariableInitialization implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         final Node output = this.origin.generate(context);
-        if (!output.isError()) {
-            final Optional<String> target = output.attributes().variableTarget();
-            if (target.isEmpty()) {
-                throw new IllegalStateException("Variable target is not provided");
-            }
-            context.scope().init(target.get());
+        final Optional<String> target = output.attributes().variableTarget();
+        if (target.isEmpty()) {
+            throw new IllegalStateException("Variable target is not provided");
         }
+        context.scope().init(target.get());
         return output;
     }
 

@@ -89,7 +89,7 @@ public final class Ebnf implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         if (this.children.isEmpty()) {
             throw new IllegalStateException(
                 "Ebnf should have at least one 'Block', but it's empty"

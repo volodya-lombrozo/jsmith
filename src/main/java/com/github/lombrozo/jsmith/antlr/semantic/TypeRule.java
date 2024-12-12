@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 
 /**
@@ -57,7 +58,7 @@ public final class TypeRule implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         final Node snippet = this.origin.generate(context);
         snippet.attributes().withType(snippet.text().output());
         return snippet;

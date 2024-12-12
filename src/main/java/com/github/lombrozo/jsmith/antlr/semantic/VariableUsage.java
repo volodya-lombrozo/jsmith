@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.Text;
@@ -64,7 +65,7 @@ public final class VariableUsage implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         final Node snippet = this.origin.generate(context);
         final Optional<String> initialized;
         final Attributes attributes = context.attributes();
@@ -76,19 +77,14 @@ public final class VariableUsage implements Rule {
         }
         final Text text = snippet.text();
         final String author = text.labels().author();
-        return initialized
-            .map(output -> (Node) new TerminalNode(author, output))
-            .orElseGet(
-                () -> {
-                    Logger.warn(
-                        this,
-                        String.format(
-                            "We cannot find any initialized variable in the scope '%s'",
-                            context.scope()
-                        )
-                    );
-                    return new ErrorNode(author, "<variable not found>");
-                }
+        return initialized.map(output -> (Node) new TerminalNode(author, output))
+            .orElseThrow(
+                () -> new WrongPathException(
+                    String.format(
+                        "We cannot find any initialized variable in the scope '%s'",
+                        context.scope()
+                    )
+                )
             );
     }
 

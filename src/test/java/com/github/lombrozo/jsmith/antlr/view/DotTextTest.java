@@ -29,6 +29,7 @@ import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import com.github.lombrozo.jsmith.antlr.rules.ParserRuleSpec;
 import com.github.lombrozo.jsmith.antlr.rules.Root;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import java.util.Arrays;
 import java.util.Collections;
 import org.hamcrest.MatcherAssert;
@@ -82,7 +83,7 @@ final class DotTextTest {
     }
 
     @Test
-    void createsSimpleTreeWithRulesOnly() {
+    void createsSimpleTreeWithRulesOnly() throws WrongPathException {
         final Root top = new Root();
         final Rule first = new ParserRuleSpec("first", top);
         top.append(first);

@@ -26,9 +26,9 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
-import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -62,26 +62,20 @@ public final class VariableDeclaration implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
-        final Node text = this.origin.generate(context);
+    public Node generate(final Context context) throws WrongPathException {
         final Node result;
-        if (text.isError()) {
-            result = text;
+        final String output = this.origin.generate(context).text().output();
+        final Optional<String> type = context.attributes().currentType();
+        if (type.isPresent()) {
+            context.scope().declare(output, type.get());
         } else {
-            final String output = text.text().output();
-            final Attributes attributes = context.attributes();
-            final Optional<String> type = attributes.currentType();
-            if (type.isPresent()) {
-                context.scope().declare(output, type.get());
-            } else {
-                context.scope().declare(output);
-            }
-            result = new TerminalNode(
-                this.name(),
-                output,
-                new Attributes(Collections.singletonMap(VariableTarget.COMMENT, output))
-            );
+            context.scope().declare(output);
         }
+        result = new TerminalNode(
+            this.name(),
+            output,
+            new Attributes().withTarget(output)
+        );
         return result;
     }
 

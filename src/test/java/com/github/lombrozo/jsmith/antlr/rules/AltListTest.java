@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 final class AltListTest {
 
     @Test
-    void generatesOneOfTheAlternativesFromMany() {
+    void generatesOneOfTheAlternativesFromMany() throws WrongPathException {
         MatcherAssert.assertThat(
             "We expect that exactly one option will be chosen from the list of alternatives",
             new AltList(new Empty(), new Literal("1"), new Literal("2"))
@@ -48,7 +48,7 @@ final class AltListTest {
     }
 
     @Test
-    void generatesOneAlternativeFromSingle() {
+    void generatesOneAlternativeFromSingle() throws WrongPathException {
         MatcherAssert.assertThat(
             "We expect that the only option will be chosen from the list of alternatives",
             new AltList(new Empty(), new Literal("1"))
@@ -60,7 +60,7 @@ final class AltListTest {
     }
 
     @Test
-    void generatesNothing() {
+    void generatesNothing() throws WrongPathException {
         MatcherAssert.assertThat(
             "We expect that nothing will be generated",
             new AltList(new Empty()).generate(new Context()).text().output(),

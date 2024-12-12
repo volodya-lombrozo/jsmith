@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 final class EbnfTest {
 
     @Test
-    void generatesSingleBlock() {
+    void generatesSingleBlock() throws WrongPathException {
         final Rule ebnf = new Ebnf();
         final String value = "1";
         ebnf.append(new Literal(value));
@@ -47,7 +47,7 @@ final class EbnfTest {
     }
 
     @Test
-    void generatesSeveralBlocks() {
+    void generatesSeveralBlocks() throws WrongPathException {
         final Rule ebnf = new Ebnf();
         final String value = "1";
         ebnf.append(new Literal(value));

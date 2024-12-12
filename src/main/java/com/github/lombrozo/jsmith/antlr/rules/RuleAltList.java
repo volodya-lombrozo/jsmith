@@ -75,13 +75,13 @@ public final class RuleAltList implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         if (this.alternatives.isEmpty()) {
             throw new IllegalStateException("RuleAltList should have at least one alternative");
         }
         return new IntermediateNode(
             this,
-            new SeveralAttempts(
+            new SeveralAttemptsError(
                 this.name(),
                 () -> context.strategy().choose(this, this.alternatives).generate(context)
             ).choose()

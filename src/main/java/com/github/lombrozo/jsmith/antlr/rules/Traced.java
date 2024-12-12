@@ -54,7 +54,7 @@ public final class Traced implements Rule, Suffix, Negatable {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         return this.original.generate(context.next(this.original));
     }
 

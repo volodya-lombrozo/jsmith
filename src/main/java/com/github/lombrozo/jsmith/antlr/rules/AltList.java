@@ -99,14 +99,14 @@ public final class AltList implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         final Node result;
         if (this.alternatives.isEmpty()) {
             result = new TerminalNode(this.name(), "");
         } else {
             result = new IntermediateNode(
                 this,
-                new SeveralAttempts(
+                new SeveralAttemptsError(
                     this.name(),
                     () -> context.strategy()
                         .choose(this, this.alternatives)

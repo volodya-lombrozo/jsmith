@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 final class TerminalDefTest {
 
     @Test
-    void retrievesLexerRule() {
+    void retrievesLexerRule() throws WrongPathException {
         final Unlexer unlexer = new Unlexer();
         final String name = "PLUS";
         final LexerRuleSpec rule = new LexerRuleSpec(name);
@@ -51,7 +51,7 @@ final class TerminalDefTest {
     }
 
     @Test
-    void retrievesLiteral() {
+    void retrievesLiteral() throws WrongPathException {
         final String text = "-";
         MatcherAssert.assertThat(
             "We expect that the literal will be retrieved",
@@ -61,7 +61,7 @@ final class TerminalDefTest {
     }
 
     @Test
-    void ignoresEndOfFile() {
+    void ignoresEndOfFile() throws WrongPathException {
         MatcherAssert.assertThat(
             "We expect that the end of file will be ignored",
             new TerminalDef(new Unlexer(), "EOF").generate(new Context()).text().output(),

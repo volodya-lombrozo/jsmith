@@ -42,7 +42,7 @@ final class SafeTest {
         MatcherAssert.assertThat(
             "We expect meaningful exception message",
             Assertions.assertThrows(
-                RecursionException.class,
+                WrongPathException.class,
                 () -> new Safe().generate(
                     new Context(Collections.nCopies(Safe.DEFAULT, new Literal("long chain")))
                 ),

@@ -92,7 +92,7 @@ public final class Atom implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         return new IntermediateNode(this, this.item.get().generate(context));
     }
 

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 final class LexerAltListTest {
 
     @Test
-    void generatesOnlyOneOfTheAlternatives() {
+    void generatesOnlyOneOfTheAlternatives() throws WrongPathException {
         final Rule list = new LexerAltList();
         list.append(new Literal("1"));
         list.append(new Literal("2"));

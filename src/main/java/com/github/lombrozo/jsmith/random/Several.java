@@ -24,7 +24,9 @@
 package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.rules.LeftToRight;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
@@ -41,13 +43,13 @@ final class Several implements Rule {
     /**
      * All children of the current node.
      */
-    private final List<? extends Rule> all;
+    private final List<Rule> all;
 
     /**
      * Constructor.
      * @param all All children of the current node.
      */
-    Several(final List<? extends Rule> all) {
+    Several(final List<Rule> all) {
         this.all = all;
     }
 
@@ -57,16 +59,14 @@ final class Several implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         final Node result;
         if (this.all.isEmpty()) {
             result = new TerminalNode(this, "");
         } else {
             result = new IntermediateNode(
                 this,
-                this.all.stream()
-                    .map(rule -> rule.generate(context))
-                    .collect(Collectors.toList())
+                new LeftToRight(this, this.all).generate(context)
             );
         }
         return result;

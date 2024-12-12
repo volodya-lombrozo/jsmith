@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 final class ElementTest {
 
     @Test
-    void generatesUsingAtomBranch() {
+    void generatesUsingAtomBranch() throws WrongPathException {
         final Root root = new Root();
         final Rule element = new Element(root);
         final Rule atom = new Atom(root);
@@ -51,7 +51,7 @@ final class ElementTest {
     }
 
     @Test
-    void generatesUsingAtomBranchAndEbnfSuffix() {
+    void generatesUsingAtomBranchAndEbnfSuffix() throws WrongPathException {
         final Root root = new Root();
         final Rule element = new Element(root);
         final Rule atom = new Atom(root);

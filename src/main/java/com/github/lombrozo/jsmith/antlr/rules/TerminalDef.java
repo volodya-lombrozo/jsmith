@@ -88,7 +88,7 @@ public final class TerminalDef implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         final Node result;
         if (TerminalDef.END_OF_FILE.equals(this.text)) {
             result = new TerminalNode(this, "");

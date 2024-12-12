@@ -79,7 +79,7 @@ public final class SetElement implements Rule, Negatable {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         return new LeftToRight(this, this.children).generate(context);
     }
 

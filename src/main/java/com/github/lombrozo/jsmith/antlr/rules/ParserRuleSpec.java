@@ -88,7 +88,7 @@ public final class ParserRuleSpec implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         return new IntermediateNode(
             Collections.singletonList(new LeftToRight(this, this.list).generate(context)),
             new Labels(this).withRule(this.rname)
