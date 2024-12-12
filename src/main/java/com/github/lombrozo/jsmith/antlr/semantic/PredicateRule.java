@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.ErrorSnippet;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.jcabi.log.Logger;
@@ -87,8 +88,24 @@ public final class PredicateRule implements Rule {
     }
 
     @Override
-    public List<Rule> children(final Context context) {
-        return Collections.emptyList();
+    public List<Rule> children(final Context context) throws WrongPathException {
+        final Rule res;
+        final Attributes attributes = context.attributes();
+        final Optional<String> opttype = attributes.currentType();
+        if (opttype.isPresent()) {
+            final String current = opttype.get();
+            if (current.equals(this.type)) {
+                res = this.origin;
+            } else {
+                throw new WrongPathException(String.format(
+                    "Type mismatch, expected: %s, but got: %s", this.type, current
+                )
+                );
+            }
+        } else {
+            res = this.origin;
+        }
+        return Collections.singletonList(res);
     }
 
     @Override

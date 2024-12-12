@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import com.github.lombrozo.jsmith.random.Rand;
 import java.util.Collections;
@@ -67,8 +68,9 @@ public final class ScopeRule implements Rule {
     }
 
     @Override
-    public List<Rule> children(final Context context) {
-        return Collections.emptyList();
+    public List<Rule> children(final Context context) throws WrongPathException {
+//        return Collections.emptyList();
+        return this.origin.children(context.withScope(new Scope(context.scope(), this.random)));
     }
 
     @Override

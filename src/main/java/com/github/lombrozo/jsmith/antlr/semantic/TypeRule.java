@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.Snippet;
 import java.util.Collections;
 import java.util.List;
@@ -66,8 +67,12 @@ public final class TypeRule implements Rule {
     }
 
     @Override
-    public List<Rule> children(final Context context) {
-        return Collections.emptyList();
+    public List<Rule> children(final Context context) throws WrongPathException {
+//        return Collections.emptyList();
+        final Snippet snippet = this.origin.generate(context);
+        return this.origin.children(
+            context.withAttributes(context.attributes().withType(snippet.text().output()))
+        );
     }
 
     @Override
