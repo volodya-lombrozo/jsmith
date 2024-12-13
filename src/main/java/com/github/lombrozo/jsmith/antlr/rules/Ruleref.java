@@ -79,7 +79,7 @@ public final class Ruleref implements Rule {
     }
 
     @Override
-    public Node generate(final Context context) {
+    public Node generate(final Context context) throws WrongPathException {
         return this.unparser.generate(this.ref, context);
     }
 

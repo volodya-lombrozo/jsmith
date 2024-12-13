@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr;
 
 import com.github.lombrozo.jsmith.antlr.rules.AltList;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ import org.junit.jupiter.api.RepeatedTest;
 final class UnparserTest {
 
     @RepeatedTest(10)
-    void generatesDifferentAlternativesForTheSameRule() {
+    void generatesDifferentAlternativesForTheSameRule() throws WrongPathException {
         final Unparser unparser = new Unparser();
         final AltList alternatives = new AltList();
         IntStream.range(0, 5)
@@ -48,9 +49,10 @@ final class UnparserTest {
             .map(Literal::new)
             .forEach(alternatives::append);
         unparser.with("stat", alternatives);
-        final Set<String> chosen = IntStream.range(0, 50)
-            .mapToObj(i -> unparser.generate("stat", new Context()).text().output())
-            .collect(Collectors.toCollection(LinkedHashSet::new));
+        final Set<String> chosen = new LinkedHashSet<>(0);
+        for (int index = 0; index < 50; ++index) {
+            chosen.add(unparser.generate("stat", new Context()).text().output());
+        }
         MatcherAssert.assertThat(
             "We expect that the result will contain all different alternatives",
             chosen.size(),

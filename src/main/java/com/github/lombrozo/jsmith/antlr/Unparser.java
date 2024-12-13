@@ -73,16 +73,12 @@ public final class Unparser {
      * @param context Context.
      * @return String representation of the parser rule.
      */
-    public Node generate(final String rule, final Context context) {
-        try {
-            if (!this.rules.containsKey(rule)) {
-                throw new IllegalStateException(
-                    String.format("Rule not found: %s. All available rules: [%s]", rule, this.rules)
-                );
-            }
-            return this.rules.get(rule).generate(context);
-        } catch (final WrongPathException exception) {
-            throw new IllegalStateException("Cannot generate the output", exception);
+    public Node generate(final String rule, final Context context) throws WrongPathException {
+        if (!this.rules.containsKey(rule)) {
+            throw new IllegalStateException(
+                String.format("Rule not found: %s. All available rules: [%s]", rule, this.rules)
+            );
         }
+        return this.rules.get(rule).generate(context);
     }
 }

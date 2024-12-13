@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 final class RulerefTest {
 
     @Test
-    void generatesRuleReferenceByUsingLink() {
+    void generatesRuleReferenceByUsingLink() throws WrongPathException {
         final String ref = "reference";
         final String expected = "Linked rule value";
         final ParserRuleSpec rule = new ParserRuleSpec(ref, new Empty());

@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.AntlrListener;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unlexer;
 import com.github.lombrozo.jsmith.antlr.Unparser;
+import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.semantic.Scope;
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.random.ConvergenceStrategy;
@@ -130,11 +131,23 @@ public final class RandomScript {
      * @return Random script text.
      */
     public Text generate(final String rule) {
-        final Scope scope = new Scope(new Rand(this.params.seed()));
-        this.grammars.forEach(this::parse);
-        return this.unparser.generate(
-            rule, new Context(scope, new ConvergenceStrategy(this.params))
-        ).text();
+        try {
+            final Scope scope = new Scope(new Rand(this.params.seed()));
+            this.grammars.forEach(this::parse);
+            return this.unparser.generate(
+                rule, new Context(scope, new ConvergenceStrategy(this.params))
+            ).text();
+        } catch (final WrongPathException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    String.format(
+                        "Error generating random script with %s",
+                        this.params
+                    ),
+                    exception
+                )
+            );
+        }
     }
 
     /**
