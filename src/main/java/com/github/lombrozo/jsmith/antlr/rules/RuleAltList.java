@@ -26,7 +26,6 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
 import com.github.lombrozo.jsmith.antlr.view.Node;
-import com.github.lombrozo.jsmith.antlr.view.Trace;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,24 +79,13 @@ public final class RuleAltList implements Rule {
         if (this.alternatives.isEmpty()) {
             throw new IllegalStateException("RuleAltList should have at least one alternative");
         }
-
-        try {
-            return new IntermediateNode(
-                this,
-                new SeveralAttemptsError(
-                    new Trace(context.path()).line() + ": " + this.name(),
-                    () -> context.strategy().choose(this, this.alternatives).generate(context)
-                ).choose()
-            );
-        } catch (final WrongPathException ex) {
-            throw new WrongPathException(
-                String.format(
-                    "Error in rule %s: %s",
-                    this.name(),
-                    ex.getMessage()
-                )
-            );
-        }
+        return new IntermediateNode(
+            this,
+            new SeveralAttempts(
+                this.name(),
+                () -> context.strategy().choose(this, this.alternatives).generate(context)
+            ).choose()
+        );
     }
 
     @Override

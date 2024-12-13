@@ -106,7 +106,7 @@ public final class AltList implements Rule {
         } else {
             result = new IntermediateNode(
                 this,
-                new SeveralAttemptsError(
+                new SeveralAttempts(
                     this.name(),
                     () -> context.strategy()
                         .choose(this, this.alternatives)

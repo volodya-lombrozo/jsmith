@@ -26,9 +26,7 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
-import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
 import com.github.lombrozo.jsmith.antlr.view.Node;
-import com.jcabi.log.Logger;
 import java.util.Optional;
 
 /**
@@ -79,11 +77,6 @@ public final class PredicateRule implements Rule {
                 throw new WrongPathException(
                     String.format("Type mismatch, expected: %s, but got: %s", this.type, current)
                 );
-//                final String msg = String.format(
-//                    "Type mismatch, expected: %s, but got: %s", this.type, current
-//                );
-//                Logger.warn(this, msg);
-//                res = new ErrorNode(this, msg);
             }
         } else {
             res = this.origin.generate(context);

@@ -27,11 +27,9 @@ import com.github.lombrozo.jsmith.antlr.Attributes;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
-import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
 import com.github.lombrozo.jsmith.antlr.view.Node;
-import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
-import com.jcabi.log.Logger;
+import com.github.lombrozo.jsmith.antlr.view.Text;
 import java.util.Optional;
 
 /**

@@ -32,12 +32,13 @@ import java.util.List;
 /**
  * Left to right rule.
  * This rule traverses the rules from left to right and correctly applies the context.
+ * I've tried to rewrite this class to some sort of machine that would traverse the rules and
+ * apply the context to them, but failed.
+ * The solution with machine looks pretty overcomplicated, at least with the current design.
+ * You can check it here: https://github.com/volodya-lombrozo/jsmith/tree/106_machine
+ * So, we need to keep this class to correctly transfer context from one rule to another, from
+ * left to right.
  * @since 0.1
- * @todo #99:90min Implement Hight Level Machine For Traversing Rules.
- *  Implement a high-level machine that will traverse the rules and apply correct context to them.
- *  Currently we are required to add classes like {@link LeftToRight} to traverse the rules.
- *  This is not a good approach and we need to implement a high-level machine that will do this.
- *  This should simplify the code and make it more readable.
  */
 public final class LeftToRight implements Rule {
 

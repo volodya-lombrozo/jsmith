@@ -23,49 +23,62 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
-import com.github.lombrozo.jsmith.antlr.view.PlainText;
 import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.PlainText;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import java.util.concurrent.CountDownLatch;
-import java.util.function.Supplier;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * Test cases for the {@link SeveralAttempts} class.
+ * Test case for {@link SeveralAttempts}.
  * @since 0.1
  */
 final class SeveralAttemptsTest {
 
-    /**
-     * Failure message.
-     */
-    private static final String FAILURE = "failure";
-
     @ParameterizedTest
-    @CsvSource({"1, failure", "2, failure", "3, success", "4, success"})
-    void choosesCorrectly(final int attempts, final String expected) {
+    @CsvSource({"3, success", "4, success"})
+    void choosesCorrectly(final int attempts, final String expected) throws WrongPathException {
         MatcherAssert.assertThat(
             String.format("We expect the %d attempt to be %s", attempts, expected),
-            new SeveralAttempts(attempts, "test", new ThreeAttempts()).choose().text().output(),
+            new SeveralAttempts(attempts, "test", new ThreeAttempts())
+                .choose()
+                .text()
+                .output(),
             Matchers.containsString(expected)
         );
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2})
+    void throwsErrorForTheFirstAttempts(final int attempts) {
+        Assertions.assertThrows(
+            WrongPathException.class,
+            () -> new SeveralAttempts(attempts, "test", new ThreeAttempts())
+                .choose()
+                .text()
+                .output(),
+            String.format("We expect first %d attempts to be failed", attempts)
+        );
+    }
+
     @Test
-    void choosesCorrectlyForSingleAttempt() {
-        MatcherAssert.assertThat(
-            "We expect the single attempt to be failure",
-            new SeveralAttempts(
+    void failsForSingleAttempt() {
+        Assertions.assertThrows(
+            WrongPathException.class,
+            () -> new SeveralAttempts(
                 1,
                 "test",
-                () -> new ErrorNode(new Root(), SeveralAttemptsTest.FAILURE)
+                () -> {
+                    throw new WrongPathException("Mock failure");
+                }
             ).choose().text().output(),
-            Matchers.containsString(SeveralAttemptsTest.FAILURE)
+            "We expect that the exception will be thrown"
         );
     }
 
@@ -73,7 +86,7 @@ final class SeveralAttemptsTest {
      * Mock text generation that starts to work only from the third attempt.
      * @since 0.1
      */
-    private static final class ThreeAttempts implements Supplier<Node> {
+    private static final class ThreeAttempts implements SeveralAttempts.Attempt {
 
         /**
          * Attempts.
@@ -81,16 +94,15 @@ final class SeveralAttemptsTest {
         private final CountDownLatch attempts = new CountDownLatch(2);
 
         @Override
-        public Node get() {
+        public Node make() throws WrongPathException {
             final Node result;
             if (this.attempts.getCount() == 0) {
                 result = new TerminalNode(new PlainText("success"));
+                this.attempts.countDown();
             } else {
-                result = new ErrorNode(
-                    new Literal("two-attempts-only"), SeveralAttemptsTest.FAILURE
-                );
+                this.attempts.countDown();
+                throw new WrongPathException("Some error");
             }
-            this.attempts.countDown();
             return result;
         }
     }

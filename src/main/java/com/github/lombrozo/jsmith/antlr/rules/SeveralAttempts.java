@@ -23,11 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
-import com.github.lombrozo.jsmith.antlr.view.ErrorNode;
 import com.github.lombrozo.jsmith.antlr.view.Node;
-import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.jcabi.log.Logger;
-import java.util.function.Supplier;
 
 /**
  * Attempt to generate output.
@@ -63,7 +60,7 @@ public final class SeveralAttempts {
     /**
      * Original output generator.
      */
-    private final Supplier<? extends Node> generator;
+    private final Attempt generator;
 
     /**
      * Constructor.
@@ -72,7 +69,7 @@ public final class SeveralAttempts {
      */
     public SeveralAttempts(
         final String author,
-        final Supplier<? extends Node> generator
+        final Attempt generator
     ) {
         this(SeveralAttempts.DEFAULT_ATTEMPTS, author, generator);
     }
@@ -86,7 +83,7 @@ public final class SeveralAttempts {
     SeveralAttempts(
         final int attempts,
         final String author,
-        final Supplier<? extends Node> original
+        final Attempt original
     ) {
         this.max = attempts;
         this.author = author;
@@ -97,25 +94,38 @@ public final class SeveralAttempts {
      * Choose output.
      * @return Output.
      */
-    public Node choose() {
-        Node snippet;
+    public Node choose() throws WrongPathException {
+        Node snippet = null;
         int attempt = 0;
+        WrongPathException origin = null;
         do {
-            snippet = this.generator.get();
+            try {
+                snippet = this.generator.make();
+            } catch (final WrongPathException exception) {
+                Logger.warn(this, exception.getMessage());
+                origin = exception;
+            }
             attempt = attempt + 1;
-        } while (snippet.isError() && attempt < this.max);
-        if (snippet.isError()) {
-            final Text text = snippet.text();
-            final String msg = String.format(
-                "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
-                this.max,
-                this.author,
-                text.labels().author(),
-                text.output()
+        } while (snippet == null && attempt < this.max);
+        if (snippet == null) {
+            throw new WrongPathException(
+                String.format(
+                    "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed. The rule is '%s'",
+                    this.max,
+                    this.author
+                ),
+                origin
             );
-            Logger.warn(this, msg);
-            snippet = new ErrorNode(text);
         }
         return snippet;
+    }
+
+    /**
+     * Attempt to generate output.
+     * @since 0.1
+     */
+    @FunctionalInterface
+    interface Attempt {
+        Node make() throws WrongPathException;
     }
 }

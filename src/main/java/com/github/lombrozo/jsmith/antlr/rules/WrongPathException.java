@@ -23,12 +23,26 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+/**
+ * This exception is used during the generation.
+ * It indicates that the path is wrong and the rule cannot be generated.
+ * @since 0.1
+ */
 public final class WrongPathException extends Exception {
 
+    /**
+     * Constructor.
+     * @param message Message.
+     */
     public WrongPathException(final String message) {
         super(message);
     }
 
+    /**
+     * Constructor.
+     * @param message Message.
+     * @param cause Cause.
+     */
     public WrongPathException(final String message, final Throwable cause) {
         super(message, cause);
     }

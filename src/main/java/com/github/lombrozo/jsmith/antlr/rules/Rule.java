@@ -42,6 +42,7 @@ public interface Rule {
      * Generate code.
      * @param context Generation context.
      * @return Generated code.
+     * @throws WrongPathException If the path is wrong.
      */
     Node generate(Context context) throws WrongPathException;
 

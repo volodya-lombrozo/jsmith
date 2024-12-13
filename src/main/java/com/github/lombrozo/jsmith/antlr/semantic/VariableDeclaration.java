@@ -29,7 +29,6 @@ import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
-import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -75,8 +74,7 @@ public final class VariableDeclaration implements Rule {
         result = new TerminalNode(
             this.name(),
             output,
-            new Attributes(Collections.singletonMap(VariableTarget.COMMENT, output))
-//                .withTarget(output)
+            new Attributes().withTarget(output)
         );
         return result;
     }
