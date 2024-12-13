@@ -49,7 +49,9 @@ class SeveralAttemptsErrorTest {
     void choosesCorrectly(final int attempts, final String expected) throws WrongPathException {
         MatcherAssert.assertThat(
             String.format("We expect the %d attempt to be %s", attempts, expected),
-            new SeveralAttemptsError(attempts, "test", new ThreeAttempts()).choose().text()
+            new SeveralAttemptsError(attempts, "test", new ThreeAttempts())
+                .choose()
+                .text()
                 .output(),
             Matchers.containsString(expected)
         );
@@ -101,10 +103,11 @@ class SeveralAttemptsErrorTest {
             final Node result;
             if (this.attempts.getCount() == 0) {
                 result = new TerminalNode(new PlainText("success"));
+                this.attempts.countDown();
             } else {
+                this.attempts.countDown();
                 throw new WrongPathException(SeveralAttemptsErrorTest.FAILURE);
             }
-            this.attempts.countDown();
             return result;
         }
     }

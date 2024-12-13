@@ -113,7 +113,7 @@ public final class SeveralAttemptsError {
         if (snippet == null) {
             throw new WrongPathException(
                 String.format(
-                    "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s'",
+                    "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed. The rule is '%s'",
                     this.max,
                     this.author
                 ),
