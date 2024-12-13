@@ -24,12 +24,12 @@
 package com.github.lombrozo.jsmith.random;
 
 import com.github.lombrozo.jsmith.antlr.Context;
-import com.github.lombrozo.jsmith.antlr.rules.LeftToRight;
 import com.github.lombrozo.jsmith.antlr.rules.Rule;
 import com.github.lombrozo.jsmith.antlr.rules.WrongPathException;
 import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,10 +64,11 @@ final class Several implements Rule {
         if (this.all.isEmpty()) {
             result = new TerminalNode(this, "");
         } else {
-            result = new IntermediateNode(
-                this,
-                new LeftToRight(this, this.all).generate(context)
-            );
+            final List<Node> res = new ArrayList<>(0);
+            for (final Rule rule : this.all) {
+                res.add(rule.generate(context));
+            }
+            result = new IntermediateNode(this, res);
         }
         return result;
     }

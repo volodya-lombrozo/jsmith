@@ -93,27 +93,6 @@ public final class SeveralAttemptsError {
         this.generator = original;
     }
 
-//            Rule rule = null;
-//        int attempt = 0;
-//        do {
-//            try {
-//                rule = this.generator.attempt();
-//            } catch (WrongPathException e) {
-//                Logger.warn(this, e.getMessage());
-//            }
-//            attempt = attempt + 1;
-//        } while (rule == null && attempt < this.max);
-//        if (rule == null) {
-//            final String msg = String.format(
-//                "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s'",
-//                this.max,
-//                this.author
-//            );
-//            Logger.warn(this, msg);
-//            throw new WrongPathException(msg);
-//        }
-//        return rule;
-
     /**
      * Choose output.
      * @return Output.
@@ -140,16 +119,6 @@ public final class SeveralAttemptsError {
                 ),
                 origin
             );
-//            final Text text = snippet.text();
-//            final String msg = String.format(
-//                "Can't generate output because constantly receive errors. I made %d attempts to generate output, but failed, the rule is '%s:%s', Message '%s'",
-//                this.max,
-//                this.author,
-//                text.labels().author(),
-//                text.output()
-//            );
-//            Logger.warn(this, msg);
-//            snippet = new ErrorNode(text);
         }
         return snippet;
     }
