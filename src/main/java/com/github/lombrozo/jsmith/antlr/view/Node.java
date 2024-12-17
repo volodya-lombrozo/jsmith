@@ -39,6 +39,13 @@ public interface Node {
     Attributes attributes();
 
     /**
+     * Copy of this node with new attributes.
+     * @param attributes New attributes.
+     * @return New node.
+     */
+    Node with(final Attributes attributes);
+
+    /**
      * Generated text.
      * @return Generated text.
      */

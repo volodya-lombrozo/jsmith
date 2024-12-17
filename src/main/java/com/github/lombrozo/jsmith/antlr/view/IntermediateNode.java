@@ -105,6 +105,15 @@ public final class IntermediateNode implements Node {
     }
 
     @Override
+    public Node with(final Attributes attributes) {
+        return new IntermediateNode(
+            this.snippets,
+            this.labels,
+            this.attrs.add(attributes)
+        );
+    }
+
+    @Override
     public Text text() {
         return new ComposedText(
             this.snippets.stream()

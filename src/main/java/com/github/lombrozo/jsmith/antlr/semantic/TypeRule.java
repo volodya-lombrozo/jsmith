@@ -60,8 +60,7 @@ public final class TypeRule implements Rule {
     @Override
     public Node generate(final Context context) throws WrongPathException {
         final Node snippet = this.origin.generate(context);
-        snippet.attributes().withType(snippet.text().output());
-        return snippet;
+        return snippet.with(snippet.attributes().withType(snippet.text().output()));
     }
 
     @Override

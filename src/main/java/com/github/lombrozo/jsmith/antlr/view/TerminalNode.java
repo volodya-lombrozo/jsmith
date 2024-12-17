@@ -94,6 +94,14 @@ public final class TerminalNode implements Node {
     }
 
     @Override
+    public Node with(final Attributes attributes) {
+        return new TerminalNode(
+            this.txt,
+            this.attrs.add(attributes)
+        );
+    }
+
+    @Override
     public Text text() {
         return this.txt;
     }

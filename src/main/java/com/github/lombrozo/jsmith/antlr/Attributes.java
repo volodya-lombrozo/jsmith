@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import org.checkerframework.checker.units.qual.A;
 
 /**
  * Attributes.
@@ -69,9 +70,9 @@ public final class Attributes {
      * @return New attributes.
      */
     public Attributes add(final Attributes other) {
-        final Map<String, String> map = new HashMap<>(this.attrs);
-        map.putAll(other.attrs);
-        return new Attributes(map);
+        final Map<String, String> res = this.copy();
+        res.putAll(other.attrs);
+        return new Attributes(res);
     }
 
     /**
@@ -83,13 +84,22 @@ public final class Attributes {
     }
 
     /**
+     * Current type.
+     * @return Type name.
+     */
+    public Optional<String> currentType() {
+        return Optional.ofNullable(this.attrs.get(Attributes.TYPE));
+    }
+
+    /**
      * With target.
      * @param target Variable name.
      * @return The same attributes.
      */
     public Attributes withTarget(final String target) {
-        this.attrs.put(Attributes.TARGET, target);
-        return this;
+        final Map<String, String> copy = this.copy();
+        copy.put(Attributes.TARGET, target);
+        return new Attributes(copy);
     }
 
     /**
@@ -98,15 +108,18 @@ public final class Attributes {
      * @return The same attributes.
      */
     public Attributes withType(final String type) {
-        this.attrs.put(Attributes.TYPE, type);
-        return this;
+//        this.attrs.put(Attributes.TYPE, type);
+//        return this;
+        final Map<String, String> copy = this.copy();
+        copy.put(Attributes.TYPE, type);
+        return new Attributes(copy);
     }
 
     /**
-     * Current type.
-     * @return Type name.
+     * Copy attributes.
+     * @return New attributes.
      */
-    public Optional<String> currentType() {
-        return Optional.ofNullable(this.attrs.get(Attributes.TYPE));
+    private Map<String, String> copy() {
+        return new HashMap<>(this.attrs);
     }
 }

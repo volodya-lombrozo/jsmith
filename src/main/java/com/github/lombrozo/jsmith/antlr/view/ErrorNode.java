@@ -71,6 +71,11 @@ public final class ErrorNode implements Node {
     }
 
     @Override
+    public Node with(final Attributes attributes) {
+        return this;
+    }
+
+    @Override
     public Text text() {
         return this.message;
     }

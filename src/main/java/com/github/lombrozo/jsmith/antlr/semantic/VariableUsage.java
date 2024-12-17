@@ -64,7 +64,7 @@ public final class VariableUsage implements Rule {
 
     @Override
     public Node generate(final Context context) throws WrongPathException {
-        final Node snippet = this.origin.generate(context);
+        final Node node = this.origin.generate(context);
         final Optional<String> initialized;
         final Attributes attributes = context.attributes();
         final Optional<String> type = attributes.currentType();
@@ -73,9 +73,8 @@ public final class VariableUsage implements Rule {
         } else {
             initialized = context.scope().initialized();
         }
-        final Text text = snippet.text();
-        final String author = text.labels().author();
-        return initialized.map(output -> (Node) new TerminalNode(author, output))
+        return initialized
+            .map(output -> (Node) new TerminalNode(node.text().labels().author(), output))
             .orElseThrow(
                 () -> new WrongPathException(
                     String.format(
