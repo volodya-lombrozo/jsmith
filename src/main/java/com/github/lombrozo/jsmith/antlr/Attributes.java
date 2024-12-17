@@ -30,9 +30,6 @@ import java.util.Optional;
 /**
  * Attributes.
  * @since 0.1
- * @todo #99:90min Make the Attributes class immutable. All methods should return
- *  a new instance of the class with the new attribute. The current implementation
- *  is mutable and it can lead to bugs.
  */
 public final class Attributes {
 
