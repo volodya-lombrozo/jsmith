@@ -43,7 +43,7 @@ public interface Node {
      * @param attributes New attributes.
      * @return New node.
      */
-    Node with(final Attributes attributes);
+    Node with(Attributes attributes);
 
     /**
      * Generated text.
