@@ -81,7 +81,7 @@ public final class ErrorNode implements Node {
     }
 
     @Override
-    public boolean isError() {
+    public boolean error() {
         return true;
     }
 

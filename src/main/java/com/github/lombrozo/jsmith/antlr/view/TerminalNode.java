@@ -107,7 +107,7 @@ public final class TerminalNode implements Node {
     }
 
     @Override
-    public boolean isError() {
+    public boolean error() {
         return false;
     }
 }

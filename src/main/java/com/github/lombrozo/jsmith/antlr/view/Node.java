@@ -55,5 +55,5 @@ public interface Node {
      * Check if the output is an error.
      * @return True if the text has an error.
      */
-    boolean isError();
+    boolean error();
 }

@@ -124,7 +124,7 @@ public final class IntermediateNode implements Node {
     }
 
     @Override
-    public boolean isError() {
-        return this.snippets.stream().anyMatch(Node::isError);
+    public boolean error() {
+        return this.snippets.stream().anyMatch(Node::error);
     }
 }

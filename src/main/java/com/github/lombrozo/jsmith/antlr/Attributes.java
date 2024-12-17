@@ -26,7 +26,6 @@ package com.github.lombrozo.jsmith.antlr;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import org.checkerframework.checker.units.qual.A;
 
 /**
  * Attributes.
@@ -97,9 +96,7 @@ public final class Attributes {
      * @return The same attributes.
      */
     public Attributes withTarget(final String target) {
-        final Map<String, String> copy = this.copy();
-        copy.put(Attributes.TARGET, target);
-        return new Attributes(copy);
+        return this.with(Attributes.TARGET, target);
     }
 
     /**
@@ -108,10 +105,18 @@ public final class Attributes {
      * @return The same attributes.
      */
     public Attributes withType(final String type) {
-//        this.attrs.put(Attributes.TYPE, type);
-//        return this;
+        return this.with(Attributes.TYPE, type);
+    }
+
+    /**
+     * With.
+     * @param key Key.
+     * @param value Value.
+     * @return New attributes.
+     */
+    private Attributes with(final String key, final String value) {
         final Map<String, String> copy = this.copy();
-        copy.put(Attributes.TYPE, type);
+        copy.put(key, value);
         return new Attributes(copy);
     }
 
