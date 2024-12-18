@@ -27,19 +27,12 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import com.github.lombrozo.jsmith.random.Rand;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * LexerCharSet rule.
  * @since 0.1
  */
 public final class LexerCharSet implements Rule, Negatable {
-
-    /**
-     * Unicode pattern.
-     */
-    private static final Pattern UNICODE = Pattern.compile("\\\\u([0-9A-Fa-f]{4})");
 
     /**
      * Parent rule.
@@ -103,18 +96,13 @@ public final class LexerCharSet implements Rule, Negatable {
     @Override
     public Node negate(final Context context) {
         final String negated;
-//        final String replaced = Literal.replaceEscapes(this.text);
         final String replaced = new UnicodeString(this.text).asString();
         if (!replaced.isEmpty() && replaced.charAt(0) == '[') {
             negated = String.format("%s^%s", replaced.charAt(0), replaced.substring(1));
         } else {
             negated = String.format("[^%s]", replaced);
         }
-        return new TerminalNode(
-            this,
-            this.rand.regex(negated)
-//            this.rand.regex(LexerCharSet.unescapeUnicodes(negated))
-        );
+        return new TerminalNode(this, this.rand.regex(negated));
     }
 
     @Override
@@ -130,23 +118,5 @@ public final class LexerCharSet implements Rule, Negatable {
     @Override
     public Rule copy() {
         return new LexerCharSet(this.top, this.text, this.rand);
-    }
-
-    /**
-     * Replace escape sequences in the string.
-     * @param raw String with escape sequences.
-     * @return String with replaced escape sequences.
-     */
-    private static String unescapeUnicodes(final String raw) {
-        final Matcher matcher = LexerCharSet.UNICODE.matcher(raw);
-        final StringBuffer res = new StringBuffer(0);
-        while (matcher.find()) {
-            matcher.appendReplacement(
-                res,
-                String.valueOf((char) Integer.parseInt(matcher.group(1), 16))
-            );
-        }
-        matcher.appendTail(res);
-        return res.toString();
     }
 }

@@ -27,8 +27,6 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 import com.github.lombrozo.jsmith.random.Rand;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Literal rule.
@@ -41,16 +39,6 @@ import java.util.regex.Pattern;
  * @since 0.1
  */
 public final class Literal implements Rule, Negatable {
-
-    /**
-     * Special characters pattern.
-     */
-    private static final Pattern SPECIAL = Pattern.compile("\\\\([nrtbf\"'\\\\])");
-
-    /**
-     * Unicode pattern.
-     */
-    private static final Pattern UNICODE = Pattern.compile("\\\\u([0-9A-Fa-f]{4})");
 
     /**
      * Parent rule.
@@ -135,102 +123,5 @@ public final class Literal implements Rule, Negatable {
     @Override
     public String toString() {
         return this.name();
-    }
-
-
-    /**
-     * Replace escape sequences.
-     * For example:
-     * {@code
-     * \\n -> \n
-     * \\r -> \r
-     * \\t -> \t
-     * ...
-     * }
-     * @param original Original string.
-     * @return String with replaced escape sequences.
-     * @todo #1:90min Make it separate class.
-     *  We use this method in different places.
-     *  It should be a separate class.
-     *  Moreover, it's better to add some tests for it.
-     */
-    static String replaceEscapes(final String original) {
-        try {
-            final String result;
-            if (original.replaceAll("'", "").startsWith("\\u")) {
-                result = Literal.unescapeUnicodes(original.replaceAll("'", ""));
-            } else {
-                result = Literal.tryToReplaceEscapes(original);
-            }
-            return result;
-        } catch (final IllegalArgumentException exception) {
-            throw new IllegalArgumentException(
-                String.format("Failed to replace escape sequences in '%s'", original),
-                exception
-            );
-        }
-    }
-
-    /**
-     * Try to replace escape sequences.
-     * @param original Original string.
-     * @return String with replaced escape sequences.
-     */
-    private static String tryToReplaceEscapes(final String original) {
-        final Matcher matcher = Literal.SPECIAL.matcher(original);
-        final StringBuffer result = new StringBuffer(original.length());
-        while (matcher.find()) {
-            final String replacement;
-            switch (matcher.group(1)) {
-                case "n":
-                    replacement = "\n";
-                    break;
-                case "r":
-                    replacement = "\r";
-                    break;
-                case "t":
-                    replacement = "\t";
-                    break;
-                case "b":
-                    replacement = "\b";
-                    break;
-                case "f":
-                    replacement = "\f";
-                    break;
-                case "\\\\":
-                    replacement = "\\";
-                    break;
-                case "\\\"":
-                    replacement = "\"";
-                    break;
-                case "\\'":
-                    replacement = "'";
-                    break;
-                default:
-                    replacement = matcher.group(0);
-                    break;
-            }
-            matcher.appendReplacement(result, replacement);
-        }
-        matcher.appendTail(result);
-        return result.toString();
-    }
-
-    /**
-     * Replace escape sequences in the string.
-     * @param raw String with escape sequences.
-     * @return String with replaced escape sequences.
-     */
-    private static String unescapeUnicodes(final String raw) {
-        final Matcher matcher = Literal.UNICODE.matcher(raw);
-        final StringBuffer res = new StringBuffer(0);
-        while (matcher.find()) {
-            matcher.appendReplacement(
-                res,
-                String.valueOf((char) Integer.parseInt(matcher.group(1), 16))
-            );
-        }
-        matcher.appendTail(res);
-        return res.toString();
     }
 }

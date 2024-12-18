@@ -26,7 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class UnicodeString {
+final class UnicodeString {
 
     /**
      * Unicode pattern.
