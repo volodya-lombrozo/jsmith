@@ -37,12 +37,57 @@ import org.junit.jupiter.params.provider.MethodSource;
 final class AntlrStringTest {
 
     @ParameterizedTest
-    @MethodSource("apostrophes")
-    void removesApostrophes(final String input, final String expected) {
+    @MethodSource("unicodes")
+    void replacesUnicodeSequences(final String input, final String expected) {
+        MatcherAssert.assertThat(
+            "We expect that the AntlrString will replace unicode sequences",
+            new AntlrString(input).asString(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("escapes")
+    void replacesEscapeSequences(final String input, final String expected) {
         MatcherAssert.assertThat(
             "We expect that the AntlrString will replace escape sequences",
             new AntlrString(input).asString(),
             Matchers.equalTo(expected)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("apostrophes")
+    void removesApostrophes(final String input, final String expected) {
+        MatcherAssert.assertThat(
+            "We expect that the AntlrString will remove apostrophes",
+            new AntlrString(input).asString(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    /**
+     * Test data for the test {@link #replacesEscapeSequences(String, String)}.
+     * @return Test data.
+     */
+    static Stream<Arguments> escapes() {
+        return Stream.of(
+            Arguments.of("'\\r'", "\r"),
+            Arguments.of("'\r'", "\r"),
+            Arguments.of("'\\n'", "\n"),
+            Arguments.of("'\n'", "\n"),
+            Arguments.of("'\\t'", "\t"),
+            Arguments.of("'\t'", "\t"),
+            Arguments.of("'\\f'", "\f"),
+            Arguments.of("'\f'", "\f"),
+            Arguments.of("'\\b'", "\b"),
+            Arguments.of("'\b'", "\b"),
+            Arguments.of("'\\\"'", "\""),
+            Arguments.of("'\\\"'", "\""),
+            Arguments.of("'\\\\'", "\\"),
+            Arguments.of("'\\\\'", "\\"),
+            Arguments.of("\\n\\n\\n", "\n\n\n"),
+            Arguments.of("\\r\\r\\r", "\r\r\r")
         );
     }
 
@@ -57,8 +102,24 @@ final class AntlrStringTest {
             Arguments.of("''''", "''"),
             Arguments.of("Java\'jin", "Java'jin"),
             Arguments.of("Java\'jin\'", "Java'jin'"),
-            Arguments.of("\'Java\'jin\'", "'Java'jin'")
+            Arguments.of("\\'Java\\'jin\\'", "'Java'jin'")
         );
     }
 
+    /**
+     * Test data for the test {@link #replacesUnicodeSequences(String, String)}.
+     * @return Test data.
+     */
+    static Stream<Arguments> unicodes() {
+        return Stream.of(
+            Arguments.of("\u00B7", "\u00B7"),
+            Arguments.of("'\\u203F'", "\u203F"),
+            Arguments.of("'\\u203F\\u203F'", "\u203F\u203F"),
+            Arguments.of("'\\u203F-\\u203F'", "\u203F-\u203F"),
+            Arguments.of("'\\u203F...\\u203F'", "\u203F...\u203F"),
+            Arguments.of("'\\u203F\\u203F\\u203F'", "\u203F\u203F\u203F"),
+            Arguments.of("'\\u203F\\u203F\\u203F\\u203F'", "\u203F\u203F\u203F\u203F"),
+            Arguments.of("\\u270C", "\u270c")
+        );
+    }
 }

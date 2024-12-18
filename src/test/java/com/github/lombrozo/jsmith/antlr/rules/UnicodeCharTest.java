@@ -40,7 +40,7 @@ final class UnicodeCharTest {
         "\\u0001, 1",
         "\\u270C, 9996",
         "\\u1234, 4660",
-        "\\uFFFF, 65535",
+        "\\uFFFF, 65535"
     })
     void convertsToInt(final String origin, final int expected) {
         MatcherAssert.assertThat(
@@ -56,7 +56,7 @@ final class UnicodeCharTest {
         "\\u0001, '\u0001'",
         "\\u270C, '\u270C'",
         "\\u1234, '\u1234'",
-        "\\uFFFF, '\uFFFF'",
+        "\\uFFFF, '\uFFFF'"
 
     })
     void unescapes(final String origin, final String expected) {

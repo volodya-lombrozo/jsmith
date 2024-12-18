@@ -34,7 +34,8 @@ import java.util.regex.Pattern;
  * 'Hello, world!' -> Hello, world!
  * 'Hello, \\u0077orld!' -> Hello, world!
  * }
- * In other words, it removes apostrophes and replaces escape sequences.
+ * In other words, it removes apostrophes and replaces escape sequences with unicode characters.
+ * @since 0.1
  */
 final class AntlrString {
 
@@ -80,41 +81,12 @@ final class AntlrString {
      */
     private static String withoutApostrophes(final String text) {
         final String result;
-        if (text.startsWith("'") && text.endsWith("'")) {
+        if (!text.isEmpty() && text.charAt(0) == '\'' && text.charAt(text.length() - 1) == '\'') {
             result = text.substring(1, text.length() - 1);
         } else {
             result = text;
         }
         return result;
-    }
-
-    /**
-     * Replace escape sequences.
-     * For example:
-     * {@code
-     * \\n -> \n
-     * \\r -> \r
-     * \\t -> \t
-     * ...
-     * }
-     * @param original Original string.
-     * @return String with replaced escape sequences.
-     */
-    private static String replaceEscapes(final String original) {
-        try {
-            final String result;
-            if (original.replaceAll("'", "").startsWith("\\u")) {
-                result = new UnicodeChar(original.replaceAll("'", "")).unescaped();
-            } else {
-                result = AntlrString.tryToReplaceEscapes(original);
-            }
-            return result;
-        } catch (final IllegalArgumentException exception) {
-            throw new IllegalArgumentException(
-                String.format("Failed to replace escape sequences in '%s'", original),
-                exception
-            );
-        }
     }
 
     /**
@@ -133,6 +105,29 @@ final class AntlrString {
         }
         matcher.appendTail(res);
         return res.toString();
+    }
+
+    /**
+     * Replace escape sequences.
+     * For example:
+     * {@code
+     * \\n -> \n
+     * \\r -> \r
+     * \\t -> \t
+     * ...
+     * }
+     * @param original Original string.
+     * @return String with replaced escape sequences.
+     */
+    private static String replaceEscapes(final String original) {
+        try {
+            return AntlrString.tryToReplaceEscapes(original);
+        } catch (final IllegalArgumentException exception) {
+            throw new IllegalArgumentException(
+                String.format("Failed to replace escape sequences in '%s'", original),
+                exception
+            );
+        }
     }
 
     /**
