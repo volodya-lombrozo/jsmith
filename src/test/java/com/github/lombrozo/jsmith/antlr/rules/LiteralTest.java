@@ -53,7 +53,7 @@ final class LiteralTest {
         MatcherAssert.assertThat(
             "We expect that the literal will generate the negated symbol",
             new Literal(input).negate(new Context()).text().output(),
-            Matchers.not(Matchers.containsString(new UnicodeString(input).asString()))
+            Matchers.not(Matchers.containsString(new AntlrString(input).asString()))
         );
     }
 

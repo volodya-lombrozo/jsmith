@@ -26,7 +26,17 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-final class UnicodeString {
+/**
+ * String in ANTLR format.
+ * This class can transform ANTLR string to the Java string.
+ * For example:
+ * {@code
+ * 'Hello, world!' -> Hello, world!
+ * 'Hello, \\u0077orld!' -> Hello, world!
+ * }
+ * In other words, it removes apostrophes and replaces escape sequences.
+ */
+final class AntlrString {
 
     /**
      * Unicode pattern.
@@ -38,16 +48,27 @@ final class UnicodeString {
      */
     private static final Pattern SPECIAL = Pattern.compile("\\\\([nrtbf\"'\\\\])");
 
-    private final String text;
+    /**
+     * Original string in ANTLR format.
+     */
+    private final String original;
 
-    public UnicodeString(String text) {
-        this.text = text;
+    /**
+     * Constructor.
+     * @param string Text.
+     */
+    AntlrString(final String string) {
+        this.original = string;
     }
 
-    public String asString() {
-        return UnicodeString.replaceEscapes(
-            UnicodeString.withoutApostrophes(
-                UnicodeString.unescapeUnicodes(this.text)
+    /**
+     * Transform ANTLR string to the Java string.
+     * @return Java string.
+     */
+    String asString() {
+        return AntlrString.replaceEscapes(
+            AntlrString.withoutApostrophes(
+                AntlrString.unescapeUnicodes(this.original)
             )
         );
     }
@@ -85,7 +106,7 @@ final class UnicodeString {
             if (original.replaceAll("'", "").startsWith("\\u")) {
                 result = new UnicodeChar(original.replaceAll("'", "")).unescaped();
             } else {
-                result = UnicodeString.tryToReplaceEscapes(original);
+                result = AntlrString.tryToReplaceEscapes(original);
             }
             return result;
         } catch (final IllegalArgumentException exception) {
@@ -102,7 +123,7 @@ final class UnicodeString {
      * @return String with replaced escape sequences.
      */
     private static String unescapeUnicodes(final String raw) {
-        final Matcher matcher = UNICODE.matcher(raw);
+        final Matcher matcher = AntlrString.UNICODE.matcher(raw);
         final StringBuffer res = new StringBuffer(0);
         while (matcher.find()) {
             matcher.appendReplacement(
@@ -114,14 +135,13 @@ final class UnicodeString {
         return res.toString();
     }
 
-
     /**
      * Try to replace escape sequences.
      * @param original Original string.
      * @return String with replaced escape sequences.
      */
     private static String tryToReplaceEscapes(final String original) {
-        final Matcher matcher = UnicodeString.SPECIAL.matcher(original);
+        final Matcher matcher = AntlrString.SPECIAL.matcher(original);
         final StringBuffer result = new StringBuffer(original.length());
         while (matcher.find()) {
             final String replacement;

@@ -93,7 +93,7 @@ public final class Literal implements Rule, Negatable {
     public Node generate(final Context context) {
         return new TerminalNode(
             this,
-            new UnicodeString(this.text).asString()
+            new AntlrString(this.text).asString()
         );
     }
 

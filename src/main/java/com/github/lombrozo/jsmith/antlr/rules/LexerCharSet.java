@@ -89,14 +89,14 @@ public final class LexerCharSet implements Rule, Negatable {
     public Node generate(final Context context) {
         return new TerminalNode(
             this,
-            this.rand.regex(new UnicodeString(this.text).asString())
+            this.rand.regex(new AntlrString(this.text).asString())
         );
     }
 
     @Override
     public Node negate(final Context context) {
         final String negated;
-        final String replaced = new UnicodeString(this.text).asString();
+        final String replaced = new AntlrString(this.text).asString();
         if (!replaced.isEmpty() && replaced.charAt(0) == '[') {
             negated = String.format("%s^%s", replaced.charAt(0), replaced.substring(1));
         } else {
