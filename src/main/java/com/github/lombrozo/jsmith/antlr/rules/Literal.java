@@ -48,6 +48,11 @@ public final class Literal implements Rule, Negatable {
     private static final Pattern SPECIAL = Pattern.compile("\\\\([nrtbf\"'\\\\])");
 
     /**
+     * Unicode pattern.
+     */
+    private static final Pattern UNICODE = Pattern.compile("\\\\u([0-9A-Fa-f]{4})");
+
+    /**
      * Parent rule.
      */
     private final Rule top;
@@ -153,7 +158,7 @@ public final class Literal implements Rule, Negatable {
         try {
             final String result;
             if (original.replaceAll("'", "").startsWith("\\u")) {
-                result = new UnicodeChar(original.replaceAll("'", "")).unescaped();
+                result = Literal.unescapeUnicodes(original.replaceAll("'", ""));
             } else {
                 result = Literal.tryToReplaceEscapes(original);
             }
@@ -209,5 +214,23 @@ public final class Literal implements Rule, Negatable {
         }
         matcher.appendTail(result);
         return result.toString();
+    }
+
+    /**
+     * Replace escape sequences in the string.
+     * @param raw String with escape sequences.
+     * @return String with replaced escape sequences.
+     */
+    private static String unescapeUnicodes(final String raw) {
+        final Matcher matcher = Literal.UNICODE.matcher(raw);
+        final StringBuffer res = new StringBuffer(0);
+        while (matcher.find()) {
+            matcher.appendReplacement(
+                res,
+                String.valueOf((char) Integer.parseInt(matcher.group(1), 16))
+            );
+        }
+        matcher.appendTail(res);
+        return res.toString();
     }
 }

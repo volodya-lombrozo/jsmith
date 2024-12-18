@@ -29,6 +29,11 @@ import java.util.regex.Pattern;
 public final class UnicodeString {
 
     /**
+     * Unicode pattern.
+     */
+    private static final Pattern UNICODE = Pattern.compile("\\\\u([0-9A-Fa-f]{4})");
+
+    /**
      * Special characters pattern.
      */
     private static final Pattern SPECIAL = Pattern.compile("\\\\([nrtbf\"'\\\\])");
@@ -40,7 +45,11 @@ public final class UnicodeString {
     }
 
     public String asString() {
-        return UnicodeString.replaceEscapes(UnicodeString.withoutApostrophes(this.text));
+        return UnicodeString.replaceEscapes(
+            UnicodeString.withoutApostrophes(
+                UnicodeString.unescapeUnicodes(this.text)
+            )
+        );
     }
 
     /**
@@ -85,6 +94,24 @@ public final class UnicodeString {
                 exception
             );
         }
+    }
+
+    /**
+     * Replace escape sequences in the string.
+     * @param raw String with escape sequences.
+     * @return String with replaced escape sequences.
+     */
+    private static String unescapeUnicodes(final String raw) {
+        final Matcher matcher = UNICODE.matcher(raw);
+        final StringBuffer res = new StringBuffer(0);
+        while (matcher.find()) {
+            matcher.appendReplacement(
+                res,
+                String.valueOf((char) Integer.parseInt(matcher.group(1), 16))
+            );
+        }
+        matcher.appendTail(res);
+        return res.toString();
     }
 
 

@@ -103,15 +103,17 @@ public final class LexerCharSet implements Rule, Negatable {
     @Override
     public Node negate(final Context context) {
         final String negated;
-        final String replaced = Literal.replaceEscapes(this.text);
-        if (replaced.startsWith("[")) {
-            negated = String.format("%s^%s", replaced.substring(0, 1), replaced.substring(1));
+//        final String replaced = Literal.replaceEscapes(this.text);
+        final String replaced = new UnicodeString(this.text).asString();
+        if (!replaced.isEmpty() && replaced.charAt(0) == '[') {
+            negated = String.format("%s^%s", replaced.charAt(0), replaced.substring(1));
         } else {
             negated = String.format("[^%s]", replaced);
         }
         return new TerminalNode(
             this,
-            this.rand.regex(LexerCharSet.unescapeUnicodes(negated))
+            this.rand.regex(negated)
+//            this.rand.regex(LexerCharSet.unescapeUnicodes(negated))
         );
     }
 
