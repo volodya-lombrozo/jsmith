@@ -96,7 +96,7 @@ public final class LexerCharSet implements Rule, Negatable {
     public Node generate(final Context context) {
         return new TerminalNode(
             this,
-            this.rand.regex(Literal.replaceEscapes(this.text))
+            this.rand.regex(new UnicodeString(this.text).asString())
         );
     }
 

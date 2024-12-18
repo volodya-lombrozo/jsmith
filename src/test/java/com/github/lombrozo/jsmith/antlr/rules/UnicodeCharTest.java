@@ -66,5 +66,4 @@ final class UnicodeCharTest {
             Matchers.equalTo(expected)
         );
     }
-
 }
