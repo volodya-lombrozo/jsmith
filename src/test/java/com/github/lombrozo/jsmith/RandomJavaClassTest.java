@@ -70,7 +70,7 @@ final class RandomJavaClassTest {
     }
 
     @Test
-    void generatesJavaCodeWithTheSameSeed() {
+    void generatesJavaCodeWithTheSameSeedAndParam() {
         final long seed = -4_887_843_732_314_896_880L;
         MatcherAssert.assertThat(
             "We expect that the generated source code will be the same for the same seed",

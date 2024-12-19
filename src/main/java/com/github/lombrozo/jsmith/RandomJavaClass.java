@@ -63,6 +63,14 @@ public final class RandomJavaClass {
 
     /**
      * Constructor.
+     * @param seed Seed.
+     */
+    public RandomJavaClass(final long seed) {
+        this(new Params(seed));
+    }
+
+    /**
+     * Constructor.
      * @param params Generation parameters.
      */
     public RandomJavaClass(final Params params) {
