@@ -33,8 +33,6 @@ The library provides a set of classes for generating random Java programs. To
 generate a random class, you can use the `new RandomJavaClass().src()` command:
 
 ```java
-import com.github.lombrozo.jsmith.RandomJavaClass;
-
 public class BasicExample {
     public static void main(String... args) {
         RandomJavaClass clazz = new RandomJavaClass();
@@ -44,49 +42,12 @@ public class BasicExample {
 }
 ```
 
-This code will generate a random Java class. Something like this:
-
-```java
-class j {
-    public void $$() {
-        long $jm$;
-        $jm$ = 80 + 05_33L - 0l;
-    }
-}
-```
-
 You can also pass the `seed` parameter to the `RandomJavaClass` constructor to
-generate the same class every time:
-
-```java
-import com.github.lombrozo.jsmith.RandomJavaClass;
-
-public class Seeded {
-    public static void main(String... args) {
-        RandomJavaClass clazz = new RandomJavaClass(123L);
-        String code = clazz.src();
-        System.out.println(code);
-    }
-}
-```
-
-will generate the following class:
-
-```java
-package ot.ynw.z$a;
-
-final class $$d {
-    public void SD() {
-        boolean e$Ee, OSF$, OA$Y$ = false | true & true;
-        boolean L$kGc = OA$Y$ & false == false, $ = L$kGc == false, $g$$ = true ^ true, S$fO, B;
-        long a$ikJ;
-    }
-}
-```
+generate the same class every time: `new RandomJavaClass(seed).src()`.
 
 Pay attention, that a single `RandomJavaClass` instance can generate only one
-class and the invocation of `src()` method will return the same class every
-time:
+random class and the invocation of `src()` method will return the same class
+every time:
 
 ```java
 public class SameExample {
