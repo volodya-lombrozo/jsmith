@@ -60,6 +60,16 @@ final class RandomJavaClassTest {
     }
 
     @Test
+    void generatesSameSrc() {
+        final RandomJavaClass clazz = new RandomJavaClass();
+        MatcherAssert.assertThat(
+            "We expect that the generated source code will be the same",
+            clazz.src(),
+            Matchers.equalTo(clazz.src())
+        );
+    }
+
+    @Test
     void generatesJavaCodeWithTheSameSeed() {
         final long seed = -4_887_843_732_314_896_880L;
         MatcherAssert.assertThat(

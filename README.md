@@ -35,14 +35,36 @@ generate a random class you can use the following code:
 ```java
 import com.github.lombrozo.jsmith.RandomJavaClass;
 
-public class App {
+public class BasicExample {
     public static void main(String... args) {
         RandomJavaClass clazz = new RandomJavaClass();
-        // Generate source code of the class
         String code = clazz.src();
-        System.out.println("Generated code:" + code);
+        System.out.println(code);
     }
 }
+```
+
+This code will generate a random Java class. Something like this:
+
+```java
+class j {
+    public void $$() {
+        long $jm$;
+        $jm$ = 80 + 05_33L - 0l;
+    }
+}
+```
+
+Pay attention, that a single `RandomJavaClass` instance can generate only one
+class and the invocation of `src()` method will return the same class every time:
+```java
+public class SameExample {
+    public static void main(String... args) {
+        RandomJavaClass clazz = new RandomJavaClass();
+        assert clazz.src().equals(clazz.src()); // true
+    }
+}
+
 ```
 
 ## Internals
