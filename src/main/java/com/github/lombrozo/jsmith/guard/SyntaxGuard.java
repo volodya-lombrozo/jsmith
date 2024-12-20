@@ -25,18 +25,23 @@ package com.github.lombrozo.jsmith.guard;
 
 import com.github.lombrozo.jsmith.antlr.view.Text;
 import com.jcabi.log.Logger;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import javax.tools.JavaCompiler;
+import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 import org.antlr.v4.Tool;
 import org.antlr.v4.runtime.CharStream;
@@ -184,22 +189,66 @@ public final class SyntaxGuard {
                             .map(grammar -> SyntaxGuard.save(grammar, temp))
                             .toArray(String[]::new)
                     ).processGrammarsOnCommandLine();
-                    ToolProvider.getSystemJavaCompiler().run(
-                        System.in,
-                        System.out,
-                        System.err,
-                        Files.list(temp).filter(Files::isRegularFile)
-                            .filter(java -> java.getFileName().toString().endsWith(".java"))
-                            .map(Path::toString)
-                            .toArray(String[]::new)
-                    );
-                    final String name = SyntaxGuard.HAS_SUFFIX.matcher(
-                        SyntaxGuard.grammarName(grammars.get(0))
-                    ).replaceAll("");
-                    return new Environment(
-                        SyntaxGuard.load(String.format("%sLexer", name), temp),
-                        SyntaxGuard.load(String.format("%sParser", name), temp)
-                    );
+
+                    final InMemoryCompiler compiler = new InMemoryCompiler();
+                    final Path[] array1 = Files.list(temp)
+                        .filter(Files::isRegularFile)
+                        .filter(java -> java.getFileName().toString().endsWith(".java"))
+                        .toArray(Path[]::new);
+                    final List<Class<?>> compiled = compiler.compile(array1);
+
+                    final Class<?> lexer = compiled.stream()
+                        .filter(clazz -> clazz.getName().endsWith("Lexer"))
+                        .findFirst()
+                        .orElseThrow();
+
+                    final Class<?> parser = compiled.stream()
+                        .filter(clazz -> clazz.getName().endsWith("Parser"))
+                        .findFirst()
+                        .orElseThrow();
+
+                    return new Environment(lexer, parser);
+
+
+//                    final String name = SyntaxGuard.HAS_SUFFIX.matcher(
+//                        SyntaxGuard.grammarName(grammars.get(0))
+//                    ).replaceAll("");
+//                    return new Environment(
+//                        SyntaxGuard.load(String.format("%sLexer", name), temp),
+//                        SyntaxGuard.load(String.format("%sParser", name), temp)
+//                    );
+
+//                    final List<? extends Class<?>> collect = Files.list(temp)
+//                        .filter(Files::isRegularFile)
+//                        .filter(java -> java.getFileName().toString().endsWith(".java"))
+//                        .map(path -> {
+//                            try {
+//                                return compiler.compile(
+//                                    path.getFileName().toString(), Files.readString(path));
+//                            } catch (final IOException exception) {
+//                                throw new RuntimeException(exception);
+//                            }
+//                        }).collect(Collectors.toList());
+//                        .map(Path::toString)
+//                        .toArray(String[]::new);
+
+//                    ToolProvider.getSystemJavaCompiler().run(
+//                        System.in,
+//                        System.out,
+//                        System.err,
+//                        Files.list(temp).filter(Files::isRegularFile)
+//                            .filter(java -> java.getFileName().toString().endsWith(".java"))
+//                            .map(Path::toString)
+//                            .toArray(String[]::new)
+//                    );
+//
+//                    final String name = SyntaxGuard.HAS_SUFFIX.matcher(
+//                        SyntaxGuard.grammarName(grammars.get(0))
+//                    ).replaceAll("");
+//                    return new Environment(
+//                        SyntaxGuard.load(String.format("%sLexer", name), temp),
+//                        SyntaxGuard.load(String.format("%sParser", name), temp)
+//                    );
                 }
             )
         );
@@ -336,4 +385,6 @@ public final class SyntaxGuard {
             }
         }
     }
+
+
 }
