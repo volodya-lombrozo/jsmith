@@ -41,37 +41,68 @@ import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 import lombok.ToString;
 
+/**
+ * In-memory compiler.
+ * @since 0.2
+ */
 final class InMemoryCompiler {
 
-
+    /**
+     * Java compiler.
+     */
     private final JavaCompiler compiler;
 
+    /**
+     * Default constructor.
+     */
     InMemoryCompiler() {
         this(ToolProvider.getSystemJavaCompiler());
     }
 
+    /**
+     * Constructor.
+     * @param compiler Java compiler
+     */
     private InMemoryCompiler(final JavaCompiler compiler) {
         this.compiler = compiler;
     }
 
+    /**
+     * Compile source code.
+     * @param name Name of the class.
+     * @param src Source code.
+     * @return Compiled class.
+     */
     Class<?> compile(final String name, final String src) {
         return this.compile(new CompilationUnit(name, src)).get(0);
     }
 
+    /**
+     * Compile source code.
+     * @param files Files with source code.
+     * @return Compiled classes.
+     * @throws IOException If an I/O error occurs
+     */
     List<Class<?>> compile(final Path... files) throws IOException {
-        CompilationUnit[] units = new CompilationUnit[files.length];
-        for (int i = 0; i < files.length; i++) {
-            final Path file = files[i];
+        final int length = files.length;
+        final CompilationUnit[] units = new CompilationUnit[length];
+        for (int index = 0; index < length; ++index) {
+            final Path file = files[index];
             final String name = file.getFileName().toString().replace(".java", "");
             final String src = Files.readString(file);
-            units[i] = new CompilationUnit(name, src);
+            units[index] = new CompilationUnit(name, src);
         }
         return this.compile(units);
     }
 
+    /**
+     * Compile source code.
+     * @param units Compilation units.
+     * @return Compiled classes.
+     */
     List<Class<?>> compile(final CompilationUnit... units) {
         try {
-            return tryCompile(units);
+            return this.tryCompile(units);
         } catch (final MalformedURLException exception) {
             throw new IllegalStateException(
                 String.format("Malformed URL for compilation units %s", Arrays.asList(units)),
@@ -111,36 +142,68 @@ final class InMemoryCompiler {
         return res;
     }
 
+    /**
+     * Compilation unit.
+     * @since 0.2
+     */
     @ToString
-    private static class CompilationUnit {
+    private static final class CompilationUnit {
 
-        private final String name;
+        /**
+         * Name of the class.
+         */
+        private final String clazz;
+
+        /**
+         * Source code.
+         */
         private final String src;
 
-        public CompilationUnit(final String name, final String src) {
-            this.name = name;
+        /**
+         * Constructor.
+         * @param name Name of the class.
+         * @param src Source code.
+         */
+        private CompilationUnit(final String name, final String src) {
+            this.clazz = name;
             this.src = src;
         }
 
+        /**
+         * Name of the class.
+         * @return Name of the class.
+         */
         String name() {
-            return name;
+            return this.clazz;
         }
 
-        String src() {
-            return src;
-        }
-
+        /**
+         * Convert to a Java file object.
+         * @return Java file object.
+         */
         JavaFileObject toJava() {
-            return new JavaSourceFromString(this.name, this.src);
+            return new StringSource(this.clazz, this.src);
         }
 
     }
 
+    /**
+     * Java source code.
+     * @since 0.2
+     */
+    private static class StringSource extends SimpleJavaFileObject {
 
-    private static class JavaSourceFromString extends SimpleJavaFileObject {
-        final String code;
+        /**
+         * Java source code.
+         */
+        private final String code;
 
-        JavaSourceFromString(String name, String code) {
+        /**
+         * Constructor.
+         * @param name Name of the class.
+         * @param code Java source code.
+         */
+        StringSource(final String name, final String code) {
             super(
                 URI.create(
                     String.format(
