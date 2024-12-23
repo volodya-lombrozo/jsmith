@@ -112,18 +112,29 @@ final class InMemoryCompiler {
             throw new IllegalStateException(
                 String.format(
                     "Some class with one of the names '%s' not found",
-                    Arrays.stream(units).map(CompilationUnit::name).toArray()
+                    Arrays.asList(units)
                 ),
+                exception
+            );
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("I/O error during compilation of units %s", Arrays.asList(units)),
                 exception
             );
         }
     }
 
+    /**
+     * Try to compile source code.
+     * @param units Compilation units to compile.
+     * @return Compiled classes.
+     * @throws MalformedURLException If a URL of a classloader is malformed.
+     * @throws ClassNotFoundException If a class is not found.
+     */
     private List<Class<?>> tryCompile(
-        CompilationUnit... units
-    ) throws MalformedURLException, ClassNotFoundException {
-        //handle success
-        final Boolean success = this.compiler.getTask(
+        final CompilationUnit... units
+    ) throws IOException, ClassNotFoundException, MalformedURLException {
+        final boolean success = this.compiler.getTask(
             null,
             null,
             null,
@@ -131,15 +142,29 @@ final class InMemoryCompiler {
             null,
             Arrays.stream(units).map(CompilationUnit::toJava).collect(Collectors.toList())
         ).call();
-        final URLClassLoader loader = URLClassLoader.newInstance(
-            new URL[]{new File("").toURI().toURL()}
-        );
-        List<Class<?>> res = new ArrayList<>(0);
-        for (final CompilationUnit unit : units) {
-            final Class<?> claszz = Class.forName(unit.name(), true, loader);
-            res.add(claszz);
+        if (!success) {
+            throw new IllegalStateException(
+                String.format("Compilation failed for units %s", Arrays.asList(units))
+            );
+        }
+        final List<Class<?>> res = new ArrayList<>(0);
+        try (URLClassLoader loader = InMemoryCompiler.loader()) {
+            for (final CompilationUnit unit : units) {
+                res.add(Class.forName(unit.name(), true, loader));
+            }
         }
         return res;
+    }
+
+    /**
+     * Create a class loader.
+     * @return Class loader.
+     * @throws MalformedURLException If a URL of a classloader is malformed.
+     */
+    private static URLClassLoader loader() throws MalformedURLException {
+        return URLClassLoader.newInstance(
+            new URL[]{new File("").toURI().toURL()}
+        );
     }
 
     /**
@@ -157,6 +182,7 @@ final class InMemoryCompiler {
         /**
          * Source code.
          */
+        @ToString.Exclude
         private final String src;
 
         /**

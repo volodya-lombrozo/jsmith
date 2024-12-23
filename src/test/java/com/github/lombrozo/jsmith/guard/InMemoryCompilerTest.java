@@ -37,7 +37,8 @@ final class InMemoryCompilerTest {
     void compilesHelloWorld() throws Exception {
         MatcherAssert.assertThat(
             "Hello world is expected",
-            (String) new InMemoryCompiler().compile(
+            (String) new InMemoryCompiler()
+                .compile(
                     "HelloWorld",
                     "public class HelloWorld { public static String hello() {return \"Hello world\";}}"
                 ).getDeclaredMethod("hello")
@@ -45,5 +46,4 @@ final class InMemoryCompilerTest {
             Matchers.equalTo("Hello world")
         );
     }
-
 }
