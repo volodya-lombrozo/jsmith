@@ -53,15 +53,7 @@ import org.cactoos.text.UncheckedText;
  * It tries to generate default ANTLR lexer and parser and parse the code.
  * If the code is incorrect, it throws an exception.
  * @since 0.1
- * @todo #1:90min Make SyntaxGuard cleaner.
- *  SyntaxGuard is too complex and uses java compiler to check the syntax of the code.
- *  We should find a way to verify the code without using compiler and any other dirty techniques
- *  as java reflection api. Also it would be nice to simplify the code and make it more readable.
- *  The starting point: <a href="https://stackoverflow.com/questions/5762067/in-antlr-3-how-do-i-generate-a-lexer-and-parser-at-runtime-instead-of-ahead-o">here.</a>
- * @checkstyle IndentationCheck (500 lines)
- * @checkstyle IllegalCatchCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidCatchingGenericException")
 public final class SyntaxGuard {
 
     /**
@@ -175,25 +167,17 @@ public final class SyntaxGuard {
                             .map(grammar -> SyntaxGuard.save(grammar, temp))
                             .toArray(String[]::new)
                     ).processGrammarsOnCommandLine();
-                    final List<Class<?>> compiled = new InMemoryCompiler().compile(
-                        Files.list(temp)
-                            .filter(Files::isRegularFile)
-                            .filter(java -> java.getFileName().toString().endsWith(".java"))
-                            .toArray(Path[]::new)
+                    return new Environment(
+                        new InMemoryCompiler().compile(
+                            Files.list(temp)
+                                .filter(Files::isRegularFile)
+                                .filter(java -> java.getFileName().toString().endsWith(".java"))
+                                .toArray(Path[]::new)
+                        )
                     );
-//                    final Class<?> lexer = SyntaxGuard.find(compiled, "Lexer");
-//                    final Class<?> parser = SyntaxGuard.find(compiled, "Parser");
-                    return new Environment(compiled);
                 }
             )
         );
-    }
-
-    private static Class<?> find(final List<Class<?>> compiled, final String suffix) {
-        return compiled.stream()
-            .filter(clazz -> clazz.getName().endsWith(suffix))
-            .findFirst()
-            .orElseThrow();
     }
 
     /**
@@ -234,7 +218,9 @@ public final class SyntaxGuard {
      * Compiled lexer and parser classes.
      * This class encapsulates lexer and parser instances.
      * @since 0.1
+     * @checkstyle IllegalCatchCheck (500 lines)
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static class Environment {
 
         /**
@@ -243,25 +229,10 @@ public final class SyntaxGuard {
         private final List<Class<?>> all;
 
         /**
-         * Lexer class.
-         */
-//        private final Class<?> clexer;
-
-        /**
-         * Parser class.
-         */
-//        private final Class<?> cparser;
-
-        /**
          * Constructor.
-         * @param clexer Lexer class.
-         * @param cparser Parser class.
+         * @param all All compiled classes.
          */
-//        Environment(final Class<?> clexer, final Class<?> cparser) {
-//            this.clexer = clexer;
-//            this.cparser = cparser;
-//        }
-        private Environment(final List<Class<?>> all) {
+        Environment(final List<Class<?>> all) {
             this.all = all;
         }
 
@@ -316,14 +287,16 @@ public final class SyntaxGuard {
             }
         }
 
+        /**
+         * Find class by suffix.
+         * @param suffix Suffix.
+         * @return Class.
+         */
         private Class<?> find(final String suffix) {
             return this.all.stream()
                 .filter(clazz -> clazz.getName().endsWith(suffix))
                 .findFirst()
                 .orElseThrow();
         }
-
     }
-
-
 }
