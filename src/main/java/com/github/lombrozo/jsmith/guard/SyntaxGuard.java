@@ -157,6 +157,10 @@ public final class SyntaxGuard {
      * @param temp Temporary directory where to store generated classes.
      * @param grammars ANTLR grammar texts.
      * @return Environment that contains lexer and parser classes.
+     * @todo #89:30min This method is overcomplicated because it uses ANTLR Tool.
+     *  The Tool can only create Parser and Lexer classes as Java files on the disk.
+     *  If it is possible to create Parser and Lexer classes in memory, we should do it.
+     *  But for now, it's not possible, so we need to save generated classes to the disk.
      */
     private static Sticky<Environment> prestructor(final Path temp, final List<String> grammars) {
         return new Sticky<>(
