@@ -181,9 +181,9 @@ public final class SyntaxGuard {
                             .filter(java -> java.getFileName().toString().endsWith(".java"))
                             .toArray(Path[]::new)
                     );
-                    final Class<?> lexer = SyntaxGuard.find(compiled, "Lexer");
-                    final Class<?> parser = SyntaxGuard.find(compiled, "Parser");
-                    return new Environment(lexer, parser);
+//                    final Class<?> lexer = SyntaxGuard.find(compiled, "Lexer");
+//                    final Class<?> parser = SyntaxGuard.find(compiled, "Parser");
+                    return new Environment(compiled);
                 }
             )
         );
@@ -238,23 +238,31 @@ public final class SyntaxGuard {
     private static class Environment {
 
         /**
+         * All compiled classes.
+         */
+        private final List<Class<?>> all;
+
+        /**
          * Lexer class.
          */
-        private final Class<?> clexer;
+//        private final Class<?> clexer;
 
         /**
          * Parser class.
          */
-        private final Class<?> cparser;
+//        private final Class<?> cparser;
 
         /**
          * Constructor.
          * @param clexer Lexer class.
          * @param cparser Parser class.
          */
-        Environment(final Class<?> clexer, final Class<?> cparser) {
-            this.clexer = clexer;
-            this.cparser = cparser;
+//        Environment(final Class<?> clexer, final Class<?> cparser) {
+//            this.clexer = clexer;
+//            this.cparser = cparser;
+//        }
+        private Environment(final List<Class<?>> all) {
+            this.all = all;
         }
 
         /**
@@ -265,7 +273,7 @@ public final class SyntaxGuard {
          */
         Lexer lexer(final String code) {
             try {
-                return (Lexer) this.clexer.getDeclaredConstructor(CharStream.class)
+                return (Lexer) this.find("Lexer").getDeclaredConstructor(CharStream.class)
                     .newInstance(CharStreams.fromString(code));
             } catch (final Exception exception) {
                 throw new IllegalStateException(
@@ -282,7 +290,7 @@ public final class SyntaxGuard {
          */
         Parser parser(final Lexer lexer) {
             try {
-                return (Parser) this.cparser.getDeclaredConstructor(TokenStream.class)
+                return (Parser) this.find("Parser").getDeclaredConstructor(TokenStream.class)
                     .newInstance(new CommonTokenStream(lexer));
             } catch (final Exception exception) {
                 throw new IllegalStateException(
@@ -299,7 +307,7 @@ public final class SyntaxGuard {
          */
         void parse(final Parser parser, final String top) {
             try {
-                this.cparser.getMethod(top).invoke(parser);
+                this.find("Parser").getMethod(top).invoke(parser);
             } catch (final Exception exception) {
                 throw new IllegalStateException(
                     "Something went wrong during parsing",
@@ -307,6 +315,14 @@ public final class SyntaxGuard {
                 );
             }
         }
+
+        private Class<?> find(final String suffix) {
+            return this.all.stream()
+                .filter(clazz -> clazz.getName().endsWith(suffix))
+                .findFirst()
+                .orElseThrow();
+        }
+
     }
 
 
