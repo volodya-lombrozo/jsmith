@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith;
 
+import com.github.lombrozo.jsmith.guard.InMemoryCompiler;
 import com.jcabi.log.Logger;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -32,6 +33,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.tools.ToolProvider;
@@ -182,11 +187,32 @@ final class RandomJavaClassTest {
      * @return Compilation result.
      */
     private static int compile(final String src, final Path temp) {
-        return ToolProvider.getSystemJavaCompiler().run(
-            new ByteArrayInputStream(src.getBytes(StandardCharsets.UTF_8)),
-            new BufferedOutputStream(System.out),
-            new BufferedOutputStream(System.err),
-            RandomJavaClassTest.saveJava(src, temp)
-        );
+        final Pattern namepattern = Pattern.compile(
+            "(class|interface)\\s+([a-zA-Z_$][a-zA-Z\\d_$]*)\\b");
+        final Pattern pckgpattern = Pattern.compile(
+            "package\\s+([a-zA-Z_$][a-zA-Z\\d_$]*(?:\\.[a-zA-Z_$][a-zA-Z\\d_$]*)*)\\s*;\n");
+
+        final Matcher matcher1 = pckgpattern.matcher(src);
+        final String pckg;
+        if (matcher1.find()) {
+            pckg = matcher1.group(1);
+        } else {
+            pckg = null;
+        }
+        final Matcher matcher = namepattern.matcher(src);
+        matcher.find();
+        final String name = matcher.group(2);
+        final InMemoryCompiler compiler = new InMemoryCompiler();
+//        final String collect = Stream.of(pckg, name).filter(Objects::nonNull)
+//            .collect(Collectors.joining("."));
+        compiler.compile(name, src);
+        return 0;
+
+//        return ToolProvider.getSystemJavaCompiler().run(
+//            new ByteArrayInputStream(src.getBytes(StandardCharsets.UTF_8)),
+//            new BufferedOutputStream(System.out),
+//            new BufferedOutputStream(System.err),
+//            RandomJavaClassTest.saveJava(src, temp)
+//        );
     }
 }

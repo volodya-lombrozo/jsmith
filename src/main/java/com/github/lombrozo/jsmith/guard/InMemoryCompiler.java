@@ -34,7 +34,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
@@ -45,7 +48,7 @@ import lombok.ToString;
  * In-memory compiler.
  * @since 0.2
  */
-final class InMemoryCompiler {
+public final class InMemoryCompiler {
 
     /**
      * Java compiler.
@@ -55,7 +58,7 @@ final class InMemoryCompiler {
     /**
      * Default constructor.
      */
-    InMemoryCompiler() {
+    public InMemoryCompiler() {
         this(ToolProvider.getSystemJavaCompiler());
     }
 
@@ -73,7 +76,7 @@ final class InMemoryCompiler {
      * @param src Source code.
      * @return Compiled class.
      */
-    Class<?> compile(final String name, final String src) {
+    public Class<?> compile(final String name, final String src) {
         return this.compile(new CompilationUnit(name, src)).get(0);
     }
 
@@ -148,9 +151,9 @@ final class InMemoryCompiler {
             );
         }
         final List<Class<?>> res = new ArrayList<>(0);
-        try (URLClassLoader loader = InMemoryCompiler.loader()) {
+        try (URLClassLoader loader = this.loader(units)) {
             for (final CompilationUnit unit : units) {
-                res.add(Class.forName(unit.name(), true, loader));
+                res.add(Class.forName(unit.fullName(), true, loader));
             }
         }
         return res;
@@ -161,10 +164,20 @@ final class InMemoryCompiler {
      * @return Class loader.
      * @throws MalformedURLException If a URL of a classloader is malformed.
      */
-    private static URLClassLoader loader() throws MalformedURLException {
-        return URLClassLoader.newInstance(
-            new URL[]{new File("").toURI().toURL()}
-        );
+    private URLClassLoader loader(CompilationUnit... units) throws MalformedURLException {
+        List<String> paths = new ArrayList<>(0);
+        paths.add("");
+        for (final CompilationUnit unit : units) {
+            final String path = unit.extractPckg()
+//                .replace('.', '/')
+                ;
+            paths.add(path);
+        }
+        final URL[] urls = new URL[paths.size()];
+        for (int i = 0; i < paths.size(); i++) {
+            urls[i] = new File(paths.get(i)).toURI().toURL();
+        }
+        return URLClassLoader.newInstance(urls);
     }
 
     /**
@@ -203,12 +216,44 @@ final class InMemoryCompiler {
             return this.clazz;
         }
 
+        String fullName() {
+            return Stream.of(this.extractPckg(), this.extractName()).filter(s -> !s.isEmpty())
+                .collect(
+                    Collectors.joining(".")
+                );
+        }
+
+        String extractPckg() {
+            final Pattern pattern = Pattern.compile(
+                "package\\s+([a-zA-Z_$][a-zA-Z\\d_$]*(\\.[a-zA-Z_$][a-zA-Z\\d_$]*)*)\\s*;"
+            );
+            final Matcher matcher = pattern.matcher(this.src);
+            final String pckg;
+            if (matcher.find()) {
+                pckg = matcher.group(1);
+            } else {
+                pckg = "";
+            }
+            return pckg;
+        }
+
+        String extractName() {
+            final Pattern pattern = Pattern.compile(
+                "(class|interface)\\s+([a-zA-Z_$][a-zA-Z\\d_$]*)\\b");
+            final Matcher matcher = pattern.matcher(this.src);
+            if (matcher.find()) {
+                return matcher.group(2);
+            } else {
+                throw new IllegalStateException("Can't find class name");
+            }
+        }
+
         /**
          * Convert to a Java file object.
          * @return Java file object.
          */
         JavaFileObject toJava() {
-            return new StringSource(this.clazz, this.src);
+            return new StringSource(this.fullName(), this.src);
         }
 
     }

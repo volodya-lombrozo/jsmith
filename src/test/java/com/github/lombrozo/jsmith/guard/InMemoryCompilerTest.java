@@ -23,6 +23,7 @@
  */
 package com.github.lombrozo.jsmith.guard;
 
+import java.lang.reflect.InvocationTargetException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,20 @@ final class InMemoryCompilerTest {
                 .compile(
                     "HelloWorld",
                     "public class HelloWorld { public static String hello() {return \"Hello world\";}}"
+                ).getDeclaredMethod("hello")
+                .invoke(null),
+            Matchers.equalTo("Hello world")
+        );
+    }
+
+    @Test
+    void compilesHelloWorldWithPackage() throws Exception {
+        MatcherAssert.assertThat(
+            "Hello world with package is expected",
+            (String) new InMemoryCompiler()
+                .compile(
+                    "HelloWorld",
+                    "package com.github.lombrozo;\n public class HelloWorld { public static String hello() {return \"Hello world\";}}"
                 ).getDeclaredMethod("hello")
                 .invoke(null),
             Matchers.equalTo("Hello world")
