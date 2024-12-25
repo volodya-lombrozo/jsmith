@@ -25,26 +25,15 @@ package com.github.lombrozo.jsmith;
 
 import com.github.lombrozo.jsmith.guard.InMemoryCompiler;
 import com.jcabi.log.Logger;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import javax.tools.ToolProvider;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -85,18 +74,27 @@ final class RandomJavaClassTest {
     }
 
     @Test
-    void generatesSpecificJavaClass(@TempDir final Path dir) {
+    void generatesSpecificJavaClass() {
         final String src = new RandomJavaClass(
             new Params(7_648_701_033_033_712_484L)
         ).src();
         Logger.info(this, "Generated source code: %n%s%n", src);
-        MatcherAssert.assertThat(
-            "The generated source code should be compilable",
-            RandomJavaClassTest.compile(
-                src,
-                dir
-            ),
-            Matchers.equalTo(0)
+        Assertions.assertDoesNotThrow(
+            () -> new InMemoryCompiler().compile(src),
+            "The generated source code should be compilable"
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("programs")
+    void createsCompilableJavaSourceCode(final Params params, final String src) {
+        Logger.info(this, "Params [%s]  Generated source code: %n%s%n", params, src);
+        Assertions.assertDoesNotThrow(
+            () -> new InMemoryCompiler().compile(src),
+            String.format(
+                "The generated source code should be compilable. You can reproduce the test using the following params: %s",
+                params
+            )
         );
     }
 
@@ -137,39 +135,6 @@ final class RandomJavaClassTest {
         Logger.info(this, "Results: %n%s%n", String.join("\n", results));
     }
 
-    @ParameterizedTest
-    @MethodSource("programs")
-    void createsCompilableJavaSourceCode(
-        final Params params, final String src, @TempDir final Path temp
-    ) {
-        Logger.info(this, "Params [%s]  Generated source code: %n%s%n", params, src);
-        final int run = RandomJavaClassTest.compile(src, temp);
-        MatcherAssert.assertThat(
-            String.format(
-                "The generated source code should be compilable. You can reproduce the test using the following params: %s",
-                params
-            ),
-            run,
-            Matchers.equalTo(0)
-        );
-    }
-
-    /**
-     * Save Java source code to the file.
-     * @param src Java source code.
-     * @param temp Temporary directory.
-     * @return Path to the saved file.
-     */
-    static String saveJava(final String src, final Path temp) {
-        try {
-            final Path java = temp.resolve("RandomJavaClass.java");
-            Files.write(java, src.getBytes(StandardCharsets.UTF_8));
-            return java.toString();
-        } catch (final IOException ex) {
-            throw new IllegalStateException("Can't save Java source code", ex);
-        }
-    }
-
     /**
      * Generate random programs.
      * @return Stream of random programs.
@@ -178,41 +143,5 @@ final class RandomJavaClassTest {
         return Stream.generate(Params::new)
             .limit(10)
             .map(params -> Arguments.of(params, new RandomJavaClass(params).src()));
-    }
-
-    /**
-     * Compile Java source code.
-     * @param src Java source code.
-     * @param temp Temporary directory.
-     * @return Compilation result.
-     */
-    private static int compile(final String src, final Path temp) {
-        final Pattern namepattern = Pattern.compile(
-            "(class|interface)\\s+([a-zA-Z_$][a-zA-Z\\d_$]*)\\b");
-        final Pattern pckgpattern = Pattern.compile(
-            "package\\s+([a-zA-Z_$][a-zA-Z\\d_$]*(?:\\.[a-zA-Z_$][a-zA-Z\\d_$]*)*)\\s*;\n");
-
-        final Matcher matcher1 = pckgpattern.matcher(src);
-        final String pckg;
-        if (matcher1.find()) {
-            pckg = matcher1.group(1);
-        } else {
-            pckg = null;
-        }
-        final Matcher matcher = namepattern.matcher(src);
-        matcher.find();
-        final String name = matcher.group(2);
-        final InMemoryCompiler compiler = new InMemoryCompiler();
-//        final String collect = Stream.of(pckg, name).filter(Objects::nonNull)
-//            .collect(Collectors.joining("."));
-        compiler.compile(name, src);
-        return 0;
-
-//        return ToolProvider.getSystemJavaCompiler().run(
-//            new ByteArrayInputStream(src.getBytes(StandardCharsets.UTF_8)),
-//            new BufferedOutputStream(System.out),
-//            new BufferedOutputStream(System.err),
-//            RandomJavaClassTest.saveJava(src, temp)
-//        );
     }
 }

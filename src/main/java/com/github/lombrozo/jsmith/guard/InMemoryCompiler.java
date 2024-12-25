@@ -69,12 +69,11 @@ public final class InMemoryCompiler {
 
     /**
      * Compile source code.
-     * @param name Name of the class.
      * @param src Source code.
      * @return Compiled class.
      */
-    public Class<?> compile(final String name, final String src) {
-        return this.compile(new CompilationUnit(name, src)).get(0);
+    public Class<?> compile(final String src) {
+        return this.compile(new CompilationUnit(src)).get(0);
     }
 
     /**
@@ -166,9 +165,23 @@ public final class InMemoryCompiler {
     private static final class CompilationUnit {
 
         /**
-         * Name of the class.
+         * Package pattern.
          */
-        private final String clazz;
+        private static final Pattern PACKAGE = Pattern.compile(
+            "package\\s+([a-zA-Z_$][a-zA-Z\\d_$]*(\\.[a-zA-Z_$][a-zA-Z\\d_$]*)*)\\s*;"
+        );
+
+        /**
+         * Class name pattern.
+         */
+        private static final Pattern CLASS = Pattern.compile(
+            "(class|interface)\\s+([a-zA-Z_$][a-zA-Z\\d_$]*)\\b"
+        );
+
+        /**
+         * Class name.
+         */
+        private final String name;
 
         /**
          * Source code.
@@ -178,34 +191,34 @@ public final class InMemoryCompiler {
 
         /**
          * Constructor.
+         * @param src Source code.
+         */
+        private CompilationUnit(final String src) {
+            this(CompilationUnit.findName(src), src);
+        }
+
+        /**
+         * Constructor.
          * @param name Name of the class.
          * @param src Source code.
          */
         private CompilationUnit(final String name, final String src) {
-            this.clazz = name;
+            this.name = name;
             this.src = src;
         }
 
-        /**
-         * Name of the class.
-         * @return Name of the class.
-         */
-        String name() {
-            return this.clazz;
-        }
-
+        @ToString.Include
         String fullName() {
-            return Stream.of(this.extractPckg(), this.extractName()).filter(s -> !s.isEmpty())
-                .collect(
-                    Collectors.joining(".")
-                );
+            return Stream.of(this.findPckg(), this.name).filter(s -> !s.isEmpty())
+                .collect(Collectors.joining("."));
         }
 
-        String extractPckg() {
-            final Pattern pattern = Pattern.compile(
-                "package\\s+([a-zA-Z_$][a-zA-Z\\d_$]*(\\.[a-zA-Z_$][a-zA-Z\\d_$]*)*)\\s*;"
-            );
-            final Matcher matcher = pattern.matcher(this.src);
+        /**
+         * Find the package name.
+         * @return Package name.
+         */
+        private String findPckg() {
+            final Matcher matcher = CompilationUnit.PACKAGE.matcher(this.src);
             final String pckg;
             if (matcher.find()) {
                 pckg = matcher.group(1);
@@ -215,10 +228,13 @@ public final class InMemoryCompiler {
             return pckg;
         }
 
-        String extractName() {
-            final Pattern pattern = Pattern.compile(
-                "(class|interface)\\s+([a-zA-Z_$][a-zA-Z\\d_$]*)\\b");
-            final Matcher matcher = pattern.matcher(this.src);
+        /**
+         * Find the name of the class.
+         * @param src Source code.
+         * @return Name of the class.
+         */
+        private static String findName(final String src) {
+            final Matcher matcher = CompilationUnit.CLASS.matcher(src);
             if (matcher.find()) {
                 return matcher.group(2);
             } else {

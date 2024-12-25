@@ -40,7 +40,6 @@ final class InMemoryCompilerTest {
             "Hello world is expected",
             (String) new InMemoryCompiler()
                 .compile(
-                    "HelloWorld",
                     "public class HelloWorld { public static String hello() {return \"Hello world\";}}"
                 ).getDeclaredMethod("hello")
                 .invoke(null),
@@ -54,7 +53,6 @@ final class InMemoryCompilerTest {
             "Hello world with package is expected",
             (String) new InMemoryCompiler()
                 .compile(
-                    "HelloWorld",
                     "package com.github.lombrozo;\n public class HelloWorld { public static String hello() {return \"Hello world with package\";}}"
                 ).getDeclaredMethod("hello")
                 .invoke(null),

@@ -74,12 +74,7 @@ public final class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaF
      * @return The class loader.
      */
     ClassLoader loader() {
-        return new MemoryClassLoader(this.getAllClassBytes());
-    }
-
-    private Map<String, byte[]> getAllClassBytes() {
-        return this.compiled.stream()
-            .collect(Collectors.toMap(JavaClass::fullName, JavaClass::bytes));
+        return new MemoryClassLoader(this.compiled);
     }
 
     /**
@@ -149,9 +144,17 @@ public final class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaF
 
         /**
          * Constructor.
+         * @param classes The classes.
+         */
+        MemoryClassLoader(final List<? extends JavaClass> classes) {
+            this(classes.stream().collect(Collectors.toMap(JavaClass::fullName, JavaClass::bytes)));
+        }
+
+        /**
+         * Constructor.
          * @param all All the classes.
          */
-        MemoryClassLoader(final Map<String, byte[]> all) {
+        private MemoryClassLoader(final Map<String, byte[]> all) {
             this.classes = new HashMap<>(all);
         }
 
