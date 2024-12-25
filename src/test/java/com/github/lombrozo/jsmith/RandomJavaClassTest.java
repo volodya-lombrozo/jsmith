@@ -55,9 +55,13 @@ final class RandomJavaClassTest {
 
     @Test
     void generatesSameSrc() {
-        final RandomJavaClass clazz = new RandomJavaClass();
+        final Params params = new Params();
+        final RandomJavaClass clazz = new RandomJavaClass(params);
         MatcherAssert.assertThat(
-            "We expect that the generated source code will be the same",
+            String.format(
+                "We expect that the generated source code will be the same, but they weren't '%s'",
+                params
+            ),
             clazz.src(),
             Matchers.equalTo(clazz.src())
         );
