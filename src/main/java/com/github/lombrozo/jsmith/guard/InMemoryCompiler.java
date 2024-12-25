@@ -207,10 +207,22 @@ public final class InMemoryCompiler {
             this.src = src;
         }
 
+        /**
+         * Get the full name of the class.
+         * @return Full name of the class.
+         */
         @ToString.Include
         String fullName() {
             return Stream.of(this.findPckg(), this.name).filter(s -> !s.isEmpty())
                 .collect(Collectors.joining("."));
+        }
+
+        /**
+         * Convert to a Java file object.
+         * @return Java file object.
+         */
+        JavaFileObject source() {
+            return new JavaSource(this.fullName(), this.src);
         }
 
         /**
@@ -240,14 +252,6 @@ public final class InMemoryCompiler {
             } else {
                 throw new IllegalStateException("Can't find class name");
             }
-        }
-
-        /**
-         * Convert to a Java file object.
-         * @return Java file object.
-         */
-        JavaFileObject source() {
-            return new JavaSource(this.fullName(), this.src);
         }
 
     }

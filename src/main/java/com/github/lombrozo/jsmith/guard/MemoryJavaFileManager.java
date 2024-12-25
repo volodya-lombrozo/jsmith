@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
@@ -81,18 +82,18 @@ public final class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaF
      * A byte array class.
      * @since 0.1
      */
-    private static class JavaClass extends SimpleJavaFileObject {
+    private static final class JavaClass extends SimpleJavaFileObject {
 
         /**
          * The output stream.
          */
-        private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        private final ByteArrayOutputStream baos;
 
         /**
          * Simple name of the class.
          * Example: com.example.MyClass
          */
-        private String name;
+        private final String name;
 
         /**
          * Constructor.
@@ -107,6 +108,7 @@ public final class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaF
                 kind
             );
             this.name = name;
+            this.baos = new ByteArrayOutputStream();
         }
 
         @Override
@@ -159,12 +161,15 @@ public final class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaF
         }
 
         @Override
-        protected Class<?> findClass(final String name) throws ClassNotFoundException {
+        public Class<?> findClass(final String name) throws ClassNotFoundException {
             final byte[] bytes = this.classes.get(name);
-            if (bytes != null) {
-                return this.defineClass(name, bytes, 0, bytes.length);
+            final Class<?> result;
+            if (Objects.nonNull(bytes)) {
+                result = this.defineClass(name, bytes, 0, bytes.length);
+            } else {
+                result = super.findClass(name);
             }
-            return super.findClass(name);
+            return result;
         }
     }
 }

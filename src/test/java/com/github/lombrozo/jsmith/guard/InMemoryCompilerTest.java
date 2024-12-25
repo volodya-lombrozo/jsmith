@@ -23,7 +23,6 @@
  */
 package com.github.lombrozo.jsmith.guard;
 
-import java.lang.reflect.InvocationTargetException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
