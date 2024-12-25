@@ -175,7 +175,7 @@ public final class InMemoryCompiler {
          * Class name pattern.
          */
         private static final Pattern CLASS = Pattern.compile(
-            "(class|interface)\\s+([a-zA-Z_$][a-zA-Z\\d_$]*)\\b"
+            "(class|interface)\\s+([a-zA-Z_$][a-zA-Z\\d_$]*)"
         );
 
         /**
@@ -213,7 +213,8 @@ public final class InMemoryCompiler {
          */
         @ToString.Include
         String fullName() {
-            return Stream.of(this.findPckg(), this.name).filter(s -> !s.isEmpty())
+            return Stream.of(this.findPckg(), this.name)
+                .filter(s -> !s.isEmpty())
                 .collect(Collectors.joining("."));
         }
 
