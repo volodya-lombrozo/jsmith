@@ -23,17 +23,14 @@
  */
 package com.github.lombrozo.jsmith.guard;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -140,84 +137,25 @@ public final class InMemoryCompiler {
         final MemoryJavaFileManager manager = new MemoryJavaFileManager(
             this.compiler.getStandardFileManager(null, null, null)
         );
-
         final boolean success = this.compiler.getTask(
             null,
             manager,
             null,
             null,
             null,
-            Arrays.stream(units).map(CompilationUnit::toJava).collect(Collectors.toList())
+            Arrays.stream(units).map(CompilationUnit::source).collect(Collectors.toList())
         ).call();
         if (!success) {
             throw new IllegalStateException(
                 String.format("Compilation failed for units %s", Arrays.asList(units))
             );
         }
-        final Map<String, byte[]> bytes = manager.getAllClassBytes();
-        MemoryClassLoader classLoader = new MemoryClassLoader(bytes);
-
-        return Arrays.stream(units).map(CompilationUnit::fullName).map(name -> {
-            try {
-                return classLoader.loadClass(name);
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException(e);
-            }
-        }).collect(Collectors.toList());
-
-//        classLoader.loadClass(units[0].fullName());
-
-//        final List<Class<?>> res = new ArrayList<>(0);
-//        try (URLClassLoader loader = this.loader(units)) {
-//            for (final CompilationUnit unit : units) {
-//                res.add(Class.forName(unit.name(), true, loader));
-//            }
-//        }
-//        return res;
-    }
-
-    /**
-     * Create a class loader.
-     * @return Class loader.
-     * @throws MalformedURLException If a URL of a classloader is malformed.
-     */
-    private URLClassLoader loader(CompilationUnit... units) throws MalformedURLException {
-        return URLClassLoader.newInstance(
-            new URL[]{new File("").toURI().toURL()}
-        );
-
-        //        final ArrayList<URL> urls = new ArrayList<>(0);
-//        for (final CompilationUnit unit : units) {
-//            final URL url = URI.create(
-//                String.format(
-//                    "string:///%s%s",
-//                    unit.fullName().replace('.', '/'),
-//                    JavaFileObject.Kind.SOURCE.extension
-//                )
-//            ).toURL();
-//        }
-//        final URL[] array = urls.toArray(new URL[0]);
-//        return URLClassLoader.newInstance(array)
-//
-//            ;
-
-
-        //        List<String> paths = new ArrayList<>(0);
-//        paths.add("");
-//        for (final CompilationUnit unit : units) {
-//            final String path = unit.extractPckg()
-//                ;
-//
-//            paths.add(path);
-//        }
-//        final URL[] urls = new URL[paths.size()];
-//        for (int i = 0; i < paths.size(); i++) {
-//
-//
-//
-//            urls[i] = new File(paths.get(i)).toURI().toURL();
-//        }
-//        return URLClassLoader.newInstance(urls);
+        final ClassLoader loader = manager.loader();
+        final List<Class<?>> res = new ArrayList<>(0);
+        for (final CompilationUnit unit : units) {
+            res.add(loader.loadClass(unit.fullName()));
+        }
+        return res;
     }
 
     /**
@@ -292,8 +230,8 @@ public final class InMemoryCompiler {
          * Convert to a Java file object.
          * @return Java file object.
          */
-        JavaFileObject toJava() {
-            return new StringSource(this.fullName(), this.src);
+        JavaFileObject source() {
+            return new JavaSource(this.fullName(), this.src);
         }
 
     }
@@ -302,7 +240,7 @@ public final class InMemoryCompiler {
      * Java source code.
      * @since 0.2
      */
-    private static class StringSource extends SimpleJavaFileObject {
+    private static class JavaSource extends SimpleJavaFileObject {
 
         /**
          * Java source code.
@@ -314,7 +252,7 @@ public final class InMemoryCompiler {
          * @param name Name of the class.
          * @param code Java source code.
          */
-        StringSource(final String name, final String code) {
+        JavaSource(final String name, final String code) {
             super(
                 URI.create(
                     String.format(

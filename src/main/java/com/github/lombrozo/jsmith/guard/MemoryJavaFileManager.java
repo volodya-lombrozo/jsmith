@@ -23,36 +23,145 @@
  */
 package com.github.lombrozo.jsmith.guard;
 
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
+import javax.tools.SimpleJavaFileObject;
 
+/**
+ * Custom Java file manager that stores compiled classes in memory.
+ * @since 0.2
+ */
 public final class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
-    private final Map<String, ByteArrayClass> compiledClasses = new HashMap<>();
 
-    protected MemoryJavaFileManager(JavaFileManager fileManager) {
-        super(fileManager);
+    /**
+     * The compiled classes.
+     */
+    private final List<JavaClass> compiled;
+
+    /**
+     * Constructor.
+     * @param origin The original file manager
+     */
+    MemoryJavaFileManager(final JavaFileManager origin) {
+        super(origin);
+        this.compiled = new ArrayList<>(0);
     }
 
     @Override
     public JavaFileObject getJavaFileForOutput(
-        Location location, String className,
-        JavaFileObject.Kind kind, FileObject sibling
-    ) throws IOException {
-        ByteArrayClass byteClass = new ByteArrayClass(className, kind);
-        compiledClasses.put(className, byteClass);
-        return byteClass;
+        final Location location,
+        final String name,
+        final JavaFileObject.Kind kind,
+        final FileObject sibling
+    ) {
+        final JavaClass clazz = new JavaClass(name, kind);
+        this.compiled.add(clazz);
+        return clazz;
     }
 
-    public Map<String, byte[]> getAllClassBytes() {
-        Map<String, byte[]> classBytes = new HashMap<>();
-        for (Map.Entry<String, ByteArrayClass> entry : this.compiledClasses.entrySet()) {
-            classBytes.put(entry.getKey(), entry.getValue().getBytes());
+    /**
+     * Get the class loader.
+     * @return The class loader.
+     */
+    ClassLoader loader() {
+        return new MemoryClassLoader(this.getAllClassBytes());
+    }
+
+    private Map<String, byte[]> getAllClassBytes() {
+        return this.compiled.stream()
+            .collect(Collectors.toMap(JavaClass::fullName, JavaClass::bytes));
+    }
+
+    /**
+     * A byte array class.
+     * @since 0.1
+     */
+    private static class JavaClass extends SimpleJavaFileObject {
+
+        /**
+         * The output stream.
+         */
+        private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        /**
+         * Simple name of the class.
+         * Example: com.example.MyClass
+         */
+        private String name;
+
+        /**
+         * Constructor.
+         * @param name The name of the class.
+         * @param kind The kind of the class.
+         */
+        private JavaClass(final String name, final Kind kind) {
+            super(
+                URI.create(
+                    String.format("bytes:///%s%s", name.replace('.', '/'), kind.extension)
+                ),
+                kind
+            );
+            this.name = name;
         }
-        return classBytes;
+
+        @Override
+        public OutputStream openOutputStream() {
+            return this.baos;
+        }
+
+        /**
+         * Get the full name.
+         * @return The full name.
+         */
+        String fullName() {
+            return this.name;
+        }
+
+        /**
+         * Get the bytes.
+         * @return The bytes.
+         */
+        byte[] bytes() {
+            return this.baos.toByteArray();
+        }
+    }
+
+    /**
+     * A class loader that loads classes from memory.
+     * @since 0.1
+     */
+    private static final class MemoryClassLoader extends ClassLoader {
+
+        /**
+         * All the classes.
+         */
+        private final Map<String, byte[]> classes;
+
+        /**
+         * Constructor.
+         * @param all All the classes.
+         */
+        MemoryClassLoader(final Map<String, byte[]> all) {
+            this.classes = new HashMap<>(all);
+        }
+
+        @Override
+        protected Class<?> findClass(final String name) throws ClassNotFoundException {
+            final byte[] bytes = this.classes.get(name);
+            if (bytes != null) {
+                return this.defineClass(name, bytes, 0, bytes.length);
+            }
+            return super.findClass(name);
+        }
     }
 }
