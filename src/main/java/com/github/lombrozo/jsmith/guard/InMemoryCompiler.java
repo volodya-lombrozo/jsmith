@@ -31,9 +31,9 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -137,9 +137,13 @@ public final class InMemoryCompiler {
     private List<Class<?>> tryCompile(
         final CompilationUnit... units
     ) throws IOException, ClassNotFoundException, MalformedURLException {
+        final MemoryJavaFileManager manager = new MemoryJavaFileManager(
+            this.compiler.getStandardFileManager(null, null, null)
+        );
+
         final boolean success = this.compiler.getTask(
             null,
-            null,
+            manager,
             null,
             null,
             null,
@@ -150,13 +154,26 @@ public final class InMemoryCompiler {
                 String.format("Compilation failed for units %s", Arrays.asList(units))
             );
         }
-        final List<Class<?>> res = new ArrayList<>(0);
-        try (URLClassLoader loader = this.loader(units)) {
-            for (final CompilationUnit unit : units) {
-                res.add(Class.forName(unit.fullName(), true, loader));
+        final Map<String, byte[]> bytes = manager.getAllClassBytes();
+        MemoryClassLoader classLoader = new MemoryClassLoader(bytes);
+
+        return Arrays.stream(units).map(CompilationUnit::fullName).map(name -> {
+            try {
+                return classLoader.loadClass(name);
+            } catch (ClassNotFoundException e) {
+                throw new IllegalStateException(e);
             }
-        }
-        return res;
+        }).collect(Collectors.toList());
+
+//        classLoader.loadClass(units[0].fullName());
+
+//        final List<Class<?>> res = new ArrayList<>(0);
+//        try (URLClassLoader loader = this.loader(units)) {
+//            for (final CompilationUnit unit : units) {
+//                res.add(Class.forName(unit.name(), true, loader));
+//            }
+//        }
+//        return res;
     }
 
     /**
@@ -165,19 +182,42 @@ public final class InMemoryCompiler {
      * @throws MalformedURLException If a URL of a classloader is malformed.
      */
     private URLClassLoader loader(CompilationUnit... units) throws MalformedURLException {
-        List<String> paths = new ArrayList<>(0);
-        paths.add("");
-        for (final CompilationUnit unit : units) {
-            final String path = unit.extractPckg()
-//                .replace('.', '/')
-                ;
-            paths.add(path);
-        }
-        final URL[] urls = new URL[paths.size()];
-        for (int i = 0; i < paths.size(); i++) {
-            urls[i] = new File(paths.get(i)).toURI().toURL();
-        }
-        return URLClassLoader.newInstance(urls);
+        return URLClassLoader.newInstance(
+            new URL[]{new File("").toURI().toURL()}
+        );
+
+        //        final ArrayList<URL> urls = new ArrayList<>(0);
+//        for (final CompilationUnit unit : units) {
+//            final URL url = URI.create(
+//                String.format(
+//                    "string:///%s%s",
+//                    unit.fullName().replace('.', '/'),
+//                    JavaFileObject.Kind.SOURCE.extension
+//                )
+//            ).toURL();
+//        }
+//        final URL[] array = urls.toArray(new URL[0]);
+//        return URLClassLoader.newInstance(array)
+//
+//            ;
+
+
+        //        List<String> paths = new ArrayList<>(0);
+//        paths.add("");
+//        for (final CompilationUnit unit : units) {
+//            final String path = unit.extractPckg()
+//                ;
+//
+//            paths.add(path);
+//        }
+//        final URL[] urls = new URL[paths.size()];
+//        for (int i = 0; i < paths.size(); i++) {
+//
+//
+//
+//            urls[i] = new File(paths.get(i)).toURI().toURL();
+//        }
+//        return URLClassLoader.newInstance(urls);
     }
 
     /**

@@ -55,10 +55,10 @@ final class InMemoryCompilerTest {
             (String) new InMemoryCompiler()
                 .compile(
                     "HelloWorld",
-                    "package com.github.lombrozo;\n public class HelloWorld { public static String hello() {return \"Hello world\";}}"
+                    "package com.github.lombrozo;\n public class HelloWorld { public static String hello() {return \"Hello world with package\";}}"
                 ).getDeclaredMethod("hello")
                 .invoke(null),
-            Matchers.equalTo("Hello world")
+            Matchers.equalTo("Hello world with package")
         );
     }
 }
