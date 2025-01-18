@@ -42,9 +42,19 @@ import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
 public final class Identifier implements Rule {
 
     /**
-     * Constructor
+     * Parent rule.
+     */
+    private final Rule parentrule;
+
+    /**
+     * Token or Rule reference.
+     */
+    private final String ref;
+
+    /**
+     * Constructor.
      *
-     * @param parent parent rule
+     * @param parent Parent rule
      * @implNote Constructs Identifier with an empty RULE_REF | TOKEN_REF
      */
     public Identifier(final Rule parent) {
@@ -52,32 +62,27 @@ public final class Identifier implements Rule {
     }
 
     /**
-     * @param parent parent rule
-     * @param ref rule or token reference
+     * Constructor.
+     * @param parent Parent rule
+     * @param ref Rule or token reference
      */
     public Identifier(final Rule parent, final String ref) {
-        this.parentRule = parent;
+        this.parentrule = parent;
         this.ref = ref;
     }
 
-
-
-    final Rule parentRule;
-    final String ref;
-
-
     @Override
     public Rule parent() {
-        return parentRule;
+        return this.parentrule;
     }
 
     @Override
-    public Node generate(Context context) throws WrongPathException {
+    public Node generate(final Context context) throws WrongPathException {
         return new TerminalNode(this, this.ref);
     }
 
     @Override
-    public void append(Rule rule) {
+    public void append(final Rule rule) {
         throw new UnsupportedOperationException("Identifier cannot have children.");
     }
 
