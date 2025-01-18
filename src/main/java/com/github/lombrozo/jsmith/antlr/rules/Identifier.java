@@ -23,20 +23,62 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
+
 /**
  * Identifier rule.
  * The ANTLR grammar definition:
  * {@code
  * identifier
- *     : RULE_REF
- *     | TOKEN_REF
- *     ;
+ * : RULE_REF
+ * | TOKEN_REF
+ * ;
  * }
+ *
  * @since 0.1
  */
-public final class Identifier extends Unimplemented {
+public final class Identifier implements Rule {
+
+    /**
+     * Constructor
+     *
+     * @param parent parent rule
+     * @implNote Constructs Identifier with an empty RULE_REF | TOKEN_REF
+     */
     public Identifier(final Rule parent) {
-        super(parent);
+        this(parent, "");
+    }
+
+    /**
+     * @param parent parent rule
+     * @param ref rule or token reference
+     */
+    public Identifier(final Rule parent, final String ref) {
+        this.parentRule = parent;
+        this.ref = ref;
+    }
+
+
+
+    final Rule parentRule;
+    final String ref;
+
+
+    @Override
+    public Rule parent() {
+        return parentRule;
+    }
+
+    @Override
+    public Node generate(Context context) throws WrongPathException {
+        return new TerminalNode(this, this.ref);
+    }
+
+    @Override
+    public void append(Rule rule) {
+        throw new UnsupportedOperationException("Identifier cannot have children.");
     }
 
     @Override
@@ -46,6 +88,7 @@ public final class Identifier extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new Identifier(this.parent());
+        return new Identifier(this.parent(), this.ref);
     }
+
 }
