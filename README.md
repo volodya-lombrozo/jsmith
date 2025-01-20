@@ -23,7 +23,7 @@ following snippet to your `pom.xml`:
 <dependency>
   <groupId>com.github.volodya-lombrozo</groupId>
   <artifactId>jsmith</artifactId>
-  <version>0.0.3</version>
+  <version>0.1.2</version>
 </dependency>
 ```
 
