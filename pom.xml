@@ -376,6 +376,7 @@ SOFTWARE.
               <publishingServerId>central</publishingServerId>
               <tokenAuth>true</tokenAuth>
               <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
             </configuration>
           </plugin>
         </plugins>
