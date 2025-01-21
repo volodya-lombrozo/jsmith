@@ -43,4 +43,14 @@ final class IdentifierTest {
             Matchers.equalTo("EXAMPLE_REF")
         );
     }
+
+    @Test
+    void isIdentifier() throws WrongPathException {
+        final Identifier id = new Identifier(new Root(), "EXAMPLE_REF");
+        MatcherAssert.assertThat(
+                "We expect that isIdentifier will return true value",
+                Identifier.isIdentifier(id),
+                Matchers.equalTo(true)
+        );
+    }
 }
