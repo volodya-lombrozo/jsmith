@@ -40,16 +40,15 @@ import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
  * @since 0.1
  */
 public final class Identifier implements Rule {
+    /**
+     * Rule name.
+     */
+    private static final String ALIAS = "identifier";
 
     /**
      * Parent rule.
      */
     private final Rule parentrule;
-
-    /**
-     * Rule name.
-     */
-    private static final String ALIAS = "identifier";
 
     /**
      * Token or Rule reference.
@@ -70,7 +69,7 @@ public final class Identifier implements Rule {
      * Constructor.
      *
      * @param parent Parent rule
-     * @param ref    Rule or token reference
+     * @param ref Rule or token reference
      */
     public Identifier(final Rule parent, final String ref) {
         this.parentrule = parent;

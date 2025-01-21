@@ -48,9 +48,9 @@ final class IdentifierTest {
     void isIdentifier() {
         final Identifier id = new Identifier(new Root(), "EXAMPLE_REF");
         MatcherAssert.assertThat(
-                "We expect that isIdentifier will return true value",
-                Identifier.isIdentifier(id),
-                Matchers.equalTo(true)
+           "We expect that isIdentifier will return true value",
+            Identifier.isIdentifier(id),
+            Matchers.equalTo(true)
         );
     }
 }
