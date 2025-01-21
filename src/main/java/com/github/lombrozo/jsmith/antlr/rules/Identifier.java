@@ -47,6 +47,11 @@ public final class Identifier implements Rule {
     private final Rule parentrule;
 
     /**
+     * Rule name.
+     */
+    private static final String ALIAS = "identifier";
+
+    /**
      * Token or Rule reference.
      */
     private final String ref;
@@ -63,8 +68,9 @@ public final class Identifier implements Rule {
 
     /**
      * Constructor.
+     *
      * @param parent Parent rule
-     * @param ref Rule or token reference
+     * @param ref    Rule or token reference
      */
     public Identifier(final Rule parent, final String ref) {
         this.parentrule = parent;
@@ -94,6 +100,15 @@ public final class Identifier implements Rule {
     @Override
     public Rule copy() {
         return new Identifier(this.parent(), this.ref);
+    }
+
+    /**
+     * Checks if rule is Identifier.
+     * @param rule Rule to check.
+     * @return True if rule is identifier, false otherwise.
+     */
+    static boolean isIdentifier(final Rule rule) {
+        return Identifier.ALIAS.equals(rule.name());
     }
 
 }
