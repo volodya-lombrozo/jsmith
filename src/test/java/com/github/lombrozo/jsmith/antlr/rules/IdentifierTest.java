@@ -45,7 +45,7 @@ final class IdentifierTest {
     }
 
     @Test
-    void isIdentifier() throws WrongPathException {
+    void isIdentifier() {
         final Identifier id = new Identifier(new Root(), "EXAMPLE_REF");
         MatcherAssert.assertThat(
                 "We expect that isIdentifier will return true value",
