@@ -32,10 +32,10 @@ import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
  * The ANTLR grammar definition:
  * {@code
  * identifier
- * : RULE_REF
- * | TOKEN_REF
- * ;
- * }
+ *     : RULE_REF
+ *     | TOKEN_REF
+ *     ;
+ *     }
  *
  * @since 0.1
  */
@@ -48,22 +48,13 @@ public final class Identifier implements Rule {
     /**
      * Parent rule.
      */
-    private final Rule parentrule;
+    private final Rule top;
 
     /**
      * Token or Rule reference.
      */
     private final String ref;
 
-    /**
-     * Constructor.
-     *
-     * @param parent Parent rule
-     * @implNote Constructs Identifier with an empty RULE_REF | TOKEN_REF
-     */
-    public Identifier(final Rule parent) {
-        this(parent, "");
-    }
 
     /**
      * Constructor.
@@ -72,13 +63,13 @@ public final class Identifier implements Rule {
      * @param ref Rule or token reference
      */
     public Identifier(final Rule parent, final String ref) {
-        this.parentrule = parent;
+        this.top = parent;
         this.ref = ref;
     }
 
     @Override
     public Rule parent() {
-        return this.parentrule;
+        return this.top;
     }
 
     @Override
@@ -100,14 +91,4 @@ public final class Identifier implements Rule {
     public Rule copy() {
         return new Identifier(this.parent(), this.ref);
     }
-
-    /**
-     * Checks if rule is Identifier.
-     * @param rule Rule to check.
-     * @return True if rule is identifier, false otherwise.
-     */
-    static boolean isIdentifier(final Rule rule) {
-        return Identifier.ALIAS.equals(rule.name());
-    }
-
 }
