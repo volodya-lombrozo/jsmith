@@ -32,19 +32,14 @@ import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
  * The ANTLR grammar definition:
  * {@code
  * identifier
- *     : RULE_REF
- *     | TOKEN_REF
- *     ;
- *     }
+ * : RULE_REF
+ * | TOKEN_REF
+ * ;
+ * }
  *
  * @since 0.1
  */
 public final class Identifier implements Rule {
-    /**
-     * Rule name.
-     */
-    private static final String ALIAS = "identifier";
-
     /**
      * Parent rule.
      */
@@ -55,7 +50,7 @@ public final class Identifier implements Rule {
      */
     private final String ref;
 
-     /**
+    /**
      * Constructor.
      *
      * @param parent Parent rule
@@ -64,6 +59,7 @@ public final class Identifier implements Rule {
     public Identifier(final Rule parent) {
         this(parent, "");
     }
+
     /**
      * Constructor.
      *
