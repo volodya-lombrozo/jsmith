@@ -55,7 +55,15 @@ public final class Identifier implements Rule {
      */
     private final String ref;
 
-
+     /**
+     * Constructor.
+     *
+     * @param parent Parent rule
+     * @implNote Constructs Identifier with an empty RULE_REF | TOKEN_REF
+     */
+    public Identifier(final Rule parent) {
+        this(parent, "");
+    }
     /**
      * Constructor.
      *
