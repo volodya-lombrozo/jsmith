@@ -31,9 +31,9 @@ import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
  * Identifier rule.
  * The ANTLR grammar definition:
  * {@code
- * identifier
- * : RULE_REF
- * | TOKEN_REF
+ *    identifier
+ *    : RULE_REF
+ *    | TOKEN_REF
  * ;
  * }
  *
