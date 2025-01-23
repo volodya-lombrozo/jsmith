@@ -23,22 +23,39 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * ActionBlock rule.
  * The ANTLR grammar definition:
  * {@code
- * actionBlock
+ *     actionBlock
  *     : BEGIN_ACTION ACTION_CONTENT* END_ACTION
  *     ;
  * }
+ *
  * @since 0.1
  */
-public final class ActionBlock extends Unimplemented {
+public final class ActionBlock implements Rule {
 
     /**
      * Element name.
      */
     private static final String ALIAS = "actionBlock";
+
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * Action content.
+     */
+    private final List<Rule> content;
 
     /**
      * Constructor.
@@ -49,10 +66,36 @@ public final class ActionBlock extends Unimplemented {
 
     /**
      * Constructor.
+     *
      * @param parent Parent rule.
      */
     public ActionBlock(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param content Action content.
+     */
+    public ActionBlock(final Rule parent, final List<Rule> content) {
+        this.top = parent;
+        this.content = content;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        return new LeftToRight(this, this.content).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.content.add(rule);
     }
 
     @Override
@@ -62,7 +105,10 @@ public final class ActionBlock extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new ActionBlock(this.parent());
+        return new ActionBlock(
+            this.parent(),
+            this.content.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 
     static boolean isActionBlock(final Rule rule) {
