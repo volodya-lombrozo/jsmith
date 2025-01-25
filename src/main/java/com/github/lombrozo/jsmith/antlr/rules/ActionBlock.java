@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * ActionBlock rule.
  * The ANTLR grammar definition:
  * {@code
- *     actionBlock
+ * actionBlock
  *     : BEGIN_ACTION ACTION_CONTENT* END_ACTION
  *     ;
  * }

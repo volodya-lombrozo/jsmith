@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests for {@link ActionBlock}.
  *
- * @since 0.1.2
+ * @since 0.2.0
  */
 final class ActionBlockTest {
     @Test
