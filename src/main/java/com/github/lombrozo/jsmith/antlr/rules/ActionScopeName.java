@@ -23,6 +23,10 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
+
 /**
  * ActionScopeName rule.
  * The ANTLR grammar definition:
@@ -35,14 +39,49 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class ActionScopeName extends Unimplemented {
+public final class ActionScopeName implements Rule {
+
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * Identifier | PARSER | LEXER.
+     */
+    private final String ref;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public ActionScopeName(final Rule parent) {
-        super(parent);
+        this(parent, "");
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param ref Identifier | PARSER | LEXER.
+     */
+    public ActionScopeName(final Rule parent, final String ref) {
+        this.top = parent;
+        this.ref = ref;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        return new TerminalNode(this, this.ref);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        throw new UnsupportedOperationException("ActionScopeName cannot have children.");
     }
 
     @Override
@@ -52,6 +91,7 @@ public final class ActionScopeName extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new ActionScopeName(this.parent());
+        return new ActionScopeName(this.parent(), this.ref);
     }
+
 }
