@@ -269,7 +269,7 @@ normalInterfaceDeclaration
     ;
 
 normalClassDeclaration
-    : (inheritanceModifier SPACE)? ('strictfp' SPACE)?  'class' SPACE /* $jsmith-unique */ Identifier classBody
+    : (inheritanceModifier SPACE)? ('strictfp' SPACE)?  'class' SPACE /* $jsmith-unique */ /* $jsmith-var-decl */ Identifier classBody
     ;
 
 interfaceModifier
@@ -281,8 +281,34 @@ inheritanceModifier
     | 'abstract'
     ;
 
+/**
+* @todo #15:30min Classes are generated with only one constructor.
+* Currently, generating multiple constructors can cause a problem
+* where a constructor with the same signature is generated several times.
+* We need to make sure that only unique constructors with different numbers of parameters are generated.
+*/
+
 classBody /* $jsmith-scope */
-    : '{' classBodyDeclaration+ '}' NL
+    : '{' constructorDeclaration classBodyDeclaration+'}' NL
+    ;
+
+constructorDeclaration
+    : NL constructorModifiers SPACE /* $jsmith-var-target */ Identifier SPACE '(' constructorParams ')' SPACE constructorBody
+    ;
+
+constructorParams
+    : (vardef (',' SPACE vardef)*)?
+    ;
+
+constructorBody
+    : '{' '}'
+    ;
+
+
+constructorModifiers
+    : 'public'
+    | 'private'
+    | 'protected'
     ;
 
 interfaceBody
