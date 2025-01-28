@@ -289,7 +289,7 @@ inheritanceModifier
 */
 
 classBody /* $jsmith-scope */
-    : '{' constructorDeclaration classBodyDeclaration+'}' NL
+    : '{' (constructorDeclaration)? classBodyDeclaration+'}' NL
     ;
 
 constructorDeclaration
@@ -301,7 +301,7 @@ constructorParams
     ;
 
 constructorBody
-    : '{' '}'
+    : methodBlock
     ;
 
 
