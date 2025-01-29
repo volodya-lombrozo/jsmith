@@ -23,6 +23,13 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * ArgActionBlock rule.
  * The ANTLR rule for the argActionBlock:
@@ -33,14 +40,48 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class ArgActionBlock extends Unimplemented {
+public final class ArgActionBlock implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * Argument content.
+     */
+    private final List<Rule> content;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public ArgActionBlock(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<Rule>());
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param content Argument content.
+     */
+    public ArgActionBlock(final Rule parent, final List<Rule> content) {
+        this.top = parent;
+        this.content = content;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        return new LeftToRight(this, this.content).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.content.add(rule);
     }
 
     @Override
@@ -50,6 +91,8 @@ public final class ArgActionBlock extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new ArgActionBlock(this.parent());
+        return new ArgActionBlock(
+            this.parent(), this.content.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
