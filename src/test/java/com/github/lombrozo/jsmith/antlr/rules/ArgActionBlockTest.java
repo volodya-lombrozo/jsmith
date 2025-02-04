@@ -28,6 +28,11 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for {@link ArgActionBlock}.
+ *
+ * @since 0.2.0
+ */
 final class ArgActionBlockTest {
     @Test
     void generatesArgActionBlock() throws WrongPathException {

@@ -25,7 +25,6 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,7 +55,7 @@ public final class ArgActionBlock implements Rule {
      * @param parent Parent rule.
      */
     public ArgActionBlock(final Rule parent) {
-        this(parent, new ArrayList<Rule>());
+        this(parent, new ArrayList<Rule>(0));
     }
 
     /**
