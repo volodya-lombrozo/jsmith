@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024 Volodya Lombrozo
+ * Copyright (c) 2023-2025 Volodya Lombrozo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,11 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for {@link ArgActionBlock}.
+ *
+ * @since 0.2.0
+ */
 final class ArgActionBlockTest {
     @Test
     void generatesArgActionBlock() throws WrongPathException {
