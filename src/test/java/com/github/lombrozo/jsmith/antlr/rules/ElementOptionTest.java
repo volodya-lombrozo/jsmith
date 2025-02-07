@@ -46,15 +46,16 @@ final class ElementOptionTest {
             Matchers.equalTo("test=test;")
         );
     }
+
     @Test
     void throwsIllegalStateException() throws WrongPathException {
         final ElementOption rule = new ElementOption(new Root());
-        try{
+        try {
             rule.generate(new Context());
-        }catch (IllegalStateException e){
+        } catch (final IllegalStateException exception) {
             MatcherAssert.assertThat(
                 "We expect ElementOption to throw IllegalState",
-                e.getMessage(),
+                exception.getMessage(),
                 Matchers.equalTo("ElementOption should have 1 or 3 rules, provided: 0")
             );
         }
