@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * ElementOption rule.
  * The ANTLR grammar definition:
@@ -34,13 +40,57 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class ElementOption extends Unimplemented {
+public final class ElementOption implements Rule {
+
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of rules.
+     */
+    private final List<Rule> rules;
+
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public ElementOption(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<Rule>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule
+     * @param rules List of rules
+     */
+    public ElementOption(final Rule parent, final List<Rule> rules) {
+        this.top = parent;
+        this.rules = rules;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.rules.size() != 1 && this.rules.size() != 3) {
+            throw new IllegalStateException(
+                String.format(
+                    "ElementOption should have 1 or 3 rules, provided: %d",
+                    this.rules.size()
+                )
+            );
+        }
+        return new LeftToRight(this, this.rules).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.rules.add(rule);
     }
 
     @Override
@@ -50,6 +100,9 @@ public final class ElementOption extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new ElementOption(this.parent());
+        return new ElementOption(
+            this.parent(),
+            this.rules.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
