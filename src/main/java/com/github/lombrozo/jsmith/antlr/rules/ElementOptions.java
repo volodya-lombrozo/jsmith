@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Element options.
  * The ANTLR grammar definition:
@@ -33,9 +39,48 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class ElementOptions extends Unimplemented {
+public final class ElementOptions implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of child rules.
+     */
+    private final List<Rule> rules;
+
+    /**
+     * Constructor.
+     * @param parent Parent rule
+     */
     public ElementOptions(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule
+     * @param rules List of rules.
+     */
+    public ElementOptions(final Rule parent, final List<Rule> rules) {
+        this.top = parent;
+        this.rules = rules;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        return new LeftToRight(this, this.rules).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.rules.add(rule);
     }
 
     @Override
@@ -45,6 +90,9 @@ public final class ElementOptions extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new ElementOptions(this.parent());
+        return new ElementOptions(
+            this.parent(),
+            this.rules.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
