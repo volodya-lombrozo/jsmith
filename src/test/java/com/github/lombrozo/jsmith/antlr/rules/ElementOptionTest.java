@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -48,16 +49,11 @@ final class ElementOptionTest {
     }
 
     @Test
-    void throwsIllegalStateException() throws WrongPathException {
+    void throwsIllegalStateException() {
         final ElementOption rule = new ElementOption(new Root());
-        try {
-            rule.generate(new Context());
-        } catch (final IllegalStateException exception) {
-            MatcherAssert.assertThat(
-                "We expect ElementOption to throw IllegalState",
-                exception.getMessage(),
-                Matchers.equalTo("ElementOption should have 1 or 3 rules, provided: 0")
-            );
-        }
+        Assertions.assertThrows(
+            IllegalStateException.class, () -> rule.generate(new Context()),
+            "We expect it to throw IllegalStateException"
+        );
     }
 }
