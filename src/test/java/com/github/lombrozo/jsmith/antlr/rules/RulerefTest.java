@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.Unparser;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -59,13 +60,15 @@ final class RulerefTest {
     @Test
     void generatesRuleReferenceByUsingArgActionBlock() throws WrongPathException {
         final String ref = "reference";
-        final ArgActionBlock actionblock = new ArgActionBlock(new Root(), new ArrayList<>(0));
-        final String expected = "Linked rule value(1)";
-        final String expectedtwo = "Linked rule value(2)";
-        actionblock.append(new Literal(expected));
-        actionblock.append(new Literal(expectedtwo));
+        final ArrayList<String> expected = new ArrayList<>(2);
+        expected.add("Linked rule value(1)");
+        expected.add("Linked rule value(2)");
+        final ArgActionBlock block = new ArgActionBlock(
+            new Root(),
+            expected.stream().map(Literal::new).collect(Collectors.toList())
+        );
         final Unparser unparser = new Unparser();
-        unparser.with(ref, actionblock);
+        unparser.with(ref, block);
         final Ruleref ruleref = new Ruleref(new Empty(), ref, unparser);
         MatcherAssert.assertThat(
             String.format(
@@ -73,20 +76,20 @@ final class RulerefTest {
                 ruleref
             ),
             ruleref.generate(new Context()).text().output(),
-            Matchers.equalTo(expected.concat(expectedtwo))
+            Matchers.equalTo(block.generate(new Context()).text().output())
         );
     }
 
     @Test
     void generatesRuleReferenceByUsingElementOptions() throws WrongPathException {
         final String ref = "reference";
-        final ElementOptions elemopts = new ElementOptions(new Empty());
+        final ElementOptions options = new ElementOptions(new Empty());
         final String expected = "Linked rule value";
-        final ElementOption elemopt = new ElementOption(elemopts);
-        elemopt.append(new Identifier(elemopt, expected));
-        elemopts.append(elemopt);
+        final ElementOption element = new ElementOption(options);
+        element.append(new Identifier(element, expected));
+        options.append(element);
         final Unparser unparser = new Unparser();
-        unparser.with(ref, elemopts);
+        unparser.with(ref, options);
         final Ruleref ruleref = new Ruleref(new Empty(), ref, unparser);
         MatcherAssert.assertThat(
             String.format(
