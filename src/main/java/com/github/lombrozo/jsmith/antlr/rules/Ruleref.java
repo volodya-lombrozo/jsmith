@@ -36,9 +36,6 @@ import com.github.lombrozo.jsmith.antlr.view.Node;
  *     ;
  * }
  * @since 0.1
- * @todo #1:30min Add more test cases for rule ref.
- *  Currently, we handle only the case when the rule reference is a simple string.
- *  We need to add more test cases to cover the cases with argActionBlock and elementOptions.
  */
 public final class Ruleref implements Rule {
 
