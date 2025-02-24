@@ -29,6 +29,7 @@ import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 
 /**
@@ -130,12 +131,15 @@ public final class RandomJavaClass {
             new ResourceOf(this.lexer)
         ).generate(this.rule).output();
         try {
-            // Create the code formatter instance
-            CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(new HashMap(0));
-            final TextEdit format = codeFormatter.format(
-                CodeFormatter.K_COMPILATION_UNIT, output, 0, output.length(), 0, null
+            final CodeFormatter formatter = ToolFactory.createCodeFormatter(new HashMap(0));
+            final TextEdit format = formatter.format(
+                CodeFormatter.K_COMPILATION_UNIT, output,
+                0,
+                output.length(),
+                0,
+                System.lineSeparator()
             );
-            final Document document = new Document(output);
+            final IDocument document = new Document(output);
             format.apply(document);
             return document.get();
         } catch (final BadLocationException exception) {
