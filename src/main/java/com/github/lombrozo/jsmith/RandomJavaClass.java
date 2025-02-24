@@ -23,7 +23,9 @@
  */
 package com.github.lombrozo.jsmith;
 
+import com.github.lombrozo.jsmith.antlr.rules.Option;
 import java.util.HashMap;
+import java.util.Optional;
 import org.cactoos.io.ResourceOf;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
@@ -140,8 +142,12 @@ public final class RandomJavaClass {
                 System.lineSeparator()
             );
             final IDocument document = new Document(output);
-            format.apply(document);
-            return document.get();
+            if (format != null) {
+                format.apply(document);
+                return document.get();
+            } else {
+                return output;
+            }
         } catch (final BadLocationException exception) {
             throw new IllegalStateException(
                 String.format("Failed to format source code %n%s%n", output), exception
