@@ -23,10 +23,13 @@
  */
 package com.github.lombrozo.jsmith;
 
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
-import com.google.googlejavaformat.java.JavaFormatterOptions;
+import java.util.HashMap;
 import org.cactoos.io.ResourceOf;
+import org.eclipse.jdt.core.ToolFactory;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
+import org.eclipse.text.edits.TextEdit;
 
 /**
  * Random Java class.
@@ -127,8 +130,15 @@ public final class RandomJavaClass {
             new ResourceOf(this.lexer)
         ).generate(this.rule).output();
         try {
-            return new Formatter(JavaFormatterOptions.builder().build()).formatSource(output);
-        } catch (final FormatterException exception) {
+            // Create the code formatter instance
+            CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(new HashMap(0));
+            final TextEdit format = codeFormatter.format(
+                CodeFormatter.K_COMPILATION_UNIT, output, 0, output.length(), 0, null
+            );
+            final Document document = new Document(output);
+            format.apply(document);
+            return document.get();
+        } catch (final BadLocationException exception) {
             throw new IllegalStateException(
                 String.format("Failed to format source code %n%s%n", output), exception
             );
