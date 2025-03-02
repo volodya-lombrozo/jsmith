@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2025 Volodya Lombrozo
+ * Copyright (c) 2023-2024 Volodya Lombrozo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Action rule.
  * The ANTLR grammar definition:
@@ -33,14 +39,57 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class Action extends Unimplemented {
+public final class Action implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * Elements list.
+     */
+    private final List<Rule> elements;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public Action(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<Rule>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param elements ActionScopeName, Identifier and ActionBlock.
+     */
+    public Action(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.size() < 3) {
+            throw new IllegalStateException(
+                "Action must have at least 3 elements: at, identifier and actionBlock"
+            );
+        } else if (this.elements.size() > 5) {
+            throw new IllegalStateException(
+                "Action must have at most 5 elements: At, actionScopeName, COLONCOLON, identifier and actionBlock"
+            );
+        }
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.elements.add(rule);
     }
 
     @Override
@@ -50,6 +99,8 @@ public final class Action extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new Action(this.parent());
+        return new Action(
+            this.parent(), this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
