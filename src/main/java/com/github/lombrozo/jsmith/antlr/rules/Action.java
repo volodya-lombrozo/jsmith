@@ -75,13 +75,9 @@ public final class Action implements Rule {
 
     @Override
     public Node generate(final Context context) throws WrongPathException {
-        if (this.elements.size() < 3) {
+        if (this.elements.size() != 3 && this.elements.size() != 5) {
             throw new IllegalStateException(
-                "Action must have at least 3 elements: at, identifier and actionBlock"
-            );
-        } else if (this.elements.size() > 5) {
-            throw new IllegalStateException(
-                "Action must have at most 5 elements: At, actionScopeName, COLONCOLON, identifier and actionBlock"
+                "Action must have 3 or 5 elements: at, (actionScopeName, coloncolon)? identifier and actionBlock"
             );
         }
         return new LeftToRight(this, this.elements).generate(context);
