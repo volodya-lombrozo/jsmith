@@ -70,7 +70,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.cactoos</groupId>
       <artifactId>cactoos</artifactId>
-      <version>0.56.1</version>
+      <version>0.57.0</version>
     </dependency>
     <dependency>
       <groupId>com.jcabi</groupId>
@@ -85,7 +85,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.36</version>
+      <version>1.18.38</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -111,19 +111,19 @@ SOFTWARE.
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.12.0</version>
+      <version>5.12.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>5.12.0</version>
+      <version>5.12.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.12.0</version>
+      <version>5.12.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -172,7 +172,7 @@ SOFTWARE.
           <plugin>
             <groupId>com.qulice</groupId>
             <artifactId>qulice-maven-plugin</artifactId>
-            <version>0.23.0</version>
+            <version>0.24.0</version>
             <configuration>
               <license>file:${basedir}/LICENSE.txt</license>
               <excludes>
