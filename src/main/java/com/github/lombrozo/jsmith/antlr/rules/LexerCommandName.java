@@ -23,6 +23,10 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
+
 /**
  * LexerCommandName rule.
  * The ANTLR grammar definition:
@@ -34,14 +38,49 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class LexerCommandName extends Unimplemented {
+public final class LexerCommandName implements Rule {
+
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * Lexer command name. It should be identifier or MODE.
+     */
+    private final String ref;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public LexerCommandName(final Rule parent) {
-        super(parent);
+        this(parent, "");
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param name Name of a lexer command.
+     */
+    public LexerCommandName(final Rule parent, final String name) {
+        this.top = parent;
+        this.ref = name;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        return new TerminalNode(this, this.ref);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        // Should not do anything.
     }
 
     @Override
@@ -51,6 +90,6 @@ public final class LexerCommandName extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new LexerCommandName(this.parent());
+        return new LexerCommandName(this.parent(), this.ref);
     }
 }
