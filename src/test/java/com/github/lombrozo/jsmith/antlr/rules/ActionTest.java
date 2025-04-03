@@ -27,6 +27,7 @@ import com.github.lombrozo.jsmith.antlr.Context;
 import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -62,6 +63,16 @@ final class ActionTest {
             "We expect this action to generate with all elements",
             action.generate(new Context()).text().output(),
             Matchers.equalTo("@testScope::testId{Test Block;}")
+        );
+    }
+
+    @Test
+    void throwsIllegalStateException() throws WrongPathException {
+        final Action action = new Action(new Root());
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> action.generate(new Context()),
+            "We expect action class to throw IllegalStateException if action is created without necessary elements"
         );
     }
 }
