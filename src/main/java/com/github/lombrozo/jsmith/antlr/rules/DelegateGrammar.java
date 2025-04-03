@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Delegate grammar.
  * The ANTLR grammar definition:
@@ -34,14 +40,55 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class DelegateGrammar extends Unimplemented {
+public final class DelegateGrammar implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * Elements list.
+     */
+    private final List<Rule> elements;
 
     /**
      * Constructor.
+     *
      * @param parent Parent rule.
      */
     public DelegateGrammar(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<Rule>(0));
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param parent Parent rule
+     * @param elements Elements list
+     */
+    public DelegateGrammar(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.size() != 1 && this.elements.size() != 3) {
+            throw new IllegalStateException(
+                "DelegateGrammar requires one or three elements: Identifier, (ASSIGN, Identifier)?"
+            );
+        }
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.elements.add(rule);
     }
 
     @Override
@@ -51,6 +98,9 @@ public final class DelegateGrammar extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new DelegateGrammar(this.parent());
+        return new DelegateGrammar(
+            this.parent(),
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
