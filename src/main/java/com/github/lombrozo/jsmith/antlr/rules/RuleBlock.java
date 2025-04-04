@@ -23,6 +23,11 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.List;
+
 /**
  * Rule block.
  * The ruleBlock definition in ANTLR grammar:
@@ -33,14 +38,43 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class RuleBlock extends Unimplemented {
+public final class RuleBlock implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
 
     /**
-     * Constructor.
-     * @param parent Parent rule.
+     * RuleAltList.
      */
+    private final Rule list;
+
     public RuleBlock(final Rule parent) {
-        super(parent);
+        this.list = new RuleAltList(this, List.of(new Literal("Empty")));
+        this.top = parent;
+    }
+
+    public RuleBlock(final Rule parent, final Rule list) {
+        this.top = parent;
+        this.list = list;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (!list.name().contains("ruleAltList")) {
+            throw new IllegalStateException("Child of rule block must be RuleAltList");
+        }
+        return new IntermediateNode(this, this.list.generate(context));
+    }
+
+    // Does nothing
+    @Override
+    public void append(final Rule rule) {
     }
 
     @Override
@@ -50,6 +84,6 @@ public final class RuleBlock extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new RuleBlock(this.parent());
+        return new RuleBlock(this.parent(), this.list.copy());
     }
 }
