@@ -26,7 +26,6 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
 import com.github.lombrozo.jsmith.antlr.view.Node;
-import java.util.List;
 
 /**
  * Rule block.
@@ -38,6 +37,7 @@ import java.util.List;
  * }
  * @since 0.1
  */
+@SuppressWarnings("PMD.OnlyOneConstructorShouldDoInitialization")
 public final class RuleBlock implements Rule {
     /**
      * Parent rule.
@@ -49,11 +49,20 @@ public final class RuleBlock implements Rule {
      */
     private final Rule list;
 
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     */
     public RuleBlock(final Rule parent) {
-        this.list = new RuleAltList(this, List.of(new Literal("Empty")));
         this.top = parent;
+        this.list = new RuleAltList(this);
     }
 
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param list Rule Alternatives List.
+     */
     public RuleBlock(final Rule parent, final Rule list) {
         this.top = parent;
         this.list = list;
@@ -66,15 +75,15 @@ public final class RuleBlock implements Rule {
 
     @Override
     public Node generate(final Context context) throws WrongPathException {
-        if (!list.name().contains("ruleAltList")) {
+        if (!this.list.name().contains("ruleAltList")) {
             throw new IllegalStateException("Child of rule block must be RuleAltList");
         }
         return new IntermediateNode(this, this.list.generate(context));
     }
 
-    // Does nothing
     @Override
     public void append(final Rule rule) {
+        this.list.append(rule);
     }
 
     @Override
