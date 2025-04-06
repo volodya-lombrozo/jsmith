@@ -23,6 +23,10 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
+
 /**
  * LexerCommandExpr rule.
  * The ANTLR grammar definition:
@@ -34,14 +38,57 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class LexerCommandExpr extends Unimplemented {
+public final class LexerCommandExpr implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * Identifier or integer.
+     */
+    private final Rule elem;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public LexerCommandExpr(final Rule parent) {
-        super(parent);
+        this(parent, new Literal(""));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param elem Identifier or int;
+     */
+    public LexerCommandExpr(final Rule parent, final Rule elem) {
+        this.top = parent;
+        this.elem = elem;
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param num Number.
+     */
+    public LexerCommandExpr(final Rule parent, final Integer num) {
+        this(parent, new Literal(num.toString()));
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        return new TerminalNode(this, this.elem.generate(context).text().output());
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        // Does nothing.
     }
 
     @Override
@@ -51,6 +98,6 @@ public final class LexerCommandExpr extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new LexerCommandExpr(this.parent());
+        return new LexerCommandExpr(this.parent(), this.elem.copy());
     }
 }
