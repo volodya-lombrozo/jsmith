@@ -37,10 +37,12 @@ final class LexerCommandNameTest {
     @Test
     void generatesLexerCommandName() throws WrongPathException {
         final String ref = "Testname";
-        final LexerCommandName name = new LexerCommandName(new Root(), ref);
+        final LexerCommandName name = new LexerCommandName(new Root());
+        final Identifier id = new Identifier(name, ref);
+        name.append(id);
         Assertions.assertEquals(
             name.generate(new Context()).text().output(),
-            ref,
+            id.generate(new Context()).text().output(),
             "We expect LexerCommandName to generate correctly"
         );
     }

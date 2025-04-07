@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * LexerCommandName rule.
@@ -48,24 +49,15 @@ public final class LexerCommandName implements Rule {
     /**
      * Lexer command name. It should be identifier or MODE.
      */
-    private final String ref;
+    private final AtomicReference<Rule> elem;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public LexerCommandName(final Rule parent) {
-        this(parent, "");
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param name Name of a lexer command.
-     */
-    public LexerCommandName(final Rule parent, final String name) {
         this.top = parent;
-        this.ref = name;
+        this.elem = new AtomicReference<>();
     }
 
     @Override
@@ -75,12 +67,12 @@ public final class LexerCommandName implements Rule {
 
     @Override
     public Node generate(final Context context) throws WrongPathException {
-        return new TerminalNode(this, this.ref);
+        return new TerminalNode(this, this.elem.get().generate(context).text().output());
     }
 
     @Override
     public void append(final Rule rule) {
-        // Should not do anything.
+        this.elem.set(rule);
     }
 
     @Override
@@ -90,6 +82,8 @@ public final class LexerCommandName implements Rule {
 
     @Override
     public Rule copy() {
-        return new LexerCommandName(this.parent(), this.ref);
+        final LexerCommandName cpy = new LexerCommandName(this.parent());
+        cpy.append(this.elem.get().copy());
+        return cpy;
     }
 }
