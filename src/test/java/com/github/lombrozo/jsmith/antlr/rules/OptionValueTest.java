@@ -40,7 +40,7 @@ final class OptionValueTest {
         option.append(new Identifier(option, "TestId2"));
         Assertions.assertEquals(
             option.generate(new Context()).text().output(),
-            "TestId.TestId2",
+            "TestIdTestId2",
             "We expect OptionValue to generate chain of identifiers with dots in between."
         );
     }

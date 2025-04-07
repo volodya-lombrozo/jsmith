@@ -113,15 +113,8 @@ public final class OptionValue implements Rule {
         return new LeftToRight(this, this.elements).generate(context);
     }
 
-    // We use append only for chain of identifiers with dots between.
-    // So we could only append identifiers and append dot literals inside method.
-    // If we create empty OptionValue and insert rule after initialisation we do not add
-    // dot literal to list.
     @Override
     public void append(final Rule rule) {
-        if (!this.elements.isEmpty()) {
-            this.elements.add(new Literal("."));
-        }
         this.elements.add(rule);
     }
 
