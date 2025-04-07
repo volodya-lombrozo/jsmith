@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -45,6 +46,16 @@ final class DelegateGrammarTest {
             "We expect delegateGrammar to generate output correctly",
             grammar.generate(new Context()).text().output(),
             Matchers.equalTo("Delegate=Grammar")
+        );
+    }
+
+    @Test
+    void throwsException() throws WrongPathException {
+        final DelegateGrammar grammar = new DelegateGrammar(new Root());
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> grammar.generate(new Context()),
+            "We expect DelegateGrammar class to throw exception if it contains wrong size of elements"
         );
     }
 }
