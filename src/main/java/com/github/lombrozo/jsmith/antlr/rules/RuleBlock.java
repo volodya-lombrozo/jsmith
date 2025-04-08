@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
 import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Rule block.
@@ -47,7 +48,7 @@ public final class RuleBlock implements Rule {
     /**
      * RuleAltList.
      */
-    private final Rule list;
+    private final AtomicReference<Rule> list;
 
     /**
      * Constructor.
@@ -55,17 +56,7 @@ public final class RuleBlock implements Rule {
      */
     public RuleBlock(final Rule parent) {
         this.top = parent;
-        this.list = new RuleAltList(this);
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param list Rule Alternatives List.
-     */
-    public RuleBlock(final Rule parent, final Rule list) {
-        this.top = parent;
-        this.list = list;
+        this.list = new AtomicReference<>();
     }
 
     @Override
@@ -75,15 +66,15 @@ public final class RuleBlock implements Rule {
 
     @Override
     public Node generate(final Context context) throws WrongPathException {
-        if (!this.list.name().contains("ruleAltList")) {
-            throw new IllegalStateException("Child of rule block must be RuleAltList");
-        }
-        return new IntermediateNode(this, this.list.generate(context));
+        return new IntermediateNode(this, this.list.get().generate(context));
     }
 
     @Override
     public void append(final Rule rule) {
-        this.list.append(rule);
+        if (!rule.name().contains("ruleAltList")) {
+            throw new IllegalArgumentException("Child of rule block must be RuleAltList");
+        }
+        this.list.set(rule);
     }
 
     @Override
@@ -93,6 +84,8 @@ public final class RuleBlock implements Rule {
 
     @Override
     public Rule copy() {
-        return new RuleBlock(this.parent(), this.list.copy());
+        final RuleBlock cpy = new RuleBlock(this.top);
+        cpy.append(this.list.get().copy());
+        return cpy;
     }
 }
