@@ -36,20 +36,20 @@ import org.junit.jupiter.api.Test;
 final class LexerCommandExprTest {
     @Test
     void generatesLexerCommandExprWithIdentifier() throws WrongPathException {
-        final LexerCommandExpr expr = new LexerCommandExpr(
-            new Root(),
-            new Identifier(new Root(), "test")
-        );
+        final LexerCommandExpr expr = new LexerCommandExpr(new Root());
+        final Identifier ref = new Identifier(expr, "test");
+        expr.append(ref);
         MatcherAssert.assertThat(
             "We expect it to generate correctly",
             expr.generate(new Context()).text().output(),
-            Matchers.equalTo("test")
+            Matchers.equalTo(ref.generate(new Context()).text().output())
         );
     }
 
     @Test
     void generatesLexerCommandExprWithInt() throws WrongPathException {
-        final LexerCommandExpr expr = new LexerCommandExpr(new Root(), 12);
+        final LexerCommandExpr expr = new LexerCommandExpr(new Root());
+        expr.append(12);
         MatcherAssert.assertThat(
             "We expect it to generate correctly with integers",
             expr.generate(new Context()).text().output(),

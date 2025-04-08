@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
 import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * LexerCommandExpr rule.
@@ -47,33 +48,15 @@ public final class LexerCommandExpr implements Rule {
     /**
      * Identifier or integer.
      */
-    private final Rule elem;
+    private final AtomicReference<Rule> elem;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public LexerCommandExpr(final Rule parent) {
-        this(parent, new Literal(""));
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param elem Identifier or int;
-     */
-    public LexerCommandExpr(final Rule parent, final Rule elem) {
         this.top = parent;
-        this.elem = elem;
-    }
-
-    /**
-     * Constructor.
-     * @param parent Parent rule.
-     * @param num Number.
-     */
-    public LexerCommandExpr(final Rule parent, final Integer num) {
-        this(parent, new Literal(num.toString()));
+        this.elem = new AtomicReference<>();
     }
 
     @Override
@@ -83,12 +66,20 @@ public final class LexerCommandExpr implements Rule {
 
     @Override
     public Node generate(final Context context) throws WrongPathException {
-        return new TerminalNode(this, this.elem.generate(context).text().output());
+        return new TerminalNode(this, this.elem.get().generate(context).text().output());
     }
 
     @Override
     public void append(final Rule rule) {
-        // Does nothing.
+        this.elem.set(rule);
+    }
+
+    /**
+     * Sets atomicReference to Identifier with int.
+     * @param num Integer to set reference to.
+     */
+    public void append(final Integer num) {
+        this.elem.set(new Identifier(this, num.toString()));
     }
 
     @Override
@@ -98,6 +89,8 @@ public final class LexerCommandExpr implements Rule {
 
     @Override
     public Rule copy() {
-        return new LexerCommandExpr(this.parent(), this.elem.copy());
+        final LexerCommandExpr cpy = new LexerCommandExpr(this.parent());
+        cpy.append(this.elem.get().copy());
+        return cpy;
     }
 }
