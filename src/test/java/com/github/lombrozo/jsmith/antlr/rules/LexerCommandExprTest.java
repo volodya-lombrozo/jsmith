@@ -45,15 +45,4 @@ final class LexerCommandExprTest {
             Matchers.equalTo(ref.generate(new Context()).text().output())
         );
     }
-
-    @Test
-    void generatesLexerCommandExprWithInt() throws WrongPathException {
-        final LexerCommandExpr expr = new LexerCommandExpr(new Root());
-        expr.append(12);
-        MatcherAssert.assertThat(
-            "We expect it to generate correctly with integers",
-            expr.generate(new Context()).text().output(),
-            Matchers.equalTo("12")
-        );
-    }
 }

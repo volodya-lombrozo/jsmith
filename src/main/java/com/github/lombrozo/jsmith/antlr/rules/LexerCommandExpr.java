@@ -74,14 +74,6 @@ public final class LexerCommandExpr implements Rule {
         this.elem.set(rule);
     }
 
-    /**
-     * Sets atomicReference to Identifier with int.
-     * @param num Integer to set reference to.
-     */
-    public void append(final Integer num) {
-        this.elem.set(new Identifier(this, num.toString()));
-    }
-
     @Override
     public String name() {
         return "lexerCommandExpr";
