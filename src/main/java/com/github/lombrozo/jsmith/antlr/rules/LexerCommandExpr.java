@@ -23,6 +23,11 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.antlr.view.TerminalNode;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * LexerCommandExpr rule.
  * The ANTLR grammar definition:
@@ -34,14 +39,39 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class LexerCommandExpr extends Unimplemented {
+public final class LexerCommandExpr implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * Identifier or integer.
+     */
+    private final AtomicReference<Rule> elem;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public LexerCommandExpr(final Rule parent) {
-        super(parent);
+        this.top = parent;
+        this.elem = new AtomicReference<>();
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        return new TerminalNode(this, this.elem.get().generate(context).text().output());
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.elem.set(rule);
     }
 
     @Override
@@ -51,6 +81,8 @@ public final class LexerCommandExpr extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new LexerCommandExpr(this.parent());
+        final LexerCommandExpr cpy = new LexerCommandExpr(this.parent());
+        cpy.append(this.elem.get().copy());
+        return cpy;
     }
 }

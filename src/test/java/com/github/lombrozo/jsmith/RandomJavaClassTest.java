@@ -37,6 +37,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Test cases for {@link RandomJavaClass}.
@@ -67,6 +68,21 @@ final class RandomJavaClassTest {
         );
     }
 
+    @ParameterizedTest
+    @ValueSource(longs = {1_038_792_632_350_611_846L, 2_257_151_642_642_236_899L})
+    void generatesSameSrcWithSeed(final long seed) {
+        final Params params = new Params(seed);
+        final RandomJavaClass clazz = new RandomJavaClass(params);
+        MatcherAssert.assertThat(
+            String.format(
+                "We expect that the generated source code will be the same, but they weren't '%s'",
+                params
+            ),
+            clazz.src(),
+            Matchers.equalTo(clazz.src())
+        );
+    }
+
     @Test
     void generatesJavaCodeWithTheSameSeedAndParam() {
         final long seed = -4_887_843_732_314_896_880L;
@@ -77,11 +93,10 @@ final class RandomJavaClassTest {
         );
     }
 
-    @Test
-    void generatesSpecificJavaClass() {
-        final String src = new RandomJavaClass(
-            new Params(7_648_701_033_033_712_484L)
-        ).src();
+    @ParameterizedTest
+    @ValueSource(longs = {1_038_792_632_350_611_846L, 2_257_151_642_642_236_899L})
+    void generatesSpecificJavaClass(final long seed) {
+        final String src = new RandomJavaClass(new Params(seed)).src();
         Logger.info(this, "Generated source code: %n%s%n", src);
         Assertions.assertDoesNotThrow(
             () -> new InMemoryCompiler().compile(src),

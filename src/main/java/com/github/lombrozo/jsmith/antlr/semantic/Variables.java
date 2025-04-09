@@ -23,9 +23,8 @@
  */
 package com.github.lombrozo.jsmith.antlr.semantic;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.ToString;
@@ -40,12 +39,12 @@ public final class Variables {
     /**
      * Declared variables.
      */
-    private final Set<Variable> decl;
+    private final List<Variable> decl;
 
     /**
      * Assigned variables.
      */
-    private final Set<Variable> init;
+    private final List<Variable> init;
 
     /**
      * Default constructor.
@@ -53,8 +52,8 @@ public final class Variables {
      */
     public Variables() {
         this(
-            new HashSet<>(0),
-            new HashSet<>(0)
+            new ArrayList<>(0),
+            new ArrayList<>(0)
         );
     }
 
@@ -64,8 +63,8 @@ public final class Variables {
      * @param declared Declared variables.
      */
     public Variables(
-        final Set<Variable> assigned,
-        final Set<Variable> declared
+        final List<Variable> assigned,
+        final List<Variable> declared
     ) {
         this.init = assigned;
         this.decl = declared;
@@ -129,10 +128,10 @@ public final class Variables {
      * @param type Variable type.
      * @return All assigned variables.
      */
-    Set<String> allAssigned(final String type) {
+    List<String> allAssigned(final String type) {
         return this.init.stream()
             .filter(v -> v.type().equals(type))
             .map(Variable::name)
-            .collect(Collectors.toSet());
+            .collect(Collectors.toList());
     }
 }

@@ -26,36 +26,23 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for {@link DelegateGrammar}.
+ * Tests for {@link LexerCommandExpr}.
  *
  * @since 0.2.0
  */
-final class DelegateGrammarTest {
-
+final class LexerCommandExprTest {
     @Test
-    void generatesDelegateGrammar() throws WrongPathException {
-        final DelegateGrammar grammar = new DelegateGrammar(new Root());
-        grammar.append(new Identifier(grammar, "Delegate"));
-        grammar.append(new Literal("="));
-        grammar.append(new Identifier(grammar, "Grammar"));
+    void generatesLexerCommandExprWithIdentifier() throws WrongPathException {
+        final LexerCommandExpr expr = new LexerCommandExpr(new Root());
+        final Identifier ref = new Identifier(expr, "test");
+        expr.append(ref);
         MatcherAssert.assertThat(
-            "We expect delegateGrammar to generate output correctly",
-            grammar.generate(new Context()).text().output(),
-            Matchers.equalTo("Delegate=Grammar")
-        );
-    }
-
-    @Test
-    void throwsException() throws WrongPathException {
-        final DelegateGrammar grammar = new DelegateGrammar(new Root());
-        Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> grammar.generate(new Context()),
-            "We expect DelegateGrammar class to throw exception if it contains wrong size of elements"
+            "We expect it to generate correctly",
+            expr.generate(new Context()).text().output(),
+            Matchers.equalTo(ref.generate(new Context()).text().output())
         );
     }
 }

@@ -24,38 +24,44 @@
 package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
+import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for {@link DelegateGrammar}.
+ * Tests for {@link RuleBlock}.
  *
  * @since 0.2.0
  */
-final class DelegateGrammarTest {
-
+final class RuleBlockTest {
     @Test
-    void generatesDelegateGrammar() throws WrongPathException {
-        final DelegateGrammar grammar = new DelegateGrammar(new Root());
-        grammar.append(new Identifier(grammar, "Delegate"));
-        grammar.append(new Literal("="));
-        grammar.append(new Identifier(grammar, "Grammar"));
+    void generatesRuleBlock() throws WrongPathException {
+        final RuleBlock block = new RuleBlock(new Root());
+        final RuleAltList rules = new RuleAltList(
+            block,
+            List.of(new Literal("Test1"), new Literal("Test2"))
+        );
+        block.append(rules);
         MatcherAssert.assertThat(
-            "We expect delegateGrammar to generate output correctly",
-            grammar.generate(new Context()).text().output(),
-            Matchers.equalTo("Delegate=Grammar")
+            "We expect RuleBlock to generate correctly",
+            block.generate(new Context()).text().output(),
+            Matchers.anyOf(
+                Matchers.equalTo("Test1"),
+                Matchers.equalTo("Test2")
+            )
         );
     }
 
     @Test
-    void throwsException() throws WrongPathException {
-        final DelegateGrammar grammar = new DelegateGrammar(new Root());
+    void throwsIllegalStateException() throws WrongPathException {
+        final RuleBlock block = new RuleBlock(new Root());
+        final Identifier invalid = new Identifier(block, "Invalid");
         Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> grammar.generate(new Context()),
-            "We expect DelegateGrammar class to throw exception if it contains wrong size of elements"
+            IllegalArgumentException.class,
+            () -> block.append(invalid),
+            "We expect RuleBlock to throw exception if child is not RuleAltList class"
         );
     }
 }
