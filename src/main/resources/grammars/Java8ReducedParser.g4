@@ -341,9 +341,35 @@ classMemberDeclaration
     | methodDeclaration
     ;
 
+
 methodDeclaration
-    : NL 'public' SPACE 'void' SPACE /* $jsmith-unique */ Identifier '(' ')' methodBody NL
+    : NL methodModifiers SPACE /* $jsmith-type */ returnMethodType SPACE /* $jsmith-unique */ Identifier '(' methodParams ')' methodBody NL
     ;
+
+methodModifiers
+    : accessMethodModifier? SPACE otherMethodModifiers?
+    ;
+
+accessMethodModifier
+    : 'public'
+    | 'private'
+    | 'protected'
+    ;
+
+otherMethodModifiers
+    : 'static'
+    | 'final'
+    | 'strictfp'
+    ;
+
+returnMethodType
+    : 'void'
+    ;
+
+methodParams
+    : (vardef (',' SPACE vardef)*)?
+    ;
+
 
 methodBody
     : methodBlock
