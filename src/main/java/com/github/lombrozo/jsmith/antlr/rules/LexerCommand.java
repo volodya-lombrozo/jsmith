@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * LexerCommand rule.
  * The ANTLR grammar definition:
@@ -34,14 +40,60 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class LexerCommand extends Unimplemented {
+public final class LexerCommand implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of elements.
+     */
+    private final List<Rule> elems;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public LexerCommand(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<Rule>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule.
+     * @param elements List of elements.
+     */
+    public LexerCommand(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elems = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elems.isEmpty()) {
+            throw new IllegalStateException("lexerCommand should have at least 1 element");
+        }
+        return new LeftToRight(this, this.elems).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        if (
+            !"lexerCommandName".equals(rule.name())
+                && !"lexerCommandExpr".equals(rule.name())
+                && !rule.name().contains("terminalDef")
+        ) {
+            throw new IllegalArgumentException(
+                String.format("Unsupported lexerCommand element: %s", rule.name())
+            );
+        }
+        this.elems.add(rule);
     }
 
     @Override
@@ -51,6 +103,9 @@ public final class LexerCommand extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new LexerCommand(this.parent());
+        return new LexerCommand(
+            this.parent(),
+            this.elems.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
