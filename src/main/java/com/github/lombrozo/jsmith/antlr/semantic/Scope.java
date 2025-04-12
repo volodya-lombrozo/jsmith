@@ -25,8 +25,8 @@ package com.github.lombrozo.jsmith.antlr.semantic;
 
 import com.github.lombrozo.jsmith.random.Rand;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.ToString;
@@ -157,28 +157,28 @@ public final class Scope {
      * Get all declared variables.
      * @return All declared variables.
      */
-    private Set<String> allDeclared() {
+    private List<String> allDeclared() {
         return Stream.concat(
             this.variables.allDeclared().stream(),
             Optional.ofNullable(this.parent)
                 .map(Scope::allDeclared)
                 .stream()
                 .flatMap(Collection::stream)
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toList());
     }
 
     /**
      * Get all assigned variables.
      * @return All assigned variables.
      */
-    private Set<String> allAssigned() {
+    private List<String> allAssigned() {
         return Stream.concat(
             this.variables.allAssigned().stream(),
             Optional.ofNullable(this.parent)
                 .map(Scope::allAssigned)
                 .stream()
                 .flatMap(Collection::stream)
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toList());
     }
 
     /**
@@ -186,7 +186,7 @@ public final class Scope {
      * @param collection Collection.
      * @return Random element.
      */
-    private Optional<String> random(final Set<String> collection) {
+    private Optional<String> random(final List<String> collection) {
         final Optional<String> result;
         if (collection.isEmpty()) {
             result = Optional.empty();
