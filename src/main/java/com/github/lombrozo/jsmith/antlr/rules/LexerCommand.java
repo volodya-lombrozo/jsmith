@@ -87,7 +87,8 @@ public final class LexerCommand implements Rule {
         if (
             !"lexerCommandName".equals(rule.name())
                 && !"lexerCommandExpr".equals(rule.name())
-                && !rule.name().contains("terminalDef")
+                && !rule.name().contains("LPAREN")
+                && !rule.name().contains("RPAREN")
         ) {
             throw new IllegalArgumentException(
                 String.format("Unsupported lexerCommand element: %s", rule.name())
