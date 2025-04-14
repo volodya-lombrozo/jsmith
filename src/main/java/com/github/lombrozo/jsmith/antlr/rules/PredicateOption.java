@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * PredicateOption rule.
  * The ANTLR grammar definition:
@@ -34,14 +40,56 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class PredicateOption extends Unimplemented {
+public final class PredicateOption implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of elements.
+     */
+    private final List<Rule> elems;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public PredicateOption(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    public PredicateOption(final Rule parent, final List<Rule> elems) {
+        this.top = parent;
+        this.elems = elems;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elems.size() != 1 && this.elems.size() != 3) {
+            throw new IllegalStateException("predicateOption should contain 1 or 3 rules");
+        }
+        return new LeftToRight(this, this.elems).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        if (
+            !"elementOption".equals(rule.name())
+                && !"identifier".equals(rule.name())
+                && !"actionBlock".equals(rule.name())
+                && !rule.name().contains("ASSIGN")
+        ) {
+            throw new IllegalArgumentException(
+                String.format("PredicateOption does not support such rule: %s", rule.name())
+            );
+        }
+        this.elems.add(rule);
     }
 
     @Override
@@ -51,6 +99,9 @@ public final class PredicateOption extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new PredicateOption(this.parent());
+        return new PredicateOption(
+            this.parent(),
+            this.elems.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
