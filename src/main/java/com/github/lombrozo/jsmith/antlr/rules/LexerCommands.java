@@ -23,24 +23,80 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * LexerCommands rule.
  * The ANTLR grammar definition:
  * {@code
  * lexerCommands
- *     : RARROW {@link LexerCommand} (COMMA {@link LexerCommand})*
- *     ;
+ * : RARROW {@link LexerCommand} (COMMA {@link LexerCommand})*
+ * ;
  * }
+ *
  * @since 0.1
  */
-public final class LexerCommands extends Unimplemented {
+public final class LexerCommands implements Rule {
+
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of lexer commands.
+     */
+    private final List<Rule> elements;
 
     /**
      * Constructor.
+     *
      * @param parent Parent rule.
      */
     public LexerCommands(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param parent   Parent rule
+     * @param elements List of elements
+     */
+    public LexerCommands(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.isEmpty()) {
+            throw new IllegalStateException("LexerCommands can't be empty");
+        }
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        if (
+            !"lexerCommand".equals(rule.name())
+                && !rule.name().contains("RARROW")
+                && !rule.name().contains("COMMA")
+        ) {
+            throw new IllegalArgumentException(
+                String.format("Rule %s can't be appended to LexerCommands", rule.name())
+            );
+        }
+        this.elements.add(rule);
     }
 
     @Override
@@ -50,6 +106,9 @@ public final class LexerCommands extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new LexerCommands(this.parent());
+        return new LexerCommands(
+            this.parent(),
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
