@@ -23,26 +23,77 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * LexerAlt rule.
  * The ANTLR grammar definition:
  * {@code
  * lexerAlt
- *     : {@link LexerElements} {@link LexerCommands}?
- *     |
- *     // explicitly allow empty alts
- *     ;
+ * : {@link LexerElements} {@link LexerCommands}?
+ * |
+ * // explicitly allow empty alts
+ * ;
  * }
+ *
  * @since 0.1
  */
-public final class LexerAlt extends Unimplemented {
+public final class LexerAlt implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of elements.
+     */
+    private final List<Rule> elements;
 
     /**
      * Constructor.
+     *
      * @param parent Parent rule.
      */
     public LexerAlt(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param parent   Parent rule.
+     * @param elements List of elements.
+     */
+    public LexerAlt(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        if (
+            !"lexerCommands".equals(rule.name())
+                && !"lexerElements".equals(rule.name())
+        ) {
+            throw new IllegalArgumentException(
+                String.format("Rule %s can't be appended to LexerAlt", rule.name())
+            );
+        }
+        this.elements.add(rule);
     }
 
     @Override
@@ -52,6 +103,9 @@ public final class LexerAlt extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new LexerAlt(this.parent());
+        return new LexerAlt(
+            this.parent(),
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
