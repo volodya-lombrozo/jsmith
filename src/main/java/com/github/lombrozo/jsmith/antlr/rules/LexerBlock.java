@@ -23,6 +23,11 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.ToString;
 
 /**
@@ -30,13 +35,23 @@ import lombok.ToString;
  * The ANTLR grammar definition:
  * {@code
  * lexerBlock
- *     : LPAREN {@link LexerAltList} RPAREN
- *     ;
+ * : LPAREN {@link LexerAltList} RPAREN
+ * ;
  * }
+ *
  * @since 0.1
  */
 @ToString
-public final class LexerBlock extends Unimplemented {
+public final class LexerBlock implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of elements.
+     */
+    private final List<Rule> elements;
 
     /**
      * Constructor.
@@ -47,10 +62,34 @@ public final class LexerBlock extends Unimplemented {
 
     /**
      * Constructor.
+     *
      * @param parent Parent rule.
      */
     public LexerBlock(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    public LexerBlock(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.isEmpty()) {
+            throw new IllegalStateException("LexerBlock can't be empty");
+        }
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        this.elements.add(rule);
     }
 
     @Override
@@ -60,6 +99,9 @@ public final class LexerBlock extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new LexerBlock(this.parent());
+        return new LexerBlock(
+            this.parent(),
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
