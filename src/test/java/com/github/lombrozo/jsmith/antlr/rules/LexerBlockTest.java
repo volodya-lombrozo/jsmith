@@ -60,10 +60,10 @@ final class LexerBlockTest {
         MatcherAssert.assertThat(
             "We expect message to be correct",
             Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> block.generate(new Context()),
-            "We expect IllegalStateException to be thrown"
-        ).getMessage(),
+                IllegalStateException.class,
+                () -> block.generate(new Context()),
+                "We expect IllegalStateException to be thrown"
+            ).getMessage(),
             Matchers.equalTo("LexerBlock can't be empty")
         );
     }
