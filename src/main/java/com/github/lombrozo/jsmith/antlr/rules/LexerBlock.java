@@ -35,8 +35,8 @@ import lombok.ToString;
  * The ANTLR grammar definition:
  * {@code
  * lexerBlock
- * : LPAREN {@link LexerAltList} RPAREN
- * ;
+ *     : LPAREN {@link LexerAltList} RPAREN
+ *     ;
  * }
  *
  * @since 0.1

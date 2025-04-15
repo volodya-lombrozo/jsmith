@@ -57,10 +57,14 @@ final class LexerBlockTest {
     @Test
     void throwsIllegalState() {
         final LexerBlock block = new LexerBlock();
-        Assertions.assertThrows(
+        MatcherAssert.assertThat(
+            "We expect message to be correct",
+            Assertions.assertThrows(
             IllegalStateException.class,
             () -> block.generate(new Context()),
             "We expect IllegalStateException to be thrown"
+        ).getMessage(),
+            Matchers.equalTo("LexerBlock can't be empty")
         );
     }
 }
