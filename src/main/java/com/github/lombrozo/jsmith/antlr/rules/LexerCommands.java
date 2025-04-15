@@ -34,8 +34,8 @@ import java.util.stream.Collectors;
  * The ANTLR grammar definition:
  * {@code
  * lexerCommands
- * : RARROW {@link LexerCommand} (COMMA {@link LexerCommand})*
- * ;
+ *     : RARROW {@link LexerCommand} (COMMA {@link LexerCommand})*
+ *     ;
  * }
  *
  * @since 0.1
