@@ -34,8 +34,8 @@ import java.util.stream.Collectors;
  * The ANTLR grammar definition:
  * {@code
  * predicateOptions
- * : LT {@link PredicateOption} (COMMA {@link PredicateOption})* GT
- * ;
+ *     : LT {@link PredicateOption} (COMMA {@link PredicateOption})* GT
+ *     ;
  * }
  *
  * @since 0.1
