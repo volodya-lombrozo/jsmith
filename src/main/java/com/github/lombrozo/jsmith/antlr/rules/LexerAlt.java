@@ -34,10 +34,10 @@ import java.util.stream.Collectors;
  * The ANTLR grammar definition:
  * {@code
  * lexerAlt
- * : {@link LexerElements} {@link LexerCommands}?
- * |
- * // explicitly allow empty alts
- * ;
+ *     : {@link LexerElements} {@link LexerCommands}?
+ *     |
+ *     // explicitly allow empty alts
+ *     ;
  * }
  *
  * @since 0.1
