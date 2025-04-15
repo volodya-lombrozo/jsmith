@@ -34,8 +34,8 @@ import java.util.stream.Collectors;
  * The ANTLR grammar definition:
  * {@code
  * delegateGrammars
- * : IMPORT {@link DelegateGrammar} (COMMA {@link DelegateGrammar})* SEMI
- * ;
+ *     : IMPORT {@link DelegateGrammar} (COMMA {@link DelegateGrammar})* SEMI
+ *     ;
  * }
  *
  * @since 0.1
