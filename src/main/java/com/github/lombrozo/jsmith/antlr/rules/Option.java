@@ -34,8 +34,8 @@ import java.util.stream.Collectors;
  * The ANTLR grammar definition:
  * {@code
  * option
- * : {@link Identifier} ASSIGN optionValue
- * ;
+ *     : {@link Identifier} ASSIGN optionValue
+ *     ;
  * }
  *
  * @since 0.1
