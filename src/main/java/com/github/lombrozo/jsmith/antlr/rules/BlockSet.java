@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * BlockSet rule.
  * The ANTLR grammar definition:
@@ -33,14 +39,60 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class BlockSet extends Unimplemented {
+public final class BlockSet implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of elements.
+     */
+    private final List<Rule> elems;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public BlockSet(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule
+     * @param elems List of elements
+     */
+    public BlockSet(final Rule parent, final List<Rule> elems) {
+        this.top = parent;
+        this.elems = elems;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elems.size() < 2) {
+            throw new IllegalStateException("BlockSet should have at least three elements");
+        }
+        return new LeftToRight(this, this.elems).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        if (
+            !"setElement".equals(rule.name())
+                && !rule.name().contains("LPAREN")
+                && !rule.name().contains("RPAREN")
+        ) {
+            throw new IllegalArgumentException(
+                String.format("BlockSet does not support such rule: %s", rule.name())
+            );
+        }
+        this.elems.add(rule);
     }
 
     @Override
@@ -50,6 +102,9 @@ public final class BlockSet extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new BlockSet(this.parent());
+        return new BlockSet(
+            this.parent(),
+            this.elems.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
