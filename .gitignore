@@ -30,3 +30,4 @@ antlr-generated/
 
 src/main/antlr4/com/github/lombrozo/jsmith/tmp
 .aider*
+.aidy
