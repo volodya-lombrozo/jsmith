@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * PredicateOptions rule.
  * The ANTLR grammar definition:
@@ -31,16 +37,65 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     : LT {@link PredicateOption} (COMMA {@link PredicateOption})* GT
  *     ;
  * }
+ *
  * @since 0.1
  */
-public final class PredicateOptions extends Unimplemented {
+public final class PredicateOptions implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of predicate options.
+     */
+    private final List<Rule> elements;
 
     /**
      * Constructor.
+     *
      * @param parent Parent rule.
      */
     public PredicateOptions(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param parent   Parent rule
+     * @param elements List of elements
+     */
+    public PredicateOptions(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.isEmpty()) {
+            throw new IllegalStateException("predicateOptions can't be empty");
+        }
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        if (
+            !"predicateOption".equals(rule.name())
+                && !rule.name().contains("GT")
+                && !rule.name().contains("LT")
+        ) {
+            throw new IllegalArgumentException(
+                String.format("Rule %s can't be appended to predicateOptions", rule.name())
+            );
+        }
+        this.elements.add(rule);
     }
 
     @Override
@@ -50,7 +105,10 @@ public final class PredicateOptions extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new PredicateOptions(this.parent());
+        return new PredicateOptions(
+            this.parent(),
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 
 }
