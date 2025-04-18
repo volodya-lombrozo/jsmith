@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Delegate grammars.
  * The ANTLR grammar definition:
@@ -31,16 +37,65 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     : IMPORT {@link DelegateGrammar} (COMMA {@link DelegateGrammar})* SEMI
  *     ;
  * }
+ *
  * @since 0.1
  */
-public final class DelegateGrammars extends Unimplemented {
+public final class DelegateGrammars implements Rule {
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of grammars.
+     */
+    private final List<Rule> elements;
+
+    /**
+     * Constructor.
+     *
+     * @param parent Parent rule.
+     */
+    public DelegateGrammars(final Rule parent) {
+        this(parent, new ArrayList<>(0));
+    }
 
     /**
      * Constructor.
      * @param parent Parent rule.
+     * @param elements List of elements.
      */
-    public DelegateGrammars(final Rule parent) {
-        super(parent);
+    public DelegateGrammars(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.isEmpty()) {
+            throw new IllegalStateException("delegateGrammars can't be empty");
+        }
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        if (
+            !"delegateGrammar".equals(rule.name())
+                && !rule.name().contains("IMPORT")
+                && !rule.name().contains("COMMA")
+                && !rule.name().contains("SEMI")
+        ) {
+            throw new IllegalArgumentException(
+                String.format("Rule %s can't be appended to delegateGrammars", rule.name())
+            );
+        }
+        this.elements.add(rule);
     }
 
     @Override
@@ -50,6 +105,9 @@ public final class DelegateGrammars extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new DelegateGrammars(this.parent());
+        return new DelegateGrammars(
+            this.parent(),
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
