@@ -86,11 +86,23 @@ public final class LabeledAlt implements Rule {
 
     @Override
     public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.isEmpty()) {
+            throw new IllegalStateException("LabeledAlt can't be empty");
+        }
         return new LeftToRight(this, this.elements).generate(context);
     }
 
     @Override
     public void append(final Rule rule) {
+        if (
+            !"alternative".equals(rule.name())
+                && !"identifier".equals(rule.name())
+                && !rule.name().contains("POUND")
+        ) {
+            throw new IllegalArgumentException(
+                String.format("Rule %s can't be appended to LabeledAlt class", rule.name())
+            );
+        }
         this.elements.add(rule);
     }
 
