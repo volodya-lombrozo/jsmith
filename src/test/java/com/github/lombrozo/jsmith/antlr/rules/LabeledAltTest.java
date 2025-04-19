@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 import com.github.lombrozo.jsmith.antlr.Context;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -48,6 +49,26 @@ final class LabeledAltTest {
             "We expect LabeledAlt to generate correctly",
             label.generate(new Context()).text().output(),
             Matchers.equalTo(options.generate(new Context()).text().output())
+        );
+    }
+
+    @Test
+    void throwsIllegalState() {
+        final LabeledAlt label = new LabeledAlt(new Root());
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> label.generate(new Context()),
+            "We expect empty LabeledAlt to throw IllegalStateException"
+        );
+    }
+
+    @Test
+    void throwsIllegalArgument() {
+        final LabeledAlt label = new LabeledAlt(new Root());
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> label.append(new Literal("Wrong rule")),
+            "We expect IllegalArgument to be thrown for trying to append wrong rule"
         );
     }
 }
