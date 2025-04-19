@@ -54,7 +54,7 @@ final class OptionTest {
         Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> option.append(new Action(option)),
-            "We expect an exception to be thrown"
+            "We expect an exception to be thrown because of unsupported rule appending to Option class"
         );
     }
 
@@ -64,7 +64,7 @@ final class OptionTest {
         Assertions.assertThrows(
             IllegalStateException.class,
             () -> option.generate(new Context()),
-            "We expect an exception to be thrown"
+            "We expect an exception to be thrown because of empty Option trying to be generated"
         );
     }
 }
