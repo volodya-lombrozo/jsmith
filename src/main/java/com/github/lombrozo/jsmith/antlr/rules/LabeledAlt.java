@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * LabeledAlt rule.
  * The ANTLR grammar definition:
@@ -33,12 +39,22 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class LabeledAlt extends Unimplemented {
+public final class LabeledAlt implements Rule {
+
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
 
     /**
      * Production from grammar.
      */
     private final String production;
+
+    /**
+     * List of elements.
+     */
+    private final List<Rule> elements;
 
     /**
      * Constructor.
@@ -54,8 +70,40 @@ public final class LabeledAlt extends Unimplemented {
      * @param production Production from grammar.
      */
     public LabeledAlt(final Rule parent, final String production) {
-        super(parent);
+        this(parent, production, new ArrayList<>(0));
+    }
+
+    public LabeledAlt(final Rule parent, final String production, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
         this.production = production;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.isEmpty()) {
+            throw new IllegalStateException("LabeledAlt can't be empty");
+        }
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        if (
+            !"alternative".equals(rule.name())
+                && !"identifier".equals(rule.name())
+                && !rule.name().contains("POUND")
+        ) {
+            throw new IllegalArgumentException(
+                String.format("Rule %s can't be appended to LabeledAlt class", rule.name())
+            );
+        }
+        this.elements.add(rule);
     }
 
     @Override
@@ -69,7 +117,11 @@ public final class LabeledAlt extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new LabeledAlt(this.parent());
+        return new LabeledAlt(
+            this.parent(),
+            this.production,
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
 
