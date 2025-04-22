@@ -26,6 +26,7 @@ package com.github.lombrozo.jsmith.guard;
 import com.github.lombrozo.jsmith.antlr.rules.Literal;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -35,20 +36,23 @@ import org.junit.jupiter.api.Test;
  */
 final class AllowedTest {
     @Test
-    void checksTrue() {
-        MatcherAssert.assertThat(
-            "We expect Allowed class check method to return true",
-            new Allowed("TEST", "TEST1").check(new Literal("TEST1")),
-            Matchers.equalTo(true)
+    void checksSuccess() {
+        Assertions.assertDoesNotThrow(
+            () -> new Allowed("TEST", "TEST1").check(new Literal("TEST1")),
+            "We expect Allowed class check method to return true"
         );
     }
 
     @Test
-    void checksFalse() {
+    void checksThrow() {
         MatcherAssert.assertThat(
-            "We expect Allowed class check method to return false",
-            new Allowed("FIRST, SECOND").check(new Literal("THIRD")),
-            Matchers.equalTo(false)
+            "We expect correct error message",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new Allowed("FIRST, SECOND").check(new Literal("THIRD")),
+                "We expect Allowed class check method to throw illegal argument"
+            ).getMessage(),
+            Matchers.equalTo("Rule literal(THIRD) can't be appended. Supported rules are : FIRST, SECOND")
         );
     }
 }
