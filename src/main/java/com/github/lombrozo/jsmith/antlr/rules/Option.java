@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Option rule.
  * The ANTLR grammar definition:
@@ -31,16 +37,68 @@ package com.github.lombrozo.jsmith.antlr.rules;
  *     : {@link Identifier} ASSIGN optionValue
  *     ;
  * }
+ *
  * @since 0.1
  */
-public final class Option extends Unimplemented {
+public final class Option implements Rule {
+
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of elements.
+     */
+    private final List<Rule> elements;
 
     /**
      * Constructor.
+     *
      * @param parent Parent rule.
      */
     public Option(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param parent   Parent rule
+     * @param elements List of elements
+     */
+    public Option(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.size() != 3) {
+            throw new IllegalStateException(
+                "Option must contain Identifier, ASSIGN and optionValue elements"
+            );
+        }
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        if (
+            !"identifier".equals(rule.name())
+                && !"optionValue".equals(rule.name())
+                && !rule.name().contains("ASSIGN")
+        ) {
+            throw new IllegalArgumentException(
+                String.format("Rule %s can't be appended to Option rule", rule.name())
+            );
+        }
+        this.elements.add(rule);
     }
 
     @Override
@@ -50,6 +108,9 @@ public final class Option extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new Option(this.parent());
+        return new Option(
+            this.parent(),
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
