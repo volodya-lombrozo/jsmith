@@ -52,7 +52,9 @@ final class AllowedTest {
                 () -> new Allowed("FIRST, SECOND").check(new Literal("THIRD")),
                 "We expect Allowed class check method to throw illegal argument"
             ).getMessage(),
-            Matchers.equalTo("Rule literal(THIRD) can't be appended. Supported rules are : FIRST, SECOND")
+            Matchers.equalTo(
+                "Rule literal(THIRD) can't be appended. Supported rules are : FIRST, SECOND"
+            )
         );
     }
 }

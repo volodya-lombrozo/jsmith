@@ -51,7 +51,6 @@ public class Allowed {
     /**
      * Checks rule for certain class.
      * @param rule Rule to check
-     * @return Boolean value indicating whether rule is suitable for appending.
      */
     public void check(final Rule rule) {
         boolean ret = false;
