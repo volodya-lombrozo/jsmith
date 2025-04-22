@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.guard.Allowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,16 +80,7 @@ public final class PredicateOption implements Rule {
 
     @Override
     public void append(final Rule rule) {
-        if (
-            !"elementOption".equals(rule.name())
-                && !"identifier".equals(rule.name())
-                && !"actionBlock".equals(rule.name())
-                && !rule.name().contains("ASSIGN")
-        ) {
-            throw new IllegalArgumentException(
-                String.format("PredicateOption does not support such rule: %s", rule.name())
-            );
-        }
+        new Allowed("elementOption", "identifier", "ASSIGN", "actionBlock").check(rule);
         this.elems.add(rule);
     }
 
