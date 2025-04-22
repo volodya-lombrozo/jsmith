@@ -53,7 +53,7 @@ public class Allowed {
      * @param rule Rule to check
      * @return Boolean value indicating whether rule is suitable for appending.
      */
-    public boolean check(final Rule rule) {
+    public void check(final Rule rule) {
         boolean ret = false;
         for (final String allowed : this.strings) {
             if (rule.name().contains(allowed)) {
@@ -61,6 +61,13 @@ public class Allowed {
                 break;
             }
         }
-        return ret;
+        if (!ret) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Rule %s can't be appended. Supported rules are : %s",
+                    rule.name(), this.strings.stream().collect(Collectors.joining(", "))
+                )
+            );
+        }
     }
 }
