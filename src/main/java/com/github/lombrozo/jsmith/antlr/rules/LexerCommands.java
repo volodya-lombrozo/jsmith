@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.guard.Allowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -90,15 +91,7 @@ public final class LexerCommands implements Rule {
 
     @Override
     public void append(final Rule rule) {
-        if (
-            !"lexerCommand".equals(rule.name())
-                && !rule.name().contains("RARROW")
-                && !rule.name().contains("COMMA")
-        ) {
-            throw new IllegalArgumentException(
-                String.format("Rule %s can't be appended to LexerCommands", rule.name())
-            );
-        }
+        new Allowed("RARROW", "lexerCommand", "COMMA").check(rule);
         this.elements.add(rule);
     }
 

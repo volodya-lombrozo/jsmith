@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.guard.Allowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,15 +84,7 @@ public final class BlockSet implements Rule {
 
     @Override
     public void append(final Rule rule) {
-        if (
-            !"setElement".equals(rule.name())
-                && !rule.name().contains("LPAREN")
-                && !rule.name().contains("RPAREN")
-        ) {
-            throw new IllegalArgumentException(
-                String.format("BlockSet does not support such rule: %s", rule.name())
-            );
-        }
+        new Allowed("LPAREN", "setElement", "RPAREN").check(rule);
         this.elems.add(rule);
     }
 

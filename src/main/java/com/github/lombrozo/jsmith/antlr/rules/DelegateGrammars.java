@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.guard.Allowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,16 +86,7 @@ public final class DelegateGrammars implements Rule {
 
     @Override
     public void append(final Rule rule) {
-        if (
-            !"delegateGrammar".equals(rule.name())
-                && !rule.name().contains("IMPORT")
-                && !rule.name().contains("COMMA")
-                && !rule.name().contains("SEMI")
-        ) {
-            throw new IllegalArgumentException(
-                String.format("Rule %s can't be appended to delegateGrammars", rule.name())
-            );
-        }
+        new Allowed("IMPORT", "delegateGrammar", "COMMA", "SEMI").check(rule);
         this.elements.add(rule);
     }
 

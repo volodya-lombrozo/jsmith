@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.guard.Allowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -89,15 +90,7 @@ public final class Option implements Rule {
 
     @Override
     public void append(final Rule rule) {
-        if (
-            !"identifier".equals(rule.name())
-                && !"optionValue".equals(rule.name())
-                && !rule.name().contains("ASSIGN")
-        ) {
-            throw new IllegalArgumentException(
-                String.format("Rule %s can't be appended to Option rule", rule.name())
-            );
-        }
+        new Allowed("identifier", "ASSIGN", "optionValue").check(rule);
         this.elements.add(rule);
     }
 

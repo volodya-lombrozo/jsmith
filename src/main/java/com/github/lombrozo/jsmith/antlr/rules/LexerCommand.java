@@ -25,6 +25,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
 
 import com.github.lombrozo.jsmith.antlr.Context;
 import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.guard.Allowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,16 +85,7 @@ public final class LexerCommand implements Rule {
 
     @Override
     public void append(final Rule rule) {
-        if (
-            !"lexerCommandName".equals(rule.name())
-                && !"lexerCommandExpr".equals(rule.name())
-                && !rule.name().contains("LPAREN")
-                && !rule.name().contains("RPAREN")
-        ) {
-            throw new IllegalArgumentException(
-                String.format("Unsupported lexerCommand element: %s", rule.name())
-            );
-        }
+        new Allowed("lexerCommandName", "lexerCommandExpr", "LPAREN", "RPAREN").check(rule);
         this.elems.add(rule);
     }
 
