@@ -40,9 +40,6 @@ import java.util.stream.Collectors;
  * }
  *
  * @since 0.1
- *   @todo #150:90min We have a lot of repeated checks in append methods.
- *   It's better to create class for this type of checks.
- *   Something like {@code new Allowed("lexerCommand", "RARROW", "COMMA").check(this);}
  */
 public final class LexerCommands implements Rule {
 
