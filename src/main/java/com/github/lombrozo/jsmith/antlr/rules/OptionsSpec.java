@@ -23,6 +23,13 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.guard.Allowed;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * OptionsSpec rule.
  * The ANTLR grammar definition:
@@ -33,14 +40,58 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class OptionsSpec extends Unimplemented {
+public final class OptionsSpec implements Rule {
+
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of elements.
+     */
+    private final List<Rule> elements;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public OptionsSpec(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule
+     * @param elements List of elements.
+     */
+    public OptionsSpec(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.size() < 2) {
+            throw new IllegalStateException(
+                String.format(
+                    "OptionsSpec must have at least 2 elements, provided %d",
+                    this.elements.size()
+                )
+            );
+        }
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        new Allowed("OPTIONS", "option", "SEMI", "RBRACE").check(rule);
+        this.elements.add(rule);
     }
 
     @Override
@@ -50,6 +101,9 @@ public final class OptionsSpec extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new OptionsSpec(this.parent());
+        return new OptionsSpec(
+            this.parent(),
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 }
