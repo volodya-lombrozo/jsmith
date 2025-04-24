@@ -53,10 +53,17 @@ final class LabeledElementTest {
     @Test
     void throwsIllegalArgument() {
         final LabeledElement element = new LabeledElement(new Root());
-        Assertions.assertThrows(
-            IllegalArgumentException.class,
-            () -> element.append(new Literal("Illegal rule")),
-            "We expect LabeledElement to throw an IllegalArgument"
+        MatcherAssert.assertThat(
+            "We expect correct error message from append method",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> element.append(new Literal("Illegal rule")),
+                "We expect LabeledElement to throw an IllegalArgument"
+            ).getMessage(),
+            Matchers.allOf(
+                Matchers.containsString("Rule literal(Illegal rule) can't be appended"),
+                Matchers.containsString("Supported rules are : identifier, ASSIGN, atom, block")
+            )
         );
     }
 
