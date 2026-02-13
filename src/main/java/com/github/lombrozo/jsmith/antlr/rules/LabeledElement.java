@@ -23,6 +23,13 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.guard.Allowed;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * LabeledElement rule.
  * The ANTLR grammar definition:
@@ -33,7 +40,7 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class LabeledElement extends Unimplemented {
+public final class LabeledElement implements Rule {
 
     /**
      * Labeled element name.
@@ -41,11 +48,55 @@ public final class LabeledElement extends Unimplemented {
     private static final String ALIAS = "labeledElement";
 
     /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * List of elements.
+     */
+    private final List<Rule> elements;
+
+    /**
      * Constructor.
      * @param parent Parent rule.
      */
     public LabeledElement(final Rule parent) {
-        super(parent);
+        this(parent, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule
+     * @param elements List of elements
+     */
+    public LabeledElement(final Rule parent, final List<Rule> elements) {
+        this.top = parent;
+        this.elements = elements;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        if (this.elements.size() != 3) {
+            throw new IllegalStateException(
+                String.format(
+                    "LabeledElement must have 3 rules, provided: %d",
+                    this.elements.size()
+                )
+            );
+        }
+        return new LeftToRight(this, this.elements).generate(context);
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        new Allowed("identifier", "ASSIGN", "atom", "block").check(rule);
+        this.elements.add(rule);
     }
 
     @Override
@@ -55,7 +106,10 @@ public final class LabeledElement extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new LabeledElement(this.parent());
+        return new LabeledElement(
+            this.parent(),
+            this.elements.stream().map(Rule::copy).collect(Collectors.toList())
+        );
     }
 
     /**
