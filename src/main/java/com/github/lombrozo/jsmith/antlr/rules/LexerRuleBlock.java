@@ -23,6 +23,12 @@
  */
 package com.github.lombrozo.jsmith.antlr.rules;
 
+import com.github.lombrozo.jsmith.antlr.Context;
+import com.github.lombrozo.jsmith.antlr.view.IntermediateNode;
+import com.github.lombrozo.jsmith.antlr.view.Node;
+import com.github.lombrozo.jsmith.guard.Allowed;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * Lexer rule block.
  * The ANTLR rule definition:
@@ -33,14 +39,50 @@ package com.github.lombrozo.jsmith.antlr.rules;
  * }
  * @since 0.1
  */
-public final class LexerRuleBlock extends Unimplemented {
+public final class LexerRuleBlock implements Rule {
+
+    /**
+     * Parent rule.
+     */
+    private final Rule top;
+
+    /**
+     * Child rule (LexerAltList).
+     */
+    private final AtomicReference<Rule> child;
 
     /**
      * Constructor.
      * @param parent Parent rule.
      */
     public LexerRuleBlock(final Rule parent) {
-        super(parent);
+        this(parent, new AtomicReference<Rule>());
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent rule
+     * @param child Child rule
+     */
+    public LexerRuleBlock(final Rule parent, final AtomicReference<Rule> child) {
+        this.top = parent;
+        this.child = child;
+    }
+
+    @Override
+    public Rule parent() {
+        return this.top;
+    }
+
+    @Override
+    public Node generate(final Context context) throws WrongPathException {
+        return new IntermediateNode(this, this.child.get().generate(context));
+    }
+
+    @Override
+    public void append(final Rule rule) {
+        new Allowed("lexerAltList").check(rule);
+        this.child.set(rule);
     }
 
     @Override
@@ -50,6 +92,6 @@ public final class LexerRuleBlock extends Unimplemented {
 
     @Override
     public Rule copy() {
-        return new LexerRuleBlock(this.parent());
+        return new LexerRuleBlock(this.parent(), new AtomicReference<>(this.child.get().copy()));
     }
 }
